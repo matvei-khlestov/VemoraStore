@@ -16,6 +16,51 @@
 		A0854FCA2E611320004633CA /* VemoraStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FC82E611320004633CA /* VemoraStoreTests.swift */; };
 		A0854FCE2E611324004633CA /* VemoraStoreUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FCB2E611324004633CA /* VemoraStoreUITests.swift */; };
 		A0854FCF2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FCC2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift */; };
+		A0854FD42E611855004633CA /* ServiceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FD32E611855004633CA /* ServiceLocator.swift */; };
+		A0854FD72E611898004633CA /* UIImageView+KF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FD62E611898004633CA /* UIImageView+KF.swift */; };
+		A0854FDA2E61199A004633CA /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FD92E61199A004633CA /* CoreDataManager.swift */; };
+		A0854FDE2E6119E6004633CA /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FDD2E6119E6004633CA /* KeychainService.swift */; };
+		A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE12E6121BC004633CA /* FirestoreProductService.swift */; };
+		A0854FE62E6121E3004633CA /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */; };
+		A0854FE82E6121F4004633CA /* FirebaseProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE72E6121F4004633CA /* FirebaseProfileService.swift */; };
+		A0854FEA2E612206004633CA /* FirebaseNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE92E612206004633CA /* FirebaseNotificationService.swift */; };
+		A0854FEF2E612272004633CA /* CartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FEE2E612272004633CA /* CartService.swift */; };
+		A0854FF12E612286004633CA /* FavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FF02E612286004633CA /* FavoritesService.swift */; };
+		A0854FF42E6122B6004633CA /* LocationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FF32E6122B6004633CA /* LocationService.swift */; };
+		A0854FF92E612395004633CA /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FF82E612395004633CA /* Product.swift */; };
+		A0854FFB2E6123A5004633CA /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FFA2E6123A5004633CA /* Category.swift */; };
+		A0854FFD2E6123B6004633CA /* Order.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FFC2E6123B6004633CA /* Order.swift */; };
+		A0854FFF2E6123D0004633CA /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FFE2E6123D0004633CA /* Address.swift */; };
+		A08550022E612411004633CA /* AuthServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550012E612411004633CA /* AuthServiceProtocol.swift */; };
+		A08550042E612420004633CA /* ProductServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550032E612420004633CA /* ProductServiceProtocol.swift */; };
+		A08550062E61242E004633CA /* ProfileServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550052E61242E004633CA /* ProfileServiceProtocol.swift */; };
+		A08550082E61243C004633CA /* CartServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550072E61243C004633CA /* CartServiceProtocol.swift */; };
+		A085500A2E61244A004633CA /* FavoritesServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550092E61244A004633CA /* FavoritesServiceProtocol.swift */; };
+		A085500C2E612458004633CA /* NotificationServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085500B2E612458004633CA /* NotificationServiceProtocol.swift */; };
+		A08550102E61255A004633CA /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085500F2E61255A004633CA /* Coordinator.swift */; };
+		A08550122E61256B004633CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550112E61256B004633CA /* AppCoordinator.swift */; };
+		A08550142E61257B004633CA /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550132E61257B004633CA /* AuthCoordinator.swift */; };
+		A08550162E61258B004633CA /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550152E61258B004633CA /* MainCoordinator.swift */; };
+		A085501A2E6125E4004633CA /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550192E6125E4004633CA /* LoginViewController.swift */; };
+		A085501C2E6125F6004633CA /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085501B2E6125F6004633CA /* LoginViewModel.swift */; };
+		A085501F2E612637004633CA /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085501E2E612637004633CA /* CatalogViewController.swift */; };
+		A08550212E61264B004633CA /* CatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550202E61264B004633CA /* CatalogViewModel.swift */; };
+		A08550232E61265E004633CA /* ProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550222E61265E004633CA /* ProductCell.swift */; };
+		A08550262E612936004633CA /* ProductDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550252E612936004633CA /* ProductDetailsViewController.swift */; };
+		A08550282E612945004633CA /* ProductDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550272E612945004633CA /* ProductDetailsViewModel.swift */; };
+		A085502B2E612977004633CA /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085502A2E612977004633CA /* FavoritesViewController.swift */; };
+		A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085502C2E6129A3004633CA /* FavoritesViewModel.swift */; };
+		A085502F2E6129D1004633CA /* FavoriteProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085502E2E6129D1004633CA /* FavoriteProductCell.swift */; };
+		A08550322E612A46004633CA /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550312E612A45004633CA /* CartViewController.swift */; };
+		A08550362E612A62004633CA /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550352E612A62004633CA /* CartViewModel.swift */; };
+		A08550392E612A84004633CA /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550382E612A84004633CA /* ProfileViewController.swift */; };
+		A085503B2E612A94004633CA /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085503A2E612A94004633CA /* ProfileViewModel.swift */; };
+		A085503E2E612AC6004633CA /* CheckoutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085503D2E612AC6004633CA /* CheckoutViewController.swift */; };
+		A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085503F2E612ADB004633CA /* CheckoutViewModel.swift */; };
+		A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550412E612AEA004633CA /* MapPickerViewController.swift */; };
+		A08550452E612B4D004633CA /* TabBarFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550442E612B4D004633CA /* TabBarFactory.swift */; };
+		A085504A2E612C55004633CA /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550492E612C55004633CA /* UserDefaultsService.swift */; };
+		A085504C2E612F78004633CA /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085504B2E612F78004633CA /* UserDefaultsKeys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +94,51 @@
 		A0854FC82E611320004633CA /* VemoraStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreTests.swift; sourceTree = "<group>"; };
 		A0854FCB2E611324004633CA /* VemoraStoreUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreUITests.swift; sourceTree = "<group>"; };
 		A0854FCC2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		A0854FD32E611855004633CA /* ServiceLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceLocator.swift; sourceTree = "<group>"; };
+		A0854FD62E611898004633CA /* UIImageView+KF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+KF.swift"; sourceTree = "<group>"; };
+		A0854FD92E61199A004633CA /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		A0854FDD2E6119E6004633CA /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		A0854FE12E6121BC004633CA /* FirestoreProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProductService.swift; sourceTree = "<group>"; };
+		A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
+		A0854FE72E6121F4004633CA /* FirebaseProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseProfileService.swift; sourceTree = "<group>"; };
+		A0854FE92E612206004633CA /* FirebaseNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseNotificationService.swift; sourceTree = "<group>"; };
+		A0854FEE2E612272004633CA /* CartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartService.swift; sourceTree = "<group>"; };
+		A0854FF02E612286004633CA /* FavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesService.swift; sourceTree = "<group>"; };
+		A0854FF32E6122B6004633CA /* LocationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationService.swift; sourceTree = "<group>"; };
+		A0854FF82E612395004633CA /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
+		A0854FFA2E6123A5004633CA /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		A0854FFC2E6123B6004633CA /* Order.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Order.swift; sourceTree = "<group>"; };
+		A0854FFE2E6123D0004633CA /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
+		A08550012E612411004633CA /* AuthServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceProtocol.swift; sourceTree = "<group>"; };
+		A08550032E612420004633CA /* ProductServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductServiceProtocol.swift; sourceTree = "<group>"; };
+		A08550052E61242E004633CA /* ProfileServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileServiceProtocol.swift; sourceTree = "<group>"; };
+		A08550072E61243C004633CA /* CartServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartServiceProtocol.swift; sourceTree = "<group>"; };
+		A08550092E61244A004633CA /* FavoritesServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesServiceProtocol.swift; sourceTree = "<group>"; };
+		A085500B2E612458004633CA /* NotificationServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationServiceProtocol.swift; sourceTree = "<group>"; };
+		A085500F2E61255A004633CA /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		A08550112E61256B004633CA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		A08550132E61257B004633CA /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
+		A08550152E61258B004633CA /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
+		A08550192E6125E4004633CA /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		A085501B2E6125F6004633CA /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
+		A085501E2E612637004633CA /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
+		A08550202E61264B004633CA /* CatalogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewModel.swift; sourceTree = "<group>"; };
+		A08550222E61265E004633CA /* ProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCell.swift; sourceTree = "<group>"; };
+		A08550252E612936004633CA /* ProductDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsViewController.swift; sourceTree = "<group>"; };
+		A08550272E612945004633CA /* ProductDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsViewModel.swift; sourceTree = "<group>"; };
+		A085502A2E612977004633CA /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		A085502C2E6129A3004633CA /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
+		A085502E2E6129D1004633CA /* FavoriteProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteProductCell.swift; sourceTree = "<group>"; };
+		A08550312E612A45004633CA /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
+		A08550352E612A62004633CA /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
+		A08550382E612A84004633CA /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		A085503A2E612A94004633CA /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
+		A085503D2E612AC6004633CA /* CheckoutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewController.swift; sourceTree = "<group>"; };
+		A085503F2E612ADB004633CA /* CheckoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewModel.swift; sourceTree = "<group>"; };
+		A08550412E612AEA004633CA /* MapPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPickerViewController.swift; sourceTree = "<group>"; };
+		A08550442E612B4D004633CA /* TabBarFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarFactory.swift; sourceTree = "<group>"; };
+		A08550492E612C55004633CA /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
+		A085504B2E612F78004633CA /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,8 +170,6 @@
 			isa = PBXGroup;
 			children = (
 				A0854FBE2E611307004633CA /* VemoraStore */,
-				A0854FC92E611320004633CA /* VemoraStoreTests */,
-				A0854FCD2E611324004633CA /* VemoraStoreUITests */,
 				A0854F7E2E6112A3004633CA /* Products */,
 			);
 			sourceTree = "<group>";
@@ -99,12 +187,15 @@
 		A0854FBE2E611307004633CA /* VemoraStore */ = {
 			isa = PBXGroup;
 			children = (
-				A0854FB42E611307004633CA /* AppDelegate.swift */,
-				A0854FB52E611307004633CA /* Assets.xcassets */,
-				A0854FB62E611307004633CA /* Info.plist */,
-				A0854FB82E611307004633CA /* LaunchScreen.storyboard */,
-				A0854FBB2E611307004633CA /* SceneDelegate.swift */,
-				A0854FBC2E611307004633CA /* VemoraStore.xcdatamodeld */,
+				A0854FD02E61173E004633CA /* App */,
+				A0854FD12E6117F4004633CA /* Core */,
+				A0854FDF2E611B1B004633CA /* Data */,
+				A0854FF62E612317004633CA /* Domain */,
+				A085500D2E612480004633CA /* Presentation */,
+				A08550432E612AFF004633CA /* UI */,
+				A0854FF52E6122ED004633CA /* Resources */,
+				A08550462E612B94004633CA /* Tests */,
+				A08550472E612BAD004633CA /* LaunchScreen */,
 				A0854FBD2E611307004633CA /* ViewController.swift */,
 			);
 			path = VemoraStore;
@@ -125,6 +216,282 @@
 				A0854FCC2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift */,
 			);
 			path = VemoraStoreUITests;
+			sourceTree = "<group>";
+		};
+		A0854FD02E61173E004633CA /* App */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FB42E611307004633CA /* AppDelegate.swift */,
+				A0854FBB2E611307004633CA /* SceneDelegate.swift */,
+				A0854FB62E611307004633CA /* Info.plist */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		A0854FD12E6117F4004633CA /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FD22E611805004633CA /* DI */,
+				A0854FD52E61186A004633CA /* Extensions */,
+				A0854FD82E611972004633CA /* Persistence */,
+				A0854FDC2E6119CA004633CA /* Security */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		A0854FD22E611805004633CA /* DI */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FD32E611855004633CA /* ServiceLocator.swift */,
+			);
+			path = DI;
+			sourceTree = "<group>";
+		};
+		A0854FD52E61186A004633CA /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FD62E611898004633CA /* UIImageView+KF.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		A0854FD82E611972004633CA /* Persistence */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FD92E61199A004633CA /* CoreDataManager.swift */,
+				A0854FDB2E6119B1004633CA /* Models */,
+				A0854FBC2E611307004633CA /* VemoraStore.xcdatamodeld */,
+			);
+			path = Persistence;
+			sourceTree = "<group>";
+		};
+		A0854FDB2E6119B1004633CA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A0854FDC2E6119CA004633CA /* Security */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FDD2E6119E6004633CA /* KeychainService.swift */,
+			);
+			path = Security;
+			sourceTree = "<group>";
+		};
+		A0854FDF2E611B1B004633CA /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FE02E612180004633CA /* Firebase */,
+				A0854FED2E61224B004633CA /* Local */,
+				A0854FF22E61229E004633CA /* Location */,
+				A08550482E612C25004633CA /* UserDefaults */,
+			);
+			path = Data;
+			sourceTree = "<group>";
+		};
+		A0854FE02E612180004633CA /* Firebase */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FE12E6121BC004633CA /* FirestoreProductService.swift */,
+				A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */,
+				A0854FE72E6121F4004633CA /* FirebaseProfileService.swift */,
+				A0854FE92E612206004633CA /* FirebaseNotificationService.swift */,
+			);
+			path = Firebase;
+			sourceTree = "<group>";
+		};
+		A0854FED2E61224B004633CA /* Local */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FEE2E612272004633CA /* CartService.swift */,
+				A0854FF02E612286004633CA /* FavoritesService.swift */,
+			);
+			path = Local;
+			sourceTree = "<group>";
+		};
+		A0854FF22E61229E004633CA /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FF32E6122B6004633CA /* LocationService.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
+		A0854FF52E6122ED004633CA /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FB52E611307004633CA /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		A0854FF62E612317004633CA /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FF72E612380004633CA /* Models */,
+				A08550002E6123E2004633CA /* Protocols */,
+			);
+			path = Domain;
+			sourceTree = "<group>";
+		};
+		A0854FF72E612380004633CA /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FF82E612395004633CA /* Product.swift */,
+				A0854FFA2E6123A5004633CA /* Category.swift */,
+				A0854FFC2E6123B6004633CA /* Order.swift */,
+				A0854FFE2E6123D0004633CA /* Address.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		A08550002E6123E2004633CA /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				A08550012E612411004633CA /* AuthServiceProtocol.swift */,
+				A08550032E612420004633CA /* ProductServiceProtocol.swift */,
+				A08550052E61242E004633CA /* ProfileServiceProtocol.swift */,
+				A08550072E61243C004633CA /* CartServiceProtocol.swift */,
+				A08550092E61244A004633CA /* FavoritesServiceProtocol.swift */,
+				A085500B2E612458004633CA /* NotificationServiceProtocol.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		A085500D2E612480004633CA /* Presentation */ = {
+			isa = PBXGroup;
+			children = (
+				A085500E2E61253A004633CA /* Coordinators */,
+				A08550172E6125A4004633CA /* Scenes */,
+			);
+			path = Presentation;
+			sourceTree = "<group>";
+		};
+		A085500E2E61253A004633CA /* Coordinators */ = {
+			isa = PBXGroup;
+			children = (
+				A085500F2E61255A004633CA /* Coordinator.swift */,
+				A08550112E61256B004633CA /* AppCoordinator.swift */,
+				A08550132E61257B004633CA /* AuthCoordinator.swift */,
+				A08550152E61258B004633CA /* MainCoordinator.swift */,
+			);
+			path = Coordinators;
+			sourceTree = "<group>";
+		};
+		A08550172E6125A4004633CA /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				A08550182E6125CC004633CA /* Auth */,
+				A085501D2E61260C004633CA /* Catalog */,
+				A08550242E61291F004633CA /* ProductDetails */,
+				A08550292E612952004633CA /* Favorites */,
+				A08550302E612A33004633CA /* Cart */,
+				A08550372E612A6F004633CA /* Profile */,
+				A085503C2E612AA0004633CA /* Checkout */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		A08550182E6125CC004633CA /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				A08550192E6125E4004633CA /* LoginViewController.swift */,
+				A085501B2E6125F6004633CA /* LoginViewModel.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
+		A085501D2E61260C004633CA /* Catalog */ = {
+			isa = PBXGroup;
+			children = (
+				A085501E2E612637004633CA /* CatalogViewController.swift */,
+				A08550202E61264B004633CA /* CatalogViewModel.swift */,
+				A08550222E61265E004633CA /* ProductCell.swift */,
+			);
+			path = Catalog;
+			sourceTree = "<group>";
+		};
+		A08550242E61291F004633CA /* ProductDetails */ = {
+			isa = PBXGroup;
+			children = (
+				A08550252E612936004633CA /* ProductDetailsViewController.swift */,
+				A08550272E612945004633CA /* ProductDetailsViewModel.swift */,
+			);
+			path = ProductDetails;
+			sourceTree = "<group>";
+		};
+		A08550292E612952004633CA /* Favorites */ = {
+			isa = PBXGroup;
+			children = (
+				A085502A2E612977004633CA /* FavoritesViewController.swift */,
+				A085502C2E6129A3004633CA /* FavoritesViewModel.swift */,
+				A085502E2E6129D1004633CA /* FavoriteProductCell.swift */,
+			);
+			path = Favorites;
+			sourceTree = "<group>";
+		};
+		A08550302E612A33004633CA /* Cart */ = {
+			isa = PBXGroup;
+			children = (
+				A08550312E612A45004633CA /* CartViewController.swift */,
+				A08550352E612A62004633CA /* CartViewModel.swift */,
+			);
+			path = Cart;
+			sourceTree = "<group>";
+		};
+		A08550372E612A6F004633CA /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				A08550382E612A84004633CA /* ProfileViewController.swift */,
+				A085503A2E612A94004633CA /* ProfileViewModel.swift */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		A085503C2E612AA0004633CA /* Checkout */ = {
+			isa = PBXGroup;
+			children = (
+				A085503D2E612AC6004633CA /* CheckoutViewController.swift */,
+				A085503F2E612ADB004633CA /* CheckoutViewModel.swift */,
+				A08550412E612AEA004633CA /* MapPickerViewController.swift */,
+			);
+			path = Checkout;
+			sourceTree = "<group>";
+		};
+		A08550432E612AFF004633CA /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A08550442E612B4D004633CA /* TabBarFactory.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		A08550462E612B94004633CA /* Tests */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FC92E611320004633CA /* VemoraStoreTests */,
+				A0854FCD2E611324004633CA /* VemoraStoreUITests */,
+			);
+			path = Tests;
+			sourceTree = "<group>";
+		};
+		A08550472E612BAD004633CA /* LaunchScreen */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FB82E611307004633CA /* LaunchScreen.storyboard */,
+			);
+			path = LaunchScreen;
+			sourceTree = "<group>";
+		};
+		A08550482E612C25004633CA /* UserDefaults */ = {
+			isa = PBXGroup;
+			children = (
+				A08550492E612C55004633CA /* UserDefaultsService.swift */,
+				A085504B2E612F78004633CA /* UserDefaultsKeys.swift */,
+			);
+			path = UserDefaults;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -264,10 +631,55 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0854FE62E6121E3004633CA /* FirebaseAuthService.swift in Sources */,
+				A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */,
+				A08550102E61255A004633CA /* Coordinator.swift in Sources */,
 				A0854FC42E611307004633CA /* AppDelegate.swift in Sources */,
+				A08550042E612420004633CA /* ProductServiceProtocol.swift in Sources */,
+				A08550082E61243C004633CA /* CartServiceProtocol.swift in Sources */,
+				A08550122E61256B004633CA /* AppCoordinator.swift in Sources */,
+				A0854FD42E611855004633CA /* ServiceLocator.swift in Sources */,
+				A085504C2E612F78004633CA /* UserDefaultsKeys.swift in Sources */,
+				A0854FEF2E612272004633CA /* CartService.swift in Sources */,
+				A0854FFF2E6123D0004633CA /* Address.swift in Sources */,
 				A0854FC52E611307004633CA /* SceneDelegate.swift in Sources */,
+				A08550282E612945004633CA /* ProductDetailsViewModel.swift in Sources */,
+				A085504A2E612C55004633CA /* UserDefaultsService.swift in Sources */,
+				A08550322E612A46004633CA /* CartViewController.swift in Sources */,
+				A08550212E61264B004633CA /* CatalogViewModel.swift in Sources */,
+				A0854FD72E611898004633CA /* UIImageView+KF.swift in Sources */,
+				A08550162E61258B004633CA /* MainCoordinator.swift in Sources */,
+				A085503E2E612AC6004633CA /* CheckoutViewController.swift in Sources */,
+				A0854FF42E6122B6004633CA /* LocationService.swift in Sources */,
+				A0854FF12E612286004633CA /* FavoritesService.swift in Sources */,
+				A08550392E612A84004633CA /* ProfileViewController.swift in Sources */,
+				A0854FF92E612395004633CA /* Product.swift in Sources */,
+				A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */,
+				A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */,
+				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
 				A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */,
+				A085501C2E6125F6004633CA /* LoginViewModel.swift in Sources */,
+				A0854FFB2E6123A5004633CA /* Category.swift in Sources */,
+				A085501A2E6125E4004633CA /* LoginViewController.swift in Sources */,
+				A08550022E612411004633CA /* AuthServiceProtocol.swift in Sources */,
+				A08550142E61257B004633CA /* AuthCoordinator.swift in Sources */,
+				A085503B2E612A94004633CA /* ProfileViewModel.swift in Sources */,
+				A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */,
+				A0854FFD2E6123B6004633CA /* Order.swift in Sources */,
+				A0854FDE2E6119E6004633CA /* KeychainService.swift in Sources */,
+				A08550062E61242E004633CA /* ProfileServiceProtocol.swift in Sources */,
+				A0854FDA2E61199A004633CA /* CoreDataManager.swift in Sources */,
+				A085502F2E6129D1004633CA /* FavoriteProductCell.swift in Sources */,
+				A08550262E612936004633CA /* ProductDetailsViewController.swift in Sources */,
+				A08550452E612B4D004633CA /* TabBarFactory.swift in Sources */,
+				A085500C2E612458004633CA /* NotificationServiceProtocol.swift in Sources */,
+				A08550362E612A62004633CA /* CartViewModel.swift in Sources */,
+				A085502B2E612977004633CA /* FavoritesViewController.swift in Sources */,
+				A08550232E61265E004633CA /* ProductCell.swift in Sources */,
+				A0854FE82E6121F4004633CA /* FirebaseProfileService.swift in Sources */,
 				A0854FC72E611307004633CA /* ViewController.swift in Sources */,
+				A0854FEA2E612206004633CA /* FirebaseNotificationService.swift in Sources */,
+				A085500A2E61244A004633CA /* FavoritesServiceProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,7 +736,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QZ329TNU43;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = VemoraStore/Info.plist;
+				INFOPLIST_FILE = VemoraStore/App/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -357,7 +769,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = QZ329TNU43;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = VemoraStore/Info.plist;
+				INFOPLIST_FILE = VemoraStore/App/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.business";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
