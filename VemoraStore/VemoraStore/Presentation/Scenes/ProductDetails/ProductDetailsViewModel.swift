@@ -14,6 +14,7 @@ final class ProductDetailsViewModel {
     private let favoritesService: FavoritesServiceProtocol
     private let cartService: CartServiceProtocol
     
+    // MARK: - Init
     init(
         product: Product,
         favoritesService: FavoritesServiceProtocol = Container.shared.favoritesService(),
@@ -22,5 +23,23 @@ final class ProductDetailsViewModel {
         self.product = product
         self.favoritesService = favoritesService
         self.cartService = cartService
+    }
+    
+    // MARK: - Outputs (для UI)
+    var title: String { product.name }
+    var description: String { product.description }
+    var priceText: String { "\(product.price) ₽" }
+    
+    var isFavorite: Bool {
+        favoritesService.isFavorite(product.id)
+    }
+    
+    // MARK: - Actions
+    func toggleFavorite() {
+        favoritesService.toggle(productId: product.id)
+    }
+    
+    func addToCart() {
+        cartService.add(product: product)
     }
 }

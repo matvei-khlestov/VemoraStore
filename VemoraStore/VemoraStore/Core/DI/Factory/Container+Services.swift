@@ -8,6 +8,7 @@
 import FactoryKit
 
 extension Container {
+    
     var authService: Factory<AuthServiceProtocol> {
         self { FirebaseAuthService() }.singleton
     }
