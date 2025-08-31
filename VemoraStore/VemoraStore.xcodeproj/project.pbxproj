@@ -49,7 +49,6 @@
 		A08550282E612945004633CA /* ProductDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550272E612945004633CA /* ProductDetailsViewModel.swift */; };
 		A085502B2E612977004633CA /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085502A2E612977004633CA /* FavoritesViewController.swift */; };
 		A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085502C2E6129A3004633CA /* FavoritesViewModel.swift */; };
-		A085502F2E6129D1004633CA /* FavoriteProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085502E2E6129D1004633CA /* FavoriteProductCell.swift */; };
 		A08550322E612A46004633CA /* CartViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550312E612A45004633CA /* CartViewController.swift */; };
 		A08550362E612A62004633CA /* CartViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550352E612A62004633CA /* CartViewModel.swift */; };
 		A08550392E612A84004633CA /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550382E612A84004633CA /* ProfileViewController.swift */; };
@@ -67,6 +66,13 @@
 		A08550592E614B5C004633CA /* LocationServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550582E614B5C004633CA /* LocationServiceProtocol.swift */; };
 		A085505C2E614D79004633CA /* FactoryKit in Frameworks */ = {isa = PBXBuildFile; productRef = A085505B2E614D79004633CA /* FactoryKit */; };
 		A085505E2E614EA3004633CA /* CartItemEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085505D2E614EA3004633CA /* CartItemEntity.swift */; };
+		A08550612E63EBF8004633CA /* UI.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550602E63EBF8004633CA /* UI.swift */; };
+		A08550632E63F006004633CA /* AppTab.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550622E63F006004633CA /* AppTab.swift */; };
+		A08550652E63F518004633CA /* CatalogCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550642E63F518004633CA /* CatalogCoordinator.swift */; };
+		A08550672E63F7EC004633CA /* FavoritesCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550662E63F7EC004633CA /* FavoritesCoordinator.swift */; };
+		A08550692E64005F004633CA /* CartCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550682E64005F004633CA /* CartCoordinator.swift */; };
+		A085506B2E6400A1004633CA /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085506A2E6400A1004633CA /* ProfileCoordinator.swift */; };
+		A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -133,7 +139,6 @@
 		A08550272E612945004633CA /* ProductDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductDetailsViewModel.swift; sourceTree = "<group>"; };
 		A085502A2E612977004633CA /* FavoritesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
 		A085502C2E6129A3004633CA /* FavoritesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesViewModel.swift; sourceTree = "<group>"; };
-		A085502E2E6129D1004633CA /* FavoriteProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteProductCell.swift; sourceTree = "<group>"; };
 		A08550312E612A45004633CA /* CartViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewController.swift; sourceTree = "<group>"; };
 		A08550352E612A62004633CA /* CartViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartViewModel.swift; sourceTree = "<group>"; };
 		A08550382E612A84004633CA /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
@@ -150,6 +155,13 @@
 		A08550562E6144CB004633CA /* Profile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Profile.swift; sourceTree = "<group>"; };
 		A08550582E614B5C004633CA /* LocationServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationServiceProtocol.swift; sourceTree = "<group>"; };
 		A085505D2E614EA3004633CA /* CartItemEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartItemEntity.swift; sourceTree = "<group>"; };
+		A08550602E63EBF8004633CA /* UI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UI.swift; sourceTree = "<group>"; };
+		A08550622E63F006004633CA /* AppTab.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppTab.swift; sourceTree = "<group>"; };
+		A08550642E63F518004633CA /* CatalogCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogCoordinator.swift; sourceTree = "<group>"; };
+		A08550662E63F7EC004633CA /* FavoritesCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCoordinator.swift; sourceTree = "<group>"; };
+		A08550682E64005F004633CA /* CartCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCoordinator.swift; sourceTree = "<group>"; };
+		A085506A2E6400A1004633CA /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
+		A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -205,7 +217,7 @@
 				A0854FDF2E611B1B004633CA /* Data */,
 				A0854FF62E612317004633CA /* Domain */,
 				A085500D2E612480004633CA /* Presentation */,
-				A08550432E612AFF004633CA /* UI */,
+				A085505F2E63EBD0004633CA /* UI */,
 				A0854FF52E6122ED004633CA /* Resources */,
 				A08550462E612B94004633CA /* Tests */,
 				A08550472E612BAD004633CA /* LaunchScreen */,
@@ -393,6 +405,11 @@
 				A08550112E61256B004633CA /* AppCoordinator.swift */,
 				A08550132E61257B004633CA /* AuthCoordinator.swift */,
 				A08550152E61258B004633CA /* MainCoordinator.swift */,
+				A08550642E63F518004633CA /* CatalogCoordinator.swift */,
+				A08550662E63F7EC004633CA /* FavoritesCoordinator.swift */,
+				A08550682E64005F004633CA /* CartCoordinator.swift */,
+				A085506A2E6400A1004633CA /* ProfileCoordinator.swift */,
+				A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -444,7 +461,6 @@
 			children = (
 				A085502A2E612977004633CA /* FavoritesViewController.swift */,
 				A085502C2E6129A3004633CA /* FavoritesViewModel.swift */,
-				A085502E2E6129D1004633CA /* FavoriteProductCell.swift */,
 			);
 			path = Favorites;
 			sourceTree = "<group>";
@@ -477,13 +493,6 @@
 			path = Checkout;
 			sourceTree = "<group>";
 		};
-		A08550432E612AFF004633CA /* UI */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UI;
-			sourceTree = "<group>";
-		};
 		A08550462E612B94004633CA /* Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -513,6 +522,7 @@
 		A085504D2E613155004633CA /* TabBar */ = {
 			isa = PBXGroup;
 			children = (
+				A08550622E63F006004633CA /* AppTab.swift */,
 				A08550442E612B4D004633CA /* TabBarFactory.swift */,
 			);
 			path = TabBar;
@@ -533,6 +543,14 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		A085505F2E63EBD0004633CA /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				A08550602E63EBF8004633CA /* UI.swift */,
+			);
+			path = UI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -683,7 +701,9 @@
 				A08550042E612420004633CA /* ProductServiceProtocol.swift in Sources */,
 				A08550082E61243C004633CA /* CartServiceProtocol.swift in Sources */,
 				A08550122E61256B004633CA /* AppCoordinator.swift in Sources */,
+				A08550652E63F518004633CA /* CatalogCoordinator.swift in Sources */,
 				A085504C2E612F78004633CA /* UserDefaultsKeys.swift in Sources */,
+				A08550612E63EBF8004633CA /* UI.swift in Sources */,
 				A0854FEF2E612272004633CA /* CartService.swift in Sources */,
 				A0854FFF2E6123D0004633CA /* Address.swift in Sources */,
 				A0854FC52E611307004633CA /* SceneDelegate.swift in Sources */,
@@ -702,22 +722,26 @@
 				A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */,
 				A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */,
 				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
+				A085506B2E6400A1004633CA /* ProfileCoordinator.swift in Sources */,
 				A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */,
 				A085501C2E6125F6004633CA /* LoginViewModel.swift in Sources */,
+				A08550692E64005F004633CA /* CartCoordinator.swift in Sources */,
 				A0854FFB2E6123A5004633CA /* Category.swift in Sources */,
 				A08550572E6144CB004633CA /* Profile.swift in Sources */,
 				A085501A2E6125E4004633CA /* LoginViewController.swift in Sources */,
 				A08550022E612411004633CA /* AuthServiceProtocol.swift in Sources */,
 				A08550512E613F2D004633CA /* Container+ViewModels.swift in Sources */,
+				A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */,
 				A08550142E61257B004633CA /* AuthCoordinator.swift in Sources */,
 				A08550592E614B5C004633CA /* LocationServiceProtocol.swift in Sources */,
 				A085503B2E612A94004633CA /* ProfileViewModel.swift in Sources */,
 				A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */,
 				A0854FFD2E6123B6004633CA /* Order.swift in Sources */,
+				A08550672E63F7EC004633CA /* FavoritesCoordinator.swift in Sources */,
+				A08550632E63F006004633CA /* AppTab.swift in Sources */,
 				A0854FDE2E6119E6004633CA /* KeychainService.swift in Sources */,
 				A08550062E61242E004633CA /* ProfileServiceProtocol.swift in Sources */,
 				A0854FDA2E61199A004633CA /* CoreDataManager.swift in Sources */,
-				A085502F2E6129D1004633CA /* FavoriteProductCell.swift in Sources */,
 				A08550262E612936004633CA /* ProductDetailsViewController.swift in Sources */,
 				A08550452E612B4D004633CA /* TabBarFactory.swift in Sources */,
 				A085504F2E613EF8004633CA /* Container+Services.swift in Sources */,
