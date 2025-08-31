@@ -6,3 +6,12 @@
 //
 
 import Foundation
+import Combine
+
+protocol AuthServiceProtocol {
+    var isAuthorizedPublisher: AnyPublisher<Bool, Never> { get }
+    func signIn(email: String, password: String) async throws
+    func signUp(email: String, password: String) async throws
+    func signOut() throws
+    var currentUserId: String? { get }
+}

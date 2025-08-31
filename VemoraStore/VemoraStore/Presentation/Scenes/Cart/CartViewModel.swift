@@ -6,3 +6,13 @@
 //
 
 import Foundation
+import FactoryKit
+
+final class CartViewModel {
+    
+    private let cartService: CartServiceProtocol
+    
+    init(cartService: CartServiceProtocol = Container.shared.cartService()) {
+        self.cartService = cartService
+    }
+}

@@ -6,3 +6,18 @@
 //
 
 import Foundation
+import FactoryKit
+
+final class FavoritesViewModel {
+    
+    private let favoritesService: FavoritesServiceProtocol
+    private let productService: ProductServiceProtocol
+    
+    init(
+        favoritesService: FavoritesServiceProtocol = Container.shared.favoritesService(),
+        productService: ProductServiceProtocol = Container.shared.productService()
+    ) {
+        self.favoritesService = favoritesService
+        self.productService = productService
+    }
+}

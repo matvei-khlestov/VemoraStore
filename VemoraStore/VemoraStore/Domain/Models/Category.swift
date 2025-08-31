@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct Category: Codable, Hashable {
+    let id: String
+    let name: String
+    let icon: URL?
+}

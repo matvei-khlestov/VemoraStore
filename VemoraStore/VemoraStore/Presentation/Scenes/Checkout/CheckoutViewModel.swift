@@ -6,3 +6,18 @@
 //
 
 import Foundation
+import FactoryKit
+
+final class CheckoutViewModel {
+    
+    private let cartService: CartServiceProtocol
+    private let authService: AuthServiceProtocol
+    
+    init(
+        cart: CartServiceProtocol = Container.shared.cartService(),
+        auth: AuthServiceProtocol = Container.shared.authService()
+    ) {
+        self.cartService = cart
+        self.authService = auth
+    }
+}

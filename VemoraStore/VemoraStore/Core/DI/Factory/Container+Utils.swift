@@ -1,5 +1,5 @@
 //
-//  ServiceLocator.swift
+//  Container+Utils.swift
 //  VemoraStore
 //
 //  Created by Matvei Khlestov on 29.08.2025.

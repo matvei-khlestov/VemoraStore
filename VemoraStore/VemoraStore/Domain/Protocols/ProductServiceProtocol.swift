@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import Combine
+
+protocol ProductServiceProtocol {
+    func products() -> AnyPublisher<[Product], Error>
+    func products(in categoryId: String) -> AnyPublisher<[Product], Error>
+    func categories() -> AnyPublisher<[Category], Error>
+}
