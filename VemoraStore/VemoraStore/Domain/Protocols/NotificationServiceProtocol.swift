@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol NotificationServiceProtocol {
+    func updateFCMToken(_ token: String, for uid: String)
+}

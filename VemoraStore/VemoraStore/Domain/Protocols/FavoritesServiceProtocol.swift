@@ -6,3 +6,10 @@
 //
 
 import Foundation
+import Combine
+
+protocol FavoritesServiceProtocol {
+    var favoritesIdsPublisher: AnyPublisher<Set<String>, Never> { get }
+    func toggle(productId: String)
+    func isFavorite(_ productId: String) -> Bool
+}

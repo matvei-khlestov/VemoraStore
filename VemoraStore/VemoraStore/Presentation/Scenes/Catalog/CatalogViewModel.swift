@@ -6,3 +6,13 @@
 //
 
 import Foundation
+import FactoryKit
+
+final class CatalogViewModel {
+    
+    private let productService: ProductServiceProtocol
+    
+    init(productService: ProductServiceProtocol = Container.shared.productService()) {
+        self.productService = productService
+    }
+}

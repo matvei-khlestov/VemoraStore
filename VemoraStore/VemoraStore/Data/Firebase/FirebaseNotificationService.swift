@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+final class FirebaseNotificationService: NotificationServiceProtocol {
+    func updateFCMToken(_ token: String, for uid: String) {}
+}

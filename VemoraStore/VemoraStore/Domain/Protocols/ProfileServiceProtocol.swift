@@ -6,3 +6,9 @@
 //
 
 import Foundation
+import Combine
+
+protocol ProfileServiceProtocol {
+    func loadProfile(uid: String) -> AnyPublisher<Profile, Error>
+    func updateProfile(_ profile: Profile, avatar: Data?) async throws
+}
