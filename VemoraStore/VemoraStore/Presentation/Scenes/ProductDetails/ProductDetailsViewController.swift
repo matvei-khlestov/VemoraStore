@@ -83,7 +83,6 @@ final class ProductDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Товар"
         setupLayout()
         configure()
     }

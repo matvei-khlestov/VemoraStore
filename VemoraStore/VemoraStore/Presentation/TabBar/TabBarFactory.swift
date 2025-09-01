@@ -12,6 +12,8 @@ struct TabBarFactory {
     static func makeNav(root: UIViewController, tab: AppTab) -> UINavigationController {
         let nav = UINavigationController(rootViewController: root)
         nav.navigationBar.prefersLargeTitles = true
+        root.navigationItem.largeTitleDisplayMode = .always
+        root.navigationItem.title = tab.title
         nav.tabBarItem = UITabBarItem(title: tab.title,
                                       image: UIImage(systemName: tab.systemImage),
                                       tag: tab.rawValue)
@@ -28,8 +30,19 @@ struct TabBarFactory {
 
     static func applyAppearance(to tabBarController: UITabBarController) {
         let appearance = UITabBarAppearance()
-        appearance.configureWithDefaultBackground()
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [
+            .foregroundColor: UIColor.gray,
+            .font: UIFont.systemFont(ofSize: 12)
+        ]
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.gray
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [
+            .foregroundColor: UIColor.brightPurple,
+            .font: UIFont.systemFont(ofSize: 12)
+        ]
+        appearance.stackedLayoutAppearance.selected.iconColor = UIColor.brightPurple
+        
         tabBarController.tabBar.standardAppearance = appearance
+        
         if #available(iOS 15.0, *) {
             tabBarController.tabBar.scrollEdgeAppearance = appearance
         }

@@ -9,10 +9,10 @@ import UIKit
 import FactoryKit
 
 final class AppCoordinator: Coordinator {
+    
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
 
-    // deps
     private let authService: AuthServiceProtocol
 
     init(
@@ -24,30 +24,41 @@ final class AppCoordinator: Coordinator {
     }
 
     func start() {
-        if authService.currentUserId != nil {
-            showMain()
-        } else {
-            showAuth()
-        }
+        showMain()
     }
 
-    private func showAuth() {
+    // MARK: - Public helper (по требованию просим авторизацию и потом выполняем completion)
+    func requireAuth(completion: @escaping () -> Void) {
+        if authService.currentUserId != nil {
+            completion()
+            return
+        }
+        showAuth(onFinish: completion)
+    }
+
+    // MARK: - Flows
+    private func showAuth(onFinish: (() -> Void)? = nil) {
+        navigation.setNavigationBarHidden(false, animated: false)
+
         let auth = AuthCoordinator(navigation: navigation, authService: authService)
-        store(auth)
+        add(auth)
         auth.onFinish = { [weak self, weak auth] in
-            if let auth { self?.free(auth) }
-            self?.showMain()
+            if let auth { self?.remove(auth) }
+            onFinish?() ?? self?.showMain()
         }
         auth.start()
     }
 
     private func showMain() {
+        navigation.setNavigationBarHidden(true, animated: false)
+
         let main = MainCoordinator(navigation: navigation)
-        store(main)
+        add(main)
         main.onLogout = { [weak self, weak main] in
-            if let main { self?.free(main) }
+            if let main { self?.remove(main) }
             self?.showAuth()
         }
         main.start()
     }
 }
+

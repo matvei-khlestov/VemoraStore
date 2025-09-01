@@ -53,9 +53,10 @@ final class CatalogViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Каталог"
         view.backgroundColor = .systemBackground
+        title = "Каталог"
         navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
         setupLayout()
         bindViewModel()
         reload()
