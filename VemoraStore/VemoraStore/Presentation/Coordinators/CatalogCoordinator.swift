@@ -42,9 +42,9 @@ final class CatalogCoordinator: Coordinator {
 
     private func startCheckout() {
         let checkout = CheckoutCoordinator(navigation: navigation)
-        store(checkout)
+        add(checkout)
         checkout.onFinish = { [weak self, weak checkout] in
-            if let checkout { self?.free(checkout) }
+            if let checkout { self?.remove(checkout) }
         }
         checkout.start()
     }

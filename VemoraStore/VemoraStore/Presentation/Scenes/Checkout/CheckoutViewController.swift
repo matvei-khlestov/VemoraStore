@@ -34,6 +34,7 @@ final class CheckoutViewController: UIViewController {
     
     private let deliveryControl: UISegmentedControl = {
         let sc = UISegmentedControl(items: ["Самовывоз", "Доставка"])
+        sc.tintColor = .systemPurple
         sc.selectedSegmentIndex = 0
         return sc
     }()
@@ -107,7 +108,6 @@ final class CheckoutViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Оформление"
         view.backgroundColor = .systemBackground
         setupLayout()
         setupActions()

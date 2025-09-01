@@ -19,30 +19,30 @@ final class MainCoordinator: Coordinator {
     
     func start() {
         
-        let catalogNav = UINavigationController()
+        let catalogVC = CatalogViewController()
+        let catalogNav = TabBarFactory.makeNav(root: catalogVC, tab: .catalog)
         let catalog = CatalogCoordinator(navigation: catalogNav)
-        store(catalog)
+        add(catalog)
         catalog.start()
         
-        let favoritesNav = UINavigationController()
+        let favoritesVC = FavoritesViewController()
+        let favoritesNav = TabBarFactory.makeNav(root: favoritesVC, tab: .favorites)
         let favorites = FavoritesCoordinator(navigation: favoritesNav)
-        store(favorites)
+        add(favorites)
         favorites.start()
         
-        let cartNav = UINavigationController()
+        let cartVC = CartViewController()
+        let cartNav = TabBarFactory.makeNav(root: cartVC, tab: .cart)
         let cart = CartCoordinator(navigation: cartNav)
-        store(cart); cart.start()
+        add(cart)
+        cart.start()
         
-        let profileNav = UINavigationController()
+        let profileVC = ProfileViewController()
+        let profileNav = TabBarFactory.makeNav(root: profileVC, tab: .profile)
         let profile = ProfileCoordinator(navigation: profileNav)
-        store(profile)
+        add(profile)
         profile.onLogout = { [weak self] in self?.onLogout?() }
         profile.start()
-        
-        catalogNav.tabBarItem   = UITabBarItem(title: AppTab.catalog.title,   image: UIImage(systemName: AppTab.catalog.systemImage),   tag: AppTab.catalog.rawValue)
-        favoritesNav.tabBarItem = UITabBarItem(title: AppTab.favorites.title, image: UIImage(systemName: AppTab.favorites.systemImage), tag: AppTab.favorites.rawValue)
-        cartNav.tabBarItem      = UITabBarItem(title: AppTab.cart.title,      image: UIImage(systemName: AppTab.cart.systemImage),      tag: AppTab.cart.rawValue)
-        profileNav.tabBarItem   = UITabBarItem(title: AppTab.profile.title,   image: UIImage(systemName: AppTab.profile.systemImage),   tag: AppTab.profile.rawValue)
         
         let tab = TabBarFactory.makeTabBar(
             viewControllers: [catalogNav, favoritesNav, cartNav, profileNav],

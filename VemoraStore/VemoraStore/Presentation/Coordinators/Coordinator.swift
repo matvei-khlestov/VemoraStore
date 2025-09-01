@@ -14,6 +14,6 @@ protocol Coordinator: AnyObject {
 }
 
 extension Coordinator {
-    func store(_ child: Coordinator) { childCoordinators.append(child) }
-    func free(_ child: Coordinator) { childCoordinators.removeAll { $0 === child } }
+    func add(_ child: Coordinator) { childCoordinators.append(child) }
+    func remove(_ child: Coordinator) { childCoordinators.removeAll { $0 === child } }
 }
