@@ -73,6 +73,8 @@
 		A08550692E64005F004633CA /* CartCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550682E64005F004633CA /* CartCoordinator.swift */; };
 		A085506B2E6400A1004633CA /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085506A2E6400A1004633CA /* ProfileCoordinator.swift */; };
 		A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */; };
+		A085506F2E69444E004633CA /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085506E2E69444E004633CA /* CategoryCell.swift */; };
+		A08550712E694489004633CA /* CatalogSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550702E694489004633CA /* CatalogSectionHeader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -162,6 +164,8 @@
 		A08550682E64005F004633CA /* CartCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartCoordinator.swift; sourceTree = "<group>"; };
 		A085506A2E6400A1004633CA /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
 		A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutCoordinator.swift; sourceTree = "<group>"; };
+		A085506E2E69444E004633CA /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
+		A08550702E694489004633CA /* CatalogSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogSectionHeader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -440,9 +444,9 @@
 		A085501D2E61260C004633CA /* Catalog */ = {
 			isa = PBXGroup;
 			children = (
-				A085501E2E612637004633CA /* CatalogViewController.swift */,
-				A08550202E61264B004633CA /* CatalogViewModel.swift */,
-				A08550222E61265E004633CA /* ProductCell.swift */,
+				A08550742E698278004633CA /* Scene */,
+				A08550722E698226004633CA /* Cells */,
+				A08550732E698240004633CA /* Header */,
 			);
 			path = Catalog;
 			sourceTree = "<group>";
@@ -551,6 +555,32 @@
 				A08550602E63EBF8004633CA /* UI.swift */,
 			);
 			path = UI;
+			sourceTree = "<group>";
+		};
+		A08550722E698226004633CA /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				A08550222E61265E004633CA /* ProductCell.swift */,
+				A085506E2E69444E004633CA /* CategoryCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		A08550732E698240004633CA /* Header */ = {
+			isa = PBXGroup;
+			children = (
+				A08550702E694489004633CA /* CatalogSectionHeader.swift */,
+			);
+			path = Header;
+			sourceTree = "<group>";
+		};
+		A08550742E698278004633CA /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				A085501E2E612637004633CA /* CatalogViewController.swift */,
+				A08550202E61264B004633CA /* CatalogViewModel.swift */,
+			);
+			path = Scene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -698,6 +728,7 @@
 				A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */,
 				A08550102E61255A004633CA /* Coordinator.swift in Sources */,
 				A0854FC42E611307004633CA /* AppDelegate.swift in Sources */,
+				A08550712E694489004633CA /* CatalogSectionHeader.swift in Sources */,
 				A08550042E612420004633CA /* ProductServiceProtocol.swift in Sources */,
 				A08550082E61243C004633CA /* CartServiceProtocol.swift in Sources */,
 				A08550122E61256B004633CA /* AppCoordinator.swift in Sources */,
@@ -754,6 +785,7 @@
 				A085505E2E614EA3004633CA /* CartItemEntity.swift in Sources */,
 				A0854FEA2E612206004633CA /* FirebaseNotificationService.swift in Sources */,
 				A085500A2E61244A004633CA /* FavoritesServiceProtocol.swift in Sources */,
+				A085506F2E69444E004633CA /* CategoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

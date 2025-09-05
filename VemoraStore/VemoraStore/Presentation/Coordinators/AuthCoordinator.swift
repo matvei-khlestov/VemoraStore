@@ -10,6 +10,7 @@ import Combine
 import FactoryKit
 
 final class AuthCoordinator: Coordinator {
+    
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     
