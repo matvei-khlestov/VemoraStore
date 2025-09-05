@@ -28,6 +28,7 @@ final class AppCoordinator: Coordinator {
     }
 
     // MARK: - Public helper (по требованию просим авторизацию и потом выполняем completion)
+    
     func requireAuth(completion: @escaping () -> Void) {
         if authService.currentUserId != nil {
             completion()
@@ -37,6 +38,7 @@ final class AppCoordinator: Coordinator {
     }
 
     // MARK: - Flows
+    
     private func showAuth(onFinish: (() -> Void)? = nil) {
         navigation.setNavigationBarHidden(false, animated: false)
 
