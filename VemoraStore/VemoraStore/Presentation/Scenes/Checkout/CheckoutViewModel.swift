@@ -27,11 +27,11 @@ final class CheckoutViewModel {
     @Published var deliveryMethod: DeliveryMethod = .pickup
 
     // MARK: - Outputs
-    var totalPublisher: AnyPublisher<Double, Never> {
-        cartService.itemsPublisher
-            .map { $0.reduce(0) { $0 + $1.totalPrice } }
-            .eraseToAnyPublisher()
-    }
+//    var totalPublisher: AnyPublisher<Double, Never> {
+//        cartService.itemsPublisher
+//            .map { $0.reduce(into: 0) { $0 + $1.totalPrice } }
+//            .eraseToAnyPublisher()
+//    }
 
     /// Можно ли оформить заказ (есть товары и либо самовывоз, либо есть адрес)
     var isPlaceOrderEnabled: AnyPublisher<Bool, Never> {
@@ -56,10 +56,10 @@ final class CheckoutViewModel {
 
     // MARK: - Private
     private func bind() {
-        cartService.itemsPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.items = $0 }
-            .store(in: &bag)
+//        cartService.itemsPublisher
+//            .receive(on: DispatchQueue.main)
+//            .sink { [weak self] in self?.items = $0 }
+//            .store(in: &bag)
     }
 
     // MARK: - Actions
@@ -83,7 +83,7 @@ final class CheckoutViewModel {
             try? await Task.sleep(nanoseconds: 600_000_000) // 0.6s
             await MainActor.run { [weak self] in
                 self?.isPlacing = false
-                self?.cartService.clear() // очистим корзину после "успеха"
+                /*self?.cartService.clear()*/ // очистим корзину после "успеха"
             }
         }
     }

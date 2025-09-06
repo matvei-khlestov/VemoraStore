@@ -53,7 +53,7 @@ final class ProductDetailsViewModel {
     
     /// Добавить в корзину (кнопка «Добавить в корзину»)
     func addToCart() {
-        cartService.add(product: product)
+        cartService.add(product: product, quantity: 1)
     }
     
     /// Добавить в корзину сразу с количеством (используется, если вызовешь из контроллера с qty)
@@ -61,7 +61,7 @@ final class ProductDetailsViewModel {
     func addToCart(quantity: Int) {
         guard quantity > 0 else { return }
         for _ in 0..<quantity {
-            cartService.add(product: product)
+            cartService.add(product: product, quantity: 1)
         }
     }
     

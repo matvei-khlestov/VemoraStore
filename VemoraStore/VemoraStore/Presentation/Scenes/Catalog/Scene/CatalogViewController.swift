@@ -101,16 +101,19 @@ private extension CatalogViewController {
 
             case .products:
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
-                                                      heightDimension: .estimated(320))
+                                                      heightDimension: .estimated(325))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
-                item.contentInsets = .init(top: 8, leading: 8, bottom: 8, trailing: 8)
 
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                        heightDimension: .estimated(320))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item, item])
+                // Горизонтальные отступы между колонками
+                group.interItemSpacing = .fixed(6)
 
                 let section = NSCollectionLayoutSection(group: group)
+                // Внешние отступы секции и вертикальные отступы между строками
                 section.contentInsets = .init(top: 8, leading: 8, bottom: 16, trailing: 8)
+                section.interGroupSpacing = 6
 
                 let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                         heightDimension: .absolute(44))
@@ -221,4 +224,3 @@ extension CatalogViewController: ProductCellDelegate {
         onAddToCart?(product)
     }
 }
-

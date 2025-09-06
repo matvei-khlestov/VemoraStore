@@ -190,11 +190,11 @@ private extension CheckoutViewController {
             .store(in: &bag)
         
         // Сумма
-        viewModel.totalPublisher
-            .map { "Итого: \(Int($0)) ₽" }
-            .receive(on: DispatchQueue.main)
-            .assign(to: \.text, on: totalLabel)
-            .store(in: &bag)
+//        viewModel.totalPublisher
+//            .map { "Итого: \(Int($0)) ₽" }
+//            .receive(on: DispatchQueue.main)
+//            .assign(to: \.text, on: totalLabel)
+//            .store(in: &bag)
         
         // Доступность кнопки «Оформить заказ»
         viewModel.isPlaceOrderEnabled

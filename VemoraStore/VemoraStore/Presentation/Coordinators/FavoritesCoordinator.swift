@@ -22,18 +22,19 @@ final class FavoritesCoordinator: Coordinator {
         let vc = FavoritesViewController(viewModel: vm)
         
         vc.onSelectProduct = { [weak self] product in
-            self?.showDetails(for: product)
+            self?.showProductDetails(for: product)
         }
         
         navigation.setViewControllers([vc], animated: false)
     }
     
-    private func showDetails(for product: Product) {
-        let makeVM = Container.shared.productDetailsViewModel
-        let detailsVM = makeVM(product)
-        let detailsVC = ProductDetailsViewController(viewModel: detailsVM)
-        detailsVC.onCheckout = { [weak self] in self?.startCheckout() }
-        navigation.pushViewController(detailsVC, animated: true)
+    private func showProductDetails(for product: Product) {
+        let detailsCoordinator = ProductDetailsCoordinator(
+            navigation: navigation,
+            product: product
+        )
+        add(detailsCoordinator)
+        detailsCoordinator.start()
     }
     
     private func startCheckout() {
