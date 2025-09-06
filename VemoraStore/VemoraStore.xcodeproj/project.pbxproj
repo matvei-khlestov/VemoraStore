@@ -75,6 +75,8 @@
 		A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */; };
 		A085506F2E69444E004633CA /* CategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085506E2E69444E004633CA /* CategoryCell.swift */; };
 		A08550712E694489004633CA /* CatalogSectionHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550702E694489004633CA /* CatalogSectionHeader.swift */; };
+		A08550782E6AB644004633CA /* FavoritesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550772E6AB644004633CA /* FavoritesCell.swift */; };
+		A085507B2E6ADDBB004633CA /* UIView+Animations.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085507A2E6ADDBB004633CA /* UIView+Animations.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -166,6 +168,8 @@
 		A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutCoordinator.swift; sourceTree = "<group>"; };
 		A085506E2E69444E004633CA /* CategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCell.swift; sourceTree = "<group>"; };
 		A08550702E694489004633CA /* CatalogSectionHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogSectionHeader.swift; sourceTree = "<group>"; };
+		A08550772E6AB644004633CA /* FavoritesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesCell.swift; sourceTree = "<group>"; };
+		A085507A2E6ADDBB004633CA /* UIView+Animations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+Animations.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -280,6 +284,7 @@
 			isa = PBXGroup;
 			children = (
 				A0854FD62E611898004633CA /* UIImageView+KF.swift */,
+				A085507A2E6ADDBB004633CA /* UIView+Animations.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -463,8 +468,8 @@
 		A08550292E612952004633CA /* Favorites */ = {
 			isa = PBXGroup;
 			children = (
-				A085502A2E612977004633CA /* FavoritesViewController.swift */,
-				A085502C2E6129A3004633CA /* FavoritesViewModel.swift */,
+				A08550792E6AB64C004633CA /* Scene */,
+				A08550762E6AB625004633CA /* Cell */,
 			);
 			path = Favorites;
 			sourceTree = "<group>";
@@ -579,6 +584,23 @@
 			children = (
 				A085501E2E612637004633CA /* CatalogViewController.swift */,
 				A08550202E61264B004633CA /* CatalogViewModel.swift */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		A08550762E6AB625004633CA /* Cell */ = {
+			isa = PBXGroup;
+			children = (
+				A08550772E6AB644004633CA /* FavoritesCell.swift */,
+			);
+			path = Cell;
+			sourceTree = "<group>";
+		};
+		A08550792E6AB64C004633CA /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				A085502A2E612977004633CA /* FavoritesViewController.swift */,
+				A085502C2E6129A3004633CA /* FavoritesViewModel.swift */,
 			);
 			path = Scene;
 			sourceTree = "<group>";
@@ -765,6 +787,7 @@
 				A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */,
 				A08550142E61257B004633CA /* AuthCoordinator.swift in Sources */,
 				A08550592E614B5C004633CA /* LocationServiceProtocol.swift in Sources */,
+				A085507B2E6ADDBB004633CA /* UIView+Animations.swift in Sources */,
 				A085503B2E612A94004633CA /* ProfileViewModel.swift in Sources */,
 				A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */,
 				A0854FFD2E6123B6004633CA /* Order.swift in Sources */,
@@ -774,6 +797,7 @@
 				A08550062E61242E004633CA /* ProfileServiceProtocol.swift in Sources */,
 				A0854FDA2E61199A004633CA /* CoreDataManager.swift in Sources */,
 				A08550262E612936004633CA /* ProductDetailsViewController.swift in Sources */,
+				A08550782E6AB644004633CA /* FavoritesCell.swift in Sources */,
 				A08550452E612B4D004633CA /* TabBarFactory.swift in Sources */,
 				A085504F2E613EF8004633CA /* Container+Services.swift in Sources */,
 				A085500C2E612458004633CA /* NotificationServiceProtocol.swift in Sources */,
