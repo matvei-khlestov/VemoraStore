@@ -25,6 +25,10 @@ final class CartCoordinator: Coordinator {
             self?.startCheckout()
         }
         
+        vc.onSelectProduct = { [weak self] product in
+            self?.showProductDetails(for: product)
+        }
+        
         navigation.setViewControllers([vc], animated: false)
     }
     
@@ -35,5 +39,14 @@ final class CartCoordinator: Coordinator {
             if let checkout { self?.remove(checkout) }
         }
         checkout.start()
+    }
+    
+    private func showProductDetails(for product: Product) {
+        let detailsCoordinator = ProductDetailsCoordinator(
+            navigation: navigation,
+            product: product
+        )
+        add(detailsCoordinator)
+        detailsCoordinator.start()
     }
 }

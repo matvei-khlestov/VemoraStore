@@ -1,26 +1,34 @@
 //
-//  FavoritesCell.swift
+//  CartCell.swift
 //  VemoraStore
 //
-//  Created by Matvei Khlestov on 05.09.2025.
+//  Created by Matvei Khlestov on 06.09.2025.
 //
+
 
 import UIKit
 
-protocol FavoritesCellDelegate: AnyObject {
-    func favoritesCellDidTapCart(_ cell: FavoritesCell)
-    func favoritesCellDidTapDelete(_ cell: FavoritesCell)
+protocol CartCellDelegate: AnyObject {
+    /// Вызывается при изменении количества (после каждого тапа −/+)
+    func cartCell(_ cell: CartCell, didChangeQuantity quantity: Int)
+    /// Тап по кнопке удаления
+    func cartCellDidTapDelete(_ cell: CartCell)
 }
 
-final class FavoritesCell: UITableViewCell {
-    
-    static let reuseId = "FavoritesCell"
-    
-    weak var delegate: FavoritesCellDelegate?
-    
+final class CartCell: UITableViewCell {
+
+    static let reuseId = "CartCell"
+
+    weak var delegate: CartCellDelegate?
+
     // MARK: - State
-    private var isInCart: Bool = false
-    
+    private var quantity: Int = 1 {
+        didSet {
+            quantityLabel.text = "\(quantity)"
+            minusButton.isEnabled = quantity > 1
+        }
+    }
+
     // MARK: - UI
     private let thumbImageView: UIImageView = {
         let iv = UIImageView()
@@ -30,7 +38,7 @@ final class FavoritesCell: UITableViewCell {
         iv.backgroundColor = .secondarySystemBackground
         return iv
     }()
-    
+
     private let titleLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 16, weight: .semibold)
@@ -38,7 +46,7 @@ final class FavoritesCell: UITableViewCell {
         l.numberOfLines = 2
         return l
     }()
-    
+
     private let categoryLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 12, weight: .regular)
@@ -46,7 +54,7 @@ final class FavoritesCell: UITableViewCell {
         l.setContentCompressionResistancePriority(.required, for: .vertical)
         return l
     }()
-    
+
     private let priceLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 18, weight: .bold)
@@ -54,20 +62,47 @@ final class FavoritesCell: UITableViewCell {
         l.setContentCompressionResistancePriority(.required, for: .vertical)
         return l
     }()
-    
-    private lazy var cartButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.setImage(UIImage(systemName: "cart.badge.plus"), for: .normal)
-        b.tintColor = UIColor(named: "AppAccent") ?? .systemPurple
-        b.backgroundColor = .systemBackground
-        b.layer.cornerRadius = 16
-        b.addTarget(self, action: #selector(cartTapped), for: .touchUpInside)
-        // компактная квадратная
-        b.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        b.heightAnchor.constraint(equalToConstant: 32).isActive = true
+
+    // MARK: - Qty pill (капсула − 1 +)
+    private let qtyContainer: UIView = {
+        let v = UIView()
+        v.backgroundColor = .secondarySystemBackground
+        v.layer.cornerRadius = 16
+        v.layer.masksToBounds = true
+        return v
+    }()
+
+    private lazy var minusButton: UIButton = {
+        var conf = UIButton.Configuration.plain()
+        conf.image = UIImage(systemName: "minus")
+        conf.baseForegroundColor = UIColor(named: "AppAccent") ?? .systemPurple
+        conf.contentInsets = .init(top: 6, leading: 10, bottom: 6, trailing: 10)
+        let b = UIButton(configuration: conf)
+        b.addTarget(self, action: #selector(decreaseTapped), for: .touchUpInside)
         return b
     }()
-    
+
+    private let quantityLabel: UILabel = {
+        let l = UILabel()
+        l.text = "1"
+        l.textAlignment = .center
+        l.font = .systemFont(ofSize: 15, weight: .semibold)
+        l.textColor = .label
+        l.setContentHuggingPriority(.required, for: .horizontal)
+        l.setContentCompressionResistancePriority(.required, for: .horizontal)
+        return l
+    }()
+
+    private lazy var plusButton: UIButton = {
+        var conf = UIButton.Configuration.plain()
+        conf.image = UIImage(systemName: "plus")
+        conf.baseForegroundColor = UIColor(named: "AppAccent") ?? .systemPurple
+        conf.contentInsets = .init(top: 6, leading: 10, bottom: 6, trailing: 10)
+        let b = UIButton(configuration: conf)
+        b.addTarget(self, action: #selector(increaseTapped), for: .touchUpInside)
+        return b
+    }()
+
     private lazy var deleteButton: UIButton = {
         let b = UIButton(type: .system)
         b.setImage(UIImage(systemName: "trash"), for: .normal)
@@ -79,13 +114,12 @@ final class FavoritesCell: UITableViewCell {
         b.heightAnchor.constraint(equalToConstant: 32).isActive = true
         return b
     }()
-    
+
     /// Вертикальный стек справа от картинки
     private let rightStack = UIStackView()
-    
-    /// Горизонтальная строка действий под текстом справа: корзина слева
+    /// Горизонтальная строка действий: счётчик слева + удалить справа
     private let actionsRow = UIStackView()
-    
+
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -94,22 +128,22 @@ final class FavoritesCell: UITableViewCell {
         contentView.backgroundColor = .systemBackground
         setupLayout()
     }
-    
+
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         thumbImageView.image = nil
         titleLabel.text = nil
         categoryLabel.text = nil
         priceLabel.text = nil
-        setInCart(false, animated: false)
+        setQuantity(1, notify: false)
     }
-    
+
     // MARK: - Layout
     private func setupLayout() {
         contentView.layoutMargins = .init(top: 12, left: 16, bottom: 12, right: 16)
-        
+
         // Картинка слева
         contentView.addSubview(thumbImageView)
         thumbImageView.translatesAutoresizingMaskIntoConstraints = false
@@ -118,91 +152,108 @@ final class FavoritesCell: UITableViewCell {
             thumbImageView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
             thumbImageView.widthAnchor.constraint(equalToConstant: 96)
         ])
-        
         let thumbHeight = thumbImageView.heightAnchor.constraint(equalToConstant: 96)
         thumbHeight.priority = .defaultHigh
         thumbHeight.isActive = true
-        
+
         // Правый вертикальный стек
         rightStack.axis = .vertical
         rightStack.spacing = 8
         rightStack.alignment = .fill
         rightStack.distribution = .fill
         rightStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Контент справа (сверху вниз): категория, цена, заголовок
+
         rightStack.addArrangedSubview(categoryLabel)
         rightStack.addArrangedSubview(titleLabel)
         rightStack.addArrangedSubview(priceLabel)
-        
-        // Строка действий: корзина слева + спейсер
+
+        // Счётчик
+        qtyContainer.translatesAutoresizingMaskIntoConstraints = false
+        qtyContainer.heightAnchor.constraint(equalToConstant: 32).isActive = true
+
+        qtyContainer.addSubview(minusButton)
+        qtyContainer.addSubview(quantityLabel)
+        qtyContainer.addSubview(plusButton)
+
+        [minusButton, quantityLabel, plusButton].forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+
+        NSLayoutConstraint.activate([
+            minusButton.leadingAnchor.constraint(equalTo: qtyContainer.leadingAnchor),
+            minusButton.topAnchor.constraint(equalTo: qtyContainer.topAnchor),
+            minusButton.bottomAnchor.constraint(equalTo: qtyContainer.bottomAnchor),
+
+            plusButton.trailingAnchor.constraint(equalTo: qtyContainer.trailingAnchor),
+            plusButton.topAnchor.constraint(equalTo: qtyContainer.topAnchor),
+            plusButton.bottomAnchor.constraint(equalTo: qtyContainer.bottomAnchor),
+
+            quantityLabel.centerXAnchor.constraint(equalTo: qtyContainer.centerXAnchor),
+            quantityLabel.centerYAnchor.constraint(equalTo: qtyContainer.centerYAnchor),
+
+            // Чуть компактнее ширина капсулы
+            qtyContainer.widthAnchor.constraint(equalToConstant: 100)
+        ])
+
+        // Строка действий: счетчик слева, delete справа
         actionsRow.axis = .horizontal
         actionsRow.alignment = .center
         actionsRow.distribution = .fill
         actionsRow.spacing = 8
+
         let spacer = UIView()
-        actionsRow.addArrangedSubview(cartButton)
+        actionsRow.addArrangedSubview(qtyContainer)
         actionsRow.addArrangedSubview(spacer)
         actionsRow.addArrangedSubview(deleteButton)
-        
+
         rightStack.addArrangedSubview(actionsRow)
-        
+
         contentView.addSubview(rightStack)
         NSLayoutConstraint.activate([
             rightStack.leadingAnchor.constraint(equalTo: thumbImageView.trailingAnchor, constant: 12),
             rightStack.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
             rightStack.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor),
-            // важная нижняя привязка, чтобы ячейка корректно считала высоту
             rightStack.bottomAnchor.constraint(lessThanOrEqualTo: contentView.layoutMarginsGuide.bottomAnchor),
-            
-            // картинка не должна выбивать низ
+
+            // чтобы изображение не «выпирало» вниз
             thumbImageView.bottomAnchor.constraint(lessThanOrEqualTo: contentView.layoutMarginsGuide.bottomAnchor)
         ])
-        
-        // Приоритеты, чтобы заголовок не давил низ
+
+        // Приоритеты
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         priceLabel.setContentCompressionResistancePriority(.required, for: .vertical)
         categoryLabel.setContentCompressionResistancePriority(.required, for: .vertical)
     }
-    
-    // MARK: - API
-    func configure(with product: Product, isInCart: Bool = false) {
+
+    // В CartCell.swift
+    func configure(with product: Product, quantity: Int) {
         titleLabel.text = product.name
         categoryLabel.text = product.categoryId
         priceLabel.text = String(format: "$%.2f", product.price)
-        
-        // Загрузчик изображений по желанию:
-        // thumbImageView.kf.setImage(with: product.image)
         thumbImageView.image = UIImage(resource: .divan)
-        
-        setInCart(isInCart, animated: false)
+        setQuantity(quantity, notify: false)
     }
-    
-    /// Изменение состояния корзины снаружи (например, после ответа сервиса)
-    func setInCart(_ value: Bool, animated: Bool = true) {
-        isInCart = value
-        let iconName = value ? "cart.fill.badge.minus" : "cart.badge.plus"
-        let img = UIImage(systemName: iconName)
-        
-        let apply = { self.cartButton.setImage(img, for: .normal) }
-        if animated {
-            UIView.transition(with: cartButton, duration: 0.18, options: .transitionCrossDissolve, animations: apply)
-        } else {
-            apply()
-        }
+
+    func setQuantity(_ value: Int, notify: Bool = true) {
+        quantity = max(1, value)
+        if notify { delegate?.cartCell(self, didChangeQuantity: quantity) }
     }
-    
+
     // MARK: - Actions
-    @objc private func cartTapped() {
+    @objc private func decreaseTapped() {
+        guard quantity > 1 else { return }
+        quantity -= 1
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        setInCart(!isInCart, animated: true)
-        cartButton.pulse()
-        delegate?.favoritesCellDidTapCart(self)
+        delegate?.cartCell(self, didChangeQuantity: quantity)
     }
-    
+
+    @objc private func increaseTapped() {
+        quantity += 1
+        UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        delegate?.cartCell(self, didChangeQuantity: quantity)
+    }
+
     @objc private func deleteTapped() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         deleteButton.pulse()
-        delegate?.favoritesCellDidTapDelete(self)
+        delegate?.cartCellDidTapDelete(self)
     }
 }
