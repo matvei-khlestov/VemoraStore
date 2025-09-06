@@ -24,7 +24,7 @@ final class CatalogViewController: UIViewController {
     // MARK: - UI
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
-        cv.backgroundColor = UIColor.systemGroupedBackground
+        cv.backgroundColor = .systemGroupedBackground
         cv.alwaysBounceVertical = true
         cv.dataSource = self
         cv.delegate = self

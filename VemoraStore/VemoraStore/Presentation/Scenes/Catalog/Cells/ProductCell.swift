@@ -181,26 +181,15 @@ final class ProductCell: UICollectionViewCell {
     @objc private func favoriteTapped() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         setFavorite(!isFavorite, animated: true)
-        pulse(favoriteButton)
+        favoriteButton.pulse()
         delegate?.productCellDidTapFavorite(self)
     }
 
     @objc private func addToCartTapped() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         setInCart(!isInCart, animated: true)
-        pulse(addToCartButton)
+        addToCartButton.pulse()
         delegate?.productCellDidTapAddToCart(self)
-    }
-
-    // MARK: - Anim helper
-    private func pulse(_ view: UIView) {
-        UIView.animate(withDuration: 0.12, animations: {
-            view.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-        }) { _ in
-            UIView.animate(withDuration: 0.18) {
-                view.transform = .identity
-            }
-        }
     }
 }
 
