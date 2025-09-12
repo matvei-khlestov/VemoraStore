@@ -27,7 +27,8 @@ final class CheckoutCoordinator: Coordinator {
             self?.showMapPicker()
         }
         vc.onFinished = { [weak self] in
-            self?.onFinish?()
+            // Показываем экран успешного оформления
+            self?.showOrderSuccess(orderId: nil)
         }
         
         vc.onBack = { [weak self] in
@@ -53,5 +54,24 @@ final class CheckoutCoordinator: Coordinator {
         }
         
         picker.start()
+    }
+    
+    private func showOrderSuccess(orderId: String?) {
+        let success = OrderSuccessCoordinator(navigation: navigation, orderId: orderId)
+        
+        success.onOpenOrder = { [weak self] orderId in
+            // Открываем детали заказа
+            let detailsVC = UIViewController()
+            detailsVC.view.backgroundColor = .systemBackground
+            detailsVC.title = "Заказ \(orderId ?? "")"
+            self?.navigation.pushViewController(detailsVC, animated: true)
+        }
+        
+        success.onFinish = { [weak self] in
+            self?.remove(success)
+        }
+        
+        add(success)
+        success.start()
     }
 }
