@@ -30,11 +30,28 @@ final class CheckoutCoordinator: Coordinator {
             self?.onFinish?()
         }
         
+        vc.onBack = { [weak self] in
+            self?.navigation.popViewController(animated: true)
+        }
+        
         navigation.pushViewController(vc, animated: true)
     }
     
     private func showMapPicker() {
-        let mapVC = MapPickerViewController()
-        navigation.pushViewController(mapVC, animated: true)
+        let picker = MapPickerCoordinator(navigation: navigation)
+        add(picker)
+        
+        picker.onAddressPicked = { [weak self, weak picker] address in
+            guard let self else { return }
+            // self.viewModel.address = address
+            
+            if let picker { self.remove(picker) }
+        }
+        
+        picker.onFinish = { [weak self, weak picker] in
+            if let picker { self?.remove(picker) }
+        }
+        
+        picker.start()
     }
 }

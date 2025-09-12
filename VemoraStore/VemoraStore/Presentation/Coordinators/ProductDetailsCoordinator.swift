@@ -29,6 +29,10 @@ final class ProductDetailsCoordinator: Coordinator {
             self?.startCheckout()
         }
         
+        vc.onBack = { [weak self] in
+            self?.navigation.popViewController(animated: true)
+        }
+        
         navigation.pushViewController(vc, animated: true)
     }
     

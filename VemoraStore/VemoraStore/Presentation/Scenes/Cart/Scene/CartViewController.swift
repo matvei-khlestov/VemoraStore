@@ -82,6 +82,12 @@ final class CartViewController: UIViewController {
         bindViewModel()
         reload()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
 }
 
 // MARK: - Private

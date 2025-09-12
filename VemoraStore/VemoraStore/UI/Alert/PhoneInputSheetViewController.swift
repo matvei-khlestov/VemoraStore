@@ -48,7 +48,7 @@ final class PhoneInputSheetViewController: UIViewController, UITextFieldDelegate
         tf.keyboardType = .numberPad
         tf.borderStyle = .roundedRect
         tf.placeholder = "Номер телефона"
-        tf.text = "+"
+        tf.text = "+7"
         tf.clearButtonMode = .whileEditing
         tf.autocorrectionType = .no
         tf.autocapitalizationType = .none
@@ -199,7 +199,7 @@ final class PhoneInputSheetViewController: UIViewController, UITextFieldDelegate
             if let initial = initialPhone, !initial.isEmpty {
                 textField.text = initial
             } else {
-                textField.text = "+"
+                textField.text = "+7"
             }
             updateValidationUI()
 
@@ -212,7 +212,7 @@ final class PhoneInputSheetViewController: UIViewController, UITextFieldDelegate
             textView.text = initialComment ?? ""
             placeholderLabel.isHidden = !(textView.text?.isEmpty ?? true)
             
-            textView.layer.borderWidth = 0
+            textView.layer.borderWidth = 1
             textView.layer.borderColor = UIColor.clear.cgColor
             
             if let text = textView.text, !text.isEmpty {
@@ -232,7 +232,7 @@ final class PhoneInputSheetViewController: UIViewController, UITextFieldDelegate
     private func updateValidationUI() {
         guard kind == .phone else { return }
         let valid = isValidPhone(textField.text ?? "")
-        // Красная обводка при невалидном
+        
         textField.layer.borderWidth = 1
         textField.layer.borderColor = valid ? UIColor.brightPurple.cgColor : UIColor.systemRed.cgColor
         textField.layer.cornerRadius = 8
