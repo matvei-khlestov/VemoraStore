@@ -13,15 +13,18 @@ final class CatalogViewController: UIViewController {
 
     enum Section: Int, CaseIterable { case categories, products }
 
-    // MARK: - Public
+    // MARK: - Public callbacks
+    
     var onSelectProduct: ((Product) -> Void)?
     var onAddToCart: ((Product) -> Void)?
     var onToggleFavorite: ((Product) -> Void)?
 
     // MARK: - Deps
+    
     private let viewModel: CatalogViewModel
 
     // MARK: - UI
+    
     private lazy var collectionView: UICollectionView = {
         let cv = UICollectionView(frame: .zero, collectionViewLayout: makeLayout())
         cv.backgroundColor = .systemGroupedBackground
@@ -29,6 +32,7 @@ final class CatalogViewController: UIViewController {
         cv.dataSource = self
         cv.delegate = self
         cv.keyboardDismissMode = .onDrag
+        cv.showsVerticalScrollIndicator = false
         cv.register(ProductCell.self, forCellWithReuseIdentifier: ProductCell.reuseId)
         cv.register(CategoryCell.self, forCellWithReuseIdentifier: CategoryCell.reuseId)
         cv.register(CatalogSectionHeader.self,
@@ -46,9 +50,11 @@ final class CatalogViewController: UIViewController {
     }()
 
     // MARK: - State
+    
     private var bag = Set<AnyCancellable>()
 
     // MARK: - Init
+    
     init(viewModel: CatalogViewModel = Container.shared.catalogViewModel()) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -56,6 +62,7 @@ final class CatalogViewController: UIViewController {
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
 
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -74,7 +81,8 @@ final class CatalogViewController: UIViewController {
     }
 }
 
-// MARK: - Layout
+// MARK: - Setup
+
 private extension CatalogViewController {
     func setupLayout() {
         view.addSubview(collectionView)
@@ -146,14 +154,17 @@ private extension CatalogViewController {
 }
 
 // MARK: - DataSource
+
 extension CatalogViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int { Section.allCases.count }
 
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
-        case .categories: return viewModel.categories.count
-        case .products:   return viewModel.products.count
+        case .categories:
+            return viewModel.categories.count
+        case .products:
+            return viewModel.products.count
         }
     }
 
@@ -180,7 +191,7 @@ extension CatalogViewController: UICollectionViewDataSource {
         }
     }
 
-    // Header
+    
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
@@ -198,6 +209,7 @@ extension CatalogViewController: UICollectionViewDataSource {
 }
 
 // MARK: - Delegate
+
 extension CatalogViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard Section(rawValue: indexPath.section) == .products else { return }
@@ -206,6 +218,7 @@ extension CatalogViewController: UICollectionViewDelegate {
 }
 
 // MARK: - Search
+
 extension CatalogViewController: UISearchResultsUpdating {
     func updateSearchResults(for searchController: UISearchController) {
         viewModel.query = searchController.searchBar.text ?? ""
@@ -213,6 +226,7 @@ extension CatalogViewController: UISearchResultsUpdating {
 }
 
 // MARK: - ProductCellDelegate
+
 extension CatalogViewController: ProductCellDelegate {
     func productCellDidTapFavorite(_ cell: ProductCell) {
         guard let indexPath = collectionView.indexPath(for: cell),
