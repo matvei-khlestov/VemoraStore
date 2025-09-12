@@ -88,6 +88,9 @@
 		A08550982E742082004633CA /* PhoneInputSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550972E742082004633CA /* PhoneInputSheetViewController.swift */; };
 		A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550992E747BBC004633CA /* UIBarButtonItem+ext.swift */; };
 		A085509C2E74817F004633CA /* MapPickerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085509B2E74817F004633CA /* MapPickerCoordinator.swift */; };
+		A08550A02E748A11004633CA /* OrderSuccessViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085509F2E748A11004633CA /* OrderSuccessViewController.swift */; };
+		A08550A22E748BE9004633CA /* OrderSuccessCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550A12E748BE9004633CA /* OrderSuccessCoordinator.swift */; };
+		A08550A42E749374004633CA /* OrderSuccessViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550A32E749374004633CA /* OrderSuccessViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -192,6 +195,9 @@
 		A08550972E742082004633CA /* PhoneInputSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneInputSheetViewController.swift; sourceTree = "<group>"; };
 		A08550992E747BBC004633CA /* UIBarButtonItem+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+ext.swift"; sourceTree = "<group>"; };
 		A085509B2E74817F004633CA /* MapPickerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPickerCoordinator.swift; sourceTree = "<group>"; };
+		A085509F2E748A11004633CA /* OrderSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSuccessViewController.swift; sourceTree = "<group>"; };
+		A08550A12E748BE9004633CA /* OrderSuccessCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSuccessCoordinator.swift; sourceTree = "<group>"; };
+		A08550A32E749374004633CA /* OrderSuccessViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderSuccessViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -444,6 +450,7 @@
 				A085506A2E6400A1004633CA /* ProfileCoordinator.swift */,
 				A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */,
 				A085509B2E74817F004633CA /* MapPickerCoordinator.swift */,
+				A08550A12E748BE9004633CA /* OrderSuccessCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -458,6 +465,7 @@
 				A08550302E612A33004633CA /* Cart */,
 				A08550372E612A6F004633CA /* Profile */,
 				A085503C2E612AA0004633CA /* Checkout */,
+				A085509D2E7489BD004633CA /* OrderSuccess */,
 				A08550852E718E89004633CA /* Map */,
 			);
 			path = Scenes;
@@ -694,6 +702,23 @@
 			path = Alert;
 			sourceTree = "<group>";
 		};
+		A085509D2E7489BD004633CA /* OrderSuccess */ = {
+			isa = PBXGroup;
+			children = (
+				A085509E2E7489F5004633CA /* Scene */,
+			);
+			path = OrderSuccess;
+			sourceTree = "<group>";
+		};
+		A085509E2E7489F5004633CA /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				A085509F2E748A11004633CA /* OrderSuccessViewController.swift */,
+				A08550A32E749374004633CA /* OrderSuccessViewModel.swift */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -861,6 +886,7 @@
 				A0854FD72E611898004633CA /* UIImageView+KF.swift in Sources */,
 				A085508B2E71B14A004633CA /* PickupAddressCell.swift in Sources */,
 				A08550162E61258B004633CA /* MainCoordinator.swift in Sources */,
+				A08550A22E748BE9004633CA /* OrderSuccessCoordinator.swift in Sources */,
 				A085509C2E74817F004633CA /* MapPickerCoordinator.swift in Sources */,
 				A085503E2E612AC6004633CA /* CheckoutViewController.swift in Sources */,
 				A0854FF42E6122B6004633CA /* LocationService.swift in Sources */,
@@ -883,12 +909,14 @@
 				A08550022E612411004633CA /* AuthServiceProtocol.swift in Sources */,
 				A08550512E613F2D004633CA /* Container+ViewModels.swift in Sources */,
 				A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */,
+				A08550A42E749374004633CA /* OrderSuccessViewModel.swift in Sources */,
 				A08550142E61257B004633CA /* AuthCoordinator.swift in Sources */,
 				A08550592E614B5C004633CA /* LocationServiceProtocol.swift in Sources */,
 				A085507B2E6ADDBB004633CA /* UIView+Animations.swift in Sources */,
 				A085503B2E612A94004633CA /* ProfileViewModel.swift in Sources */,
 				A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */,
 				A0854FFD2E6123B6004633CA /* Order.swift in Sources */,
+				A08550A02E748A11004633CA /* OrderSuccessViewController.swift in Sources */,
 				A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */,
 				A08550802E6BF954004633CA /* CartItem.swift in Sources */,
 				A08550672E63F7EC004633CA /* FavoritesCoordinator.swift in Sources */,

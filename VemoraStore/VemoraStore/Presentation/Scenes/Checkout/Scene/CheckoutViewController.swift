@@ -87,13 +87,13 @@ final class CheckoutViewController: UIViewController {
         return l
     }()
     
-    // order button (orange, full-width, with icon, title, and amount on the right)
     private let orderButton: UIButton = {
         let b = UIButton(type: .system)
         b.backgroundColor = UIColor.systemOrange
         b.layer.cornerRadius = 14
         b.layer.masksToBounds = true
         b.heightAnchor.constraint(equalToConstant: 52).isActive = true
+        
         return b
     }()
     
@@ -238,17 +238,18 @@ private extension CheckoutViewController {
         content.alignment = .center
         content.spacing = 10
         content.translatesAutoresizingMaskIntoConstraints = false
-        
+        content.isUserInteractionEnabled = false // ensure whole button receives taps
+
         let spacer = UIView()
         spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        
+
         content.addArrangedSubview(orderIconView)
         content.addArrangedSubview(orderTitleLabel)
         content.addArrangedSubview(spacer)
         content.addArrangedSubview(orderAmountLabel)
-        
+
         orderButton.addSubview(content)
-        
+
         NSLayoutConstraint.activate([
             content.leadingAnchor.constraint(equalTo: orderButton.leadingAnchor, constant: 16),
             content.trailingAnchor.constraint(equalTo: orderButton.trailingAnchor, constant: -16),
@@ -388,7 +389,7 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
         switch sec {
         case .pickupAddress:
             if deliveryControl.selectedSegmentIndex == 0 {
-                onPickOnMap?()
+                return
             } else {
                 if indexPath.row == 0 {
                     onPickOnMap?()
