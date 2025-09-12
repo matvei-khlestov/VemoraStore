@@ -91,7 +91,7 @@ final class ProductDetailsViewController: UIViewController {
 
     private lazy var checkoutButton: UIButton = {
         var config = UIButton.Configuration.filled()
-        config.title = "Оформить заказ"
+        config.title = "К оформлению"
         config.image = UIImage(systemName: "creditcard.fill")
         config.imagePlacement = .trailing
         config.imagePadding = 12

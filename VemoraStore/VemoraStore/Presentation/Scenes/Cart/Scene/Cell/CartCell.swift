@@ -58,7 +58,7 @@ final class CartCell: UITableViewCell {
     private let priceLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 18, weight: .bold)
-        l.textColor = UIColor(named: "AppAccent") ?? .systemPurple
+        l.textColor = .brightPurple
         l.setContentCompressionResistancePriority(.required, for: .vertical)
         return l
     }()
@@ -75,7 +75,7 @@ final class CartCell: UITableViewCell {
     private lazy var minusButton: UIButton = {
         var conf = UIButton.Configuration.plain()
         conf.image = UIImage(systemName: "minus")
-        conf.baseForegroundColor = UIColor(named: "AppAccent") ?? .systemPurple
+        conf.baseForegroundColor = .brightPurple
         conf.contentInsets = .init(top: 6, leading: 10, bottom: 6, trailing: 10)
         let b = UIButton(configuration: conf)
         b.addTarget(self, action: #selector(decreaseTapped), for: .touchUpInside)
@@ -96,7 +96,7 @@ final class CartCell: UITableViewCell {
     private lazy var plusButton: UIButton = {
         var conf = UIButton.Configuration.plain()
         conf.image = UIImage(systemName: "plus")
-        conf.baseForegroundColor = UIColor(named: "AppAccent") ?? .systemPurple
+        conf.baseForegroundColor = .brightPurple
         conf.contentInsets = .init(top: 6, leading: 10, bottom: 6, trailing: 10)
         let b = UIButton(configuration: conf)
         b.addTarget(self, action: #selector(increaseTapped), for: .touchUpInside)
@@ -110,8 +110,8 @@ final class CartCell: UITableViewCell {
         b.backgroundColor = .systemBackground
         b.layer.cornerRadius = 16
         b.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
-        b.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        b.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        b.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        b.heightAnchor.constraint(equalToConstant: 30).isActive = true
         return b
     }()
 
@@ -150,9 +150,9 @@ final class CartCell: UITableViewCell {
         NSLayoutConstraint.activate([
             thumbImageView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
             thumbImageView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
-            thumbImageView.widthAnchor.constraint(equalToConstant: 96)
+            thumbImageView.widthAnchor.constraint(equalToConstant: 108)
         ])
-        let thumbHeight = thumbImageView.heightAnchor.constraint(equalToConstant: 96)
+        let thumbHeight = thumbImageView.heightAnchor.constraint(equalToConstant: 108)
         thumbHeight.priority = .defaultHigh
         thumbHeight.isActive = true
 

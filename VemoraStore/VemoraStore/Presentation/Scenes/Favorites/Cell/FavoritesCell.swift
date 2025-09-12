@@ -50,7 +50,7 @@ final class FavoritesCell: UITableViewCell {
     private let priceLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 18, weight: .bold)
-        l.textColor = UIColor(named: "AppAccent") ?? .systemPurple
+        l.textColor = .brightPurple
         l.setContentCompressionResistancePriority(.required, for: .vertical)
         return l
     }()
@@ -58,11 +58,10 @@ final class FavoritesCell: UITableViewCell {
     private lazy var cartButton: UIButton = {
         let b = UIButton(type: .system)
         b.setImage(UIImage(systemName: "cart.badge.plus"), for: .normal)
-        b.tintColor = UIColor(named: "AppAccent") ?? .systemPurple
+        b.tintColor = .brightPurple
         b.backgroundColor = .systemBackground
         b.layer.cornerRadius = 16
         b.addTarget(self, action: #selector(cartTapped), for: .touchUpInside)
-        // компактная квадратная
         b.widthAnchor.constraint(equalToConstant: 32).isActive = true
         b.heightAnchor.constraint(equalToConstant: 32).isActive = true
         return b
@@ -75,8 +74,8 @@ final class FavoritesCell: UITableViewCell {
         b.backgroundColor = .systemBackground
         b.layer.cornerRadius = 16
         b.addTarget(self, action: #selector(deleteTapped), for: .touchUpInside)
-        b.widthAnchor.constraint(equalToConstant: 32).isActive = true
-        b.heightAnchor.constraint(equalToConstant: 32).isActive = true
+        b.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        b.heightAnchor.constraint(equalToConstant: 30).isActive = true
         return b
     }()
     
@@ -116,10 +115,10 @@ final class FavoritesCell: UITableViewCell {
         NSLayoutConstraint.activate([
             thumbImageView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
             thumbImageView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
-            thumbImageView.widthAnchor.constraint(equalToConstant: 96)
+            thumbImageView.widthAnchor.constraint(equalToConstant: 108)
         ])
         
-        let thumbHeight = thumbImageView.heightAnchor.constraint(equalToConstant: 96)
+        let thumbHeight = thumbImageView.heightAnchor.constraint(equalToConstant: 108)
         thumbHeight.priority = .defaultHigh
         thumbHeight.isActive = true
         

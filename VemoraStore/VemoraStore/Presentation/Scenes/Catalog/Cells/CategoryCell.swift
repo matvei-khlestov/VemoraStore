@@ -15,6 +15,7 @@ final class CategoryCell: UICollectionViewCell {
         iv.contentMode = .scaleAspectFill
         iv.clipsToBounds = true
         iv.backgroundColor = .red
+        iv.image = UIImage(resource: .divan)
         return iv
     }()
 

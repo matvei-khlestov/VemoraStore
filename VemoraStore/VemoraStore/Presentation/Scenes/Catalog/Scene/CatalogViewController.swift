@@ -188,7 +188,6 @@ extension CatalogViewController: UICollectionViewDataSource {
             withReuseIdentifier: CatalogSectionHeader.reuseId,
             for: indexPath
         ) as! CatalogSectionHeader
-        header.titleLabel.text = "All Product"
         return header
     }
 }

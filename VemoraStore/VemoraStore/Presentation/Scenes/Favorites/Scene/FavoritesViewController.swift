@@ -181,6 +181,7 @@ extension FavoritesViewController: FavoritesCellDelegate {
         // Если хочешь всё же перезагрузить строку (для синхронизации высот и т.п.):
         // tableView.reloadRows(at: [indexPath], with: .none)
     }
+    
     func favoritesCellDidTapDelete(_ cell: FavoritesCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         deleteRow(at: indexPath)
