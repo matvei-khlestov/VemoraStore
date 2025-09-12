@@ -12,7 +12,6 @@
 		A0854FC42E611307004633CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FB42E611307004633CA /* AppDelegate.swift */; };
 		A0854FC52E611307004633CA /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FBB2E611307004633CA /* SceneDelegate.swift */; };
 		A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A0854FBC2E611307004633CA /* VemoraStore.xcdatamodeld */; };
-		A0854FC72E611307004633CA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FBD2E611307004633CA /* ViewController.swift */; };
 		A0854FCA2E611320004633CA /* VemoraStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FC82E611320004633CA /* VemoraStoreTests.swift */; };
 		A0854FCE2E611324004633CA /* VemoraStoreUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FCB2E611324004633CA /* VemoraStoreUITests.swift */; };
 		A0854FCF2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FCC2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift */; };
@@ -87,6 +86,8 @@
 		A08550932E7416B8004633CA /* ChangePhoneCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550922E7416B8004633CA /* ChangePhoneCell.swift */; };
 		A08550952E741943004633CA /* OrderCommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550942E741943004633CA /* OrderCommentCell.swift */; };
 		A08550982E742082004633CA /* PhoneInputSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550972E742082004633CA /* PhoneInputSheetViewController.swift */; };
+		A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550992E747BBC004633CA /* UIBarButtonItem+ext.swift */; };
+		A085509C2E74817F004633CA /* MapPickerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085509B2E74817F004633CA /* MapPickerCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -115,7 +116,6 @@
 		A0854FB62E611307004633CA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A0854FB72E611307004633CA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		A0854FBB2E611307004633CA /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		A0854FBD2E611307004633CA /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		A0854FBF2E611307004633CA /* VemoraStore.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VemoraStore.xcdatamodel; sourceTree = "<group>"; };
 		A0854FC82E611320004633CA /* VemoraStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreTests.swift; sourceTree = "<group>"; };
 		A0854FCB2E611324004633CA /* VemoraStoreUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreUITests.swift; sourceTree = "<group>"; };
@@ -190,6 +190,8 @@
 		A08550922E7416B8004633CA /* ChangePhoneCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePhoneCell.swift; sourceTree = "<group>"; };
 		A08550942E741943004633CA /* OrderCommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCommentCell.swift; sourceTree = "<group>"; };
 		A08550972E742082004633CA /* PhoneInputSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneInputSheetViewController.swift; sourceTree = "<group>"; };
+		A08550992E747BBC004633CA /* UIBarButtonItem+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+ext.swift"; sourceTree = "<group>"; };
+		A085509B2E74817F004633CA /* MapPickerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPickerCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -249,7 +251,6 @@
 				A0854FF52E6122ED004633CA /* Resources */,
 				A08550462E612B94004633CA /* Tests */,
 				A08550472E612BAD004633CA /* LaunchScreen */,
-				A0854FBD2E611307004633CA /* ViewController.swift */,
 			);
 			path = VemoraStore;
 			sourceTree = "<group>";
@@ -305,6 +306,7 @@
 			children = (
 				A0854FD62E611898004633CA /* UIImageView+KF.swift */,
 				A085507A2E6ADDBB004633CA /* UIView+Animations.swift */,
+				A08550992E747BBC004633CA /* UIBarButtonItem+ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -436,11 +438,12 @@
 				A08550132E61257B004633CA /* AuthCoordinator.swift */,
 				A08550152E61258B004633CA /* MainCoordinator.swift */,
 				A08550642E63F518004633CA /* CatalogCoordinator.swift */,
+				A08550812E6C1E75004633CA /* ProductDetailsCoordinator.swift */,
 				A08550662E63F7EC004633CA /* FavoritesCoordinator.swift */,
 				A08550682E64005F004633CA /* CartCoordinator.swift */,
 				A085506A2E6400A1004633CA /* ProfileCoordinator.swift */,
 				A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */,
-				A08550812E6C1E75004633CA /* ProductDetailsCoordinator.swift */,
+				A085509B2E74817F004633CA /* MapPickerCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -858,6 +861,7 @@
 				A0854FD72E611898004633CA /* UIImageView+KF.swift in Sources */,
 				A085508B2E71B14A004633CA /* PickupAddressCell.swift in Sources */,
 				A08550162E61258B004633CA /* MainCoordinator.swift in Sources */,
+				A085509C2E74817F004633CA /* MapPickerCoordinator.swift in Sources */,
 				A085503E2E612AC6004633CA /* CheckoutViewController.swift in Sources */,
 				A0854FF42E6122B6004633CA /* LocationService.swift in Sources */,
 				A0854FF12E612286004633CA /* FavoritesService.swift in Sources */,
@@ -885,6 +889,7 @@
 				A085503B2E612A94004633CA /* ProfileViewModel.swift in Sources */,
 				A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */,
 				A0854FFD2E6123B6004633CA /* Order.swift in Sources */,
+				A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */,
 				A08550802E6BF954004633CA /* CartItem.swift in Sources */,
 				A08550672E63F7EC004633CA /* FavoritesCoordinator.swift in Sources */,
 				A08550632E63F006004633CA /* AppTab.swift in Sources */,
@@ -901,7 +906,6 @@
 				A085502B2E612977004633CA /* FavoritesViewController.swift in Sources */,
 				A08550232E61265E004633CA /* ProductCell.swift in Sources */,
 				A0854FE82E6121F4004633CA /* FirebaseProfileService.swift in Sources */,
-				A0854FC72E611307004633CA /* ViewController.swift in Sources */,
 				A085505E2E614EA3004633CA /* CartItemEntity.swift in Sources */,
 				A0854FEA2E612206004633CA /* FirebaseNotificationService.swift in Sources */,
 				A085500A2E61244A004633CA /* FavoritesServiceProtocol.swift in Sources */,

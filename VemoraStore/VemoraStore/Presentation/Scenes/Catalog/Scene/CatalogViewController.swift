@@ -60,12 +60,17 @@ final class CatalogViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         title = "Каталог"
-        navigationItem.largeTitleDisplayMode = .always
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         setupLayout()
         bindViewModel()
         viewModel.reload()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationItem.largeTitleDisplayMode = .always
+        navigationController?.navigationBar.prefersLargeTitles = true
     }
 }
 

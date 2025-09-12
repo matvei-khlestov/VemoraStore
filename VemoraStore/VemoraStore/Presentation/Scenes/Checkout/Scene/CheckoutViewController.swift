@@ -12,10 +12,13 @@ import FactoryKit
 final class CheckoutViewController: UIViewController {
     
     // MARK: - Callbacks
+    
     var onPickOnMap: (() -> Void)?
     var onFinished: (() -> Void)?
+    var onBack: (() -> Void)?
     
     // MARK: - Deps
+    
     private let viewModel: CheckoutViewModel
     
     // MARK: - UI
@@ -140,8 +143,8 @@ final class CheckoutViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Оформление заказа"
         view.backgroundColor = .systemBackground
+        setupNavigationBar()
         setupLayout()
         setupOrderButtonContent()
         setupActions()
@@ -149,10 +152,22 @@ final class CheckoutViewController: UIViewController {
     }
 }
 
-// MARK: - Layout
+// MARK: - Setup
+
 private extension CheckoutViewController {
+    
+    func setupNavigationBar() {
+        title = "Оформление заказа"
+        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.leftBarButtonItem = .backItem(
+            target: self,
+            action: #selector(backTapped),
+            tintColor: .brightPurple
+        )
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
     func setupLayout() {
-        // segmented control as a top header view
         let topBar = UIView()
         topBar.translatesAutoresizingMaskIntoConstraints = false
         deliveryControl.translatesAutoresizingMaskIntoConstraints = false
@@ -253,6 +268,7 @@ private extension CheckoutViewController {
 }
 
 // MARK: - Actions
+
 private extension CheckoutViewController {
     @objc func deliveryChanged() {
         tableView.reloadData()
@@ -261,6 +277,10 @@ private extension CheckoutViewController {
     @objc func placeTapped() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         onFinished?()
+    }
+    
+    @objc private func backTapped() {
+        onBack?()
     }
 }
 
@@ -342,13 +362,13 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
                 withIdentifier: DeliveryInfoCell.reuseId,
                 for: indexPath
             ) as! DeliveryInfoCell
-
+            
             // If segmented control is on pickup (index 0) show "Послезавтра",
             // otherwise (delivery) show "В течение 5 рабочих дней".
             let whenText: String = (deliveryControl.selectedSegmentIndex == 0)
             ? "Послезавтра"
             : "В течение 5 рабочих дней"
-
+            
             cell.configure(when: whenText, cost: "Доставка 0 ₽")
             return cell
             

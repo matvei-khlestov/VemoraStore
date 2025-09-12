@@ -11,10 +11,13 @@ import CoreLocation
 
 final class MapPickerViewController: UIViewController {
 
-    // MARK: - Public
+    // MARK: - Callbacks
+    
     var onPickAddress: ((Address) -> Void)?
+    var onBack: (() -> Void)?
 
     // MARK: - UI
+    
     private let mapView = MKMapView()
 
     private let confirmButton: UIButton = {
@@ -61,8 +64,8 @@ final class MapPickerViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Выбор адреса"
         view.backgroundColor = .systemBackground
+        setupNavigationBar()
         setupMap()
         setupLayout()
         setupActions()
@@ -71,7 +74,19 @@ final class MapPickerViewController: UIViewController {
 }
 
 // MARK: - Setup
+
 private extension MapPickerViewController {
+    
+    func setupNavigationBar() {
+        navigationItem.largeTitleDisplayMode = .never
+        navigationItem.leftBarButtonItem = .backItem(
+            target: self,
+            action: #selector(backTapped),
+            tintColor: .brightPurple
+        )
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
     func setupMap() {
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .none
@@ -138,16 +153,16 @@ private extension MapPickerViewController {
 }
 
 // MARK: - Actions
+
 private extension MapPickerViewController {
     @objc func confirmTapped() {
         let center = mapView.centerCoordinate
         let address = Address(
-            street: "Неизвестная улица", // ⚡️ пока заглушка
+            street: "Неизвестная улица",
             city: "Город",
             coordinate: center
         )
         onPickAddress?(address)
-        navigationController?.popViewController(animated: true)
     }
 
     @objc func zoomInTapped() {
@@ -162,5 +177,9 @@ private extension MapPickerViewController {
         region.span.latitudeDelta *= 2
         region.span.longitudeDelta *= 2
         mapView.setRegion(region, animated: true)
+    }
+    
+    @objc private func backTapped() {
+        onBack?()
     }
 }
