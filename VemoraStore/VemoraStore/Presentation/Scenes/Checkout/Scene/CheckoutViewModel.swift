@@ -87,4 +87,8 @@ final class CheckoutViewModel {
             }
         }
     }
+    
+    func loadMocks() {
+        cartService.loadMocks()
+    }
 }

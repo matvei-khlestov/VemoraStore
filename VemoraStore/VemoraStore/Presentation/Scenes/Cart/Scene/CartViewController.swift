@@ -47,7 +47,7 @@ final class CartViewController: UIViewController {
         b.setTitle("Оформить заказ", for: .normal)
         b.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
         b.setTitleColor(.white, for: .normal)
-        b.backgroundColor = UIColor(named: "AppAccent") ?? .systemPurple
+        b.backgroundColor = .systemPurple
         b.layer.cornerRadius = 14
         b.layer.masksToBounds = false
         b.layer.shadowColor = UIColor.black.withAlphaComponent(0.2).cgColor

@@ -8,12 +8,13 @@
 import UIKit
 
 final class CatalogSectionHeader: UICollectionReusableView {
+    
     static let reuseId = "CatalogSectionHeader"
 
     let titleLabel: UILabel = {
         let l = UILabel()
         l.font = .systemFont(ofSize: 22, weight: .bold)
-        l.text = "All Product"
+        l.text = "Все товары"
         return l
     }()
 
