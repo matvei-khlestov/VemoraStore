@@ -66,7 +66,7 @@ final class PaymentMethodCell: UITableViewCell {
 
         rootStack.axis = .vertical
         rootStack.alignment = .leading
-        rootStack.spacing = 8
+        rootStack.spacing = 10
         rootStack.isLayoutMarginsRelativeArrangement = true
         rootStack.layoutMargins = .init(top: 15, left: 16, bottom: 15, right: 16)
 

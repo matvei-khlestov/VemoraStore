@@ -43,19 +43,9 @@ final class CartViewController: UIViewController {
     }()
 
     private lazy var checkoutButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.setTitle("Оформить заказ", for: .normal)
-        b.titleLabel?.font = .systemFont(ofSize: 17, weight: .semibold)
-        b.setTitleColor(.white, for: .normal)
-        b.backgroundColor = .systemPurple
-        b.layer.cornerRadius = 14
-        b.layer.masksToBounds = false
-        b.layer.shadowColor = UIColor.black.withAlphaComponent(0.2).cgColor
-        b.layer.shadowOpacity = 1
-        b.layer.shadowRadius = 8
-        b.layer.shadowOffset = CGSize(width: 0, height: 4)
-        b.addTarget(self, action: #selector(checkoutTapped), for: .touchUpInside)
-        return b
+        let button = BrandedButton.make(.primaryWithShadow, title: "Оформить заказ")
+        button.addTarget(self, action: #selector(checkoutTapped), for: .touchUpInside)
+        return button
     }()
 
     // MARK: - State
@@ -121,8 +111,7 @@ private extension CartViewController {
             // Кнопка Checkout
             checkoutButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             checkoutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            checkoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16),
-            checkoutButton.heightAnchor.constraint(equalToConstant: 50)
+            checkoutButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -16)
         ])
 
         // Кнопка поверх таблицы

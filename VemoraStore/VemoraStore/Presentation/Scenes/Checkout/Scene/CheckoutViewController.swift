@@ -155,7 +155,6 @@ final class CheckoutViewController: UIViewController {
 // MARK: - Setup
 
 private extension CheckoutViewController {
-    
     func setupNavigationBar() {
         title = "Оформление заказа"
         navigationItem.largeTitleDisplayMode = .never
@@ -239,17 +238,17 @@ private extension CheckoutViewController {
         content.spacing = 10
         content.translatesAutoresizingMaskIntoConstraints = false
         content.isUserInteractionEnabled = false // ensure whole button receives taps
-
+        
         let spacer = UIView()
         spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
-
+        
         content.addArrangedSubview(orderIconView)
         content.addArrangedSubview(orderTitleLabel)
         content.addArrangedSubview(spacer)
         content.addArrangedSubview(orderAmountLabel)
-
+        
         orderButton.addSubview(content)
-
+        
         NSLayoutConstraint.activate([
             content.leadingAnchor.constraint(equalTo: orderButton.leadingAnchor, constant: 16),
             content.trailingAnchor.constraint(equalTo: orderButton.trailingAnchor, constant: -16),
@@ -264,7 +263,49 @@ private extension CheckoutViewController {
     }
     
     func bindViewModel() {
-        // Подключи реальные паблишеры суммы/доставки при необходимости
+        // Reflect delivery method in segmented control and update section
+        viewModel.$deliveryMethod
+            .receive(on: RunLoop.main)
+            .sink { [weak self] method in
+                guard let self else { return }
+                let index = (method == .pickup) ? 0 : 1
+                if self.deliveryControl.selectedSegmentIndex != index {
+                    self.deliveryControl.selectedSegmentIndex = index
+                }
+                let section = Section.pickupAddress.rawValue
+                self.tableView.reloadSections(IndexSet(integer: section), with: .automatic)
+            }
+            .store(in: &bag)
+
+        // Update DeliveryAddressCell when address string changes
+        viewModel.$deliveryAddressString
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                // Only relevant for Delivery mode (segment index 1)
+                guard self.deliveryControl.selectedSegmentIndex == 1 else { return }
+                let indexPath = IndexPath(row: 0, section: Section.pickupAddress.rawValue)
+                if let cell = self.tableView.cellForRow(at: indexPath) as? DeliveryAddressCell {
+                    cell.configure(address: self.viewModel.deliveryAddressString)
+                    self.tableView.beginUpdates()
+                    self.tableView.endUpdates()
+                } else {
+                    if self.tableView.numberOfSections > Section.pickupAddress.rawValue,
+                       self.tableView.numberOfRows(inSection: Section.pickupAddress.rawValue) > 0 {
+                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
+                    }
+                }
+            }
+            .store(in: &bag)
+
+        // Enable/disable order button based on validation
+        viewModel.isPlaceOrderEnabled
+            .receive(on: RunLoop.main)
+            .sink { [weak self] enabled in
+                self?.orderButton.isEnabled = enabled
+                self?.orderButton.alpha = enabled ? 1.0 : 0.5
+            }
+            .store(in: &bag)
     }
 }
 
@@ -272,7 +313,8 @@ private extension CheckoutViewController {
 
 private extension CheckoutViewController {
     @objc func deliveryChanged() {
-        tableView.reloadData()
+        let method: CheckoutViewModel.DeliveryMethod = (deliveryControl.selectedSegmentIndex == 0) ? .pickup : .delivery
+        viewModel.setDeliveryMethod(method)
     }
     
     @objc func placeTapped() {
@@ -311,7 +353,7 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
                     withIdentifier: PickupAddressCell.reuseId,
                     for: indexPath
                 ) as! PickupAddressCell
-                cell.configure(address: "г. Красногорск, Заводская улица 18к2")
+                cell.configure(address: "Москва, Ходынский бульвар 4")
                 return cell
             } else {
                 if indexPath.row == 0 {
@@ -319,7 +361,7 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
                         withIdentifier: DeliveryAddressCell.reuseId,
                         for: indexPath
                     ) as! DeliveryAddressCell
-                    cell.configure(address: nil)
+                    cell.configure(address: viewModel.deliveryAddressString)
                     return cell
                 } else if indexPath.row == 1 {
                     let cell = tableView.dequeueReusableCell(
@@ -394,13 +436,9 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
                 if indexPath.row == 0 {
                     onPickOnMap?()
                 } else if indexPath.row == 1 {
-                    let sheet = PhoneInputSheetViewController()
-                    sheet.kind = .phone
-                    // sheet.initialPhone = viewModel.phone
-                    sheet.initialPhone = nil
+                    let sheet = PhoneOrCommentInputSheetViewController(kind: .phone, initialPhone: nil, initialComment: nil)
                     sheet.onSave = { [weak self] phone in
                         guard let self = self else { return }
-                        // self.viewModel.phone = phone
                         if let cell = self.tableView.cellForRow(at: indexPath) as? ChangePhoneCell {
                             cell.configure(phone: phone, placeholder: "Указать номер телефона")
                         } else {
@@ -409,13 +447,9 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
                     }
                     present(sheet, animated: true)
                 } else {
-                    let sheet = PhoneInputSheetViewController()
-                    sheet.kind = .comment
-                    // sheet.initialComment = viewModel.comment
-                    sheet.initialComment = nil
+                    let sheet = PhoneOrCommentInputSheetViewController(kind: .comment, initialPhone: nil, initialComment: nil)
                     sheet.onSave = { [weak self] comment in
                         guard let self = self else { return }
-                        // self.viewModel.comment = comment
                         if let cell = self.tableView.cellForRow(at: indexPath) as? OrderCommentCell {
                             cell.configure(comment: comment, placeholder: "Оставить комментарий")
                         } else {

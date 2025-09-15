@@ -15,13 +15,18 @@ final class CheckoutCoordinator: Coordinator {
     
     var onFinish: (() -> Void)?
     
-    init(navigation: UINavigationController) {
+    private let checkoutViewModel: CheckoutViewModel
+    
+    init(
+        navigation: UINavigationController,
+        viewModel: CheckoutViewModel = Container.shared.checkoutViewModel()
+    ) {
         self.navigation = navigation
+        self.checkoutViewModel = viewModel
     }
     
     func start() {
-        let vm = Container.shared.checkoutViewModel()
-        let vc = CheckoutViewController(viewModel: vm)
+        let vc = CheckoutViewController(viewModel: checkoutViewModel)
         
         vc.onPickOnMap = { [weak self] in
             self?.showMapPicker()
@@ -42,9 +47,9 @@ final class CheckoutCoordinator: Coordinator {
         let picker = MapPickerCoordinator(navigation: navigation)
         add(picker)
         
-        picker.onAddressPicked = { [weak self, weak picker] address in
+        picker.onFullAddressPicked = { [weak self, weak picker] fullAddress in
             guard let self else { return }
-            // self.viewModel.address = address
+            self.checkoutViewModel.updateDeliveryAddress(fullAddress)
             
             if let picker { self.remove(picker) }
         }

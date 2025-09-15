@@ -58,4 +58,31 @@ extension Container {
         self { CheckoutViewModel(cart: self.cartService(),
                                  auth: self.authService()) }
     }
+    
+    
+    // MARK: - Address / Delivery
+    
+    var deliveryDetailsViewModel: ParameterFactory<String, DeliveryDetailsViewModelProtocol> {
+        self { baseAddress in
+            DeliveryDetailsViewModel(baseAddress: baseAddress)
+        }
+    }
+
+    // MARK: - Address Confirm
+    
+    var addressConfirmSheetViewModel: Factory<AddressConfirmSheetViewModelProtocol> {
+        self {
+            AddressConfirmSheetViewModel(
+                search: self.addressSearchService(),
+                formatter: self.addressFormatter()
+            )
+        }
+    }
+    // MARK: - Phone Input
+    
+    var phoneInputSheetViewModel: ParameterFactory<(PhoneOrCommentInputSheetViewModel.Kind, String?, String?), PhoneOrCommentInputSheetViewModelProtocol> {
+        self { (kind, initialPhone, initialComment) in
+            PhoneOrCommentInputSheetViewModel(kind: kind, initialPhone: initialPhone, initialComment: initialComment)
+        }
+    }
 }

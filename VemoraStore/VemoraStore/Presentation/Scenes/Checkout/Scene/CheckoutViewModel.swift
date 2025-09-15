@@ -17,8 +17,9 @@ final class CheckoutViewModel {
 
     // MARK: - State
     @Published private(set) var items: [CartItemEntity] = []
-    @Published var address: Address? = nil          // выбранный адрес доставки (или nil для самовывоза)
-    @Published var note: String = ""                // комментарий к заказу
+    @Published var address: Address? = nil
+    @Published private(set) var deliveryAddressString: String? = nil
+    @Published var note: String = ""
     @Published private(set) var isPlacing: Bool = false
     @Published private(set) var placeError: String? = nil
 
@@ -27,18 +28,18 @@ final class CheckoutViewModel {
     @Published var deliveryMethod: DeliveryMethod = .pickup
 
     // MARK: - Outputs
-//    var totalPublisher: AnyPublisher<Double, Never> {
-//        cartService.itemsPublisher
-//            .map { $0.reduce(into: 0) { $0 + $1.totalPrice } }
-//            .eraseToAnyPublisher()
-//    }
-
-    /// Можно ли оформить заказ (есть товары и либо самовывоз, либо есть адрес)
     var isPlaceOrderEnabled: AnyPublisher<Bool, Never> {
-        Publishers.CombineLatest($items.map { !$0.isEmpty },
-                                 Publishers.CombineLatest($deliveryMethod, $address)
-                                    .map { method, addr in method == .pickup || addr != nil })
-        .map { hasItems, hasFulfillment in hasItems && hasFulfillment }
+        Publishers.CombineLatest3(
+            $items.map { !$0.isEmpty },
+            $deliveryMethod,
+            Publishers.CombineLatest($address, $deliveryAddressString)
+        )
+        .map { hasItems, method, pair -> Bool in
+            let (addrModel, addrString) = pair
+            let hasDeliveryAddress = (addrModel != nil) || ((addrString ?? "").isEmpty == false)
+            let hasFulfillment = (method == .pickup) || hasDeliveryAddress
+            return hasItems && hasFulfillment
+        }
         .eraseToAnyPublisher()
     }
 
@@ -63,13 +64,13 @@ final class CheckoutViewModel {
     }
 
     // MARK: - Actions
-    func selectAddress(_ address: Address) {
-        self.address = address
-    }
 
     func setDeliveryMethod(_ method: DeliveryMethod) {
         deliveryMethod = method
-        if method == .pickup { address = nil }
+        if method == .pickup {
+            address = nil
+            deliveryAddressString = nil
+        }
     }
 
     /// Оформление заказа (оплата при получении)
@@ -90,5 +91,14 @@ final class CheckoutViewModel {
     
     func loadMocks() {
         cartService.loadMocks()
+    }
+
+    /// Устанавливает полный адрес строкой (из MapPicker/DeliveryDetails)
+    func updateDeliveryAddress(_ fullAddress: String) {
+        deliveryAddressString = fullAddress
+        // переключаемся на режим доставки, т.к. адрес задан
+        if deliveryMethod != .delivery {
+            deliveryMethod = .delivery
+        }
     }
 }
