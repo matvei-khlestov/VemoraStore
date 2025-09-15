@@ -10,10 +10,10 @@ import UIKit
 final class MapPickerCoordinator: Coordinator {
 
     // MARK: - Public callbacks
-    /// Вернёт выбранный адрес вверх по иерархии
-    var onAddressPicked: ((Address) -> Void)?
+    
     /// Сообщит, что координатор завершил работу (можно убрать из childCoordinators)
     var onFinish: (() -> Void)?
+    var onFullAddressPicked: ((String) -> Void)?
 
     // MARK: - Deps
     let navigation: UINavigationController
@@ -28,9 +28,9 @@ final class MapPickerCoordinator: Coordinator {
     func start() {
         let vc = MapPickerViewController()
 
-        vc.onPickAddress = { [weak self] address in
+        vc.onAddressComposed = { [weak self] fullAddress in
             guard let self else { return }
-            self.onAddressPicked?(address)
+            self.onFullAddressPicked?(fullAddress)
             self.navigation.popViewController(animated: true)
             self.onFinish?()
         }

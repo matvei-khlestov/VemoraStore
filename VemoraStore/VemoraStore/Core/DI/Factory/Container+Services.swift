@@ -30,4 +30,8 @@ extension Container {
     var locationService: Factory<LocationServiceProtocol> {
         self { LocationService.shared }.singleton
     }
+    
+    var addressSearchService: Factory<AddressSearchServiceProtocol> {
+        self { AddressSearchService() }
+    }
 }
