@@ -15,7 +15,7 @@ extension Container {
     var loginViewModel: Factory<LoginViewModel> {
         self { LoginViewModel(authService: self.authService()) }
     }
-
+    
     // MARK: - Catalog
     
     var catalogViewModel: Factory<CatalogViewModel> {
@@ -31,27 +31,27 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Favorites
     
     var favoritesViewModel: Factory<FavoritesViewModel> {
         self { FavoritesViewModel(favoritesService: self.favoritesService(),
                                   productService: self.productService()) }
     }
-
+    
     // MARK: - Cart
     
     var cartViewModel: Factory<CartViewModel> {
         self { CartViewModel(cartService: self.cartService()) }
     }
-
+    
     // MARK: - Profile
     
     var profileViewModel: Factory<ProfileViewModel> {
         self { ProfileViewModel(profileService: self.profileService(),
                                 authService: self.authService()) }
     }
-
+    
     // MARK: - Checkout
     
     var checkoutViewModel: Factory<CheckoutViewModel> {
@@ -67,7 +67,7 @@ extension Container {
             DeliveryDetailsViewModel(baseAddress: baseAddress)
         }
     }
-
+    
     // MARK: - Address Confirm
     
     var addressConfirmSheetViewModel: Factory<AddressConfirmSheetViewModelProtocol> {
@@ -78,11 +78,18 @@ extension Container {
             )
         }
     }
+    
     // MARK: - Phone Input
     
     var phoneInputSheetViewModel: ParameterFactory<(PhoneOrCommentInputSheetViewModel.Kind, String?, String?), PhoneOrCommentInputSheetViewModelProtocol> {
         self { (kind, initialPhone, initialComment) in
             PhoneOrCommentInputSheetViewModel(kind: kind, initialPhone: initialPhone, initialComment: initialComment)
         }
+    }
+    
+    // MARK: - Map Picker
+    
+    var mapPickerViewModel: Factory<MapPickerViewModelProtocol> {
+        self { MapPickerViewModel(container: self) }
     }
 }

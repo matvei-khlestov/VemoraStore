@@ -8,17 +8,23 @@
 import UIKit
 import MapKit
 import CoreLocation
+import FactoryKit
 
 final class MapPickerViewController: UIViewController {
-
+    
+    // MARK: - ViewModel
+    
+    private let viewModel: MapPickerViewModelProtocol = Container.shared.mapPickerViewModel()
+    
     // MARK: - Callbacks
-
+    
     var onBack: (() -> Void)?
     var onAddressComposed: ((String) -> Void)?
-
+    
     // MARK: - UI
+    
     private let mapView = MKMapView()
-
+    
     // три кнопки справа: гео, +, −
     private let locateButton: UIButton = {
         let b = UIButton(type: .system)
@@ -33,7 +39,7 @@ final class MapPickerViewController: UIViewController {
         b.heightAnchor.constraint(equalToConstant: 44).isActive = true
         return b
     }()
-
+    
     private let zoomInButton: UIButton = {
         let b = UIButton(type: .system)
         b.setTitle("+", for: .normal)
@@ -45,7 +51,7 @@ final class MapPickerViewController: UIViewController {
         b.heightAnchor.constraint(equalToConstant: 44).isActive = true
         return b
     }()
-
+    
     private let zoomOutButton: UIButton = {
         let b = UIButton(type: .system)
         b.setTitle("−", for: .normal)
@@ -57,7 +63,7 @@ final class MapPickerViewController: UIViewController {
         b.heightAnchor.constraint(equalToConstant: 44).isActive = true
         return b
     }()
-
+    
     private let centerPin: UIImageView = {
         let iv = UIImageView(image: UIImage(systemName: "mappin.circle.fill"))
         iv.tintColor = .brightPurple
@@ -65,22 +71,24 @@ final class MapPickerViewController: UIViewController {
         iv.contentMode = .scaleAspectFit
         return iv
     }()
-
+    
     // MARK: - Location
+    
     private let locationManager = CLLocationManager()
     private let geocoder = CLGeocoder()
     private var didShowSheet = false
     private weak var addressSheet: AddressConfirmSheetViewController?
     private var geocodeWorkItem: DispatchWorkItem?
     private var isSheetEditing = false
-
+    
     private var lastGeocodeAt: Date = .distantPast
     private let minGeocodeInterval: TimeInterval = 1.5
     private var geocodeInFlight = false
     private var lastGeocodeCoordinate: CLLocationCoordinate2D?
     private var isProgrammaticMove = false
-
+    
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
@@ -88,25 +96,20 @@ final class MapPickerViewController: UIViewController {
         setupMap()
         setupRightButtons()
         setupActions()
+        bindViewModel()
         requestLocation()
     }
-
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // показать шит один раз при первом попадании
-        if !didShowSheet {
-            didShowSheet = true
-            presentAddressSheet(with: "Определяем адрес…")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [weak self] in
-                self?.reverseGeocodeCenterAndFillSheet()
-            }
-        }
+        viewModel.onViewDidAppear()
     }
 }
 
 // MARK: - Setup
-private extension MapPickerViewController {
 
+private extension MapPickerViewController {
+    
     func setupNavigationBar() {
         navigationItem.largeTitleDisplayMode = .never
         navigationItem.leftBarButtonItem = .backItem(
@@ -116,21 +119,21 @@ private extension MapPickerViewController {
         )
         navigationController?.navigationBar.prefersLargeTitles = false
     }
-
+    
     func setupMap() {
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .none
         mapView.delegate = self
         view.addSubview(mapView)
         mapView.translatesAutoresizingMaskIntoConstraints = false
-
+        
         NSLayoutConstraint.activate([
             mapView.topAnchor.constraint(equalTo: view.topAnchor),
             mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-
+        
         // центровой пин
         view.addSubview(centerPin)
         NSLayoutConstraint.activate([
@@ -140,14 +143,14 @@ private extension MapPickerViewController {
             centerPin.heightAnchor.constraint(equalToConstant: 32)
         ])
     }
-
+    
     func setupRightButtons() {
         let stack = UIStackView(arrangedSubviews: [zoomInButton, zoomOutButton, locateButton])
         stack.axis = .vertical
         stack.spacing = 15
         stack.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(stack)
-
+        
         NSLayoutConstraint.activate([
             stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             stack.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40),
@@ -155,56 +158,69 @@ private extension MapPickerViewController {
             stack.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -180)
         ])
     }
-
+    
     func setupActions() {
         zoomInButton.addTarget(self, action: #selector(zoomInTapped), for: .touchUpInside)
         zoomOutButton.addTarget(self, action: #selector(zoomOutTapped), for: .touchUpInside)
         locateButton.addTarget(self, action: #selector(locateTapped), for: .touchUpInside)
     }
-
+    
+    func bindViewModel() {
+        viewModel.requestPresentAddressSheet = { [weak self] text in
+            self?.presentAddressSheet(with: text)
+        }
+        viewModel.requestCenterMap = { [weak self] coordinate, meters in
+            self?.centerMap(on: coordinate, meters: meters)
+        }
+        viewModel.updateAddressText = { [weak self] text in
+            self?.updateAddressSheet(with: text)
+        }
+    }
+    
     func requestLocation() {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.requestWhenInUseAuthorization()
         // Do not startUpdatingLocation here; wait for authorization callback
     }
-
+    
     func presentAddressSheet(with text: String?) {
         let sheet = AddressConfirmSheetViewController()
         sheet.address = text
         // передаём регион карты для подсказок и поиска
         sheet.searchRegion = mapView.region
-
+        
         // когда пользователь выбирает адрес или жмёт Return — центрируем карту и сворачиваемся
         sheet.onAddressPicked = { [weak self] formatted, coordinate in
             guard let self else { return }
             self.centerMap(on: coordinate)
             self.updateAddressSheet(with: formatted)
         }
-
+        
         sheet.onEditingChanged = { [weak self] isEditing in
             self?.isSheetEditing = isEditing
+            self?.viewModel.setIsSheetEditing(isEditing)
         }
-
+        
         sheet.onFullAddressComposed = { [weak self] full in
             guard let self else { return }
             // Передаём наружу (в координатор/Checkout)
             self.onAddressComposed?(full)
-
+            
             // Закрываем любые представленные поверх шиты (если ещё открыты)
             self.presentedViewController?.dismiss(animated: true)
         }
-
+        
         self.addressSheet = sheet
         present(sheet, animated: true)
     }
-
+    
     func updateAddressSheet(with text: String) {
         // Не обновляем, если пользователь сейчас редактирует адрес вручную
         guard !isSheetEditing else { return }
         addressSheet?.address = text
     }
-
+    
     private func centerMap(on coordinate: CLLocationCoordinate2D, meters: CLLocationDistance = 600) {
         isProgrammaticMove = true
         let region = MKCoordinateRegion(center: coordinate,
@@ -217,69 +233,14 @@ private extension MapPickerViewController {
             self?.reverseGeocodeCenterAndFillSheet()
         }
     }
-
+    
     private func reverseGeocodeCenterAndFillSheet() {
-        // Throttle by time window and distance so we don't exceed Apple's 50/min cap
-        let now = Date()
         let center = currentCenterLocation.coordinate
-
-        // If last geocode was very recent, delay the execution instead of firing immediately
-        let elapsed = now.timeIntervalSince(lastGeocodeAt)
-        let scheduleDelay = max(0, minGeocodeInterval - elapsed)
-
-        // If center hasn't moved meaningfully, skip
-        if let prev = lastGeocodeCoordinate {
-            let p1 = MKMapPoint(center)
-            let p2 = MKMapPoint(prev)
-            let meters = p1.distance(to: p2)
-            if meters < 35 { return } // ignore tiny pans/zooms
-        }
-
-        geocodeWorkItem?.cancel()
-        let work = DispatchWorkItem { [weak self] in
-            self?.performReverseGeocode(at: center)
-        }
-        geocodeWorkItem = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + scheduleDelay, execute: work)
+        viewModel.onRegionDidChange(center: center)
     }
-
+    
     private func performReverseGeocode(at coordinate: CLLocationCoordinate2D) {
-        guard !geocodeInFlight else { return }
-        geocodeInFlight = true
-        lastGeocodeAt = Date()
-        lastGeocodeCoordinate = coordinate
-
-        geocoder.cancelGeocode()
-        let loc = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-
-        geocoder.reverseGeocodeLocation(loc, preferredLocale: Locale(identifier: "ru_RU")) { [weak self] placemarks, error in
-            guard let self else { return }
-            self.geocodeInFlight = false
-
-            if let error = error as NSError? {
-                // For transient errors: network / no result / partial result — soft retry once after interval
-                if let clErr = error as? CLError,
-                   [.network, .geocodeFoundNoResult, .geocodeFoundPartialResult].contains(clErr.code) {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + self.minGeocodeInterval) { [weak self] in
-                        self?.reverseGeocodeCenterAndFillSheet()
-                    }
-                } else {
-                    self.updateAddressSheet(with: "Адрес не найден")
-                }
-                return
-            }
-
-            guard let p = placemarks?.first else {
-                self.updateAddressSheet(with: "Адрес не найден")
-                return
-            }
-
-            let city   = p.locality ?? p.administrativeArea ?? ""
-            let street = p.thoroughfare ?? ""
-            let house  = p.subThoroughfare ?? ""
-            let formatted = [city, street, house].filter { !$0.isEmpty }.joined(separator: ", ")
-            self.updateAddressSheet(with: formatted.isEmpty ? "Адрес не найден" : formatted)
-        }
+        viewModel.onRegionDidChange(center: coordinate)
     }
 }
 
@@ -292,32 +253,31 @@ func clampedSpan(_ span: MKCoordinateSpan) -> MKCoordinateSpan {
 }
 
 // MARK: - Actions
+
 private extension MapPickerViewController {
-
+    
     @objc func zoomInTapped() {
-        var region = mapView.region
-        region.span = clampedSpan(MKCoordinateSpan(latitudeDelta: region.span.latitudeDelta / 2,
-                                                   longitudeDelta: region.span.longitudeDelta / 2))
-        mapView.setRegion(region, animated: true)
+        let newRegion = viewModel.onZoomIn(currentRegion: mapView.region)
+        mapView.setRegion(newRegion, animated: true)
     }
-
+    
     @objc func zoomOutTapped() {
-        var region = mapView.region
-        region.span = clampedSpan(MKCoordinateSpan(latitudeDelta: region.span.latitudeDelta * 2,
-                                                   longitudeDelta: region.span.longitudeDelta * 2))
-        mapView.setRegion(region, animated: true)
+        let newRegion = viewModel.onZoomOut(currentRegion: mapView.region)
+        mapView.setRegion(newRegion, animated: true)
     }
-
+    
     @objc func locateTapped() {
+        viewModel.onLocateTapped()
         requestLocation()
     }
-
+    
     @objc func backTapped() {
         onBack?()
     }
 }
 
 // MARK: - Геокодинг
+
 private extension MapPickerViewController {
     var currentCenterLocation: CLLocation {
         CLLocation(latitude: mapView.centerCoordinate.latitude,
@@ -326,55 +286,40 @@ private extension MapPickerViewController {
 }
 
 // MARK: - CLLocationManagerDelegate
+
 extension MapPickerViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
-        switch status {
-        case .authorizedWhenInUse, .authorizedAlways:
-            manager.startUpdatingLocation()
-        case .denied, .restricted:
-            break
-        case .notDetermined:
-            break
-        @unknown default:
-            break
-        }
+        viewModel.onLocationAuthChanged(status, manager: manager)
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        guard let loc = locations.last else { return }
-        centerMap(on: loc.coordinate)
-        manager.stopUpdatingLocation()
+        viewModel.onLocationsUpdated(locations, manager: manager)
     }
-
+    
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        // Можно показать тост/алерт, но пока просто оставим
-        print("Location error:", error)
+        viewModel.onLocationFailed(error)
     }
 }
 
 extension MapPickerViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         guard !isSheetEditing, !isProgrammaticMove else { return }
-        geocodeWorkItem?.cancel()
-        let work = DispatchWorkItem { [weak self] in
-            self?.reverseGeocodeCenterAndFillSheet()
-        }
-        geocodeWorkItem = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7, execute: work)
+        viewModel.onRegionDidChange(center: mapView.centerCoordinate)
     }
 }
 
 // MARK: - Хранилки
+
 private extension MapPickerViewController {
     // чтобы собрать Address при подтверждении
     var currentCityKey: String { "currentCityKey" }
     var currentStreetKey: String { "currentStreetKey" }
-
+    
     private struct Holder {
         static var city: String?
         static var street: String?
     }
-
+    
     var currentCity: String? {
         get { Holder.city }
         set { Holder.city = newValue }
