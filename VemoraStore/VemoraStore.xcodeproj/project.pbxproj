@@ -108,6 +108,8 @@
 		A08550D92E79BB7E004633CA /* MapPickerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550D82E79BB7E004633CA /* MapPickerViewModel.swift */; };
 		A08550DB2E79D024004633CA /* ProfileGuestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550DA2E79D024004633CA /* ProfileGuestViewController.swift */; };
 		A08550DE2E79D1CD004633CA /* ProfileGuestCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550DD2E79D1CD004633CA /* ProfileGuestCoordinator.swift */; };
+		A08550E22E79E1AC004633CA /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550E12E79E1AC004633CA /* AboutViewController.swift */; };
+		A08550E42E79E357004633CA /* AboutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550E32E79E357004633CA /* AboutCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -232,6 +234,8 @@
 		A08550D82E79BB7E004633CA /* MapPickerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPickerViewModel.swift; sourceTree = "<group>"; };
 		A08550DA2E79D024004633CA /* ProfileGuestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGuestViewController.swift; sourceTree = "<group>"; };
 		A08550DD2E79D1CD004633CA /* ProfileGuestCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGuestCoordinator.swift; sourceTree = "<group>"; };
+		A08550E12E79E1AC004633CA /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
+		A08550E32E79E357004633CA /* AboutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -480,6 +484,7 @@
 				A08550662E63F7EC004633CA /* FavoritesCoordinator.swift */,
 				A08550682E64005F004633CA /* CartCoordinator.swift */,
 				A08550DD2E79D1CD004633CA /* ProfileGuestCoordinator.swift */,
+				A08550E32E79E357004633CA /* AboutCoordinator.swift */,
 				A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */,
 				A085509B2E74817F004633CA /* MapPickerCoordinator.swift */,
 				A08550A12E748BE9004633CA /* OrderSuccessCoordinator.swift */,
@@ -490,6 +495,7 @@
 		A08550172E6125A4004633CA /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				A08550E02E79E190004633CA /* AboutUs */,
 				A08550182E6125CC004633CA /* Auth */,
 				A085501D2E61260C004633CA /* Catalog */,
 				A08550242E61291F004633CA /* ProductDetails */,
@@ -850,6 +856,14 @@
 			path = ProfileGuest;
 			sourceTree = "<group>";
 		};
+		A08550E02E79E190004633CA /* AboutUs */ = {
+			isa = PBXGroup;
+			children = (
+				A08550E12E79E1AC004633CA /* AboutViewController.swift */,
+			);
+			path = AboutUs;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1042,6 +1056,7 @@
 				A08550532E613F5A004633CA /* Container+Utils.swift in Sources */,
 				A08550952E741943004633CA /* OrderCommentCell.swift in Sources */,
 				A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */,
+				A08550E42E79E357004633CA /* AboutCoordinator.swift in Sources */,
 				A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */,
 				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
 				A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */,
@@ -1069,6 +1084,7 @@
 				A0854FDE2E6119E6004633CA /* KeychainService.swift in Sources */,
 				A08550062E61242E004633CA /* ProfileServiceProtocol.swift in Sources */,
 				A0854FDA2E61199A004633CA /* CoreDataManager.swift in Sources */,
+				A08550E22E79E1AC004633CA /* AboutViewController.swift in Sources */,
 				A08550CF2E78C4AC004633CA /* DeliveryAddressFormattingProtocol.swift in Sources */,
 				A08550262E612936004633CA /* ProductDetailsViewController.swift in Sources */,
 				A08550B72E788972004633CA /* AddressConfirmSheetViewModel.swift in Sources */,

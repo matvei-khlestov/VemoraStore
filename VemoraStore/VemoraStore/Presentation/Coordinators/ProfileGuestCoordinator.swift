@@ -64,12 +64,9 @@ private extension ProfileGuestCoordinator {
     }
     
     func openAbout() {
-        if let url = URL(string: "https://vemora.example.com/about") {
-            let safari = SFSafariViewController(url: url)
-            navigation.present(safari, animated: true)
-        } else {
-            showInfo("Страница «О нас» временно недоступна.")
-        }
+        let coordinator = AboutCoordinator(navigation: navigation)
+        add(coordinator)
+        coordinator.start()
     }
     
     func openPrivacy() {
@@ -97,5 +94,3 @@ private extension ProfileGuestCoordinator {
         navigation.present(alert, animated: true)
     }
 }
-
-
