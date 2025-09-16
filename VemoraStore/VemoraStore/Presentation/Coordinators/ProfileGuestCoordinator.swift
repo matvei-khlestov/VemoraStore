@@ -79,13 +79,9 @@ private extension ProfileGuestCoordinator {
     }
     
     func callSupport() {
-        let number = "+78001234567" // подставь актуальный номер
-        if let url = URL(string: "tel://\(number)"),
-           UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url)
-        } else {
-            showInfo("Не удалось открыть звонилку.")
-        }
+        let coordinator = ContactUsCoordinator(navigation: self.navigation)
+        self.add(coordinator)
+        coordinator.start()
     }
     
     func showInfo(_ text: String) {
