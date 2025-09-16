@@ -91,28 +91,6 @@ final class ProfileGuestViewController: UIViewController {
         return containerView
     }()
     
-    // MARK: - Data
-    
-    private enum Row: Int, CaseIterable {
-        case about, contact, privacy
-        
-        var title: String {
-            switch self {
-            case .about:   return "О нас"
-            case .contact: return "Связаться с нами"
-            case .privacy: return "Политика конфиденциальности"
-            }
-        }
-        
-        var systemImage: String {
-            switch self {
-            case .about:   return "storefront.fill"
-            case .contact: return "phone.fill"
-            case .privacy: return "lock.shield.fill"
-            }
-        }
-    }
-    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -183,7 +161,7 @@ final class ProfileGuestViewController: UIViewController {
         ])
         
         // фиксированная высота под 3 строки
-        tableView.heightAnchor.constraint(equalToConstant: CGFloat(Row.allCases.count) * tableView.rowHeight + 8).isActive = true
+        tableView.heightAnchor.constraint(equalToConstant: CGFloat(ProfileGuestRow.allCases.count) * tableView.rowHeight + 8).isActive = true
     }
     
     // MARK: - Wiring
@@ -206,12 +184,12 @@ final class ProfileGuestViewController: UIViewController {
 
 extension ProfileGuestViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        Row.allCases.count
+        ProfileGuestRow.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        guard let row = Row(rawValue: indexPath.row) else { return cell }
+        guard let row = ProfileGuestRow(rawValue: indexPath.row) else { return cell }
         
         var conf = cell.defaultContentConfiguration()
         conf.text = row.title
@@ -230,7 +208,7 @@ extension ProfileGuestViewController: UITableViewDataSource {
 extension ProfileGuestViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let row = Row(rawValue: indexPath.row) else { return }
+        guard let row = ProfileGuestRow(rawValue: indexPath.row) else { return }
         switch row {
         case .about:   onAboutTap?()
         case .contact: onContactTap?()

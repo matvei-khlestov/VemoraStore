@@ -110,6 +110,9 @@
 		A08550DE2E79D1CD004633CA /* ProfileGuestCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550DD2E79D1CD004633CA /* ProfileGuestCoordinator.swift */; };
 		A08550E22E79E1AC004633CA /* AboutViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550E12E79E1AC004633CA /* AboutViewController.swift */; };
 		A08550E42E79E357004633CA /* AboutCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550E32E79E357004633CA /* AboutCoordinator.swift */; };
+		A08550E72E79F73B004633CA /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550E62E79F73B004633CA /* ContactUsViewController.swift */; };
+		A08550E92E79F7A4004633CA /* ContactUsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550E82E79F7A4004633CA /* ContactUsCoordinator.swift */; };
+		A08550EB2E7A056D004633CA /* ProfileGuestRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550EA2E7A056D004633CA /* ProfileGuestRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -236,6 +239,9 @@
 		A08550DD2E79D1CD004633CA /* ProfileGuestCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGuestCoordinator.swift; sourceTree = "<group>"; };
 		A08550E12E79E1AC004633CA /* AboutViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutViewController.swift; sourceTree = "<group>"; };
 		A08550E32E79E357004633CA /* AboutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutCoordinator.swift; sourceTree = "<group>"; };
+		A08550E62E79F73B004633CA /* ContactUsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
+		A08550E82E79F7A4004633CA /* ContactUsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsCoordinator.swift; sourceTree = "<group>"; };
+		A08550EA2E7A056D004633CA /* ProfileGuestRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGuestRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -485,6 +491,7 @@
 				A08550682E64005F004633CA /* CartCoordinator.swift */,
 				A08550DD2E79D1CD004633CA /* ProfileGuestCoordinator.swift */,
 				A08550E32E79E357004633CA /* AboutCoordinator.swift */,
+				A08550E82E79F7A4004633CA /* ContactUsCoordinator.swift */,
 				A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */,
 				A085509B2E74817F004633CA /* MapPickerCoordinator.swift */,
 				A08550A12E748BE9004633CA /* OrderSuccessCoordinator.swift */,
@@ -495,6 +502,7 @@
 		A08550172E6125A4004633CA /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				A08550E52E79F724004633CA /* ContactUs */,
 				A08550E02E79E190004633CA /* AboutUs */,
 				A08550182E6125CC004633CA /* Auth */,
 				A085501D2E61260C004633CA /* Catalog */,
@@ -852,6 +860,7 @@
 			isa = PBXGroup;
 			children = (
 				A08550DA2E79D024004633CA /* ProfileGuestViewController.swift */,
+				A08550EA2E7A056D004633CA /* ProfileGuestRow.swift */,
 			);
 			path = ProfileGuest;
 			sourceTree = "<group>";
@@ -862,6 +871,14 @@
 				A08550E12E79E1AC004633CA /* AboutViewController.swift */,
 			);
 			path = AboutUs;
+			sourceTree = "<group>";
+		};
+		A08550E52E79F724004633CA /* ContactUs */ = {
+			isa = PBXGroup;
+			children = (
+				A08550E62E79F73B004633CA /* ContactUsViewController.swift */,
+			);
+			path = ContactUs;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1006,6 +1023,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A08550AE2E783E88004633CA /* BrandedButton.swift in Sources */,
+				A08550EB2E7A056D004633CA /* ProfileGuestRow.swift in Sources */,
 				A08550D92E79BB7E004633CA /* MapPickerViewModel.swift in Sources */,
 				A0854FE62E6121E3004633CA /* FirebaseAuthService.swift in Sources */,
 				A08550D52E79BAE2004633CA /* CLGeocodingService.swift in Sources */,
@@ -1070,6 +1088,7 @@
 				A08550512E613F2D004633CA /* Container+ViewModels.swift in Sources */,
 				A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */,
 				A08550BA2E789476004633CA /* AddressFormatter.swift in Sources */,
+				A08550E72E79F73B004633CA /* ContactUsViewController.swift in Sources */,
 				A08550A42E749374004633CA /* OrderSuccessViewModel.swift in Sources */,
 				A08550142E61257B004633CA /* AuthCoordinator.swift in Sources */,
 				A085507B2E6ADDBB004633CA /* UIView+Animations.swift in Sources */,
@@ -1097,6 +1116,7 @@
 				A08550362E612A62004633CA /* CartViewModel.swift in Sources */,
 				A085502B2E612977004633CA /* FavoritesViewController.swift in Sources */,
 				A08550232E61265E004633CA /* ProductCell.swift in Sources */,
+				A08550E92E79F7A4004633CA /* ContactUsCoordinator.swift in Sources */,
 				A0854FE82E6121F4004633CA /* FirebaseProfileService.swift in Sources */,
 				A085505E2E614EA3004633CA /* CartItemEntity.swift in Sources */,
 				A0854FEA2E612206004633CA /* FirebaseNotificationService.swift in Sources */,
