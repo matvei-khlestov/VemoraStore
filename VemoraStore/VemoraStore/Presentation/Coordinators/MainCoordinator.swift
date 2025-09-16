@@ -37,11 +37,10 @@ final class MainCoordinator: Coordinator {
         add(cart)
         cart.start()
         
-        let profileVC = ProfileViewController()
-        let profileNav = TabBarFactory.makeNav(root: profileVC, tab: .profile)
-        let profile = ProfileCoordinator(navigation: profileNav)
+        let profileGuestVC = ProfileGuestViewController()
+        let profileNav = TabBarFactory.makeNav(root: profileGuestVC, tab: .profile)
+        let profile = ProfileGuestCoordinator(navigation: profileNav)
         add(profile)
-        profile.onLogout = { [weak self] in self?.onLogout?() }
         profile.start()
         
         let tab = TabBarFactory.makeTabBar(

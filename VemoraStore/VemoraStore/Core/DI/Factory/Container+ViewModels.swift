@@ -47,10 +47,7 @@ extension Container {
     
     // MARK: - Profile
     
-    var profileViewModel: Factory<ProfileViewModel> {
-        self { ProfileViewModel(profileService: self.profileService(),
-                                authService: self.authService()) }
-    }
+    
     
     // MARK: - Checkout
     
