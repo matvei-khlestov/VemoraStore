@@ -66,7 +66,6 @@ final class CatalogViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        title = "Каталог"
         navigationItem.searchController = searchController
         navigationItem.hidesSearchBarWhenScrolling = false
         setupLayout()
@@ -76,8 +75,7 @@ final class CatalogViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.largeTitleDisplayMode = .always
-        navigationController?.navigationBar.prefersLargeTitles = true
+        setupNavigationBar(title: "Каталог")
     }
 }
 

@@ -95,11 +95,15 @@ final class ProfileGuestViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Профиль"
         view.backgroundColor = .systemBackground
         buildLayout()
         setupConstraints()
         wire()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationBar(title: "Профиль")
     }
     
     // MARK: - Layout

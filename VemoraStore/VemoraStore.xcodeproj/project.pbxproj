@@ -113,6 +113,10 @@
 		A08550E72E79F73B004633CA /* ContactUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550E62E79F73B004633CA /* ContactUsViewController.swift */; };
 		A08550E92E79F7A4004633CA /* ContactUsCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550E82E79F7A4004633CA /* ContactUsCoordinator.swift */; };
 		A08550EB2E7A056D004633CA /* ProfileGuestRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550EA2E7A056D004633CA /* ProfileGuestRow.swift */; };
+		A08550ED2E7A094C004633CA /* UIViewController+NavBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550EC2E7A094C004633CA /* UIViewController+NavBar.swift */; };
+		A08550F12E7AB69F004633CA /* PrivacyPolicyText.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550F02E7AB69F004633CA /* PrivacyPolicyText.swift */; };
+		A08550F32E7AB6E0004633CA /* PrivacyPolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550F22E7AB6E0004633CA /* PrivacyPolicyViewController.swift */; };
+		A08550F52E7AB7C1004633CA /* PrivacyPolicyCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550F42E7AB7C1004633CA /* PrivacyPolicyCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -242,6 +246,10 @@
 		A08550E62E79F73B004633CA /* ContactUsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsViewController.swift; sourceTree = "<group>"; };
 		A08550E82E79F7A4004633CA /* ContactUsCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactUsCoordinator.swift; sourceTree = "<group>"; };
 		A08550EA2E7A056D004633CA /* ProfileGuestRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileGuestRow.swift; sourceTree = "<group>"; };
+		A08550EC2E7A094C004633CA /* UIViewController+NavBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+NavBar.swift"; sourceTree = "<group>"; };
+		A08550F02E7AB69F004633CA /* PrivacyPolicyText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyText.swift; sourceTree = "<group>"; };
+		A08550F22E7AB6E0004633CA /* PrivacyPolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyViewController.swift; sourceTree = "<group>"; };
+		A08550F42E7AB7C1004633CA /* PrivacyPolicyCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrivacyPolicyCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -358,6 +366,7 @@
 				A0854FD62E611898004633CA /* UIImageView+KF.swift */,
 				A085507A2E6ADDBB004633CA /* UIView+Animations.swift */,
 				A08550992E747BBC004633CA /* UIBarButtonItem+ext.swift */,
+				A08550EC2E7A094C004633CA /* UIViewController+NavBar.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -495,6 +504,7 @@
 				A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */,
 				A085509B2E74817F004633CA /* MapPickerCoordinator.swift */,
 				A08550A12E748BE9004633CA /* OrderSuccessCoordinator.swift */,
+				A08550F42E7AB7C1004633CA /* PrivacyPolicyCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -502,6 +512,7 @@
 		A08550172E6125A4004633CA /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				A08550EF2E7AB680004633CA /* PrivacyPolicy */,
 				A08550E52E79F724004633CA /* ContactUs */,
 				A08550E02E79E190004633CA /* AboutUs */,
 				A08550182E6125CC004633CA /* Auth */,
@@ -881,6 +892,15 @@
 			path = ContactUs;
 			sourceTree = "<group>";
 		};
+		A08550EF2E7AB680004633CA /* PrivacyPolicy */ = {
+			isa = PBXGroup;
+			children = (
+				A08550F02E7AB69F004633CA /* PrivacyPolicyText.swift */,
+				A08550F22E7AB6E0004633CA /* PrivacyPolicyViewController.swift */,
+			);
+			path = PrivacyPolicy;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1031,6 +1051,7 @@
 				A08550D12E78C4FE004633CA /* DeliveryAddressFormatter.swift in Sources */,
 				A08550822E6C1E75004633CA /* ProductDetailsCoordinator.swift in Sources */,
 				A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */,
+				A08550F12E7AB69F004633CA /* PrivacyPolicyText.swift in Sources */,
 				A08550C02E789FA8004633CA /* AddressFormattingProtocol.swift in Sources */,
 				A08550C22E78A407004633CA /* DeliveryDetailsViewModel.swift in Sources */,
 				A08550982E742082004633CA /* PhoneOrCommentInputSheetViewController.swift in Sources */,
@@ -1072,13 +1093,16 @@
 				A08550A62E76E9A5004633CA /* AddressConfirmSheetViewController.swift in Sources */,
 				A0854FF92E612395004633CA /* Product.swift in Sources */,
 				A08550532E613F5A004633CA /* Container+Utils.swift in Sources */,
+				A08550F52E7AB7C1004633CA /* PrivacyPolicyCoordinator.swift in Sources */,
 				A08550952E741943004633CA /* OrderCommentCell.swift in Sources */,
 				A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */,
+				A08550ED2E7A094C004633CA /* UIViewController+NavBar.swift in Sources */,
 				A08550E42E79E357004633CA /* AboutCoordinator.swift in Sources */,
 				A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */,
 				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
 				A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */,
 				A085501C2E6125F6004633CA /* LoginViewModel.swift in Sources */,
+				A08550F32E7AB6E0004633CA /* PrivacyPolicyViewController.swift in Sources */,
 				A08550692E64005F004633CA /* CartCoordinator.swift in Sources */,
 				A08550912E71D835004633CA /* DeliveryAddressCell.swift in Sources */,
 				A0854FFB2E6123A5004633CA /* Category.swift in Sources */,

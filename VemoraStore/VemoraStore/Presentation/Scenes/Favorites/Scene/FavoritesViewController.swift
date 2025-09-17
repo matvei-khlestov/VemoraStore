@@ -58,7 +58,6 @@ final class FavoritesViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Избранное"
         view.backgroundColor = .systemBackground
         setupLayout()
         bindViewModel()
@@ -67,8 +66,7 @@ final class FavoritesViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.largeTitleDisplayMode = .always
-        navigationController?.navigationBar.prefersLargeTitles = true
+        setupNavigationBar(title: "Избранное")
     }
 }
 

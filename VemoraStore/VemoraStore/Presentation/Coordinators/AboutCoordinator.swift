@@ -24,7 +24,7 @@ final class AboutCoordinator: Coordinator {
     
     func start() {
         let controller = AboutViewController()
-        
+        controller.hidesBottomBarWhenPushed = true
         controller.onBack = { [weak self] in
             self?.navigation.popViewController(animated: true)
         }

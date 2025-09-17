@@ -1,13 +1,13 @@
 //
-//  ContactUsCoordinator.swift
+//  PrivacyPolicyCoordinator.swift
 //  VemoraStore
 //
-//  Created by Matvei Khlestov on 16.09.2025.
+//  Created by Matvei Khlestov on 17.09.2025.
 //
 
 import UIKit
 
-final class ContactUsCoordinator: Coordinator {
+final class PrivacyPolicyCoordinator: Coordinator {
     
     // MARK: - Props
     
@@ -23,7 +23,7 @@ final class ContactUsCoordinator: Coordinator {
     // MARK: - Start
     
     func start() {
-        let vc = ContactUsViewController()
+        let vc = PrivacyPolicyViewController()
         vc.hidesBottomBarWhenPushed = true
         vc.onBack = { [weak self] in
             self?.navigation.popViewController(animated: true)

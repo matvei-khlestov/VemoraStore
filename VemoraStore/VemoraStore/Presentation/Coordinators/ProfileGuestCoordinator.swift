@@ -70,12 +70,9 @@ private extension ProfileGuestCoordinator {
     }
     
     func openPrivacy() {
-        if let url = URL(string: "https://vemora.example.com/privacy") {
-            let safari = SFSafariViewController(url: url)
-            navigation.present(safari, animated: true)
-        } else {
-            showInfo("Политика конфиденциальности временно недоступна.")
-        }
+        let coordinator = PrivacyPolicyCoordinator(navigation: navigation)
+        add(coordinator)
+        coordinator.start()
     }
     
     func callSupport() {
