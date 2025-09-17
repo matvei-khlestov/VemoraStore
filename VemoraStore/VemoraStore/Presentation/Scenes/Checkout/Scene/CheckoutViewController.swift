@@ -144,7 +144,12 @@ final class CheckoutViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setupNavigationBar()
+        setupNavigationBarWithNavLeftItem(
+            title: "Оформление заказа",
+            action: #selector(backTapped),
+            largeTitleDisplayMode: .never,
+            prefersLargeTitles: false
+        )
         setupLayout()
         setupOrderButtonContent()
         setupActions()
@@ -155,17 +160,6 @@ final class CheckoutViewController: UIViewController {
 // MARK: - Setup
 
 private extension CheckoutViewController {
-    func setupNavigationBar() {
-        title = "Оформление заказа"
-        navigationItem.largeTitleDisplayMode = .never
-        navigationItem.leftBarButtonItem = .backItem(
-            target: self,
-            action: #selector(backTapped),
-            tintColor: .brightPurple
-        )
-        navigationController?.navigationBar.prefersLargeTitles = false
-    }
-    
     func setupLayout() {
         let topBar = UIView()
         topBar.translatesAutoresizingMaskIntoConstraints = false

@@ -66,7 +66,6 @@ final class CartViewController: UIViewController {
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Корзина"
         view.backgroundColor = .systemBackground
         setupLayout()
         bindViewModel()
@@ -75,8 +74,7 @@ final class CartViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.largeTitleDisplayMode = .always
-        navigationController?.navigationBar.prefersLargeTitles = true
+        setupNavigationBar(title: "Корзина")
     }
 }
 

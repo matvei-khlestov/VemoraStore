@@ -32,6 +32,7 @@ final class OrderSuccessCoordinator: Coordinator {
     // MARK: - Start
     func start() {
         let vc = OrderSuccessViewController()
+        vc.hidesBottomBarWhenPushed = true
         vc.onViewOrder = { [weak self] in
             guard let self else { return }
             self.onOpenOrder?(self.orderId)

@@ -21,8 +21,10 @@ final class ContactUsViewController: UIViewController {
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.contentInset.top = 30
-        tableView.verticalScrollIndicatorInsets.top = 30
+        tableView.contentInset.top = 0
+        tableView.verticalScrollIndicatorInsets.top = 0
+//        tableView.backgroundColor = .systemBackground
+        tableView.tableHeaderView = UIView()
         return tableView
     }()
     
@@ -33,21 +35,15 @@ final class ContactUsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setupNavigationBar()
+        setupNavigationBarWithNavLeftItem(
+            title: "Контакты",
+            action:  #selector(backTapped)
+        )
         setupItems()
         setupTableView()
     }
     
     // MARK: - Setup
-    
-    private func setupNavigationBar() {
-        title = "Контакты"
-        navigationItem.leftBarButtonItem = .backItem(
-            target: self,
-            action: #selector(backTapped),
-            tintColor: .brightPurple
-        )
-    }
     
     private func setupItems() {
         items = [
@@ -58,6 +54,9 @@ final class ContactUsViewController: UIViewController {
     }
     
     private func setupTableView() {
+        let spacer = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 20))
+        spacer.backgroundColor = .clear
+        tableView.tableHeaderView = spacer
         view.addSubview(tableView)
         setupConstraints()
     }

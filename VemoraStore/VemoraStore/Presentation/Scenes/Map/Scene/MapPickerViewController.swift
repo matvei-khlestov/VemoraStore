@@ -92,7 +92,11 @@ final class MapPickerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setupNavigationBar()
+        setupNavigationBarWithNavLeftItem(
+            action: #selector(backTapped),
+            largeTitleDisplayMode: .never,
+            prefersLargeTitles: false
+        )
         setupMap()
         setupRightButtons()
         setupActions()
@@ -109,17 +113,6 @@ final class MapPickerViewController: UIViewController {
 // MARK: - Setup
 
 private extension MapPickerViewController {
-    
-    func setupNavigationBar() {
-        navigationItem.largeTitleDisplayMode = .never
-        navigationItem.leftBarButtonItem = .backItem(
-            target: self,
-            action: #selector(backTapped),
-            tintColor: .brightPurple
-        )
-        navigationController?.navigationBar.prefersLargeTitles = false
-    }
-    
     func setupMap() {
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .none
