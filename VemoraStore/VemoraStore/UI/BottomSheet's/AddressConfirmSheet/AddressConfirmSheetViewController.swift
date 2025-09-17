@@ -7,7 +7,6 @@
 
 import UIKit
 import MapKit
-import FactoryKit
 
 final class AddressConfirmSheetViewController: UIViewController {
     
@@ -16,18 +15,18 @@ final class AddressConfirmSheetViewController: UIViewController {
     
     // MARK: - ViewModel
     private let viewModel: AddressConfirmSheetViewModelProtocol
+    private let makeDeliveryDetailsVM: (String) -> DeliveryDetailsViewModelProtocol
     
     // MARK: - Init
-    init(container: Container = .shared) {
-        self.viewModel = container.addressConfirmSheetViewModel()
+    init(viewModel: AddressConfirmSheetViewModelProtocol, makeDeliveryDetailsVM: @escaping (String) -> DeliveryDetailsViewModelProtocol) {
+        self.viewModel = viewModel
+        self.makeDeliveryDetailsVM = makeDeliveryDetailsVM
         super.init(nibName: nil, bundle: nil)
         configureSheet()
     }
     
     required init?(coder: NSCoder) {
-        self.viewModel = Container.shared.addressConfirmSheetViewModel()
-        super.init(coder: coder)
-        configureSheet()
+        fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Public API
@@ -198,7 +197,8 @@ final class AddressConfirmSheetViewController: UIViewController {
     // MARK: - Actions
     @objc private func continueTapped() {
         let base = addressField.text ?? ""
-        let details = DeliveryDetailsSheetViewController(baseAddress: base)
+        let detailsViewModel = makeDeliveryDetailsVM(base)
+        let details = DeliveryDetailsSheetViewController(viewModel: detailsViewModel)
         details.onSave = { [weak self] (full: String) in
             guard let self else { return }
             self.onFullAddressComposed?(full)

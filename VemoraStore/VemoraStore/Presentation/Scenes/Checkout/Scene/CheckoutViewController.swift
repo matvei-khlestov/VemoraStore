@@ -7,7 +7,6 @@
 
 import UIKit
 import Combine
-import FactoryKit
 
 final class CheckoutViewController: UIViewController {
     
@@ -19,7 +18,10 @@ final class CheckoutViewController: UIViewController {
     
     // MARK: - Deps
     
-    private let viewModel: CheckoutViewModel
+    private let viewModel: CheckoutViewModelProtocol
+    
+    // ViewModel factory for bottom sheets (unified)
+    private let makeSheetVM: (PhoneOrCommentInputSheetViewModel.Kind, String?, String?) -> PhoneOrCommentInputSheetViewModelProtocol
     
     // MARK: - UI
     
@@ -134,8 +136,12 @@ final class CheckoutViewController: UIViewController {
     }
     
     // MARK: - Init
-    init(viewModel: CheckoutViewModel = Container.shared.checkoutViewModel()) {
+    init(
+        viewModel: CheckoutViewModelProtocol,
+        makeSheetVM: @escaping (PhoneOrCommentInputSheetViewModel.Kind, String?, String?) -> PhoneOrCommentInputSheetViewModelProtocol
+    ) {
         self.viewModel = viewModel
+        self.makeSheetVM = makeSheetVM
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -258,7 +264,7 @@ private extension CheckoutViewController {
     
     func bindViewModel() {
         // Reflect delivery method in segmented control and update section
-        viewModel.$deliveryMethod
+        viewModel.deliveryMethodPublisher
             .receive(on: RunLoop.main)
             .sink { [weak self] method in
                 guard let self else { return }
@@ -272,22 +278,19 @@ private extension CheckoutViewController {
             .store(in: &bag)
 
         // Update DeliveryAddressCell when address string changes
-        viewModel.$deliveryAddressString
+        viewModel.deliveryAddressStringPublisher
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self else { return }
-                // Only relevant for Delivery mode (segment index 1)
                 guard self.deliveryControl.selectedSegmentIndex == 1 else { return }
                 let indexPath = IndexPath(row: 0, section: Section.pickupAddress.rawValue)
                 if let cell = self.tableView.cellForRow(at: indexPath) as? DeliveryAddressCell {
                     cell.configure(address: self.viewModel.deliveryAddressString)
                     self.tableView.beginUpdates()
                     self.tableView.endUpdates()
-                } else {
-                    if self.tableView.numberOfSections > Section.pickupAddress.rawValue,
-                       self.tableView.numberOfRows(inSection: Section.pickupAddress.rawValue) > 0 {
-                        self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                    }
+                } else if self.tableView.numberOfSections > Section.pickupAddress.rawValue,
+                          self.tableView.numberOfRows(inSection: Section.pickupAddress.rawValue) > 0 {
+                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
                 }
             }
             .store(in: &bag)
@@ -430,7 +433,8 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
                 if indexPath.row == 0 {
                     onPickOnMap?()
                 } else if indexPath.row == 1 {
-                    let sheet = PhoneOrCommentInputSheetViewController(kind: .phone, initialPhone: nil, initialComment: nil)
+                    let viewModel = makeSheetVM(.phone, "+79001234567", nil)
+                    let sheet = PhoneOrCommentInputSheetViewController(viewModel: viewModel)
                     sheet.onSave = { [weak self] phone in
                         guard let self = self else { return }
                         if let cell = self.tableView.cellForRow(at: indexPath) as? ChangePhoneCell {
@@ -441,7 +445,8 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
                     }
                     present(sheet, animated: true)
                 } else {
-                    let sheet = PhoneOrCommentInputSheetViewController(kind: .comment, initialPhone: nil, initialComment: nil)
+                    let viewModel = makeSheetVM(.comment, nil, "Kомментарий")
+                    let sheet = PhoneOrCommentInputSheetViewController(viewModel: viewModel)
                     sheet.onSave = { [weak self] comment in
                         guard let self = self else { return }
                         if let cell = self.tableView.cellForRow(at: indexPath) as? OrderCommentCell {

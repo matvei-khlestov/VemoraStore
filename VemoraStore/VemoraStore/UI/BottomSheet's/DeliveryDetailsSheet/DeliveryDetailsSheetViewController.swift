@@ -7,7 +7,6 @@
 
 import UIKit
 import Combine
-import FactoryKit
 
 final class DeliveryDetailsSheetViewController: UIViewController {
     
@@ -161,10 +160,6 @@ final class DeliveryDetailsSheetViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         configureSheet()
-    }
-    convenience init(baseAddress: String, container: Container = .shared) {
-        let vm = container.deliveryDetailsViewModel(baseAddress)
-        self.init(viewModel: vm)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     

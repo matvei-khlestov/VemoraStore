@@ -15,18 +15,27 @@ final class CheckoutCoordinator: Coordinator {
     
     var onFinish: (() -> Void)?
     
-    private let checkoutViewModel: CheckoutViewModel
+    private let checkoutViewModel: CheckoutViewModelProtocol
     
     init(
         navigation: UINavigationController,
-        viewModel: CheckoutViewModel = Container.shared.checkoutViewModel()
+        viewModel: CheckoutViewModelProtocol = Container.shared.checkoutViewModel()
     ) {
         self.navigation = navigation
         self.checkoutViewModel = viewModel
     }
     
     func start() {
-        let vc = CheckoutViewController(viewModel: checkoutViewModel)
+        let vc = CheckoutViewController(
+            viewModel: checkoutViewModel,
+            makeSheetVM: { kind,initialPhone,initialComment  in
+                PhoneOrCommentInputSheetViewModel(
+                    kind: kind,
+                    initialPhone: initialPhone,
+                    initialComment: initialComment
+                ) as PhoneOrCommentInputSheetViewModelProtocol
+            }
+        )
         
         vc.onPickOnMap = { [weak self] in
             self?.showMapPicker()

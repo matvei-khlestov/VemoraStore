@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 final class FirebaseAuthService: AuthServiceProtocol {
+    
     private let isAuthorizedSubject = CurrentValueSubject<Bool, Never>(false)
     var isAuthorizedPublisher: AnyPublisher<Bool, Never> {
         isAuthorizedSubject.eraseToAnyPublisher()
@@ -35,4 +36,6 @@ final class FirebaseAuthService: AuthServiceProtocol {
         currentUserId = nil
         isAuthorizedSubject.send(false)
     }
+    
+    func deleteAccount() async throws {}
 }

@@ -6,41 +6,52 @@
 //
 
 import UIKit
+import FactoryKit
 
 final class MapPickerCoordinator: Coordinator {
-
+    
     // MARK: - Public callbacks
     
     /// Сообщит, что координатор завершил работу (можно убрать из childCoordinators)
     var onFinish: (() -> Void)?
     var onFullAddressPicked: ((String) -> Void)?
-
+    
     // MARK: - Deps
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
-
+    
     // MARK: - Init
     init(navigation: UINavigationController) {
         self.navigation = navigation
     }
-
+    
     // MARK: - Start
     func start() {
-        let vc = MapPickerViewController()
-
+        let mapVM = Container.shared.mapPickerViewModel()
+        
+        let vc = MapPickerViewController(
+            viewModel: mapVM,
+            makeAddressConfirmVM: {
+                Container.shared.addressConfirmSheetViewModel()
+            },
+            makeDeliveryDetailsVM: { base in
+                Container.shared.deliveryDetailsViewModel(base)
+            }
+        )
+        
         vc.onAddressComposed = { [weak self] fullAddress in
             guard let self else { return }
             self.onFullAddressPicked?(fullAddress)
             self.navigation.popViewController(animated: true)
             self.onFinish?()
         }
-
+        
         vc.onBack = { [weak self] in
             guard let self else { return }
             self.navigation.popViewController(animated: true)
             self.onFinish?()
         }
-
+        
         navigation.pushViewController(vc, animated: true)
     }
 }
