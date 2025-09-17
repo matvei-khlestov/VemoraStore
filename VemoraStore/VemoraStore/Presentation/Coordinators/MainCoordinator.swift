@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import FactoryKit
 
 final class MainCoordinator: Coordinator {
     
@@ -37,9 +38,10 @@ final class MainCoordinator: Coordinator {
         add(cart)
         cart.start()
         
-        let profileGuestVC = ProfileGuestViewController()
-        let profileNav = TabBarFactory.makeNav(root: profileGuestVC, tab: .profile)
-        let profile = ProfileGuestCoordinator(navigation: profileNav)
+        let profileVM = Container.shared.profileUserViewModel()
+        let profileVC = ProfileUserViewController(viewModel: profileVM)
+        let profileNav = TabBarFactory.makeNav(root: profileVC, tab: .profile)
+        let profile = ProfileUserCoordinator(navigation: profileNav)
         add(profile)
         profile.start()
         

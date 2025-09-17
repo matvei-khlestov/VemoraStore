@@ -7,7 +7,6 @@
 
 import Foundation
 import Combine
-import FactoryKit
 
 final class DeliveryDetailsViewModel: DeliveryDetailsViewModelProtocol {
     
@@ -26,9 +25,9 @@ final class DeliveryDetailsViewModel: DeliveryDetailsViewModelProtocol {
     
     // MARK: - Init
     
-    init(baseAddress: String, container: Container = .shared) {
+    init(baseAddress: String, formatter: DeliveryAddressFormattingProtocol) {
         self.baseAddress = baseAddress
-        self.formatter = container.deliveryAddressFormatter()
+        self.formatter = formatter
     }
     
     // MARK: - Actions

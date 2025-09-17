@@ -20,15 +20,6 @@ final class PhoneOrCommentInputSheetViewController: UIViewController {
     var onSave: ((String) -> Void)?
     
     // MARK: - Init
-    convenience init(
-        kind: PhoneOrCommentInputSheetViewModel.Kind = .phone,
-        initialPhone: String? = nil,
-        initialComment: String? = nil,
-        container: Container = .shared
-    ) {
-        let vm = container.phoneInputSheetViewModel((kind, initialPhone, initialComment))
-        self.init(viewModel: vm)
-    }
     
     init(viewModel: PhoneOrCommentInputSheetViewModelProtocol) {
         self.viewModel = viewModel
@@ -37,7 +28,7 @@ final class PhoneOrCommentInputSheetViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        self.viewModel = Container.shared.phoneInputSheetViewModel((.phone, nil, nil))
+        self.viewModel = PhoneOrCommentInputSheetViewModel(kind: .phone, initialPhone: nil, initialComment: nil)
         super.init(coder: coder)
         modalPresentationStyle = .pageSheet
     }

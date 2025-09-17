@@ -7,9 +7,8 @@
 
 import Foundation
 import Combine
-import FactoryKit
 
-final class CheckoutViewModel {
+final class CheckoutViewModel: CheckoutViewModelProtocol {
 
     // MARK: - Services
     private let cartService: CartServiceProtocol
@@ -26,6 +25,15 @@ final class CheckoutViewModel {
     // Способ получения заказа
     enum DeliveryMethod { case pickup, delivery }
     @Published var deliveryMethod: DeliveryMethod = .pickup
+
+    // MARK: - Publishers (protocol)
+    var deliveryMethodPublisher: AnyPublisher<DeliveryMethod, Never> {
+        $deliveryMethod.eraseToAnyPublisher()
+    }
+
+    var deliveryAddressStringPublisher: AnyPublisher<String?, Never> {
+        $deliveryAddressString.eraseToAnyPublisher()
+    }
 
     // MARK: - Outputs
     var isPlaceOrderEnabled: AnyPublisher<Bool, Never> {
@@ -47,8 +55,8 @@ final class CheckoutViewModel {
 
     // MARK: - Init
     init(
-        cart: CartServiceProtocol = Container.shared.cartService(),
-        auth: AuthServiceProtocol = Container.shared.authService()
+        cart: CartServiceProtocol,
+        auth: AuthServiceProtocol
     ) {
         self.cartService = cart
         self.authService = auth

@@ -47,7 +47,9 @@ extension Container {
     
     // MARK: - Profile
     
-    
+    var profileUserViewModel: Factory<ProfileUserViewModelProtocol> {
+        self { ProfileUserViewModel(auth: self.authService()) }
+    }
     
     // MARK: - Checkout
     
@@ -59,11 +61,14 @@ extension Container {
     
     // MARK: - Address / Delivery
     
-    var deliveryDetailsViewModel: ParameterFactory<String, DeliveryDetailsViewModelProtocol> {
-        self { baseAddress in
-            DeliveryDetailsViewModel(baseAddress: baseAddress)
-        }
+var deliveryDetailsViewModel: ParameterFactory<String, DeliveryDetailsViewModelProtocol> {
+    self { baseAddress in
+        DeliveryDetailsViewModel(
+            baseAddress: baseAddress,
+            formatter: self.deliveryAddressFormatter()
+        )
     }
+}
     
     // MARK: - Address Confirm
     

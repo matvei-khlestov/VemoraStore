@@ -28,8 +28,8 @@ final class AddressConfirmSheetViewModel: NSObject, AddressConfirmSheetViewModel
     
     // MARK: - Init
     init(
-        search: AddressSearchServiceProtocol = Container.shared.addressSearchService(),
-        formatter: AddressFormattingProtocol = Container.shared.addressFormatter()
+        search: AddressSearchServiceProtocol,
+        formatter: AddressFormattingProtocol
     ) {
         self.search = search
         self.formatter = formatter

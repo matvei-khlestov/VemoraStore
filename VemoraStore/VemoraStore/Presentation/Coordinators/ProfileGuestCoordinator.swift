@@ -36,7 +36,7 @@ final class ProfileGuestCoordinator: Coordinator {
             self?.openAbout()
         }
         vc.onContactTap = { [weak self] in
-            self?.callSupport()
+            self?.openContacts()
         }
         vc.onPrivacyTap = { [weak self] in
             self?.openPrivacy()
@@ -75,7 +75,7 @@ private extension ProfileGuestCoordinator {
         coordinator.start()
     }
     
-    func callSupport() {
+    func openContacts() {
         let coordinator = ContactUsCoordinator(navigation: self.navigation)
         self.add(coordinator)
         coordinator.start()

@@ -14,7 +14,10 @@ final class MapPickerViewController: UIViewController {
     
     // MARK: - ViewModel
     
-    private let viewModel: MapPickerViewModelProtocol = Container.shared.mapPickerViewModel()
+    private let viewModel: MapPickerViewModelProtocol
+    
+    private let makeAddressConfirmVM: () -> AddressConfirmSheetViewModelProtocol
+    private let makeDeliveryDetailsVM: (String) -> DeliveryDetailsViewModelProtocol
     
     // MARK: - Callbacks
     
@@ -88,6 +91,19 @@ final class MapPickerViewController: UIViewController {
     private var isProgrammaticMove = false
     
     // MARK: - Lifecycle
+    
+    init(
+        viewModel: MapPickerViewModelProtocol,
+        makeAddressConfirmVM: @escaping () -> AddressConfirmSheetViewModelProtocol,
+        makeDeliveryDetailsVM: @escaping (String) -> DeliveryDetailsViewModelProtocol
+    ) {
+        self.viewModel = viewModel
+        self.makeAddressConfirmVM = makeAddressConfirmVM
+        self.makeDeliveryDetailsVM = makeDeliveryDetailsVM
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -178,7 +194,10 @@ private extension MapPickerViewController {
     }
     
     func presentAddressSheet(with text: String?) {
-        let sheet = AddressConfirmSheetViewController()
+        let sheet = AddressConfirmSheetViewController(
+            viewModel: makeAddressConfirmVM(),
+            makeDeliveryDetailsVM: makeDeliveryDetailsVM
+        )
         sheet.address = text
         // передаём регион карты для подсказок и поиска
         sheet.searchRegion = mapView.region

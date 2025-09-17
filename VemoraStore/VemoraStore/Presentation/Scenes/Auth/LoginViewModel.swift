@@ -87,9 +87,9 @@ final class LoginViewModel {
         }
     }
     
-    func logout() {
+    func logout() async {
         do {
-            try authService.signOut()
+            try await authService.signOut()
         } catch {
             errorMessage = "Ошибка выхода: \(error.localizedDescription)"
         }
