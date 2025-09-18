@@ -18,7 +18,7 @@ struct DefaultDeliveryAddressFormatter: DeliveryAddressFormattingProtocol {
         let house  = parts.indices.contains(2) ? String(parts[2]) : ""
         
         var chunks: [String] = []
-        if !city.isEmpty   { chunks.append("г. \(city)") }
+        if !city.isEmpty   { chunks.append("\(city)") }
         if !street.isEmpty { chunks.append(street) }
         if !house.isEmpty  { chunks.append("д. \(house)") }
         

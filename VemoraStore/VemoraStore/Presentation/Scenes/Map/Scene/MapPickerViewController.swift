@@ -8,14 +8,12 @@
 import UIKit
 import MapKit
 import CoreLocation
-import FactoryKit
 
 final class MapPickerViewController: UIViewController {
     
-    // MARK: - ViewModel
+    // MARK: - ViewModels
     
     private let viewModel: MapPickerViewModelProtocol
-    
     private let makeAddressConfirmVM: () -> AddressConfirmSheetViewModelProtocol
     private let makeDeliveryDetailsVM: (String) -> DeliveryDetailsViewModelProtocol
     
