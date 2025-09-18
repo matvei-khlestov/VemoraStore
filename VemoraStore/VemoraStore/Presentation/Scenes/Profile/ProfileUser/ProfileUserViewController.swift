@@ -8,9 +8,9 @@
 import UIKit
 
 final class ProfileUserViewController: UIViewController {
-
+    
     // MARK: - Callbacks
-
+    
     var onEditProfileTap:   (() -> Void)?
     var onOrdersTap:        (() -> Void)?
     var onAboutTap:         (() -> Void)?
@@ -18,13 +18,13 @@ final class ProfileUserViewController: UIViewController {
     var onPrivacyTap:       (() -> Void)?
     var onLogoutTap:        (() -> Void)?
     var onDeleteAccountTap: (() -> Void)?
-
+    
     // MARK: - ViewModel
-
+    
     private let viewModel: ProfileUserViewModelProtocol
-
+    
     // MARK: - UI
-
+    
     private lazy var scroll: UIScrollView = {
         let v = UIScrollView()
         v.translatesAutoresizingMaskIntoConstraints = false
@@ -32,7 +32,7 @@ final class ProfileUserViewController: UIViewController {
         v.alwaysBounceVertical = true
         return v
     }()
-
+    
     private lazy var content: UIStackView = {
         let v = UIStackView()
         v.axis = .vertical
@@ -43,7 +43,7 @@ final class ProfileUserViewController: UIViewController {
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
-
+    
     private lazy var avatarView: UIImageView = {
         let v = UIImageView(image: UIImage(systemName: "person.crop.circle"))
         v.contentMode = .scaleAspectFit
@@ -53,14 +53,14 @@ final class ProfileUserViewController: UIViewController {
         v.heightAnchor.constraint(equalToConstant: 96).isActive = true
         return v
     }()
-
+    
     private lazy var nameLabel: UILabel = {
         let l = UILabel()
         l.textAlignment = .center
         l.font = .systemFont(ofSize: 22, weight: .semibold)
         return l
     }()
-
+    
     private lazy var emailLabel: UILabel = {
         let l = UILabel()
         l.textAlignment = .center
@@ -69,13 +69,13 @@ final class ProfileUserViewController: UIViewController {
         l.font = .systemFont(ofSize: 15)
         return l
     }()
-
+    
     private lazy var tableContainer: UIView = {
         let v = UIView()
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
-
+    
     private lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
         tv.isScrollEnabled = false
@@ -85,7 +85,7 @@ final class ProfileUserViewController: UIViewController {
         tv.translatesAutoresizingMaskIntoConstraints = false
         return tv
     }()
-
+    
     private lazy var logoutButton: UIButton = {
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = .brightPurple
@@ -95,7 +95,7 @@ final class ProfileUserViewController: UIViewController {
         config.image = UIImage(systemName: "rectangle.portrait.and.arrow.right")
         config.imagePadding = 10
         config.contentInsets = .init(top: 12, leading: 16, bottom: 12, trailing: 16)
-
+        
         let b = UIButton(configuration: config, primaryAction: nil)
         b.layer.cornerCurve = .continuous
         b.translatesAutoresizingMaskIntoConstraints = false
@@ -103,17 +103,17 @@ final class ProfileUserViewController: UIViewController {
         b.addTarget(self, action: #selector(logoutTapped), for: .touchUpInside)
         return b
     }()
-
+    
     private lazy var deleteAccountButton: UIButton = {
         let b = UIButton(type: .system)
         b.setTitle("Удалить аккаунт", for: .normal)
         b.setTitleColor(.systemRed, for: .normal)
-        b.titleLabel?.font = .systemFont(ofSize: 16, weight: .regular)
+        b.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         b.translatesAutoresizingMaskIntoConstraints = false
         b.addTarget(self, action: #selector(deleteAccountTapped), for: .touchUpInside)
         return b
     }()
-
+    
     private lazy var actionsStack: UIStackView = {
         let v = UIStackView(arrangedSubviews: [logoutButton, deleteAccountButton])
         v.axis = .vertical
@@ -122,45 +122,49 @@ final class ProfileUserViewController: UIViewController {
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
-
+    
     // MARK: - Init
-
+    
     /// Основной init — через VM
     init(viewModel: ProfileUserViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-
+    
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
+    
     // MARK: - Lifecycle
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setupNavigationBar(title: "Профиль")
         buildLayout()
         setupConstraints()
         wire()
         applyUser()
     }
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setupNavigationBar(title: "Профиль")
+    }
+    
     // MARK: - Layout
-
+    
     private func buildLayout() {
         view.addSubview(scroll)
         scroll.addSubview(content)
-
+        
         content.addArrangedSubview(avatarView)
         content.addArrangedSubview(nameLabel)
         content.addArrangedSubview(emailLabel)
-
+        
         content.addArrangedSubview(tableContainer)
         tableContainer.addSubview(tableView)
-
+        
         content.addArrangedSubview(actionsStack)
     }
-
+    
     private func setupConstraints() {
         NSLayoutConstraint.activate([
             scroll.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -168,20 +172,20 @@ final class ProfileUserViewController: UIViewController {
             scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
-
+        
         NSLayoutConstraint.activate([
             content.topAnchor.constraint(equalTo: scroll.contentLayoutGuide.topAnchor),
             content.leadingAnchor.constraint(equalTo: scroll.frameLayoutGuide.leadingAnchor),
             content.trailingAnchor.constraint(equalTo: scroll.frameLayoutGuide.trailingAnchor),
             content.bottomAnchor.constraint(equalTo: scroll.contentLayoutGuide.bottomAnchor)
         ])
-
-
+        
+        
         [nameLabel, emailLabel, actionsStack].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
             $0.widthAnchor.constraint(equalTo: content.layoutMarginsGuide.widthAnchor).isActive = true
         }
-
+        
         tableContainer.widthAnchor.constraint(equalTo: content.layoutMarginsGuide.widthAnchor).isActive = true
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: tableContainer.topAnchor, constant: 8),
@@ -189,29 +193,29 @@ final class ProfileUserViewController: UIViewController {
             tableView.trailingAnchor.constraint(equalTo: tableContainer.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: tableContainer.bottomAnchor)
         ])
-
+        
         tableView.heightAnchor.constraint(
             equalToConstant: CGFloat(viewModel.rowsCount) * tableView.rowHeight + 8
         ).isActive = true
     }
-
+    
     // MARK: - Wiring
-
+    
     private func wire() {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
-
+    
     // MARK: - Content
-
+    
     private func applyUser() {
         nameLabel.text = viewModel.userName
         emailLabel.text = viewModel.userEmail
     }
-
+    
     // MARK: - Actions
-
+    
     @objc private func logoutTapped() {
         Task { [weak self] in
             guard let self else { return }
@@ -224,7 +228,7 @@ final class ProfileUserViewController: UIViewController {
             }
         }
     }
-
+    
     @objc private func deleteAccountTapped() {
         Task { [weak self] in
             guard let self else { return }
@@ -245,12 +249,12 @@ extension ProfileUserViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.rowsCount
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-
+        
         guard let row = viewModel.row(at: indexPath.row) else { return cell }
-
+        
         var conf = cell.defaultContentConfiguration()
         conf.text = row.title
         conf.textProperties.font = .systemFont(ofSize: 17)

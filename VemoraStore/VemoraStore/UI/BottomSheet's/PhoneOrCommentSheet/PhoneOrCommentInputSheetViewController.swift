@@ -28,9 +28,7 @@ final class PhoneOrCommentInputSheetViewController: UIViewController {
     }
     
     required init?(coder: NSCoder) {
-        self.viewModel = PhoneOrCommentInputSheetViewModel(kind: .phone, initialPhone: nil, initialComment: nil)
-        super.init(coder: coder)
-        modalPresentationStyle = .pageSheet
+        fatalError("Use init(viewModel:) to inject a view model instead of storyboard init.")
     }
     
     // MARK: - UI

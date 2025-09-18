@@ -40,4 +40,8 @@ extension Container {
     var geocodingService: Factory<GeocodingServiceProtocol> {
         self { CLGeocodingService() }
     }
+    
+    var ordersService: Factory<OrdersServiceProtocol> {
+        self { OrdersService() }
+    }
 }

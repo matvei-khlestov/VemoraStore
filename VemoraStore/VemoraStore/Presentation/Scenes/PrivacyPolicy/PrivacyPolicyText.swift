@@ -11,7 +11,6 @@ enum PrivacyPolicyText {
     static let lastUpdated = "Обновлено: 17 сентября 2025"
     
     static let body: String = """
-POLICY: Политика конфиденциальности Vemora
 \(lastUpdated)
 
 1. Общие положения

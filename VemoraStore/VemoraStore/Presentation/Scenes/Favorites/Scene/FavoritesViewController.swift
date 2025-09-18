@@ -20,7 +20,7 @@ final class FavoritesViewController: UIViewController {
     // MARK: - UI
     private lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
-        tv.backgroundColor = .systemGroupedBackground
+        tv.backgroundColor = .white
         tv.separatorStyle = .singleLine
         tv.dataSource = self
         tv.delegate = self

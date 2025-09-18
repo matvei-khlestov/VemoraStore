@@ -63,12 +63,15 @@ private extension ProfileUserCoordinator {
     }
     
     func openOrders() {
-        // TODO: замените на ваш контроллер заказов
-        let vc = UIViewController()
-        vc.view.backgroundColor = .systemBackground
-        vc.title = "Мои заказы"
-        vc.hidesBottomBarWhenPushed = true
-        navigation.pushViewController(vc, animated: true)
+        let coordinator = OrdersCoordinator(navigation: navigation)
+        add(coordinator)
+
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            guard let self, let coordinator else { return }
+            self.remove(coordinator)
+        }
+
+        coordinator.start()
     }
     
     func openAbout() {

@@ -21,10 +21,6 @@ final class ContactUsViewController: UIViewController {
         tableView.delegate = self
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.contentInset.top = 0
-        tableView.verticalScrollIndicatorInsets.top = 0
-//        tableView.backgroundColor = .systemBackground
-        tableView.tableHeaderView = UIView()
         return tableView
     }()
     

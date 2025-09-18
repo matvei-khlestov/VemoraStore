@@ -58,17 +58,22 @@ extension Container {
                                  auth: self.authService()) }
     }
     
+    // MARK: - Orders
+    
+    var ordersViewModel: Factory<OrdersViewModelProtocol> {
+        self { OrdersViewModel(service: self.ordersService()) }
+    }
     
     // MARK: - Address / Delivery
     
-var deliveryDetailsViewModel: ParameterFactory<String, DeliveryDetailsViewModelProtocol> {
-    self { baseAddress in
-        DeliveryDetailsViewModel(
-            baseAddress: baseAddress,
-            formatter: self.deliveryAddressFormatter()
-        )
+    var deliveryDetailsViewModel: ParameterFactory<String, DeliveryDetailsViewModelProtocol> {
+        self { baseAddress in
+            DeliveryDetailsViewModel(
+                baseAddress: baseAddress,
+                formatter: self.deliveryAddressFormatter()
+            )
+        }
     }
-}
     
     // MARK: - Address Confirm
     
@@ -92,6 +97,11 @@ var deliveryDetailsViewModel: ParameterFactory<String, DeliveryDetailsViewModelP
     // MARK: - Map Picker
     
     var mapPickerViewModel: Factory<MapPickerViewModelProtocol> {
-        self { MapPickerViewModel(container: self) }
+        self {
+            MapPickerViewModel(
+                geocoder: self.geocodingService(),
+                formatter: self.addressFormatter()
+            )
+        }
     }
 }

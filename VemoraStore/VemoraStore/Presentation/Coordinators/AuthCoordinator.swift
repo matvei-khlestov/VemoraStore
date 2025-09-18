@@ -21,7 +21,7 @@ final class AuthCoordinator: Coordinator {
     
     init(
         navigation: UINavigationController,
-        authService: AuthServiceProtocol = Container.shared.authService()
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.authService = authService

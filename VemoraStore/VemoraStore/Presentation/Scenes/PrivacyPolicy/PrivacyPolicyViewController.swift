@@ -36,6 +36,7 @@ final class PrivacyPolicyViewController: UIViewController {
         view.backgroundColor = .systemBackground
         
         setupNavigationBarWithNavLeftItem(
+            title: "Политика конфиденциальности",
             action:  #selector(backTapped),
             largeTitleDisplayMode: .never,
             prefersLargeTitles: false
@@ -76,13 +77,6 @@ final class PrivacyPolicyViewController: UIViewController {
                 .paragraphStyle: paragraph
             ]
         )
-        
-        let bodyString = PrivacyPolicyText.body
-        let highlight = "POLICY: Политика конфиденциальности Vemora"
-        if let swiftRange = bodyString.range(of: highlight) {
-            let nsRange = NSRange(swiftRange, in: bodyString)
-            attr.addAttributes([.font: UIFont.systemFont(ofSize: 18, weight: .semibold)], range: nsRange)
-        }
         
         textView.attributedText = attr
     }

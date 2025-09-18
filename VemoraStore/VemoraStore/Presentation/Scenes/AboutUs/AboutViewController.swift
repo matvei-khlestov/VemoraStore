@@ -33,15 +33,6 @@ final class AboutViewController: UIViewController {
         return stackView
     }()
     
-    private lazy var brandLogoView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(resource: .vemora))
-        imageView.contentMode = .scaleAspectFill
-        imageView.clipsToBounds = true
-        imageView.layer.cornerRadius = 10
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
-    
     private lazy var introLabel: UILabel = {
         let label = UILabel()
         label.text = "Vemora — современный магазин мебели и товаров для дома, где каждая деталь создана с заботой о вашем комфорте. Мы верим, что уют начинается с правильной атмосферы, а атмосфера — с качественной мебели, которая отражает ваш стиль и характер."
@@ -80,14 +71,6 @@ final class AboutViewController: UIViewController {
     private func buildLayout() {
         view.addSubview(scrollView)
         scrollView.addSubview(contentStack)
-        
-        // Brand logo
-        contentStack.addArrangedSubview(brandLogoView)
-        NSLayoutConstraint.activate([
-            brandLogoView.heightAnchor.constraint(equalToConstant: 300),
-            brandLogoView.leadingAnchor.constraint(equalTo: contentStack.layoutMarginsGuide.leadingAnchor),
-            brandLogoView.trailingAnchor.constraint(equalTo: contentStack.layoutMarginsGuide.trailingAnchor)
-        ])
         
         // Вступительный текст
         contentStack.addArrangedSubview(introLabel)

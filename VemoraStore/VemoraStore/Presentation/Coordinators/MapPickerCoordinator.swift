@@ -12,7 +12,6 @@ final class MapPickerCoordinator: Coordinator {
     
     // MARK: - Public callbacks
     
-    /// Сообщит, что координатор завершил работу (можно убрать из childCoordinators)
     var onFinish: (() -> Void)?
     var onFullAddressPicked: ((String) -> Void)?
     

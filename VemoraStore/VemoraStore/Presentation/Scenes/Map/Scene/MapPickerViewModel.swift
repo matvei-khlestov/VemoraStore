@@ -8,7 +8,6 @@
 import Foundation
 import CoreLocation
 import MapKit
-import FactoryKit
 
 final class MapPickerViewModel: MapPickerViewModelProtocol {
 
@@ -33,10 +32,13 @@ final class MapPickerViewModel: MapPickerViewModelProtocol {
     var updateAddressText: ((String) -> Void)?
 
     // MARK: - Init
-    init(container: Container = .shared,
-         locale: Locale = Locale(identifier: "ru_RU")) {
-        self.geocoder = container.geocodingService()
-        self.formatter = container.addressFormatter()
+    init(
+        geocoder: GeocodingServiceProtocol,
+        formatter: AddressFormattingProtocol,
+        locale: Locale = Locale(identifier: "ru_RU")
+    ) {
+        self.geocoder = geocoder
+        self.formatter = formatter
         self.locale = locale
     }
 
@@ -114,7 +116,6 @@ final class MapPickerViewModel: MapPickerViewModelProtocol {
     }
 
     func onLocationFailed(_ error: Error) {
-        // без побочных эффектов; при желании можно логировать/аналитику
         print("Location error:", error)
     }
 
