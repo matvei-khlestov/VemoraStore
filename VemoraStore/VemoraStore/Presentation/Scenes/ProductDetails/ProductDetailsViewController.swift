@@ -160,7 +160,11 @@ final class ProductDetailsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        setupNavigationBarWithNavLeftItem(action: #selector(backTapped))
+        setupNavigationBarWithNavLeftItem(
+            action:  #selector(backTapped),
+            largeTitleDisplayMode: .never,
+            prefersLargeTitles: false
+        )
         setupLayout()
         configure()
     }

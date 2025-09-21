@@ -7,6 +7,7 @@
 
 import UIKit
 import SafariServices
+import FactoryKit
 
 final class ProfileGuestCoordinator: Coordinator {
     
@@ -50,17 +51,19 @@ final class ProfileGuestCoordinator: Coordinator {
 
 private extension ProfileGuestCoordinator {
     func openLogin() {
-        // В реальном проекте тут можно вызвать AuthCoordinator
-        let alert = UIAlertController(
-            title: "Вход",
-            message: "Открыть экран авторизации",
-            preferredStyle: .alert
+        // Стартуем флоу авторизации через координатор
+        let auth = AuthCoordinator(
+            navigation: navigation,
+            authService: Container.shared.authService()
         )
-        alert.addAction(UIAlertAction(title: "Готово", style: .default, handler: { [weak self] _ in
-            self?.onAuthCompleted?()
-        }))
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        navigation.present(alert, animated: true)
+        add(auth)
+        auth.onFinish = { [weak self, weak auth] in
+            guard let self else { return }
+            if let auth { self.remove(auth) }
+            // Сообщаем наружу, что авторизация завершена
+            self.onAuthCompleted?()
+        }
+        auth.start()
     }
     
     func openAbout() {

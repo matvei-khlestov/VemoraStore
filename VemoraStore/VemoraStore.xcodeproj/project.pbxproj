@@ -37,8 +37,6 @@
 		A08550122E61256B004633CA /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550112E61256B004633CA /* AppCoordinator.swift */; };
 		A08550142E61257B004633CA /* AuthCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550132E61257B004633CA /* AuthCoordinator.swift */; };
 		A08550162E61258B004633CA /* MainCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550152E61258B004633CA /* MainCoordinator.swift */; };
-		A085501A2E6125E4004633CA /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550192E6125E4004633CA /* LoginViewController.swift */; };
-		A085501C2E6125F6004633CA /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085501B2E6125F6004633CA /* LoginViewModel.swift */; };
 		A085501F2E612637004633CA /* CatalogViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085501E2E612637004633CA /* CatalogViewController.swift */; };
 		A08550212E61264B004633CA /* CatalogViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550202E61264B004633CA /* CatalogViewModel.swift */; };
 		A08550232E61265E004633CA /* ProductCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550222E61265E004633CA /* ProductCell.swift */; };
@@ -131,6 +129,16 @@
 		A08551152E7C5405004633CA /* OrdersServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551142E7C5405004633CA /* OrdersServiceProtocol.swift */; };
 		A08551172E7C5447004633CA /* OrdersService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551162E7C5447004633CA /* OrdersService.swift */; };
 		A085511A2E7C609E004633CA /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551192E7C609E004633CA /* BadgeView.swift */; };
+		A085511D2E7D931C004633CA /* AuthValidatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085511C2E7D931C004633CA /* AuthValidatingProtocol.swift */; };
+		A08551202E7D93B0004633CA /* AuthValidator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085511F2E7D93B0004633CA /* AuthValidator.swift */; };
+		A08551222E7D9415004633CA /* AuthField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551212E7D9415004633CA /* AuthField.swift */; };
+		A08551242E7D9440004633CA /* ValidationResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551232E7D9440004633CA /* ValidationResult.swift */; };
+		A08551262E7D94D6004633CA /* FormTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551252E7D94D6004633CA /* FormTextField.swift */; };
+		A08551282E7D952F004633CA /* SignUpViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551272E7D952F004633CA /* SignUpViewModelProtocol.swift */; };
+		A085512A2E7D95EF004633CA /* SignUpViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551292E7D95EF004633CA /* SignUpViewModel.swift */; };
+		A085512C2E7D99F7004633CA /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085512B2E7D99F7004633CA /* SignUpViewController.swift */; };
+		A085512E2E7DE2B1004633CA /* UIButton+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085512D2E7DE2B1004633CA /* UIButton+ext.swift */; };
+		A08551322E7DE3B4004633CA /* UITextField+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551312E7DE3B4004633CA /* UITextField+ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -185,8 +193,6 @@
 		A08550112E61256B004633CA /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		A08550132E61257B004633CA /* AuthCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthCoordinator.swift; sourceTree = "<group>"; };
 		A08550152E61258B004633CA /* MainCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinator.swift; sourceTree = "<group>"; };
-		A08550192E6125E4004633CA /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
-		A085501B2E6125F6004633CA /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		A085501E2E612637004633CA /* CatalogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewController.swift; sourceTree = "<group>"; };
 		A08550202E61264B004633CA /* CatalogViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogViewModel.swift; sourceTree = "<group>"; };
 		A08550222E61265E004633CA /* ProductCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductCell.swift; sourceTree = "<group>"; };
@@ -278,6 +284,16 @@
 		A08551142E7C5405004633CA /* OrdersServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersServiceProtocol.swift; sourceTree = "<group>"; };
 		A08551162E7C5447004633CA /* OrdersService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrdersService.swift; sourceTree = "<group>"; };
 		A08551192E7C609E004633CA /* BadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BadgeView.swift; sourceTree = "<group>"; };
+		A085511C2E7D931C004633CA /* AuthValidatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthValidatingProtocol.swift; sourceTree = "<group>"; };
+		A085511F2E7D93B0004633CA /* AuthValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthValidator.swift; sourceTree = "<group>"; };
+		A08551212E7D9415004633CA /* AuthField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthField.swift; sourceTree = "<group>"; };
+		A08551232E7D9440004633CA /* ValidationResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidationResult.swift; sourceTree = "<group>"; };
+		A08551252E7D94D6004633CA /* FormTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextField.swift; sourceTree = "<group>"; };
+		A08551272E7D952F004633CA /* SignUpViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModelProtocol.swift; sourceTree = "<group>"; };
+		A08551292E7D95EF004633CA /* SignUpViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewModel.swift; sourceTree = "<group>"; };
+		A085512B2E7D99F7004633CA /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
+		A085512D2E7DE2B1004633CA /* UIButton+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+ext.swift"; sourceTree = "<group>"; };
+		A08551312E7DE3B4004633CA /* UITextField+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -395,6 +411,8 @@
 				A085507A2E6ADDBB004633CA /* UIView+Animations.swift */,
 				A08550992E747BBC004633CA /* UIBarButtonItem+ext.swift */,
 				A08550EC2E7A094C004633CA /* UIViewController+NavBar.swift */,
+				A085512D2E7DE2B1004633CA /* UIButton+ext.swift */,
+				A08551312E7DE3B4004633CA /* UITextField+ext.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -499,6 +517,7 @@
 		A08550002E6123E2004633CA /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				A085511B2E7D9300004633CA /* Validator */,
 				A08550C32E78AFD9004633CA /* Services */,
 				A08550C52E78B00B004633CA /* ViewModels */,
 				A08550C42E78AFF2004633CA /* Formatters */,
@@ -533,9 +552,9 @@
 				A08550E82E79F7A4004633CA /* ContactUsCoordinator.swift */,
 				A08550F42E7AB7C1004633CA /* PrivacyPolicyCoordinator.swift */,
 				A085506C2E6400FC004633CA /* CheckoutCoordinator.swift */,
+				A08551122E7C4FDD004633CA /* OrdersCoordinator.swift */,
 				A085509B2E74817F004633CA /* MapPickerCoordinator.swift */,
 				A08550A12E748BE9004633CA /* OrderSuccessCoordinator.swift */,
-				A08551122E7C4FDD004633CA /* OrdersCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -563,8 +582,8 @@
 		A08550182E6125CC004633CA /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				A08550192E6125E4004633CA /* LoginViewController.swift */,
-				A085501B2E6125F6004633CA /* LoginViewModel.swift */,
+				A08551292E7D95EF004633CA /* SignUpViewModel.swift */,
+				A085512B2E7D99F7004633CA /* SignUpViewController.swift */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -818,6 +837,7 @@
 			isa = PBXGroup;
 			children = (
 				A08550AA2E782F1A004633CA /* PaddedField.swift */,
+				A08551252E7D94D6004633CA /* FormTextField.swift */,
 			);
 			path = TextFields;
 			sourceTree = "<group>";
@@ -860,8 +880,8 @@
 		A08550B82E7893F6004633CA /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				A08550B92E789476004633CA /* AddressFormatter.swift */,
-				A08550D02E78C4FE004633CA /* DeliveryAddressFormatter.swift */,
+				A085511E2E7D938E004633CA /* Validation */,
+				A08551332E7E256F004633CA /* AddressFormatters */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -901,6 +921,7 @@
 				A08550FD2E7AD552004633CA /* ProfileUserViewModelProtocol.swift */,
 				A08551012E7B0A41004633CA /* CheckoutViewModelProtocol.swift */,
 				A085510C2E7C4B84004633CA /* OrdersViewModelProtocol.swift */,
+				A08551272E7D952F004633CA /* SignUpViewModelProtocol.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -981,6 +1002,33 @@
 				A08551192E7C609E004633CA /* BadgeView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		A085511B2E7D9300004633CA /* Validator */ = {
+			isa = PBXGroup;
+			children = (
+				A085511C2E7D931C004633CA /* AuthValidatingProtocol.swift */,
+			);
+			path = Validator;
+			sourceTree = "<group>";
+		};
+		A085511E2E7D938E004633CA /* Validation */ = {
+			isa = PBXGroup;
+			children = (
+				A085511F2E7D93B0004633CA /* AuthValidator.swift */,
+				A08551212E7D9415004633CA /* AuthField.swift */,
+				A08551232E7D9440004633CA /* ValidationResult.swift */,
+			);
+			path = Validation;
+			sourceTree = "<group>";
+		};
+		A08551332E7E256F004633CA /* AddressFormatters */ = {
+			isa = PBXGroup;
+			children = (
+				A08550B92E789476004633CA /* AddressFormatter.swift */,
+				A08550D02E78C4FE004633CA /* DeliveryAddressFormatter.swift */,
+			);
+			path = AddressFormatters;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1136,6 +1184,7 @@
 				A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */,
 				A08550F12E7AB69F004633CA /* PrivacyPolicyText.swift in Sources */,
 				A08551132E7C4FDD004633CA /* OrdersCoordinator.swift in Sources */,
+				A08551262E7D94D6004633CA /* FormTextField.swift in Sources */,
 				A08550C02E789FA8004633CA /* AddressFormattingProtocol.swift in Sources */,
 				A08550C22E78A407004633CA /* DeliveryDetailsViewModel.swift in Sources */,
 				A08551172E7C5447004633CA /* OrdersService.swift in Sources */,
@@ -1174,6 +1223,8 @@
 				A08550162E61258B004633CA /* MainCoordinator.swift in Sources */,
 				A08550A22E748BE9004633CA /* OrderSuccessCoordinator.swift in Sources */,
 				A085509C2E74817F004633CA /* MapPickerCoordinator.swift in Sources */,
+				A08551222E7D9415004633CA /* AuthField.swift in Sources */,
+				A08551282E7D952F004633CA /* SignUpViewModelProtocol.swift in Sources */,
 				A085503E2E612AC6004633CA /* CheckoutViewController.swift in Sources */,
 				A0854FF12E612286004633CA /* FavoritesService.swift in Sources */,
 				A085510F2E7C4C03004633CA /* OrdersViewModel.swift in Sources */,
@@ -1190,17 +1241,17 @@
 				A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */,
 				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
 				A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */,
-				A085501C2E6125F6004633CA /* LoginViewModel.swift in Sources */,
 				A08550F32E7AB6E0004633CA /* PrivacyPolicyViewController.swift in Sources */,
 				A08550692E64005F004633CA /* CartCoordinator.swift in Sources */,
+				A08551322E7DE3B4004633CA /* UITextField+ext.swift in Sources */,
 				A08550912E71D835004633CA /* DeliveryAddressCell.swift in Sources */,
 				A08551002E7AD580004633CA /* ProfileUserViewModel.swift in Sources */,
 				A0854FFB2E6123A5004633CA /* Category.swift in Sources */,
 				A08550572E6144CB004633CA /* Profile.swift in Sources */,
-				A085501A2E6125E4004633CA /* LoginViewController.swift in Sources */,
 				A08550022E612411004633CA /* AuthServiceProtocol.swift in Sources */,
 				A08550512E613F2D004633CA /* Container+ViewModels.swift in Sources */,
 				A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */,
+				A085512C2E7D99F7004633CA /* SignUpViewController.swift in Sources */,
 				A08550BA2E789476004633CA /* AddressFormatter.swift in Sources */,
 				A08551092E7C4A95004633CA /* OrderItemCell.swift in Sources */,
 				A08550E72E79F73B004633CA /* ContactUsViewController.swift in Sources */,
@@ -1208,9 +1259,12 @@
 				A08550F82E7AD084004633CA /* ProfileUserViewController.swift in Sources */,
 				A08550142E61257B004633CA /* AuthCoordinator.swift in Sources */,
 				A085507B2E6ADDBB004633CA /* UIView+Animations.swift in Sources */,
+				A08551242E7D9440004633CA /* ValidationResult.swift in Sources */,
 				A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */,
 				A08550FC2E7AD229004633CA /* ProfileUserCoordinator.swift in Sources */,
 				A08550A02E748A11004633CA /* OrderSuccessViewController.swift in Sources */,
+				A085512E2E7DE2B1004633CA /* UIButton+ext.swift in Sources */,
+				A085511D2E7D931C004633CA /* AuthValidatingProtocol.swift in Sources */,
 				A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */,
 				A08550802E6BF954004633CA /* CartItem.swift in Sources */,
 				A08550672E63F7EC004633CA /* FavoritesCoordinator.swift in Sources */,
@@ -1227,6 +1281,7 @@
 				A08550B72E788972004633CA /* AddressConfirmSheetViewModel.swift in Sources */,
 				A08550782E6AB644004633CA /* FavoritesCell.swift in Sources */,
 				A085511A2E7C609E004633CA /* BadgeView.swift in Sources */,
+				A08551202E7D93B0004633CA /* AuthValidator.swift in Sources */,
 				A085508F2E71B1D9004633CA /* PaymentMethodCell.swift in Sources */,
 				A08550452E612B4D004633CA /* TabBarFactory.swift in Sources */,
 				A08550D32E79BA69004633CA /* GeocodingServiceProtocol.swift in Sources */,
@@ -1241,6 +1296,7 @@
 				A0854FEA2E612206004633CA /* FirebaseNotificationService.swift in Sources */,
 				A085500A2E61244A004633CA /* FavoritesServiceProtocol.swift in Sources */,
 				A085506F2E69444E004633CA /* CategoryCell.swift in Sources */,
+				A085512A2E7D95EF004633CA /* SignUpViewModel.swift in Sources */,
 				A08550FE2E7AD552004633CA /* ProfileUserViewModelProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
