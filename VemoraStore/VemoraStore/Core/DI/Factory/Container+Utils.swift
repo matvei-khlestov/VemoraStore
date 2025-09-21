@@ -15,4 +15,8 @@ extension Container {
     var deliveryAddressFormatter: Factory<DeliveryAddressFormattingProtocol> {
         self { DefaultDeliveryAddressFormatter() }
     }
+    
+    var authValidator: Factory<AuthValidatingProtocol> {
+        self { AuthValidator() }
+    }
 }

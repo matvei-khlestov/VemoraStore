@@ -14,6 +14,8 @@ final class PrivacyPolicyCoordinator: Coordinator {
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     
+    var onFinish: (() -> Void)?
+    
     // MARK: - Init
     
     init(navigation: UINavigationController) {
@@ -27,6 +29,7 @@ final class PrivacyPolicyCoordinator: Coordinator {
         vc.hidesBottomBarWhenPushed = true
         vc.onBack = { [weak self] in
             self?.navigation.popViewController(animated: true)
+            self?.onFinish?()
         }
         navigation.pushViewController(vc, animated: true)
     }

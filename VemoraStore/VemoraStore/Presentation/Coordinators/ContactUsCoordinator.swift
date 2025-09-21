@@ -13,6 +13,7 @@ final class ContactUsCoordinator: Coordinator {
     
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
+    var onFinish: (() -> Void)?
     
     // MARK: - Init
     
@@ -27,6 +28,7 @@ final class ContactUsCoordinator: Coordinator {
         vc.hidesBottomBarWhenPushed = true
         vc.onBack = { [weak self] in
             self?.navigation.popViewController(animated: true)
+            self?.onFinish?()
         }
         navigation.pushViewController(vc, animated: true)
     }

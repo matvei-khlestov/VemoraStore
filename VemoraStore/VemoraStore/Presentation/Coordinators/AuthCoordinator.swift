@@ -28,19 +28,57 @@ final class AuthCoordinator: Coordinator {
     }
     
     func start() {
-        let vm = Container.shared.loginViewModel()
-        let vc = LoginViewController(viewModel: vm)
-        
-        // завершаем поток, как только авторизация стала true
         authService.isAuthorizedPublisher
-            .removeDuplicates()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isAuth in
-                guard isAuth else { return }
-                self?.onFinish?()
+            .receive(on: RunLoop.main)
+            .sink { [weak self] isAuthorized in
+                guard let self else { return }
+                if isAuthorized { self.onFinish?() }
             }
             .store(in: &bag)
         
-        navigation.setViewControllers([vc], animated: false)
+        showSignUp()
+    }
+    
+    private func showSignUp() {
+        let vm = Container.shared.signUpViewModel()
+        let vc = SignUpViewController(viewModel: vm)
+        vc.hidesBottomBarWhenPushed = true
+        
+        vc.onBack = { [weak self] in
+            self?.navigation.popViewController(animated: true)
+            self?.onFinish?()
+        }
+        
+        vc.onOpenPrivacy = { [weak self] in
+            self?.openPrivacy()
+        }
+        
+        vc.onLogin = { [weak self] in
+            self?.showLogin()
+        }
+        
+        navigation.pushViewController(vc, animated: true)
+    }
+    
+    private func showLogin() {
+        //            let vm = Container.shared.signInViewModel()
+        //            let vc = SignInViewController(viewModel: vm)
+        //            vc.hidesBottomBarWhenPushed = true
+        //
+        //            vc.onBack = { [weak self] in
+        //                self?.navigation.popViewController(animated: true)
+        //            }
+        //
+        //            navigation.pushViewController(vc, animated: true)
+    }
+    
+    func openPrivacy() {
+        let coordinator = PrivacyPolicyCoordinator(navigation: navigation)
+        add(coordinator)
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            guard let self, let coordinator else { return }
+            self.remove(coordinator)
+        }
+        coordinator.start()
     }
 }

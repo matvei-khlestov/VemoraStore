@@ -11,9 +11,14 @@ import FactoryKit
 extension Container {
     
     // MARK: - Auth
-    
-    var loginViewModel: Factory<LoginViewModel> {
-        self { LoginViewModel(authService: self.authService()) }
+
+    var signUpViewModel: Factory<SignUpViewModelProtocol> {
+        self {
+            SignUpViewModel(
+                auth: self.authService(),
+                validator: self.authValidator()
+            )
+        }
     }
     
     // MARK: - Catalog

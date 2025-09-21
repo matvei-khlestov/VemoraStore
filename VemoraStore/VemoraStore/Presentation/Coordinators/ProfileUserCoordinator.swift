@@ -77,18 +77,30 @@ private extension ProfileUserCoordinator {
     func openAbout() {
         let coordinator = AboutCoordinator(navigation: navigation)
         add(coordinator)
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            guard let self, let coordinator else { return }
+            self.remove(coordinator)
+        }
         coordinator.start()
     }
     
     func openPrivacy() {
         let coordinator = PrivacyPolicyCoordinator(navigation: navigation)
         add(coordinator)
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            guard let self, let coordinator else { return }
+            self.remove(coordinator)
+        }
         coordinator.start()
     }
     
     func openContacts() {
         let coordinator = ContactUsCoordinator(navigation: self.navigation)
-        self.add(coordinator)
+        add(coordinator)
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            guard let self, let coordinator else { return }
+            self.remove(coordinator)
+        }
         coordinator.start()
     }
 }
