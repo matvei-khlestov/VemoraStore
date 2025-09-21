@@ -20,6 +20,24 @@ extension Container {
             )
         }
     }
+
+    var signInViewModel: Factory<SignInViewModelProtocol> {
+        self {
+            SignInViewModel(
+                auth: self.authService(),
+                validator: self.authValidator()
+            )
+        }
+    }
+    
+    var passwordResetViewModel: Factory<ResetPasswordViewModelProtocol> {
+        self {
+            ResetPasswordViewModel(
+                service: self.passwordResetService(),
+                validator: self.authValidator()
+            )
+        }
+    }
     
     // MARK: - Catalog
     

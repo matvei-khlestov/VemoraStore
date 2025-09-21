@@ -13,6 +13,10 @@ extension Container {
         self { FirebaseAuthService() }.singleton
     }
     
+    var passwordResetService: Factory<PasswordResetServiceProtocol> {
+        self { FirebasePasswordResetService() }.singleton
+    }
+    
     var productService: Factory<ProductServiceProtocol> {
         self { FirestoreProductService() }.singleton
     }
