@@ -139,6 +139,18 @@
 		A085512C2E7D99F7004633CA /* SignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085512B2E7D99F7004633CA /* SignUpViewController.swift */; };
 		A085512E2E7DE2B1004633CA /* UIButton+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085512D2E7DE2B1004633CA /* UIButton+ext.swift */; };
 		A08551322E7DE3B4004633CA /* UITextField+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551312E7DE3B4004633CA /* UITextField+ext.swift */; };
+		A08551352E807837004633CA /* SignInViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551342E807837004633CA /* SignInViewModelProtocol.swift */; };
+		A08551392E80789D004633CA /* SignInViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551382E80789D004633CA /* SignInViewModel.swift */; };
+		A085513B2E807906004633CA /* SignInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085513A2E807906004633CA /* SignInViewController.swift */; };
+		A085513E2E80839D004633CA /* AuthContainerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085513D2E80839D004633CA /* AuthContainerViewController.swift */; };
+		A08551402E8094A8004633CA /* PasswordResetServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085513F2E8094A8004633CA /* PasswordResetServiceProtocol.swift */; };
+		A08551422E8094DF004633CA /* FirebasePasswordResetService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551412E8094DF004633CA /* FirebasePasswordResetService.swift */; };
+		A08551442E80969E004633CA /* ResetPasswordViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551432E80969E004633CA /* ResetPasswordViewModelProtocol.swift */; };
+		A08551472E809712004633CA /* ResetPasswordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551462E809712004633CA /* ResetPasswordViewModel.swift */; };
+		A08551492E809747004633CA /* ResetPasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551482E809747004633CA /* ResetPasswordViewController.swift */; };
+		A085514B2E809897004633CA /* ResetPasswordCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085514A2E809897004633CA /* ResetPasswordCoordinator.swift */; };
+		A085514D2E80A044004633CA /* UnderlinedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085514C2E80A044004633CA /* UnderlinedButton.swift */; };
+		A085514F2E80A54F004633CA /* LabelLinkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085514E2E80A54F004633CA /* LabelLinkRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -294,6 +306,18 @@
 		A085512B2E7D99F7004633CA /* SignUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpViewController.swift; sourceTree = "<group>"; };
 		A085512D2E7DE2B1004633CA /* UIButton+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+ext.swift"; sourceTree = "<group>"; };
 		A08551312E7DE3B4004633CA /* UITextField+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+ext.swift"; sourceTree = "<group>"; };
+		A08551342E807837004633CA /* SignInViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModelProtocol.swift; sourceTree = "<group>"; };
+		A08551382E80789D004633CA /* SignInViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewModel.swift; sourceTree = "<group>"; };
+		A085513A2E807906004633CA /* SignInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewController.swift; sourceTree = "<group>"; };
+		A085513D2E80839D004633CA /* AuthContainerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthContainerViewController.swift; sourceTree = "<group>"; };
+		A085513F2E8094A8004633CA /* PasswordResetServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordResetServiceProtocol.swift; sourceTree = "<group>"; };
+		A08551412E8094DF004633CA /* FirebasePasswordResetService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebasePasswordResetService.swift; sourceTree = "<group>"; };
+		A08551432E80969E004633CA /* ResetPasswordViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewModelProtocol.swift; sourceTree = "<group>"; };
+		A08551462E809712004633CA /* ResetPasswordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewModel.swift; sourceTree = "<group>"; };
+		A08551482E809747004633CA /* ResetPasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordViewController.swift; sourceTree = "<group>"; };
+		A085514A2E809897004633CA /* ResetPasswordCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordCoordinator.swift; sourceTree = "<group>"; };
+		A085514C2E80A044004633CA /* UnderlinedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlinedButton.swift; sourceTree = "<group>"; };
+		A085514E2E80A54F004633CA /* LabelLinkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelLinkRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -461,6 +485,7 @@
 				A0854FE12E6121BC004633CA /* FirestoreProductService.swift */,
 				A0854FE72E6121F4004633CA /* FirebaseProfileService.swift */,
 				A0854FE92E612206004633CA /* FirebaseNotificationService.swift */,
+				A08551412E8094DF004633CA /* FirebasePasswordResetService.swift */,
 			);
 			path = Firebase;
 			sourceTree = "<group>";
@@ -541,6 +566,7 @@
 				A085500F2E61255A004633CA /* Coordinator.swift */,
 				A08550112E61256B004633CA /* AppCoordinator.swift */,
 				A08550132E61257B004633CA /* AuthCoordinator.swift */,
+				A085514A2E809897004633CA /* ResetPasswordCoordinator.swift */,
 				A08550152E61258B004633CA /* MainCoordinator.swift */,
 				A08550642E63F518004633CA /* CatalogCoordinator.swift */,
 				A08550812E6C1E75004633CA /* ProductDetailsCoordinator.swift */,
@@ -562,10 +588,10 @@
 		A08550172E6125A4004633CA /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				A08550182E6125CC004633CA /* Auth */,
 				A08550EF2E7AB680004633CA /* PrivacyPolicy */,
 				A08550E52E79F724004633CA /* ContactUs */,
 				A08550E02E79E190004633CA /* AboutUs */,
-				A08550182E6125CC004633CA /* Auth */,
 				A085501D2E61260C004633CA /* Catalog */,
 				A08550242E61291F004633CA /* ProductDetails */,
 				A08550292E612952004633CA /* Favorites */,
@@ -582,8 +608,10 @@
 		A08550182E6125CC004633CA /* Auth */ = {
 			isa = PBXGroup;
 			children = (
-				A08551292E7D95EF004633CA /* SignUpViewModel.swift */,
-				A085512B2E7D99F7004633CA /* SignUpViewController.swift */,
+				A08551452E8096F7004633CA /* ResetPassword */,
+				A085513C2E808389004633CA /* AuthContainer */,
+				A08551372E807863004633CA /* SignIn */,
+				A08551362E807851004633CA /* SignUp */,
 			);
 			path = Auth;
 			sourceTree = "<group>";
@@ -846,6 +874,7 @@
 			isa = PBXGroup;
 			children = (
 				A08550AD2E783E88004633CA /* BrandedButton.swift */,
+				A085514C2E80A044004633CA /* UnderlinedButton.swift */,
 			);
 			path = Buttons;
 			sourceTree = "<group>";
@@ -890,6 +919,7 @@
 			isa = PBXGroup;
 			children = (
 				A08550012E612411004633CA /* AuthServiceProtocol.swift */,
+				A085513F2E8094A8004633CA /* PasswordResetServiceProtocol.swift */,
 				A08550032E612420004633CA /* ProductServiceProtocol.swift */,
 				A08550052E61242E004633CA /* ProfileServiceProtocol.swift */,
 				A08550072E61243C004633CA /* CartServiceProtocol.swift */,
@@ -922,6 +952,8 @@
 				A08551012E7B0A41004633CA /* CheckoutViewModelProtocol.swift */,
 				A085510C2E7C4B84004633CA /* OrdersViewModelProtocol.swift */,
 				A08551272E7D952F004633CA /* SignUpViewModelProtocol.swift */,
+				A08551342E807837004633CA /* SignInViewModelProtocol.swift */,
+				A08551432E80969E004633CA /* ResetPasswordViewModelProtocol.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1000,6 +1032,7 @@
 			isa = PBXGroup;
 			children = (
 				A08551192E7C609E004633CA /* BadgeView.swift */,
+				A085514E2E80A54F004633CA /* LabelLinkRow.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1029,6 +1062,41 @@
 				A08550D02E78C4FE004633CA /* DeliveryAddressFormatter.swift */,
 			);
 			path = AddressFormatters;
+			sourceTree = "<group>";
+		};
+		A08551362E807851004633CA /* SignUp */ = {
+			isa = PBXGroup;
+			children = (
+				A08551292E7D95EF004633CA /* SignUpViewModel.swift */,
+				A085512B2E7D99F7004633CA /* SignUpViewController.swift */,
+			);
+			path = SignUp;
+			sourceTree = "<group>";
+		};
+		A08551372E807863004633CA /* SignIn */ = {
+			isa = PBXGroup;
+			children = (
+				A08551382E80789D004633CA /* SignInViewModel.swift */,
+				A085513A2E807906004633CA /* SignInViewController.swift */,
+			);
+			path = SignIn;
+			sourceTree = "<group>";
+		};
+		A085513C2E808389004633CA /* AuthContainer */ = {
+			isa = PBXGroup;
+			children = (
+				A085513D2E80839D004633CA /* AuthContainerViewController.swift */,
+			);
+			path = AuthContainer;
+			sourceTree = "<group>";
+		};
+		A08551452E8096F7004633CA /* ResetPassword */ = {
+			isa = PBXGroup;
+			children = (
+				A08551462E809712004633CA /* ResetPasswordViewModel.swift */,
+				A08551482E809747004633CA /* ResetPasswordViewController.swift */,
+			);
+			path = ResetPassword;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1173,13 +1241,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				A08550AE2E783E88004633CA /* BrandedButton.swift in Sources */,
+				A08551402E8094A8004633CA /* PasswordResetServiceProtocol.swift in Sources */,
 				A08550EB2E7A056D004633CA /* ProfileGuestRow.swift in Sources */,
 				A08550D92E79BB7E004633CA /* MapPickerViewModel.swift in Sources */,
 				A085510B2E7C4B0B004633CA /* OrdersViewController.swift in Sources */,
+				A08551422E8094DF004633CA /* FirebasePasswordResetService.swift in Sources */,
 				A0854FE62E6121E3004633CA /* FirebaseAuthService.swift in Sources */,
 				A08550D52E79BAE2004633CA /* CLGeocodingService.swift in Sources */,
 				A085508D2E71B19E004633CA /* DeliveryInfoCell.swift in Sources */,
 				A08550D12E78C4FE004633CA /* DeliveryAddressFormatter.swift in Sources */,
+				A085514D2E80A044004633CA /* UnderlinedButton.swift in Sources */,
 				A08550822E6C1E75004633CA /* ProductDetailsCoordinator.swift in Sources */,
 				A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */,
 				A08550F12E7AB69F004633CA /* PrivacyPolicyText.swift in Sources */,
@@ -1194,7 +1265,9 @@
 				A0854FC42E611307004633CA /* AppDelegate.swift in Sources */,
 				A08550AB2E782F1A004633CA /* PaddedField.swift in Sources */,
 				A08550712E694489004633CA /* CatalogSectionHeader.swift in Sources */,
+				A085514F2E80A54F004633CA /* LabelLinkRow.swift in Sources */,
 				A08550932E7416B8004633CA /* ChangePhoneCell.swift in Sources */,
+				A085513B2E807906004633CA /* SignInViewController.swift in Sources */,
 				A08550FA2E7AD0A9004633CA /* ProfileUserRow.swift in Sources */,
 				A08550B32E787298004633CA /* PhoneOrCommentInputSheetViewModel.swift in Sources */,
 				A08550042E612420004633CA /* ProductServiceProtocol.swift in Sources */,
@@ -1227,6 +1300,7 @@
 				A08551282E7D952F004633CA /* SignUpViewModelProtocol.swift in Sources */,
 				A085503E2E612AC6004633CA /* CheckoutViewController.swift in Sources */,
 				A0854FF12E612286004633CA /* FavoritesService.swift in Sources */,
+				A085513E2E80839D004633CA /* AuthContainerViewController.swift in Sources */,
 				A085510F2E7C4C03004633CA /* OrdersViewModel.swift in Sources */,
 				A08550DB2E79D024004633CA /* ProfileGuestViewController.swift in Sources */,
 				A08550D72E79BB53004633CA /* MapPickerViewModelProtocol.swift in Sources */,
@@ -1238,8 +1312,12 @@
 				A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */,
 				A08550ED2E7A094C004633CA /* UIViewController+NavBar.swift in Sources */,
 				A08550E42E79E357004633CA /* AboutCoordinator.swift in Sources */,
+				A08551442E80969E004633CA /* ResetPasswordViewModelProtocol.swift in Sources */,
 				A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */,
+				A08551492E809747004633CA /* ResetPasswordViewController.swift in Sources */,
 				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
+				A08551392E80789D004633CA /* SignInViewModel.swift in Sources */,
+				A08551352E807837004633CA /* SignInViewModelProtocol.swift in Sources */,
 				A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */,
 				A08550F32E7AB6E0004633CA /* PrivacyPolicyViewController.swift in Sources */,
 				A08550692E64005F004633CA /* CartCoordinator.swift in Sources */,
@@ -1255,6 +1333,7 @@
 				A08550BA2E789476004633CA /* AddressFormatter.swift in Sources */,
 				A08551092E7C4A95004633CA /* OrderItemCell.swift in Sources */,
 				A08550E72E79F73B004633CA /* ContactUsViewController.swift in Sources */,
+				A085514B2E809897004633CA /* ResetPasswordCoordinator.swift in Sources */,
 				A08550A42E749374004633CA /* OrderSuccessViewModel.swift in Sources */,
 				A08550F82E7AD084004633CA /* ProfileUserViewController.swift in Sources */,
 				A08550142E61257B004633CA /* AuthCoordinator.swift in Sources */,
@@ -1290,6 +1369,7 @@
 				A08550362E612A62004633CA /* CartViewModel.swift in Sources */,
 				A085502B2E612977004633CA /* FavoritesViewController.swift in Sources */,
 				A08550232E61265E004633CA /* ProductCell.swift in Sources */,
+				A08551472E809712004633CA /* ResetPasswordViewModel.swift in Sources */,
 				A08550E92E79F7A4004633CA /* ContactUsCoordinator.swift in Sources */,
 				A0854FE82E6121F4004633CA /* FirebaseProfileService.swift in Sources */,
 				A085505E2E614EA3004633CA /* CartItemEntity.swift in Sources */,

@@ -28,52 +28,55 @@ final class AuthCoordinator: Coordinator {
     }
     
     func start() {
-        authService.isAuthorizedPublisher
-            .receive(on: RunLoop.main)
-            .sink { [weak self] isAuthorized in
-                guard let self else { return }
-                if isAuthorized { self.onFinish?() }
+            authService.isAuthorizedPublisher
+                .receive(on: RunLoop.main)
+                .sink { [weak self] isAuthorized in
+                    guard let self else { return }
+                    if isAuthorized { self.onFinish?() }
+                }
+                .store(in: &bag)
+
+            showAuthContainer()
+        }
+
+        private func showAuthContainer(start mode: AuthContainerViewController.Mode = .signIn) {
+            let signInVM = Container.shared.signInViewModel()
+            let signUpVM = Container.shared.signUpViewModel()
+
+            let signInVC = SignInViewController(viewModel: signInVM)
+            let signUpVC = SignUpViewController(viewModel: signUpVM)
+
+            let container = AuthContainerViewController(signIn: signInVC, signUp: signUpVC, start: mode)
+            container.hidesBottomBarWhenPushed = true
+            container.onFinish = { [weak self] in
+                self?.navigation.popViewController(animated: true)
             }
-            .store(in: &bag)
-        
-        showSignUp()
-    }
-    
-    private func showSignUp() {
-        let vm = Container.shared.signUpViewModel()
-        let vc = SignUpViewController(viewModel: vm)
-        vc.hidesBottomBarWhenPushed = true
-        
-        vc.onBack = { [weak self] in
-            self?.navigation.popViewController(animated: true)
-            self?.onFinish?()
+
+            // Переход к политике конфиденциальности
+            container.onOpenPrivacy = { [weak self] in
+                self?.openPrivacy()
+            }
+
+            // Переход «Забыли пароль?» (временная заглушка — метод откроем позже)
+            container.onForgotPassword = {  [weak self] in
+                self?.openResetPassword()
+            }
+
+            navigation.pushViewController(container, animated: true)
         }
-        
-        vc.onOpenPrivacy = { [weak self] in
-            self?.openPrivacy()
-        }
-        
-        vc.onLogin = { [weak self] in
-            self?.showLogin()
-        }
-        
-        navigation.pushViewController(vc, animated: true)
-    }
     
-    private func showLogin() {
-        //            let vm = Container.shared.signInViewModel()
-        //            let vc = SignInViewController(viewModel: vm)
-        //            vc.hidesBottomBarWhenPushed = true
-        //
-        //            vc.onBack = { [weak self] in
-        //                self?.navigation.popViewController(animated: true)
-        //            }
-        //
-        //            navigation.pushViewController(vc, animated: true)
-    }
-    
-    func openPrivacy() {
+   private func openPrivacy() {
         let coordinator = PrivacyPolicyCoordinator(navigation: navigation)
+        add(coordinator)
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            guard let self, let coordinator else { return }
+            self.remove(coordinator)
+        }
+        coordinator.start()
+    }
+    
+    private func openResetPassword() {
+        let coordinator = ResetPasswordCoordinator(navigation: navigation)
         add(coordinator)
         coordinator.onFinish = { [weak self, weak coordinator] in
             guard let self, let coordinator else { return }

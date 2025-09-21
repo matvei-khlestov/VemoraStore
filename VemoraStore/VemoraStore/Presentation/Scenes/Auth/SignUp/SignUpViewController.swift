@@ -54,20 +54,10 @@ final class SignUpViewController: UIViewController {
     }()
     
     private lazy var agreeButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.contentHorizontalAlignment = .leading
-        b.titleLabel?.numberOfLines = 0
-        b.titleLabel?.lineBreakMode = .byWordWrapping
-        b.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
-        b.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        let text = "Политика конфиденциальности"
-        let attrs: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.brightPurple,
-            .underlineStyle: NSUnderlineStyle.single.rawValue,
-            .font: UIFont.systemFont(ofSize: 16)
-        ]
-        let attributed = NSAttributedString(string: text, attributes: attrs)
-        b.setAttributedTitle(attributed, for: .normal)
+        let b = UnderlinedButton(
+            text: "Политика конфиденциальности",
+            alignment: .leading
+        )
         return b
     }()
     
@@ -87,39 +77,9 @@ final class SignUpViewController: UIViewController {
         return b
     }()
     
-    private lazy var bottomNoteLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Уже есть аккаунт?"
-        label.textColor = .secondaryLabel
-        label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-        label.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
-        return label
-    }()
-    
-    private lazy var signInButton: UIButton = {
-        let button = UIButton(type: .system)
-        let attrs: [NSAttributedString.Key: Any] = [
-            .foregroundColor: UIColor.brightPurple,
-            .underlineStyle: NSUnderlineStyle.single.rawValue,
-            .font: UIFont.systemFont(ofSize: 16)
-        ]
-        button.setAttributedTitle(NSAttributedString(string: "Войти", attributes: attrs), for: .normal)
-        button.setContentHuggingPriority(.required, for: .horizontal)
-        button.setContentCompressionResistancePriority(.required, for: .horizontal)
-        return button
-    }()
-    
-    private lazy var bottomNoteRow: UIStackView = {
-        let sv = UIStackView(arrangedSubviews: [bottomNoteLabel, signInButton])
-        sv.axis = .horizontal
-        sv.alignment = .center
-        sv.spacing = 6
-        return sv
-    }()
-    
-    private lazy var bottomNoteContainer: UIView = {
-        let v = UIView()
-        v.addSubview(bottomNoteRow)
+    private lazy var bottomNoteRow: LabelLinkRow = {
+        let v = LabelLinkRow(label: "Уже есть аккаунт?", button: "Войти")
+        v.onTap = { [weak self] in self?.onLogin?() }
         return v
     }()
     
@@ -139,7 +99,7 @@ final class SignUpViewController: UIViewController {
             agreeRow,
             agreeErrorLabel,
             submitButton,
-            bottomNoteContainer // <-- здесь
+            bottomNoteRow
         ])
         sv.axis = .vertical
         sv.spacing = 15
@@ -167,16 +127,6 @@ final class SignUpViewController: UIViewController {
         setupKeyboardDismissRecognizer()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        setupNavigationBarWithNavLeftItem(
-            title: "Регистрация",
-            action:  #selector(backTapped),
-            largeTitleDisplayMode: .always,
-            prefersLargeTitles: true
-        )
-    }
-    
     // MARK: - Layout
     
     private func setupHierarchy() {
@@ -197,13 +147,6 @@ final class SignUpViewController: UIViewController {
             agreeCheck.widthAnchor.constraint(equalToConstant: 20),
             agreeCheck.heightAnchor.constraint(equalToConstant: 20)
         ])
-        
-        bottomNoteRow.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            bottomNoteRow.centerXAnchor.constraint(equalTo: bottomNoteContainer.centerXAnchor),
-            bottomNoteRow.topAnchor.constraint(equalTo: bottomNoteContainer.topAnchor),
-            bottomNoteRow.bottomAnchor.constraint(equalTo: bottomNoteContainer.bottomAnchor)
-        ])
     }
     
     // MARK: - Wiring
@@ -220,8 +163,6 @@ final class SignUpViewController: UIViewController {
         agreeCheck.onTap(self, action: #selector(toggleAgree))
         agreeButton.onTap(self, action: #selector(privacyTapped))
         submitButton.onTap(self, action: #selector(submitTapped))
-        submitButton.onTap(self, action: #selector(submitTapped))
-        signInButton.onTap(self, action: #selector(loginTapped))
     }
     
     // MARK: - Bindings
@@ -280,10 +221,6 @@ final class SignUpViewController: UIViewController {
     
     @objc private func privacyTapped() {
         onOpenPrivacy?()
-    }
-    
-    @objc private func backTapped() {
-        onBack?()
     }
     
     @objc private func loginTapped() {
