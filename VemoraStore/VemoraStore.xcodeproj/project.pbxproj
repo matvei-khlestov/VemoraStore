@@ -15,7 +15,6 @@
 		A0854FCA2E611320004633CA /* VemoraStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FC82E611320004633CA /* VemoraStoreTests.swift */; };
 		A0854FCE2E611324004633CA /* VemoraStoreUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FCB2E611324004633CA /* VemoraStoreUITests.swift */; };
 		A0854FCF2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FCC2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift */; };
-		A0854FD72E611898004633CA /* UIImageView+KF.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FD62E611898004633CA /* UIImageView+KF.swift */; };
 		A0854FDA2E61199A004633CA /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FD92E61199A004633CA /* CoreDataManager.swift */; };
 		A0854FDE2E6119E6004633CA /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FDD2E6119E6004633CA /* KeychainService.swift */; };
 		A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE12E6121BC004633CA /* FirestoreProductService.swift */; };
@@ -151,6 +150,8 @@
 		A085514B2E809897004633CA /* ResetPasswordCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085514A2E809897004633CA /* ResetPasswordCoordinator.swift */; };
 		A085514D2E80A044004633CA /* UnderlinedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085514C2E80A044004633CA /* UnderlinedButton.swift */; };
 		A085514F2E80A54F004633CA /* LabelLinkRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085514E2E80A54F004633CA /* LabelLinkRow.swift */; };
+		A08551512E81824C004633CA /* ConfirmationAlertType.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551502E81824C004633CA /* ConfirmationAlertType.swift */; };
+		A08551532E8182AC004633CA /* UIAlertController+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551522E8182AC004633CA /* UIAlertController+ext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -183,7 +184,6 @@
 		A0854FC82E611320004633CA /* VemoraStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreTests.swift; sourceTree = "<group>"; };
 		A0854FCB2E611324004633CA /* VemoraStoreUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreUITests.swift; sourceTree = "<group>"; };
 		A0854FCC2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		A0854FD62E611898004633CA /* UIImageView+KF.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+KF.swift"; sourceTree = "<group>"; };
 		A0854FD92E61199A004633CA /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		A0854FDD2E6119E6004633CA /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		A0854FE12E6121BC004633CA /* FirestoreProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProductService.swift; sourceTree = "<group>"; };
@@ -318,6 +318,8 @@
 		A085514A2E809897004633CA /* ResetPasswordCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordCoordinator.swift; sourceTree = "<group>"; };
 		A085514C2E80A044004633CA /* UnderlinedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlinedButton.swift; sourceTree = "<group>"; };
 		A085514E2E80A54F004633CA /* LabelLinkRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelLinkRow.swift; sourceTree = "<group>"; };
+		A08551502E81824C004633CA /* ConfirmationAlertType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmationAlertType.swift; sourceTree = "<group>"; };
+		A08551522E8182AC004633CA /* UIAlertController+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIAlertController+ext.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -431,12 +433,11 @@
 		A0854FD52E61186A004633CA /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				A0854FD62E611898004633CA /* UIImageView+KF.swift */,
-				A085507A2E6ADDBB004633CA /* UIView+Animations.swift */,
-				A08550992E747BBC004633CA /* UIBarButtonItem+ext.swift */,
-				A08550EC2E7A094C004633CA /* UIViewController+NavBar.swift */,
-				A085512D2E7DE2B1004633CA /* UIButton+ext.swift */,
-				A08551312E7DE3B4004633CA /* UITextField+ext.swift */,
+				A08551592E818354004633CA /* UIView+Animations */,
+				A08551582E818345004633CA /* UIBarButtonItem+ext */,
+				A08551572E818329004633CA /* UIViewController+NavBar */,
+				A08551562E81830E004633CA /* UIButton+ext */,
+				A08551552E8182FE004633CA /* UITextField+ext */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -725,10 +726,7 @@
 		A085505F2E63EBD0004633CA /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				A08551182E7C6085004633CA /* Views */,
-				A08550AC2E783E72004633CA /* Buttons */,
-				A08550A92E782EFE004633CA /* TextFields */,
-				A08550962E741FFD004633CA /* BottomSheet's */,
+				A085515D2E818589004633CA /* UIComponents */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -1099,6 +1097,67 @@
 			path = ResetPassword;
 			sourceTree = "<group>";
 		};
+		A08551542E8182C5004633CA /* Alert's */ = {
+			isa = PBXGroup;
+			children = (
+				A08551522E8182AC004633CA /* UIAlertController+ext.swift */,
+				A08551502E81824C004633CA /* ConfirmationAlertType.swift */,
+			);
+			path = "Alert's";
+			sourceTree = "<group>";
+		};
+		A08551552E8182FE004633CA /* UITextField+ext */ = {
+			isa = PBXGroup;
+			children = (
+				A08551312E7DE3B4004633CA /* UITextField+ext.swift */,
+			);
+			path = "UITextField+ext";
+			sourceTree = "<group>";
+		};
+		A08551562E81830E004633CA /* UIButton+ext */ = {
+			isa = PBXGroup;
+			children = (
+				A085512D2E7DE2B1004633CA /* UIButton+ext.swift */,
+			);
+			path = "UIButton+ext";
+			sourceTree = "<group>";
+		};
+		A08551572E818329004633CA /* UIViewController+NavBar */ = {
+			isa = PBXGroup;
+			children = (
+				A08550EC2E7A094C004633CA /* UIViewController+NavBar.swift */,
+			);
+			path = "UIViewController+NavBar";
+			sourceTree = "<group>";
+		};
+		A08551582E818345004633CA /* UIBarButtonItem+ext */ = {
+			isa = PBXGroup;
+			children = (
+				A08550992E747BBC004633CA /* UIBarButtonItem+ext.swift */,
+			);
+			path = "UIBarButtonItem+ext";
+			sourceTree = "<group>";
+		};
+		A08551592E818354004633CA /* UIView+Animations */ = {
+			isa = PBXGroup;
+			children = (
+				A085507A2E6ADDBB004633CA /* UIView+Animations.swift */,
+			);
+			path = "UIView+Animations";
+			sourceTree = "<group>";
+		};
+		A085515D2E818589004633CA /* UIComponents */ = {
+			isa = PBXGroup;
+			children = (
+				A08551182E7C6085004633CA /* Views */,
+				A08550AC2E783E72004633CA /* Buttons */,
+				A08550A92E782EFE004633CA /* TextFields */,
+				A08550962E741FFD004633CA /* BottomSheet's */,
+				A08551542E8182C5004633CA /* Alert's */,
+			);
+			path = UIComponents;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1259,6 +1318,7 @@
 				A08550C02E789FA8004633CA /* AddressFormattingProtocol.swift in Sources */,
 				A08550C22E78A407004633CA /* DeliveryDetailsViewModel.swift in Sources */,
 				A08551172E7C5447004633CA /* OrdersService.swift in Sources */,
+				A08551512E81824C004633CA /* ConfirmationAlertType.swift in Sources */,
 				A08550982E742082004633CA /* PhoneOrCommentInputSheetViewController.swift in Sources */,
 				A08550A82E781CDE004633CA /* DeliveryDetailsSheetViewController.swift in Sources */,
 				A08550102E61255A004633CA /* Coordinator.swift in Sources */,
@@ -1289,7 +1349,6 @@
 				A08550DE2E79D1CD004633CA /* ProfileGuestCoordinator.swift in Sources */,
 				A08550CB2E78B746004633CA /* PhoneOrCommentInputSheetViewModelProtocol.swift in Sources */,
 				A08550212E61264B004633CA /* CatalogViewModel.swift in Sources */,
-				A0854FD72E611898004633CA /* UIImageView+KF.swift in Sources */,
 				A085508B2E71B14A004633CA /* PickupAddressCell.swift in Sources */,
 				A08550C72E78B08A004633CA /* DeliveryDetailsViewModelProtocol.swift in Sources */,
 				A085510D2E7C4B84004633CA /* OrdersViewModelProtocol.swift in Sources */,
@@ -1347,6 +1406,7 @@
 				A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */,
 				A08550802E6BF954004633CA /* CartItem.swift in Sources */,
 				A08550672E63F7EC004633CA /* FavoritesCoordinator.swift in Sources */,
+				A08551532E8182AC004633CA /* UIAlertController+ext.swift in Sources */,
 				A08550C92E78B543004633CA /* AddressConfirmSheetViewModelProtocol.swift in Sources */,
 				A08550632E63F006004633CA /* AppTab.swift in Sources */,
 				A0854FDE2E6119E6004633CA /* KeychainService.swift in Sources */,

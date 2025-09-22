@@ -8,6 +8,7 @@
 import FactoryKit
 
 extension Container {
+    
     var addressFormatter: Factory<AddressFormattingProtocol> {
         self { DefaultAddressFormatter() }
     }

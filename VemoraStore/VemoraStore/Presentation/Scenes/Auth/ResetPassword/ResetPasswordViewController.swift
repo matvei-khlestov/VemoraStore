@@ -22,7 +22,7 @@ final class ResetPasswordViewController: UIViewController {
     private lazy var titleLabel: UILabel = {
         let l = UILabel()
         l.text = "Восстановление пароля"
-        l.font = .systemFont(ofSize: 32, weight: .bold)
+        l.font = .systemFont(ofSize: 28, weight: .bold)
         l.numberOfLines = 0
         return l
     }()
@@ -62,7 +62,7 @@ final class ResetPasswordViewController: UIViewController {
             backNoteRow
         ])
         sv.axis = .vertical
-        sv.spacing = 16
+        sv.spacing = 18
         return sv
     }()
     
