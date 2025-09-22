@@ -20,19 +20,22 @@ final class MainCoordinator: Coordinator {
     
     func start() {
         
-        let catalogVC = CatalogViewController()
+        let catalogVM = Container.shared.catalogViewModel()
+        let catalogVC = CatalogViewController(viewModel: catalogVM)
         let catalogNav = TabBarFactory.makeNav(root: catalogVC, tab: .catalog)
         let catalog = CatalogCoordinator(navigation: catalogNav)
         add(catalog)
         catalog.start()
         
-        let favoritesVC = FavoritesViewController()
+        let favoritesVM = Container.shared.favoritesViewModel()
+        let favoritesVC = FavoritesViewController(viewModel: favoritesVM)
         let favoritesNav = TabBarFactory.makeNav(root: favoritesVC, tab: .favorites)
         let favorites = FavoritesCoordinator(navigation: favoritesNav)
         add(favorites)
         favorites.start()
         
-        let cartVC = CartViewController()
+        let cartVM = Container.shared.cartViewModel()
+        let cartVC = CartViewController(viewModel: cartVM)
         let cartNav = TabBarFactory.makeNav(root: cartVC, tab: .cart)
         let cart = CartCoordinator(navigation: cartNav)
         add(cart)

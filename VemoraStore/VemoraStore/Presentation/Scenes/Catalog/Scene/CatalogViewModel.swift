@@ -7,41 +7,46 @@
 
 import Foundation
 import Combine
-import FactoryKit
 
-final class CatalogViewModel {
-
-    // Input
+final class CatalogViewModel: CatalogViewModelProtocol {
+    
     @Published var query: String = ""
-
-    // Output
+    
     @Published private(set) var categories: [(title: String, count: Int, imageURL: URL?)] = []
     @Published private(set) var products: [Product] = []
-
+    
+    var categoriesPublisher: AnyPublisher<[(title: String, count: Int, imageURL: URL?)], Never> {
+        $categories.eraseToAnyPublisher()
+    }
+    var productsPublisher: AnyPublisher<[Product], Never> {
+        $products.eraseToAnyPublisher()
+    }
+    
     private let productService: ProductServiceProtocol
     private var bag = Set<AnyCancellable>()
-
-    init(productService: ProductServiceProtocol = Container.shared.productService()) {
+    
+    init(productService: ProductServiceProtocol) {
         self.productService = productService
         bind()
     }
-
+    
     private func bind() {
-        // пример фильтрации по запросу (заглушка — фильтруем локально)
         $query
             .removeDuplicates()
             .debounce(for: .milliseconds(200), scheduler: DispatchQueue.main)
             .sink { [weak self] q in
                 guard let self else { return }
                 if q.isEmpty {
-                    // показать полный список (если нужно — снова дернуть сервис)
+                    // можно перезагрузить из сервиса
                 } else {
-                    self.products = self.products.filter { $0.name.localizedCaseInsensitiveContains(q) }
+                    self.products = self.products.filter {
+                        $0.name.localizedCaseInsensitiveContains(q)
+                    }
                 }
             }
             .store(in: &bag)
     }
-
+    
     func reload() {
         categories = [
             ("Bathing", 52, nil),
@@ -107,6 +112,5 @@ final class CatalogViewModel {
             )
         ]
     }
-
 }
 

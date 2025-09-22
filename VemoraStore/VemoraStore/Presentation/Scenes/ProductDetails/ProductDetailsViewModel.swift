@@ -8,7 +8,7 @@
 import Foundation
 import FactoryKit
 
-final class ProductDetailsViewModel {
+final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     
     private let product: Product
     private let favoritesService: FavoritesServiceProtocol

@@ -9,7 +9,16 @@ import Foundation
 import Combine
 import FactoryKit
 
-final class FavoritesViewModel {
+final class FavoritesViewModel: FavoritesViewModelProtocol {
+    
+    // MARK: - Publishers (protocol conformance)
+    var favoriteProductsPublisher: AnyPublisher<[Product], Never> {
+        $favoriteProducts.eraseToAnyPublisher()
+    }
+
+    var inCartIdsPublisher: AnyPublisher<Set<String>, Never> {
+        $inCartIds.eraseToAnyPublisher()
+    }
     
     // MARK: - Services
     private let favoritesService: FavoritesServiceProtocol

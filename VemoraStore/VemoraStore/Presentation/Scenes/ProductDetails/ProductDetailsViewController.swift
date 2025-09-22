@@ -16,7 +16,7 @@ final class ProductDetailsViewController: UIViewController {
     
     // MARK: - Deps
     
-    private let viewModel: ProductDetailsViewModel
+    private let viewModel: ProductDetailsViewModelProtocol
     
     // MARK: - State
     
@@ -149,7 +149,7 @@ final class ProductDetailsViewController: UIViewController {
     
     // MARK: - Init
     
-    init(viewModel: ProductDetailsViewModel) {
+    init(viewModel: ProductDetailsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }

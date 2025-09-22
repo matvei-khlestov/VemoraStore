@@ -6,19 +6,24 @@
 //
 
 import UIKit
-import FactoryKit
 
-final class CatalogCoordinator: Coordinator {
+final class CatalogCoordinator: CatalogCoordinatingProtocol {
     
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     
-    init(navigation: UINavigationController) {
+    private let viewModelFactory: ViewModelBuildingProtocol
+    
+    init(
+        navigation: UINavigationController,
+        viewModelFactory: ViewModelBuildingProtocol
+    ) {
         self.navigation = navigation
+        self.viewModelFactory = viewModelFactory
     }
     
     func start() {
-        let vm = Container.shared.catalogViewModel()
+        let vm = viewModelFactory.makeCatalogViewModel()
         let vc = CatalogViewController(viewModel: vm)
         
         vc.onSelectProduct = { [weak self] product in
