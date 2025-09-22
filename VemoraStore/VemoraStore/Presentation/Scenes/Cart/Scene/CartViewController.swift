@@ -16,7 +16,7 @@ final class CartViewController: UIViewController {
     var onSelectProduct: ((Product) -> Void)?
 
     // MARK: - Deps
-    private let viewModel: CartViewModel
+    private let viewModel: CartViewModelProtocol
 
     // MARK: - UI
     private lazy var tableView: UITableView = {
@@ -57,7 +57,7 @@ final class CartViewController: UIViewController {
     private var isPerformingRowUpdate = false
 
     // MARK: - Init
-    init(viewModel: CartViewModel = CartViewModel()) {
+    init(viewModel: CartViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -117,7 +117,7 @@ private extension CartViewController {
     }
 
     func bindViewModel() {
-        viewModel.$cartItems
+        viewModel.cartItemsPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] cartItems in
                 guard let self else { return }

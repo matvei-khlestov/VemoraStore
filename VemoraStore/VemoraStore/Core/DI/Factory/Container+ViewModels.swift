@@ -41,11 +41,11 @@ extension Container {
     
     // MARK: - Catalog
     
-    var catalogViewModel: Factory<CatalogViewModel> {
-        self { CatalogViewModel(productService: self.productService()) }
+    var catalogViewModel: Factory<CatalogViewModelProtocol> {
+        self { CatalogViewModel(productService: self.productService()) }.singleton
     }
     
-    var productDetailsViewModel: ParameterFactory<Product, ProductDetailsViewModel> {
+    var productDetailsViewModel: ParameterFactory<Product, ProductDetailsViewModelProtocol> {
         self { product in
             ProductDetailsViewModel(
                 product: product,
@@ -57,26 +57,26 @@ extension Container {
     
     // MARK: - Favorites
     
-    var favoritesViewModel: Factory<FavoritesViewModel> {
+    var favoritesViewModel: Factory<FavoritesViewModelProtocol> {
         self { FavoritesViewModel(favoritesService: self.favoritesService(),
-                                  productService: self.productService()) }
+                                  productService: self.productService()) }.singleton
     }
     
     // MARK: - Cart
     
-    var cartViewModel: Factory<CartViewModel> {
-        self { CartViewModel(cartService: self.cartService()) }
+    var cartViewModel: Factory<CartViewModelProtocol> {
+        self { CartViewModel(cartService: self.cartService()) }.singleton
     }
     
     // MARK: - Profile
     
     var profileUserViewModel: Factory<ProfileUserViewModelProtocol> {
-        self { ProfileUserViewModel(auth: self.authService()) }
+        self { ProfileUserViewModel(auth: self.authService()) }.singleton
     }
     
     // MARK: - Checkout
     
-    var checkoutViewModel: Factory<CheckoutViewModel> {
+    var checkoutViewModel: Factory<CheckoutViewModelProtocol> {
         self { CheckoutViewModel(cart: self.cartService(),
                                  auth: self.authService()) }
     }

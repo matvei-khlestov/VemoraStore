@@ -10,19 +10,19 @@ import Combine
 import FactoryKit
 
 final class CatalogViewController: UIViewController {
-
+    
     enum Section: Int, CaseIterable { case categories, products }
-
+    
     // MARK: - Public callbacks
     
     var onSelectProduct: ((Product) -> Void)?
     var onAddToCart: ((Product) -> Void)?
     var onToggleFavorite: ((Product) -> Void)?
-
+    
     // MARK: - Deps
     
-    private let viewModel: CatalogViewModel
-
+    private let viewModel: CatalogViewModelProtocol
+    
     // MARK: - UI
     
     private lazy var collectionView: UICollectionView = {
@@ -40,7 +40,7 @@ final class CatalogViewController: UIViewController {
                     withReuseIdentifier: CatalogSectionHeader.reuseId)
         return cv
     }()
-
+    
     private lazy var searchController: UISearchController = {
         let sc = UISearchController(searchResultsController: nil)
         sc.obscuresBackgroundDuringPresentation = false
@@ -48,19 +48,19 @@ final class CatalogViewController: UIViewController {
         sc.searchResultsUpdater = self
         return sc
     }()
-
+    
     // MARK: - State
     
     private var bag = Set<AnyCancellable>()
-
+    
     // MARK: - Init
     
-    init(viewModel: CatalogViewModel = Container.shared.catalogViewModel()) {
+    init(viewModel: CatalogViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
+    
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
@@ -92,7 +92,7 @@ private extension CatalogViewController {
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
-
+    
     func makeLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { sectionIndex, _ in
             guard let section = Section(rawValue: sectionIndex) else { return nil }
@@ -109,23 +109,23 @@ private extension CatalogViewController {
                 section.contentInsets = .init(top: 12, leading: 12, bottom: 8, trailing: 12)
                 section.interGroupSpacing = 12
                 return section
-
+                
             case .products:
                 let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5),
                                                       heightDimension: .estimated(325))
                 let item = NSCollectionLayoutItem(layoutSize: itemSize)
-
+                
                 let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                        heightDimension: .estimated(320))
                 let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item, item])
                 // Горизонтальные отступы между колонками
                 group.interItemSpacing = .fixed(6)
-
+                
                 let section = NSCollectionLayoutSection(group: group)
                 // Внешние отступы секции и вертикальные отступы между строками
                 section.contentInsets = .init(top: 8, leading: 8, bottom: 16, trailing: 8)
                 section.interGroupSpacing = 6
-
+                
                 let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                         heightDimension: .absolute(44))
                 let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -139,12 +139,13 @@ private extension CatalogViewController {
             }
         }
     }
-
-    func bindViewModel() {
-        viewModel.$categories
-            .combineLatest(viewModel.$products)
+    
+    private func bindViewModel() {
+        viewModel.categoriesPublisher
+            .combineLatest(viewModel.productsPublisher)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _, _ in
+            .sink { [weak self] (_: [(title: String, count: Int, imageURL: URL?)],
+                                 _: [Product]) in
                 self?.collectionView.reloadData()
             }
             .store(in: &bag)
@@ -155,7 +156,7 @@ private extension CatalogViewController {
 
 extension CatalogViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int { Section.allCases.count }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
         switch Section(rawValue: section)! {
@@ -165,10 +166,10 @@ extension CatalogViewController: UICollectionViewDataSource {
             return viewModel.products.count
         }
     }
-
+    
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+        
         switch Section(rawValue: indexPath.section)! {
         case .categories:
             let cell = collectionView.dequeueReusableCell(
@@ -177,7 +178,7 @@ extension CatalogViewController: UICollectionViewDataSource {
             let c = viewModel.categories[indexPath.item]
             cell.configure(title: c.title, count: c.count, imageURL: c.imageURL)
             return cell
-
+            
         case .products:
             let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: ProductCell.reuseId, for: indexPath
@@ -188,7 +189,7 @@ extension CatalogViewController: UICollectionViewDataSource {
             return cell
         }
     }
-
+    
     
     func collectionView(_ collectionView: UICollectionView,
                         viewForSupplementaryElementOfKind kind: String,
@@ -196,7 +197,7 @@ extension CatalogViewController: UICollectionViewDataSource {
         guard kind == UICollectionView.elementKindSectionHeader,
               Section(rawValue: indexPath.section) == .products
         else { return UICollectionReusableView() }
-
+        
         let header = collectionView.dequeueReusableSupplementaryView(
             ofKind: kind,
             withReuseIdentifier: CatalogSectionHeader.reuseId,
@@ -232,7 +233,7 @@ extension CatalogViewController: ProductCellDelegate {
         let product = viewModel.products[indexPath.item]
         onToggleFavorite?(product)
     }
-
+    
     func productCellDidTapAddToCart(_ cell: ProductCell) {
         guard let indexPath = collectionView.indexPath(for: cell),
               Section(rawValue: indexPath.section) == .products else { return }

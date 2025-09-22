@@ -15,7 +15,7 @@ final class FavoritesViewController: UIViewController {
     var onSelectProduct: ((Product) -> Void)?
     
     // MARK: - Deps
-    private let viewModel: FavoritesViewModel
+    private let viewModel: FavoritesViewModelProtocol
     
     // MARK: - UI
     private lazy var tableView: UITableView = {
@@ -49,7 +49,7 @@ final class FavoritesViewController: UIViewController {
     private var isPerformingRowUpdate = false
     
     // MARK: - Init
-    init(viewModel: FavoritesViewModel = Container.shared.favoritesViewModel()) {
+    init(viewModel: FavoritesViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -92,16 +92,10 @@ private extension FavoritesViewController {
     }
     
     func bindViewModel() {
-         viewModel.$favoriteProducts
-           .receive(on: DispatchQueue.main)
-           .sink { [weak self] products in
-               guard let self = self else { return }
-               self.items = products
-               if !self.isPerformingRowUpdate {
-                   self.tableView.reloadData()
-               }
-           }
-           .store(in: &bag)
+        viewModel.favoriteProductsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in self?.tableView.reloadData() }
+            .store(in: &bag)
     }
     
     func reload() {
@@ -121,7 +115,7 @@ private extension FavoritesViewController {
         guard items.indices.contains(indexPath.row) else { return }
         // 1) Update local data source first
         _ = items.remove(at: indexPath.row)
-
+        
         // 2) Animate table update
         isPerformingRowUpdate = true
         tableView.performBatchUpdates({
@@ -131,7 +125,7 @@ private extension FavoritesViewController {
             self.isPerformingRowUpdate = false
             self.updateEmptyState()
         })
-
+        
         // 3) Tell the ViewModel to remove the same element by index
         viewModel.removeItem(at: indexPath.row)
     }
@@ -141,7 +135,7 @@ extension FavoritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         items.count
     }
-
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: FavoritesCell.reuseId, for: indexPath) as? FavoritesCell else {
             return UITableViewCell()
@@ -157,7 +151,7 @@ extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         onSelectProduct?(items[indexPath.row])
     }
-
+    
     // Swipe-to-delete
     func tableView(_ tableView: UITableView,
                    trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
@@ -174,14 +168,14 @@ extension FavoritesViewController: FavoritesCellDelegate {
     func favoritesCellDidTapCart(_ cell: FavoritesCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let product = items[indexPath.row]
-
+        
         // бизнес-логика через VM
         viewModel.toggleCart(for: product.id)
-
+        
         // обновим иконку у той же ячейки без перерисовки строки
         let newState = viewModel.isInCart(product.id)
         cell.setInCart(newState, animated: false)
-
+        
         // Если хочешь всё же перезагрузить строку (для синхронизации высот и т.п.):
         // tableView.reloadRows(at: [indexPath], with: .none)
     }

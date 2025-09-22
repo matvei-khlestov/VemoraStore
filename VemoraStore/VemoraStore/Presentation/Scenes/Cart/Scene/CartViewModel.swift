@@ -7,28 +7,26 @@
 
 import Foundation
 import Combine
-import FactoryKit
 
-final class CartViewModel {
-
+final class CartViewModel: CartViewModelProtocol {
     // MARK: - Services
     private let cartService: CartServiceProtocol
 
-    // MARK: - State (Outputs for Controller)
+    // MARK: - State
     @Published private(set) var cartItems: [CartItem] = []
+    var cartItemsPublisher: AnyPublisher<[CartItem], Never> {
+        $cartItems.eraseToAnyPublisher()
+    }
 
     private var cancellables = Set<AnyCancellable>()
 
     // MARK: - Init
-    init(
-        cartService: CartServiceProtocol = Container.shared.cartService()
-    ) {
+    init(cartService: CartServiceProtocol) {
         self.cartService = cartService
         bind()
     }
 
     private func bind() {
-        // Подписываемся на изменения корзины из сервиса
         cartService.itemsPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] items in
@@ -37,29 +35,22 @@ final class CartViewModel {
             .store(in: &cancellables)
     }
 
-    // MARK: - Public API (для контроллера)
-
-    /// Кол-во строк в таблице
+    // MARK: - Public API
     var count: Int { cartItems.count }
 
     func item(at indexPath: IndexPath) -> CartItem { cartItems[indexPath.row] }
 
-    /// Суммарное количество единиц
     var totalItems: Int {
         cartItems.reduce(0) { $0 + $1.quantity }
     }
 
-    /// Итоговая стоимость (в ваших единицах Product.price)
     var totalPrice: Double {
         cartItems.reduce(0) { $0 + ($1.product.price * Double($1.quantity)) }
     }
 
-    // Количество
-
     func setQuantity(for productId: String, quantity: Int) {
         let newQty = max(1, quantity)
         cartService.setQuantity(productId: productId, quantity: newQty)
-        // Оптимистичное обновление UI (не обязательно, если сервис быстро шлёт itemsPublisher)
         if let idx = cartItems.firstIndex(where: { $0.id == productId }) {
             cartItems[idx].quantity = newQty
         }
@@ -79,25 +70,20 @@ final class CartViewModel {
         }
     }
 
-    /// Удаление позиции по индексу
     func removeItem(at index: Int) {
         guard cartItems.indices.contains(index) else { return }
         let removed = cartItems[index]
         cartService.remove(productId: removed.id)
-        cartItems.remove(at: index) // оптимистично
+        cartItems.remove(at: index)
     }
 
-    /// Удаление по productId
     func removeItem(with productId: String) {
         cartService.remove(productId: productId)
         if let idx = cartItems.firstIndex(where: { $0.id == productId }) {
-            cartItems.remove(at: idx) // оптимистично
+            cartItems.remove(at: idx)
         }
     }
 
-    // MARK: - Mocks / Bootstrap
-
-    /// Быстрая загрузка мок-данных через сервис (если он это поддерживает)
     func loadMocks() {
         cartService.loadMocks()
     }
