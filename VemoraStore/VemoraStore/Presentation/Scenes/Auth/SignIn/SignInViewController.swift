@@ -164,11 +164,8 @@ final class SignInViewController: UIViewController {
             do {
                 try await viewModel.signIn()
             } catch {
-                let ac = UIAlertController(title: "Ошибка",
-                                           message: error.localizedDescription,
-                                           preferredStyle: .alert)
-                ac.addAction(.init(title: "Ок", style: .default))
-                present(ac, animated: true)
+                let errorAlert = UIAlertController.makeError(error)
+                present(errorAlert, animated: true)
             }
         }
     }
