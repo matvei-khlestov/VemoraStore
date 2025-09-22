@@ -79,7 +79,7 @@ final class PhoneOrCommentInputSheetViewController: UIViewController {
         return label
     }()
     
-    private let saveButton: UIButton = BrandedButton.make(.primary, title: "Сохранить")
+    private let saveButton = BrandedButton(style: .primary, title: "Сохранить")
     
     private let stack = UIStackView()
     

@@ -7,7 +7,7 @@
 
 import UIKit
 
-enum BrandedButton {
+final class BrandedButton: UIButton {
     enum Style {
         /// Фирменная кнопка без теней
         case primary
@@ -17,31 +17,42 @@ enum BrandedButton {
         case submit
     }
     
-    /// Создаёт кнопку с заданным стилем
-    static func make(_ style: Style, title: String) -> UIButton {
+    private let style: Style
+    
+    init(style: Style, title: String) {
+        self.style = style
+        super.init(frame: .zero)
+        configure(title: title)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func configure(title: String) {
         var configuration = UIButton.Configuration.filled()
         configuration.title = title
         configuration.baseBackgroundColor = .brightPurple
         configuration.baseForegroundColor = .white
         configuration.cornerStyle = .large
         
-        let button = UIButton(configuration: configuration, primaryAction: nil)
-        button.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        button.layer.cornerCurve = .continuous
+        self.configuration = configuration
+        self.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        self.layer.cornerCurve = .continuous
         
         configuration.contentInsets = .init(top: 14, leading: 16, bottom: 14, trailing: 16)
-        button.configuration = configuration
+        self.configuration = configuration
         
         switch style {
         case .primary:
             break
         case .primaryWithShadow:
-            button.layer.masksToBounds = false
-            button.layer.shadowOpacity = 0.5
-            button.layer.shadowRadius = 8
-            button.layer.shadowOffset = CGSize(width: 0, height: 4)
+            self.layer.masksToBounds = false
+            self.layer.shadowOpacity = 0.5
+            self.layer.shadowRadius = 8
+            self.layer.shadowOffset = CGSize(width: 0, height: 4)
         case .submit:
-            button.configurationUpdateHandler = { btn in
+            self.configurationUpdateHandler = { btn in
                 guard var conf = btn.configuration else { return }
                 
                 let bg: UIColor = btn.isEnabled ? .brightPurple : UIColor.brightPurple.withAlphaComponent(0.65)
@@ -57,7 +68,5 @@ enum BrandedButton {
                 btn.configuration = conf
             }
         }
-        
-        return button
     }
 }

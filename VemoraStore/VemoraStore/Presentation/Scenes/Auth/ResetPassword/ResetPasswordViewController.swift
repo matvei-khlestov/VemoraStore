@@ -39,8 +39,8 @@ final class ResetPasswordViewController: UIViewController {
         FormTextField(kind: .email)
     }()
     
-    private lazy var submitButton: UIButton = {
-        let b = BrandedButton.make(.submit, title: "Отправить")
+    private lazy var submitButton: BrandedButton = {
+        let b = BrandedButton(style: .submit, title: "Отправить")
         b.isEnabled = false
         b.setNeedsUpdateConfiguration()
         b.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)

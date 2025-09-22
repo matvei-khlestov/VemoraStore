@@ -50,8 +50,8 @@ final class SignInViewController: UIViewController {
         return sv
     }()
     
-    private lazy var submitButton: UIButton = {
-        let b = BrandedButton.make(.submit, title: "Войти")
+    private lazy var submitButton: BrandedButton = {
+        let b = BrandedButton(style: .submit, title: "Войти")
         b.isEnabled = false
         b.setNeedsUpdateConfiguration()
         return b

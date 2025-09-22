@@ -42,8 +42,8 @@ final class CartViewController: UIViewController {
         return l
     }()
 
-    private lazy var checkoutButton: UIButton = {
-        let button = BrandedButton.make(.primaryWithShadow, title: "Оформить заказ")
+    private lazy var checkoutButton: BrandedButton = {
+        let button = BrandedButton(style: .primaryWithShadow, title: "Оформить заказ")
         button.addTarget(self, action: #selector(checkoutTapped), for: .touchUpInside)
         return button
     }()

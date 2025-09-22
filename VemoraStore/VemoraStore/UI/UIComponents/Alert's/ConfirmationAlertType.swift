@@ -13,8 +13,10 @@ enum ConfirmationAlertType {
     
     var title: String {
         switch self {
-        case .logout:        return "Выйти из аккаунта?"
-        case .deleteAccount: return "Удалить аккаунт?"
+        case .logout:     
+            return "Выйти из аккаунта?"
+        case .deleteAccount: 
+            return "Удалить аккаунт?"
         }
     }
     
@@ -29,8 +31,10 @@ enum ConfirmationAlertType {
     
     var confirmTitle: String {
         switch self {
-        case .logout:        return "Выйти"
-        case .deleteAccount: return "Удалить аккаунт"
+        case .logout:       
+            return "Выйти"
+        case .deleteAccount: 
+            return "Удалить аккаунт"
         }
     }
     
