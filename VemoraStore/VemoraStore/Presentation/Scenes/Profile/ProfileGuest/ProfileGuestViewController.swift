@@ -63,8 +63,8 @@ final class ProfileGuestViewController: UIViewController {
         return label
     }()
     
-    private lazy var authButton: UIButton = {
-        let button = BrandedButton.make(.primary, title: "Войти или зарегистрироваться")
+    private lazy var authButton: BrandedButton = {
+        let button = BrandedButton(style: .primary, title: "Войти или зарегистрироваться")
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

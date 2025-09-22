@@ -87,9 +87,7 @@ final class DeliveryDetailsSheetViewController: UIViewController {
         return textField
     }()
     
-    private lazy var saveButton: UIButton = {
-        return BrandedButton.make(.primary, title: "Сохранить адрес")
-    }()
+    private lazy var saveButton = BrandedButton(style: .primary, title: "Сохранить адрес")
     
     private lazy var closeButton: UIButton = {
         let button = UIButton(type: .system)

@@ -68,7 +68,7 @@ final class AddressConfirmSheetViewController: UIViewController {
         return tf
     }()
     
-    private let continueButton: UIButton = BrandedButton.make(.primary, title: "Продолжить")
+    private let continueButton = BrandedButton(style: .primary, title: "Продолжить")
     
     private lazy var suggestionsTable: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
