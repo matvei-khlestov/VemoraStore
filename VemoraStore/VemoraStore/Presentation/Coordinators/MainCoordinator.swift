@@ -38,10 +38,10 @@ final class MainCoordinator: Coordinator {
         add(cart)
         cart.start()
         
-//        let profileUserVM = Container.shared.profileUserViewModel()
-        let profileVC = ProfileGuestViewController()
+        let profileUserVM = Container.shared.profileUserViewModel()
+        let profileVC = ProfileUserViewController(viewModel: profileUserVM)
         let profileNav = TabBarFactory.makeNav(root: profileVC, tab: .profile)
-        let profile = ProfileGuestCoordinator(navigation: profileNav)
+        let profile = ProfileUserCoordinator(navigation: profileNav)
         add(profile)
         profile.start()
         

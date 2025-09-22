@@ -142,18 +142,16 @@ final class ResetPasswordViewController: UIViewController {
         Task {
             do {
                 try await viewModel.resetPassword()
-                let ac = UIAlertController(title: "Готово",
-                                           message: "Мы отправили письмо. Проверьте почту.",
-                                           preferredStyle: .alert)
-                ac.addAction(.init(title: "Ок", style: .default, handler: { [weak self] _ in
-                    self?.onDone?() ?? self?.onBack?()
-                }))
+                let ac = UIAlertController.makeInfo(
+                    title: "Готово",
+                    message: "Мы отправили письмо. Проверьте почту.",
+                    onOk: { [weak self] in
+                        self?.onDone?() ?? self?.onBack?()
+                    }
+                )
                 present(ac, animated: true)
             } catch {
-                let ac = UIAlertController(title: "Ошибка",
-                                           message: error.localizedDescription,
-                                           preferredStyle: .alert)
-                ac.addAction(.init(title: "Ок", style: .default))
+                let ac = UIAlertController.makeError(error)
                 present(ac, animated: true)
             }
         }

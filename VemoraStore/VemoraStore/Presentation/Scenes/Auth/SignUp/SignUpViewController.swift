@@ -228,18 +228,17 @@ final class SignUpViewController: UIViewController {
     }
     
     @objc private func submitTapped() {
-        
         Task {
             do {
                 try await viewModel.signUp()
-                let ok = UIAlertAction(title: "Ок", style: .default)
-                let ac = UIAlertController(title: "Готово", message: "Регистрация успешна", preferredStyle: .alert)
-                ac.addAction(ok)
-                present(ac, animated: true)
+                let successAlert = UIAlertController.makeSuccess(
+                    title: "Готово",
+                    message: "Регистрация успешна"
+                )
+                present(successAlert, animated: true)
             } catch {
-                let ac = UIAlertController(title: "Ошибка", message: error.localizedDescription, preferredStyle: .alert)
-                ac.addAction(.init(title: "Ок", style: .default))
-                present(ac, animated: true)
+                let errorAlert = UIAlertController.makeError(error)
+                present(errorAlert, animated: true)
             }
         }
     }

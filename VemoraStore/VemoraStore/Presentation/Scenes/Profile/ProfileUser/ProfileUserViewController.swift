@@ -226,12 +226,7 @@ final class ProfileUserViewController: UIViewController {
                     try await self.viewModel.logout()
                     self.onLogoutTap?()
                 } catch {
-                    let errorAlert = UIAlertController(
-                        title: "Ошибка",
-                        message: error.localizedDescription,
-                        preferredStyle: .alert
-                    )
-                    errorAlert.addAction(.init(title: "Ок", style: .default))
+                    let errorAlert = UIAlertController.makeError(error)
                     self.present(errorAlert, animated: true)
                 }
             }
@@ -247,12 +242,7 @@ final class ProfileUserViewController: UIViewController {
                     try await self.viewModel.deleteAccount()
                     self.onDeleteAccountTap?()
                 } catch {
-                    let errorAlert = UIAlertController(
-                        title: "Ошибка",
-                        message: error.localizedDescription,
-                        preferredStyle: .alert
-                    )
-                    errorAlert.addAction(.init(title: "Ок", style: .default))
+                    let errorAlert = UIAlertController.makeError(error)
                     self.present(errorAlert, animated: true)
                 }
             }
