@@ -42,8 +42,8 @@ final class ProfileUserCoordinator: Coordinator {
         vc.onPrivacyTap     = { [weak self] in self?.openPrivacy() }
         
         // Кнопки снизу
-        vc.onLogoutTap = { [weak self] in self?.confirmLogout() }
-        vc.onDeleteAccountTap = { [weak self] in self?.confirmDeleteAccount() }
+        vc.onLogoutTap = { [weak self] in self?.onLogout?() }
+        vc.onDeleteAccountTap = { [weak self] in self?.onDeleteAccount?() }
         
         navigation.setViewControllers([vc], animated: false)
     }
@@ -102,38 +102,5 @@ private extension ProfileUserCoordinator {
             self.remove(coordinator)
         }
         coordinator.start()
-    }
-}
-
-// MARK: - Alerts
-
-private extension ProfileUserCoordinator {
-    
-    func confirmLogout() {
-        let alert = UIAlertController(
-            title: "Выйти из аккаунта?",
-            message: "Вы сможете войти снова в любой момент.",
-            preferredStyle: .actionSheet
-        )
-        alert.addAction(UIAlertAction(title: "Выйти", style: .destructive, handler: { [weak self] _ in
-            self?.onLogout?()
-        }))
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        
-        navigation.present(alert, animated: true)
-    }
-    
-    func confirmDeleteAccount() {
-        let alert = UIAlertController(
-            title: "Удалить аккаунт?",
-            message: "Это действие необратимо. Все данные будут удалены.",
-            preferredStyle: .actionSheet
-        )
-        alert.addAction(UIAlertAction(title: "Удалить аккаунт", style: .destructive, handler: { [weak self] _ in
-            self?.onDeleteAccount?()
-        }))
-        alert.addAction(UIAlertAction(title: "Отмена", style: .cancel))
-        
-        navigation.present(alert, animated: true)
     }
 }

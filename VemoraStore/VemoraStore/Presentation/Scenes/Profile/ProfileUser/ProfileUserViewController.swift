@@ -126,7 +126,9 @@ final class ProfileUserViewController: UIViewController {
     // MARK: - Init
     
     /// Основной init — через VM
-    init(viewModel: ProfileUserViewModelProtocol) {
+    init(
+        viewModel: ProfileUserViewModelProtocol,
+    ) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -217,29 +219,45 @@ final class ProfileUserViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func logoutTapped() {
-        Task { [weak self] in
+        let alert = UIAlertController.makeConfirmation(.logout, onConfirm: { [weak self] in
             guard let self else { return }
-            do {
-                try await viewModel.logout()
-                onLogoutTap?()
-            } catch {
-                // TODO: показать алерт/тост
-                print("Logout failed:", error)
+            Task {
+                do {
+                    try await self.viewModel.logout()
+                    self.onLogoutTap?()
+                } catch {
+                    let errorAlert = UIAlertController(
+                        title: "Ошибка",
+                        message: error.localizedDescription,
+                        preferredStyle: .alert
+                    )
+                    errorAlert.addAction(.init(title: "Ок", style: .default))
+                    self.present(errorAlert, animated: true)
+                }
             }
-        }
+        })
+        present(alert, animated: true)
     }
-    
+
     @objc private func deleteAccountTapped() {
-        Task { [weak self] in
+        let alert = UIAlertController.makeConfirmation(.deleteAccount, onConfirm: { [weak self] in
             guard let self else { return }
-            do {
-                try await viewModel.deleteAccount()
-                onDeleteAccountTap?()
-            } catch {
-                // TODO: показать алерт/тост
-                print("Delete account failed:", error)
+            Task {
+                do {
+                    try await self.viewModel.deleteAccount()
+                    self.onDeleteAccountTap?()
+                } catch {
+                    let errorAlert = UIAlertController(
+                        title: "Ошибка",
+                        message: error.localizedDescription,
+                        preferredStyle: .alert
+                    )
+                    errorAlert.addAction(.init(title: "Ок", style: .default))
+                    self.present(errorAlert, animated: true)
+                }
             }
-        }
+        })
+        present(alert, animated: true)
     }
 }
 

@@ -7,7 +7,6 @@
 
 import UIKit
 import Combine
-import FactoryKit
 
 final class PhoneOrCommentInputSheetViewController: UIViewController {
     
@@ -56,6 +55,7 @@ final class PhoneOrCommentInputSheetViewController: UIViewController {
     }()
     
     private let textViewContainer = UIView()
+    
     private let textView: UITextView = {
         let textView = UITextView()
         textView.font = .systemFont(ofSize: 15)
