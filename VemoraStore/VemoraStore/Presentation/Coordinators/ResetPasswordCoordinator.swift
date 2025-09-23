@@ -6,25 +6,34 @@
 //
 
 import UIKit
-import FactoryKit
 
-final class ResetPasswordCoordinator: Coordinator {
+final class ResetPasswordCoordinator: ResetPasswordCoordinatingProtocol {
 
     // MARK: - Deps
+    
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
+    
+    private let viewModelFactory: ViewModelBuildingProtocol
 
     // MARK: - Callbacks
+    
     var onFinish: (() -> Void)?
 
     // MARK: - Init
-    init(navigation: UINavigationController) {
+    
+    init(
+        navigation: UINavigationController,
+        viewModelFactory: ViewModelBuildingProtocol
+    ) {
         self.navigation = navigation
+        self.viewModelFactory = viewModelFactory
     }
 
     // MARK: - Start
+    
     func start() {
-        let vm = Container.shared.passwordResetViewModel()
+        let vm = viewModelFactory.makeResetPasswordViewModel()
         let vc = ResetPasswordViewController(viewModel: vm)
         vc.hidesBottomBarWhenPushed = true
 

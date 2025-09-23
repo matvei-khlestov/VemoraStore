@@ -6,35 +6,43 @@
 //
 
 import UIKit
-import FactoryKit
 
-final class MapPickerCoordinator: Coordinator {
+final class MapPickerCoordinator: MapPickerCoordinatingProtocol {
     
-    // MARK: - Public callbacks
+    // MARK: - Callbacks
     
     var onFinish: (() -> Void)?
     var onFullAddressPicked: ((String) -> Void)?
     
     // MARK: - Deps
+    
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     
+    private let viewModelFactory: ViewModelBuildingProtocol
+    
     // MARK: - Init
-    init(navigation: UINavigationController) {
+    
+    init(
+        navigation: UINavigationController,
+        viewModelFactory: ViewModelBuildingProtocol
+    ) {
         self.navigation = navigation
+        self.viewModelFactory = viewModelFactory
     }
     
     // MARK: - Start
+    
     func start() {
-        let mapVM = Container.shared.mapPickerViewModel()
+        let mapVM = viewModelFactory.makeMapPickerViewModel()
         
         let vc = MapPickerViewController(
             viewModel: mapVM,
-            makeAddressConfirmVM: {
-                Container.shared.addressConfirmSheetViewModel()
+            makeAddressConfirmVM: { [viewModelFactory] in
+                viewModelFactory.makeAddressConfirmSheetViewModel()
             },
-            makeDeliveryDetailsVM: { base in
-                Container.shared.deliveryDetailsViewModel(base)
+            makeDeliveryDetailsVM: { [viewModelFactory] base in
+                viewModelFactory.makeDeliveryDetailsViewModel(baseAddress: base)
             }
         )
         

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ContactUsCoordinator: Coordinator {
+final class ContactUsCoordinator: ContactUsCoordinatingProtocol {
     
     // MARK: - Props
     

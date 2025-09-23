@@ -9,18 +9,29 @@ import UIKit
 
 final class CatalogCoordinator: CatalogCoordinatingProtocol {
     
+    // MARK: - Properties
+    
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     
+    // MARK: - Factories
+    
     private let viewModelFactory: ViewModelBuildingProtocol
+    private let coordinatorFactory: CoordinatorBuildingProtocol
+    
+    // MARK: - Init
     
     init(
         navigation: UINavigationController,
-        viewModelFactory: ViewModelBuildingProtocol
+        viewModelFactory: ViewModelBuildingProtocol,
+        coordinatorFactory: CoordinatorBuildingProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
+        self.coordinatorFactory = coordinatorFactory
     }
+    
+    // MARK: - Start
     
     func start() {
         let vm = viewModelFactory.makeCatalogViewModel()
@@ -33,8 +44,10 @@ final class CatalogCoordinator: CatalogCoordinatingProtocol {
         navigation.setViewControllers([vc], animated: false)
     }
     
+    // MARK: - Private
+    
     private func showProductDetails(for product: Product) {
-        let detailsCoordinator = ProductDetailsCoordinator(
+        let detailsCoordinator = coordinatorFactory.makeProductDetailsCoordinator(
             navigation: navigation,
             product: product
         )

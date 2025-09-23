@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class PrivacyPolicyCoordinator: Coordinator {
+final class PrivacyPolicyCoordinator: PrivacyPolicyCoordinatingProtocol {
     
     // MARK: - Props
     

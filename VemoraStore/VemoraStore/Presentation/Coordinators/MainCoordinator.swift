@@ -6,53 +6,62 @@
 //
 
 import UIKit
-import FactoryKit
 
-final class MainCoordinator: Coordinator {
+final class MainCoordinator: MainCoordinatingProtocol {
+    
+    // MARK: - Deps
     
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     var onLogout: (() -> Void)?
     
-    init(navigation: UINavigationController) {
+    private let viewModelFactory: ViewModelBuildingProtocol
+    private let coordinatorFactory: CoordinatorBuildingProtocol
+    
+    // MARK: - Init
+    
+    init(
+        navigation: UINavigationController,
+        viewModelFactory: ViewModelBuildingProtocol,
+        coordinatorFactory: CoordinatorBuildingProtocol
+    ) {
         self.navigation = navigation
+        self.viewModelFactory = viewModelFactory
+        self.coordinatorFactory = coordinatorFactory
     }
     
+    // MARK: - Start
+    
     func start() {
-        
-        let catalogVM = Container.shared.catalogViewModel()
-        let catalogVC = CatalogViewController(viewModel: catalogVM)
-        let catalogNav = TabBarFactory.makeNav(root: catalogVC, tab: .catalog)
-        let catalog = CatalogCoordinator(navigation: catalogNav)
+        // Catalog
+        let catalogNav = TabBarFactory.makeNav(root: UIViewController(), tab: .catalog)
+        let catalog = coordinatorFactory.makeCatalogCoordinator(navigation: catalogNav)
         add(catalog)
         catalog.start()
         
-        let favoritesVM = Container.shared.favoritesViewModel()
-        let favoritesVC = FavoritesViewController(viewModel: favoritesVM)
-        let favoritesNav = TabBarFactory.makeNav(root: favoritesVC, tab: .favorites)
-        let favorites = FavoritesCoordinator(navigation: favoritesNav)
+        // Favorites
+        let favoritesNav = TabBarFactory.makeNav(root: UIViewController(), tab: .favorites)
+        let favorites = coordinatorFactory.makeFavoritesCoordinator(navigation: favoritesNav)
         add(favorites)
         favorites.start()
         
-        let cartVM = Container.shared.cartViewModel()
-        let cartVC = CartViewController(viewModel: cartVM)
-        let cartNav = TabBarFactory.makeNav(root: cartVC, tab: .cart)
-        let cart = CartCoordinator(navigation: cartNav)
+        // Cart
+        let cartNav = TabBarFactory.makeNav(root: UIViewController(), tab: .cart)
+        let cart = coordinatorFactory.makeCartCoordinator(navigation: cartNav)
         add(cart)
         cart.start()
         
-        let profileUserVM = Container.shared.profileUserViewModel()
-        let profileVC = ProfileUserViewController(viewModel: profileUserVM)
-        let profileNav = TabBarFactory.makeNav(root: profileVC, tab: .profile)
-        let profile = ProfileUserCoordinator(navigation: profileNav)
+        // Profile (User)
+        let profileNav = TabBarFactory.makeNav(root: UIViewController(), tab: .profile)
+        let profile = coordinatorFactory.makeProfileGuestCoordinator(navigation: profileNav)
         add(profile)
         profile.start()
         
+        // Tab bar
         let tab = TabBarFactory.makeTabBar(
             viewControllers: [catalogNav, favoritesNav, cartNav, profileNav],
             selected: .catalog
         )
-        
         navigation.setViewControllers([tab], animated: true)
     }
 }
