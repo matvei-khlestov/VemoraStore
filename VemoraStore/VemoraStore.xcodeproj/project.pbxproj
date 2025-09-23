@@ -180,6 +180,14 @@
 		A085519B2E8227E6004633CA /* MainCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085519A2E8227E6004633CA /* MainCoordinatingProtocol.swift */; };
 		A085519D2E822A01004633CA /* AppCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085519C2E822A01004633CA /* AppCoordinatingProtocol.swift */; };
 		A085519F2E822C41004633CA /* CompositionRoot.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085519E2E822C41004633CA /* CompositionRoot.swift */; };
+		A08551A22E8337A2004633CA /* AvatarStorageServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551A12E8337A2004633CA /* AvatarStorageServiceProtocol.swift */; };
+		A08551A42E8337DB004633CA /* AvatarStorageService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551A32E8337DB004633CA /* AvatarStorageService.swift */; };
+		A08551A72E833844004633CA /* EditProfileViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551A62E833844004633CA /* EditProfileViewModelProtocol.swift */; };
+		A08551A92E83387C004633CA /* EditProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551A82E83387C004633CA /* EditProfileViewModel.swift */; };
+		A08551AB2E833A9A004633CA /* EditProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551AA2E833A9A004633CA /* EditProfileViewController.swift */; };
+		A08551AD2E833B6A004633CA /* EditProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551AC2E833B6A004633CA /* EditProfileCoordinator.swift */; };
+		A08551AF2E833B80004633CA /* EditProfileCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551AE2E833B80004633CA /* EditProfileCoordinatingProtocol.swift */; };
+		A08551B12E835131004633CA /* EditProfileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551B02E835131004633CA /* EditProfileRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -376,6 +384,14 @@
 		A085519A2E8227E6004633CA /* MainCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainCoordinatingProtocol.swift; sourceTree = "<group>"; };
 		A085519C2E822A01004633CA /* AppCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinatingProtocol.swift; sourceTree = "<group>"; };
 		A085519E2E822C41004633CA /* CompositionRoot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompositionRoot.swift; sourceTree = "<group>"; };
+		A08551A12E8337A2004633CA /* AvatarStorageServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarStorageServiceProtocol.swift; sourceTree = "<group>"; };
+		A08551A32E8337DB004633CA /* AvatarStorageService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarStorageService.swift; sourceTree = "<group>"; };
+		A08551A62E833844004633CA /* EditProfileViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModelProtocol.swift; sourceTree = "<group>"; };
+		A08551A82E83387C004633CA /* EditProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewModel.swift; sourceTree = "<group>"; };
+		A08551AA2E833A9A004633CA /* EditProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileViewController.swift; sourceTree = "<group>"; };
+		A08551AC2E833B6A004633CA /* EditProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileCoordinator.swift; sourceTree = "<group>"; };
+		A08551AE2E833B80004633CA /* EditProfileCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileCoordinatingProtocol.swift; sourceTree = "<group>"; };
+		A08551B02E835131004633CA /* EditProfileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -527,6 +543,7 @@
 		A0854FDF2E611B1B004633CA /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				A08551A02E833782004633CA /* AvatarStorage */,
 				A0854FE02E612180004633CA /* Firebase */,
 				A0854FED2E61224B004633CA /* Local */,
 				A0854FF22E61229E004633CA /* Location */,
@@ -625,9 +642,9 @@
 			children = (
 				A085500F2E61255A004633CA /* Coordinator.swift */,
 				A08550112E61256B004633CA /* AppCoordinator.swift */,
+				A08550152E61258B004633CA /* MainCoordinator.swift */,
 				A08550132E61257B004633CA /* AuthCoordinator.swift */,
 				A085514A2E809897004633CA /* ResetPasswordCoordinator.swift */,
-				A08550152E61258B004633CA /* MainCoordinator.swift */,
 				A08550642E63F518004633CA /* CatalogCoordinator.swift */,
 				A08550812E6C1E75004633CA /* ProductDetailsCoordinator.swift */,
 				A08550662E63F7EC004633CA /* FavoritesCoordinator.swift */,
@@ -641,6 +658,7 @@
 				A08551122E7C4FDD004633CA /* OrdersCoordinator.swift */,
 				A085509B2E74817F004633CA /* MapPickerCoordinator.swift */,
 				A08550A12E748BE9004633CA /* OrderSuccessCoordinator.swift */,
+				A08551AC2E833B6A004633CA /* EditProfileCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -648,6 +666,7 @@
 		A08550172E6125A4004633CA /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				A08551A52E833828004633CA /* EditProfile */,
 				A08550182E6125CC004633CA /* Auth */,
 				A08550EF2E7AB680004633CA /* PrivacyPolicy */,
 				A08550E52E79F724004633CA /* ContactUs */,
@@ -788,7 +807,11 @@
 		A085505F2E63EBD0004633CA /* UI */ = {
 			isa = PBXGroup;
 			children = (
-				A085515D2E818589004633CA /* UIComponents */,
+				A08551182E7C6085004633CA /* Views */,
+				A08550AC2E783E72004633CA /* Buttons */,
+				A08550A92E782EFE004633CA /* TextFields */,
+				A08550962E741FFD004633CA /* BottomSheet's */,
+				A08551542E8182C5004633CA /* Alert's */,
 			);
 			path = UI;
 			sourceTree = "<group>";
@@ -988,6 +1011,7 @@
 				A08550BD2E789D27004633CA /* AddressSearchServiceProtocol.swift */,
 				A08550D22E79BA69004633CA /* GeocodingServiceProtocol.swift */,
 				A08551142E7C5405004633CA /* OrdersServiceProtocol.swift */,
+				A08551A12E8337A2004633CA /* AvatarStorageServiceProtocol.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1018,6 +1042,7 @@
 				A08551672E81C9BD004633CA /* ProductDetailsViewModelProtocol.swift */,
 				A08551692E81D024004633CA /* FavoritesViewModelProtocol.swift */,
 				A085516B2E81D213004633CA /* CartViewModelProtocol.swift */,
+				A08551A62E833844004633CA /* EditProfileViewModelProtocol.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1212,18 +1237,6 @@
 			path = "UIView+Animations";
 			sourceTree = "<group>";
 		};
-		A085515D2E818589004633CA /* UIComponents */ = {
-			isa = PBXGroup;
-			children = (
-				A08551182E7C6085004633CA /* Views */,
-				A08550AC2E783E72004633CA /* Buttons */,
-				A08550A92E782EFE004633CA /* TextFields */,
-				A08550962E741FFD004633CA /* BottomSheet's */,
-				A08551542E8182C5004633CA /* Alert's */,
-			);
-			path = UIComponents;
-			sourceTree = "<group>";
-		};
 		A085516F2E81F043004633CA /* Factories */ = {
 			isa = PBXGroup;
 			children = (
@@ -1236,6 +1249,8 @@
 		A08551722E81F2A0004633CA /* Coordinators */ = {
 			isa = PBXGroup;
 			children = (
+				A085519A2E8227E6004633CA /* MainCoordinatingProtocol.swift */,
+				A085519C2E822A01004633CA /* AppCoordinatingProtocol.swift */,
 				A08551922E8220A9004633CA /* AuthCoordinatingProtocol.swift */,
 				A08551902E821E2C004633CA /* ResetPasswordCoordinatingProtocol.swift */,
 				A08551732E81F2EC004633CA /* CatalogCoordinatingProtocol.swift */,
@@ -1250,9 +1265,8 @@
 				A085518E2E821AEF004633CA /* ContactUsCoordinatingProtocol.swift */,
 				A08551942E822223004633CA /* ProfileGuestCoordinatingProtocol.swift */,
 				A08551962E822309004633CA /* ProfileUserCoordinatingProtocol.swift */,
+				A08551AE2E833B80004633CA /* EditProfileCoordinatingProtocol.swift */,
 				A08551982E822525004633CA /* OrdersCoordinatingProtocol.swift */,
-				A085519A2E8227E6004633CA /* MainCoordinatingProtocol.swift */,
-				A085519C2E822A01004633CA /* AppCoordinatingProtocol.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -1264,6 +1278,24 @@
 				A085516D2E81F010004633CA /* ViewModelBuildingProtocol.swift */,
 			);
 			path = Factories;
+			sourceTree = "<group>";
+		};
+		A08551A02E833782004633CA /* AvatarStorage */ = {
+			isa = PBXGroup;
+			children = (
+				A08551A32E8337DB004633CA /* AvatarStorageService.swift */,
+			);
+			path = AvatarStorage;
+			sourceTree = "<group>";
+		};
+		A08551A52E833828004633CA /* EditProfile */ = {
+			isa = PBXGroup;
+			children = (
+				A08551A82E83387C004633CA /* EditProfileViewModel.swift */,
+				A08551AA2E833A9A004633CA /* EditProfileViewController.swift */,
+				A08551B02E835131004633CA /* EditProfileRow.swift */,
+			);
+			path = EditProfile;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1425,8 +1457,10 @@
 				A08551932E8220A9004633CA /* AuthCoordinatingProtocol.swift in Sources */,
 				A08551832E820888004633CA /* CoordinatorFactory.swift in Sources */,
 				A08551132E7C4FDD004633CA /* OrdersCoordinator.swift in Sources */,
+				A08551AF2E833B80004633CA /* EditProfileCoordinatingProtocol.swift in Sources */,
 				A08551872E8212A7004633CA /* FavoritesCoordinatingProtocol.swift in Sources */,
 				A08551262E7D94D6004633CA /* FormTextField.swift in Sources */,
+				A08551A22E8337A2004633CA /* AvatarStorageServiceProtocol.swift in Sources */,
 				A08550C02E789FA8004633CA /* AddressFormattingProtocol.swift in Sources */,
 				A08550C22E78A407004633CA /* DeliveryDetailsViewModel.swift in Sources */,
 				A08551172E7C5447004633CA /* OrdersService.swift in Sources */,
@@ -1472,6 +1506,7 @@
 				A08550C72E78B08A004633CA /* DeliveryDetailsViewModelProtocol.swift in Sources */,
 				A085510D2E7C4B84004633CA /* OrdersViewModelProtocol.swift in Sources */,
 				A08550162E61258B004633CA /* MainCoordinator.swift in Sources */,
+				A08551A72E833844004633CA /* EditProfileViewModelProtocol.swift in Sources */,
 				A08550A22E748BE9004633CA /* OrderSuccessCoordinator.swift in Sources */,
 				A085509C2E74817F004633CA /* MapPickerCoordinator.swift in Sources */,
 				A08551222E7D9415004633CA /* AuthField.swift in Sources */,
@@ -1501,14 +1536,17 @@
 				A08551392E80789D004633CA /* SignInViewModel.swift in Sources */,
 				A08551992E822525004633CA /* OrdersCoordinatingProtocol.swift in Sources */,
 				A08551352E807837004633CA /* SignInViewModelProtocol.swift in Sources */,
+				A08551A92E83387C004633CA /* EditProfileViewModel.swift in Sources */,
 				A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */,
 				A08550F32E7AB6E0004633CA /* PrivacyPolicyViewController.swift in Sources */,
 				A08550692E64005F004633CA /* CartCoordinator.swift in Sources */,
 				A08551322E7DE3B4004633CA /* UITextField+ext.swift in Sources */,
+				A08551A42E8337DB004633CA /* AvatarStorageService.swift in Sources */,
 				A08550912E71D835004633CA /* DeliveryAddressCell.swift in Sources */,
 				A08551972E822309004633CA /* ProfileUserCoordinatingProtocol.swift in Sources */,
 				A08551002E7AD580004633CA /* ProfileUserViewModel.swift in Sources */,
 				A0854FFB2E6123A5004633CA /* Category.swift in Sources */,
+				A08551B12E835131004633CA /* EditProfileRow.swift in Sources */,
 				A08550572E6144CB004633CA /* Profile.swift in Sources */,
 				A08550022E612411004633CA /* AuthServiceProtocol.swift in Sources */,
 				A08550512E613F2D004633CA /* Container+ViewModels.swift in Sources */,
@@ -1519,6 +1557,7 @@
 				A08551092E7C4A95004633CA /* OrderItemCell.swift in Sources */,
 				A08550E72E79F73B004633CA /* ContactUsViewController.swift in Sources */,
 				A085514B2E809897004633CA /* ResetPasswordCoordinator.swift in Sources */,
+				A08551AD2E833B6A004633CA /* EditProfileCoordinator.swift in Sources */,
 				A08550A42E749374004633CA /* OrderSuccessViewModel.swift in Sources */,
 				A08550F82E7AD084004633CA /* ProfileUserViewController.swift in Sources */,
 				A08550142E61257B004633CA /* AuthCoordinator.swift in Sources */,
@@ -1559,6 +1598,7 @@
 				A08550D32E79BA69004633CA /* GeocodingServiceProtocol.swift in Sources */,
 				A085504F2E613EF8004633CA /* Container+Services.swift in Sources */,
 				A085500C2E612458004633CA /* NotificationServiceProtocol.swift in Sources */,
+				A08551AB2E833A9A004633CA /* EditProfileViewController.swift in Sources */,
 				A08550362E612A62004633CA /* CartViewModel.swift in Sources */,
 				A085502B2E612977004633CA /* FavoritesViewController.swift in Sources */,
 				A08550232E61265E004633CA /* ProductCell.swift in Sources */,

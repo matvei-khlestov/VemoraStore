@@ -174,6 +174,17 @@ extension Container {
         }
     }
 
+    // MARK: - Edit Profile
+
+    var editProfileCoordinator: ParameterFactory<UINavigationController, EditProfileCoordinatingProtocol> {
+        self { navigation in
+            EditProfileCoordinator(
+                navigation: navigation,
+                viewModelFactory: self.viewModelFactory()
+            )
+        }
+    }
+
     // MARK: - Main
     
     var mainCoordinator: ParameterFactory<UINavigationController, MainCoordinatingProtocol> {

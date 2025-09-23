@@ -32,6 +32,11 @@ final class AppCoordinator: AppCoordinatingProtocol {
     // MARK: - Start
     
     func start() {
+//        if authService.currentUserId != nil {
+//            showMain()
+//        } else {
+//            showAuth()
+//        }
         showMain()
     }
     
@@ -49,13 +54,20 @@ final class AppCoordinator: AppCoordinatingProtocol {
     
     private func showAuth(onFinish: (() -> Void)? = nil) {
         navigation.setNavigationBarHidden(false, animated: false)
-        
+
         let auth = coordinatorFactory.makeAuthCoordinator(navigation: navigation)
         add(auth)
+
         auth.onFinish = { [weak self, weak auth] in
-            if let auth { self?.remove(auth) }
-            onFinish?() ?? self?.showMain()
+            guard let self else { return }
+            if let auth { self.remove(auth) }
+            if let onFinish {
+                onFinish()
+            } else {
+                self.showMain()
+            }
         }
+
         auth.start()
     }
     
@@ -65,6 +77,11 @@ final class AppCoordinator: AppCoordinatingProtocol {
         let main = coordinatorFactory.makeMainCoordinator(navigation: navigation)
         add(main)
         main.onLogout = { [weak self, weak main] in
+            if let main { self?.remove(main) }
+            self?.showAuth()
+        }
+        
+        main.onDeleteAccount = { [weak self, weak main] in
             if let main { self?.remove(main) }
             self?.showAuth()
         }

@@ -52,6 +52,7 @@ final class ProfileUserCoordinator: ProfileUserCoordinatingProtocol {
         // Кнопки снизу
         vc.onLogoutTap = { [weak self] in self?.onLogout?() }
         vc.onDeleteAccountTap = { [weak self] in self?.onDeleteAccount?() }
+        vc.onEditProfileTap = { [weak self] in self?.openEditProfile() }
         
         navigation.setViewControllers([vc], animated: false)
     }
@@ -62,12 +63,13 @@ final class ProfileUserCoordinator: ProfileUserCoordinatingProtocol {
 private extension ProfileUserCoordinator {
     
     func openEditProfile() {
-        // TODO: замените на реальный экран редактирования профиля при готовности
-        let vc = UIViewController()
-        vc.view.backgroundColor = .systemBackground
-        vc.title = "Редактировать профиль"
-        vc.hidesBottomBarWhenPushed = true
-        navigation.pushViewController(vc, animated: true)
+        let coordinator = coordinatorFactory.makeEditProfileCoordinator(navigation: navigation)
+        add(coordinator)
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            guard let self, let coordinator else { return }
+            self.remove(coordinator)
+        }
+        coordinator.start()
     }
     
     func openOrders() {

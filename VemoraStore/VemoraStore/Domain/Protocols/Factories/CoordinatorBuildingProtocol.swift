@@ -100,6 +100,12 @@ protocol CoordinatorBuildingProtocol {
         navigation: UINavigationController
     ) -> CartCoordinatingProtocol
 
+    // MARK: - Edit Profile
+    
+    func makeEditProfileCoordinator(
+        navigation: UINavigationController
+    ) -> EditProfileCoordinatingProtocol
+
     // MARK: - Main
 
     func makeMainCoordinator(

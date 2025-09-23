@@ -12,7 +12,7 @@ final class AuthContainerViewController: UIViewController {
 
     // MARK: - Public callbacks
     
-    var onFinish: (() -> Void)?
+    var onBack: (() -> Void)?
     var onOpenPrivacy: (() -> Void)?
     var onForgotPassword: (() -> Void)?
 
@@ -40,11 +40,11 @@ final class AuthContainerViewController: UIViewController {
     private func setupCallbacks(startMode mode: Mode) {
         // события из детей
         signInVC.onOpenSignUp     = { [weak self] in self?.setMode(.signUp, animated: true) }
-        signInVC.onBack           = { [weak self] in self?.onFinish?() }
+        signInVC.onBack           = { [weak self] in self?.onBack?() }
         signInVC.onForgotPassword = { [weak self] in self?.onForgotPassword?() }
 
         signUpVC.onLogin       = { [weak self] in self?.setMode(.signIn, animated: true) }
-        signUpVC.onBack        = { [weak self] in self?.onFinish?() }
+        signUpVC.onBack        = { [weak self] in self?.onBack?() }
         signUpVC.onOpenPrivacy = { [weak self] in self?.onOpenPrivacy?() }
 
         setMode(mode, animated: false)
@@ -59,13 +59,7 @@ final class AuthContainerViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let currentTitle = (current === signInVC) ? "Вход" : "Регистрация"
-        setupNavigationBarWithNavLeftItem(
-            title: currentTitle,
-            action: #selector(backTapped),
-            largeTitleDisplayMode: .always,
-            prefersLargeTitles: true
-        )
+        setupNavigationBar()
     }
 
     // MARK: - Public Methods
@@ -77,6 +71,16 @@ final class AuthContainerViewController: UIViewController {
     }
 
     // MARK: - Private Methods
+    
+    private func setupNavigationBar() {
+        let currentTitle = (current === signInVC) ? "Вход" : "Регистрация"
+        setupNavigationBar(
+            title: currentTitle,
+            largeTitleDisplayMode: .always,
+            prefersLargeTitles: true
+        )
+        navigationItem.hidesBackButton = true
+    }
     
     private func swapChild(to newVC: UIViewController, animated: Bool) {
         let oldVC = current
@@ -116,6 +120,6 @@ final class AuthContainerViewController: UIViewController {
     // MARK: - Actions
     
     @objc private func backTapped() {
-        onFinish?()
+        onBack?()
     }
 }

@@ -31,6 +31,7 @@ protocol ViewModelBuildingProtocol {
     // MARK: - Profile
     
     func makeProfileUserViewModel() -> ProfileUserViewModelProtocol
+    func makeEditProfileViewModel() -> EditProfileViewModelProtocol
     
     // MARK: - Checkout
     
