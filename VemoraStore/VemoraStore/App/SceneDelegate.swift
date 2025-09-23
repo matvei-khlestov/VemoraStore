@@ -10,7 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    private var appCoordinator: AppCoordinator?
+    private var appCoordinator: AppCoordinatingProtocol?
     
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
@@ -22,7 +22,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window?.rootViewController = nav
         window?.makeKeyAndVisible()
         
-        let coordinator = AppCoordinator(navigation: nav)
+        let factory = CompositionRoot.makeCoordinatorFactory()
+        let coordinator = factory.makeAppCoordinator(navigation: nav)
         self.appCoordinator = coordinator
         coordinator.start()
     }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class AboutCoordinator: Coordinator {
+final class AboutCoordinator: AboutCoordinatingProtocol {
     
     // MARK: - Properties
     

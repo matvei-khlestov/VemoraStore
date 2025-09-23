@@ -6,9 +6,8 @@
 //
 
 import UIKit
-import FactoryKit
 
-final class ProfileUserCoordinator: Coordinator {
+final class ProfileUserCoordinator: ProfileUserCoordinatingProtocol {
     
     // MARK: - Coordinator
     
@@ -17,21 +16,30 @@ final class ProfileUserCoordinator: Coordinator {
     
     // MARK: - Callbacks (наружу)
     
-    /// Сообщить аппа-уровню/родителю, что пользователь нажал «Выйти»
     var onLogout: (() -> Void)?
-    /// Сообщить, что подтвердили удаление аккаунта
     var onDeleteAccount: (() -> Void)?
+    
+    // MARK: - Factories
+    
+    private let viewModelFactory: ViewModelBuildingProtocol
+    private let coordinatorFactory: CoordinatorBuildingProtocol
     
     // MARK: - Init
     
-    init(navigation: UINavigationController) {
+    init(
+        navigation: UINavigationController,
+        viewModelFactory: ViewModelBuildingProtocol,
+        coordinatorFactory: CoordinatorBuildingProtocol
+    ) {
         self.navigation = navigation
+        self.viewModelFactory = viewModelFactory
+        self.coordinatorFactory = coordinatorFactory
     }
     
     // MARK: - Start
     
     func start() {
-        let viewModel = Container.shared.profileUserViewModel()
+        let viewModel = viewModelFactory.makeProfileUserViewModel()
         let vc = ProfileUserViewController(viewModel: viewModel)
         
         // Роутинг по ячейкам
@@ -54,7 +62,7 @@ final class ProfileUserCoordinator: Coordinator {
 private extension ProfileUserCoordinator {
     
     func openEditProfile() {
-        // TODO: замените на ваш контроллер редактирования профиля
+        // TODO: замените на реальный экран редактирования профиля при готовности
         let vc = UIViewController()
         vc.view.backgroundColor = .systemBackground
         vc.title = "Редактировать профиль"
@@ -63,19 +71,17 @@ private extension ProfileUserCoordinator {
     }
     
     func openOrders() {
-        let coordinator = OrdersCoordinator(navigation: navigation)
+        let coordinator = coordinatorFactory.makeOrdersCoordinator(navigation: navigation)
         add(coordinator)
-
         coordinator.onFinish = { [weak self, weak coordinator] in
             guard let self, let coordinator else { return }
             self.remove(coordinator)
         }
-
         coordinator.start()
     }
     
     func openAbout() {
-        let coordinator = AboutCoordinator(navigation: navigation)
+        let coordinator = coordinatorFactory.makeAboutCoordinator(navigation: navigation)
         add(coordinator)
         coordinator.onFinish = { [weak self, weak coordinator] in
             guard let self, let coordinator else { return }
@@ -85,7 +91,7 @@ private extension ProfileUserCoordinator {
     }
     
     func openPrivacy() {
-        let coordinator = PrivacyPolicyCoordinator(navigation: navigation)
+        let coordinator = coordinatorFactory.makePrivacyPolicyCoordinator(navigation: navigation)
         add(coordinator)
         coordinator.onFinish = { [weak self, weak coordinator] in
             guard let self, let coordinator else { return }
@@ -95,7 +101,7 @@ private extension ProfileUserCoordinator {
     }
     
     func openContacts() {
-        let coordinator = ContactUsCoordinator(navigation: self.navigation)
+        let coordinator = coordinatorFactory.makeContactUsCoordinator(navigation: navigation)
         add(coordinator)
         coordinator.onFinish = { [weak self, weak coordinator] in
             guard let self, let coordinator else { return }

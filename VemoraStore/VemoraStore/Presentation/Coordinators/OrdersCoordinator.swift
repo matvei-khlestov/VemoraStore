@@ -6,29 +6,39 @@
 //
 
 import UIKit
-import FactoryKit
 
-final class OrdersCoordinator: Coordinator {
+final class OrdersCoordinator: OrdersCoordinatingProtocol {
     
     // MARK: - Coordinator
+    
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     
-    /// Сообщает родителю, что коорд. можно удалить (remove(child))
+    // MARK: - Callbacks
+    
     var onFinish: (() -> Void)?
     
+    // MARK: - Deps
+    
+    private let viewModelFactory: ViewModelBuildingProtocol
+    
     // MARK: - Init
-    init(navigation: UINavigationController) {
+    
+    init(
+        navigation: UINavigationController,
+        viewModelFactory: ViewModelBuildingProtocol
+    ) {
         self.navigation = navigation
+        self.viewModelFactory = viewModelFactory
     }
     
     // MARK: - Start
+    
     func start() {
-        let viewModel = Container.shared.ordersViewModel()
+        let viewModel = viewModelFactory.makeOrdersViewModel()
         let vc = OrdersViewController(viewModel: viewModel)
         vc.hidesBottomBarWhenPushed = true
         
-        // Навигация назад
         vc.onBack = { [weak self] in
             guard let self else { return }
             self.navigation.popViewController(animated: true)

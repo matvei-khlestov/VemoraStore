@@ -6,10 +6,8 @@
 //
 
 import UIKit
-import SafariServices
-import FactoryKit
 
-final class ProfileGuestCoordinator: Coordinator {
+final class ProfileGuestCoordinator: ProfileGuestCoordinatingProtocol {
     
     // MARK: - Properties
     
@@ -19,10 +17,20 @@ final class ProfileGuestCoordinator: Coordinator {
     // Внешние события (например, при успешной авторизации)
     var onAuthCompleted: (() -> Void)?
     
+    // Фабрики
+    private let viewModelFactory: ViewModelBuildingProtocol
+    private let coordinatorFactory: CoordinatorBuildingProtocol
+    
     // MARK: - Init
     
-    init(navigation: UINavigationController) {
+    init(
+        navigation: UINavigationController,
+        viewModelFactory: ViewModelBuildingProtocol,
+        coordinatorFactory: CoordinatorBuildingProtocol
+    ) {
         self.navigation = navigation
+        self.viewModelFactory = viewModelFactory
+        self.coordinatorFactory = coordinatorFactory
     }
     
     // MARK: - Start
@@ -51,11 +59,8 @@ final class ProfileGuestCoordinator: Coordinator {
 
 private extension ProfileGuestCoordinator {
     func openLogin() {
-        // Стартуем флоу авторизации через координатор
-        let auth = AuthCoordinator(
-            navigation: navigation,
-            authService: Container.shared.authService()
-        )
+        // Стартуем флоу авторизации через фабрику координаторов
+        let auth = coordinatorFactory.makeAuthCoordinator(navigation: navigation)
         add(auth)
         auth.onFinish = { [weak self, weak auth] in
             guard let self else { return }
@@ -67,26 +72,32 @@ private extension ProfileGuestCoordinator {
     }
     
     func openAbout() {
-        let coordinator = AboutCoordinator(navigation: navigation)
+        let coordinator = coordinatorFactory.makeAboutCoordinator(navigation: navigation)
         add(coordinator)
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            guard let self, let coordinator else { return }
+            self.remove(coordinator)
+        }
         coordinator.start()
     }
     
     func openPrivacy() {
-        let coordinator = PrivacyPolicyCoordinator(navigation: navigation)
+        let coordinator = coordinatorFactory.makePrivacyPolicyCoordinator(navigation: navigation)
         add(coordinator)
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            guard let self, let coordinator else { return }
+            self.remove(coordinator)
+        }
         coordinator.start()
     }
     
     func openContacts() {
-        let coordinator = ContactUsCoordinator(navigation: self.navigation)
-        self.add(coordinator)
+        let coordinator = coordinatorFactory.makeContactUsCoordinator(navigation: navigation)
+        add(coordinator)
+        coordinator.onFinish = { [weak self, weak coordinator] in
+            guard let self, let coordinator else { return }
+            self.remove(coordinator)
+        }
         coordinator.start()
-    }
-    
-    func showInfo(_ text: String) {
-        let alert = UIAlertController(title: "Vemora", message: text, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Ок", style: .default))
-        navigation.present(alert, animated: true)
     }
 }

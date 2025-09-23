@@ -20,8 +20,11 @@ final class CheckoutViewController: UIViewController {
     
     private let viewModel: CheckoutViewModelProtocol
     
-    // ViewModel factory for bottom sheets (unified)
-    private let makeSheetVM: (PhoneOrCommentInputSheetViewModel.Kind, String?, String?) -> PhoneOrCommentInputSheetViewModelProtocol
+    private let makeSheetVM: (
+        PhoneOrCommentInputSheetViewModel.Kind,
+        String?,
+        String?
+    ) -> PhoneOrCommentInputSheetViewModelProtocol
     
     // MARK: - UI
     

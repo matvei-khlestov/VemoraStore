@@ -6,29 +6,39 @@
 //
 
 import UIKit
-import FactoryKit
 
-final class CheckoutCoordinator: Coordinator {
+final class CheckoutCoordinator: CheckoutCoordinatingProtocol {
+    
+    // MARK: - Properties
     
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
-    
     var onFinish: (() -> Void)?
     
-    private let checkoutViewModel: CheckoutViewModelProtocol
+    // MARK: - Factories
+    
+    private let viewModelFactory: ViewModelBuildingProtocol
+    private let coordinatorFactory: CoordinatorBuildingProtocol
+
+    // MARK: - Init
     
     init(
         navigation: UINavigationController,
-        viewModel: CheckoutViewModelProtocol = Container.shared.checkoutViewModel()
+        viewModelFactory: ViewModelBuildingProtocol,
+        coordinatorFactory: CoordinatorBuildingProtocol
     ) {
         self.navigation = navigation
-        self.checkoutViewModel = viewModel
+        self.viewModelFactory = viewModelFactory
+        self.coordinatorFactory = coordinatorFactory
     }
     
+    // MARK: - Start
+    
     func start() {
+        let vm = viewModelFactory.makeCheckoutViewModel()
         let vc = CheckoutViewController(
-            viewModel: checkoutViewModel,
-            makeSheetVM: { kind,initialPhone,initialComment  in
+            viewModel: vm,
+            makeSheetVM: { kind, initialPhone, initialComment in
                 PhoneOrCommentInputSheetViewModel(
                     kind: kind,
                     initialPhone: initialPhone,
@@ -38,13 +48,11 @@ final class CheckoutCoordinator: Coordinator {
         )
         
         vc.onPickOnMap = { [weak self] in
-            self?.showMapPicker()
+            self?.showMapPicker(viewModel: vm)
         }
         vc.onFinished = { [weak self] in
-            // Показываем экран успешного оформления
-            self?.showOrderSuccess(orderId: nil)
+            self?.showOrderSuccess()
         }
-        
         vc.onBack = { [weak self] in
             self?.navigation.popViewController(animated: true)
         }
@@ -52,14 +60,15 @@ final class CheckoutCoordinator: Coordinator {
         navigation.pushViewController(vc, animated: true)
     }
     
-    private func showMapPicker() {
-        let picker = MapPickerCoordinator(navigation: navigation)
+    // MARK: - Private
+    
+    private func showMapPicker(viewModel: CheckoutViewModelProtocol) {
+        let picker = coordinatorFactory.makeMapPickerCoordinator(navigation: navigation)
         add(picker)
         
         picker.onFullAddressPicked = { [weak self, weak picker] fullAddress in
             guard let self else { return }
-            self.checkoutViewModel.updateDeliveryAddress(fullAddress)
-            
+            viewModel.updateDeliveryAddress(fullAddress)
             if let picker { self.remove(picker) }
         }
         
@@ -70,14 +79,12 @@ final class CheckoutCoordinator: Coordinator {
         picker.start()
     }
     
-    private func showOrderSuccess(orderId: String?) {
-        let success = OrderSuccessCoordinator(navigation: navigation, orderId: orderId)
+    private func showOrderSuccess() {
+        let success = coordinatorFactory.makeOrderSuccessCoordinator(navigation: navigation)
         
-        success.onOpenOrder = { [weak self] orderId in
-            // Открываем детали заказа
+        success.onOpenOrder = { [weak self] in
             let detailsVC = UIViewController()
             detailsVC.view.backgroundColor = .systemBackground
-            detailsVC.title = "Заказ \(orderId ?? "")"
             self?.navigation.pushViewController(detailsVC, animated: true)
         }
         

@@ -9,41 +9,51 @@ import Foundation
 
 protocol ViewModelBuildingProtocol {
     
-    // Auth
+    // MARK: - Auth
+    
     func makeSignUpViewModel() -> SignUpViewModelProtocol
     func makeSignInViewModel() -> SignInViewModelProtocol
     func makeResetPasswordViewModel() -> ResetPasswordViewModelProtocol
     
-    // Catalog
+    // MARK: - Catalog
+    
     func makeCatalogViewModel() -> CatalogViewModelProtocol
     func makeProductDetailsViewModel(product: Product) -> ProductDetailsViewModelProtocol
     
-    // Favorites
+    // MARK: - Favorites
+    
     func makeFavoritesViewModel() -> FavoritesViewModelProtocol
     
-    // Cart
+    // MARK: - Cart
+    
     func makeCartViewModel() -> CartViewModelProtocol
     
-    // Profile
+    // MARK: - Profile
+    
     func makeProfileUserViewModel() -> ProfileUserViewModelProtocol
     
-    // Checkout
+    // MARK: - Checkout
+    
     func makeCheckoutViewModel() -> CheckoutViewModelProtocol
     
-    // Orders
+    // MARK: - Orders
+    
     func makeOrdersViewModel() -> OrdersViewModelProtocol
     
-    // Address / Delivery
+    // MARK: - Delivery
+    
     func makeDeliveryDetailsViewModel(baseAddress: String) -> DeliveryDetailsViewModelProtocol
     func makeAddressConfirmSheetViewModel() -> AddressConfirmSheetViewModelProtocol
     
-    // Phone Input
+    // MARK: - Sheets
+    
     func makePhoneInputSheetViewModel(
         kind: PhoneOrCommentInputSheetViewModel.Kind,
         initialPhone: String?,
         initialComment: String?
     ) -> PhoneOrCommentInputSheetViewModelProtocol
     
-    // Map Picker
+    // MARK: - Map Picker
+    
     func makeMapPickerViewModel() -> MapPickerViewModelProtocol
 }
