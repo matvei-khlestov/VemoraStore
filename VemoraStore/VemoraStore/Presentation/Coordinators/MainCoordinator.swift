@@ -14,6 +14,7 @@ final class MainCoordinator: MainCoordinatingProtocol {
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     var onLogout: (() -> Void)?
+    var onDeleteAccount: (() -> Void)?
     
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
@@ -53,7 +54,13 @@ final class MainCoordinator: MainCoordinatingProtocol {
         
         // Profile (User)
         let profileNav = TabBarFactory.makeNav(root: UIViewController(), tab: .profile)
-        let profile = coordinatorFactory.makeProfileGuestCoordinator(navigation: profileNav)
+        let profile = coordinatorFactory.makeProfileUserCoordinator(navigation: profileNav)
+        profile.onLogout = { [weak self] in
+            self?.onLogout?()
+        }
+        profile.onDeleteAccount = { [weak self] in
+            self?.onDeleteAccount?()
+        }
         add(profile)
         profile.start()
         

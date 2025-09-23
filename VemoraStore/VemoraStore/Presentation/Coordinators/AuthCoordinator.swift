@@ -19,6 +19,7 @@ final class AuthCoordinator: AuthCoordinatingProtocol {
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
     private var bag = Set<AnyCancellable>()
+    private var isShowingAuthContainer = false
     
     // MARK: - Callbacks
     
@@ -42,10 +43,11 @@ final class AuthCoordinator: AuthCoordinatingProtocol {
     
     func start() {
         authService.isAuthorizedPublisher
+            .dropFirst()
             .receive(on: RunLoop.main)
             .sink { [weak self] isAuthorized in
-                guard let self else { return }
-                if isAuthorized { self.onFinish?() }
+                guard let self, isAuthorized else { return }
+                self.onFinish?()
             }
             .store(in: &bag)
 
@@ -55,6 +57,10 @@ final class AuthCoordinator: AuthCoordinatingProtocol {
     // MARK: - Flow
     
     private func showAuthContainer(start mode: AuthContainerViewController.Mode = .signIn) {
+        guard !isShowingAuthContainer else { return }
+        isShowingAuthContainer = true
+        defer { isShowingAuthContainer = false }
+
         let signInVM = viewModelFactory.makeSignInViewModel()
         let signUpVM = viewModelFactory.makeSignUpViewModel()
 
@@ -68,14 +74,12 @@ final class AuthCoordinator: AuthCoordinatingProtocol {
         )
         container.hidesBottomBarWhenPushed = true
 
-        container.onFinish = { [weak self] in
+        container.onBack = { [weak self] in
             self?.navigation.popViewController(animated: true)
         }
-
         container.onOpenPrivacy = { [weak self] in
             self?.openPrivacy()
         }
-
         container.onForgotPassword = { [weak self] in
             self?.openResetPassword()
         }

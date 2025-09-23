@@ -231,11 +231,6 @@ final class SignUpViewController: UIViewController {
         Task {
             do {
                 try await viewModel.signUp()
-                let successAlert = UIAlertController.makeSuccess(
-                    title: "Готово",
-                    message: "Регистрация успешна"
-                )
-                present(successAlert, animated: true)
             } catch {
                 let errorAlert = UIAlertController.makeError(error)
                 present(errorAlert, animated: true)

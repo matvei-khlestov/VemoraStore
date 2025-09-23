@@ -33,8 +33,4 @@ final class OrderSuccessCoordinator: OrderSuccessCoordinatingProtocol {
         }
         navigation.pushViewController(vc, animated: true)
     }
-
-    func finish() {
-        onFinish?()
-    }
 }

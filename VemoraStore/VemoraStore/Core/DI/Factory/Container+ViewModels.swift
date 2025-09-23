@@ -74,6 +74,10 @@ extension Container {
         self { ProfileUserViewModel(auth: self.authService()) }.singleton
     }
     
+    var editProfileViewModel: Factory<EditProfileViewModelProtocol> {
+        self { EditProfileViewModel(avatarStorage: self.avatarStorageService()) }
+    }
+    
     // MARK: - Checkout
     
     var checkoutViewModel: Factory<CheckoutViewModelProtocol> {
