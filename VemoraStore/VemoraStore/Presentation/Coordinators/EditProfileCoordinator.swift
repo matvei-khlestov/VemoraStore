@@ -52,7 +52,7 @@ final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
             self?.showEditEmail()
         }
         vc.onEditPhone = { [weak self] in
-            self?.openStub(title: "Изменить телефон")
+            self?.showEditPhone()
         }
         
         navigation.pushViewController(vc, animated: true)
@@ -82,6 +82,18 @@ final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
         }
 
         editEmail.start()
+    }
+    
+    private func showEditPhone() {
+        let editPhone = coordinatorFactory.makeEditPhoneCoordinator(navigation: navigation)
+        add(editPhone)
+
+        editPhone.onFinish = { [weak self, weak editPhone] in
+            guard let self else { return }
+            if let editPhone { self.remove(editPhone) }
+        }
+
+        editPhone.start()
     }
 
     private func openStub(title: String) {

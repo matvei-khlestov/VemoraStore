@@ -201,6 +201,11 @@
 		A08551CC2E8376F2004633CA /* EditEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551CB2E8376F2004633CA /* EditEmailViewController.swift */; };
 		A08551CE2E837733004633CA /* EditEmailCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551CD2E837733004633CA /* EditEmailCoordinatingProtocol.swift */; };
 		A08551D02E837782004633CA /* EditEmailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551CF2E837782004633CA /* EditEmailCoordinator.swift */; };
+		A08551D22E837C01004633CA /* EditPhoneViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551D12E837C01004633CA /* EditPhoneViewModelProtocol.swift */; };
+		A08551D52E837C38004633CA /* EditPhoneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551D42E837C38004633CA /* EditPhoneViewModel.swift */; };
+		A08551D72E837C6F004633CA /* EditPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551D62E837C6F004633CA /* EditPhoneViewController.swift */; };
+		A08551D92E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551D82E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift */; };
+		A08551DB2E837CDC004633CA /* EditPhoneCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -418,6 +423,11 @@
 		A08551CB2E8376F2004633CA /* EditEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEmailViewController.swift; sourceTree = "<group>"; };
 		A08551CD2E837733004633CA /* EditEmailCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEmailCoordinatingProtocol.swift; sourceTree = "<group>"; };
 		A08551CF2E837782004633CA /* EditEmailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEmailCoordinator.swift; sourceTree = "<group>"; };
+		A08551D12E837C01004633CA /* EditPhoneViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneViewModelProtocol.swift; sourceTree = "<group>"; };
+		A08551D42E837C38004633CA /* EditPhoneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneViewModel.swift; sourceTree = "<group>"; };
+		A08551D62E837C6F004633CA /* EditPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneViewController.swift; sourceTree = "<group>"; };
+		A08551D82E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneCoordinatingProtocol.swift; sourceTree = "<group>"; };
+		A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -687,6 +697,7 @@
 				A08551AC2E833B6A004633CA /* EditProfileCoordinator.swift */,
 				A08551C42E83692E004633CA /* EditNameCoordinator.swift */,
 				A08551CF2E837782004633CA /* EditEmailCoordinator.swift */,
+				A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -1073,6 +1084,7 @@
 				A08551A62E833844004633CA /* EditProfileViewModelProtocol.swift */,
 				A08551BA2E8367BC004633CA /* EditNameViewModelProtocol.swift */,
 				A08551C72E837673004633CA /* EditEmailViewModelProtocol.swift */,
+				A08551D12E837C01004633CA /* EditPhoneViewModelProtocol.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1299,6 +1311,7 @@
 				A08551982E822525004633CA /* OrdersCoordinatingProtocol.swift */,
 				A08551C22E836900004633CA /* EditNameCoordinatingProtocol.swift */,
 				A08551CD2E837733004633CA /* EditEmailCoordinatingProtocol.swift */,
+				A08551D82E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -1323,6 +1336,7 @@
 		A08551A52E833828004633CA /* EditProfile */ = {
 			isa = PBXGroup;
 			children = (
+				A08551D32E837C27004633CA /* EditPhone */,
 				A08551C62E8372F3004633CA /* EditEmail */,
 				A08551BC2E8367ED004633CA /* EditName */,
 				A08551BD2E836809004633CA /* EditProfileStart */,
@@ -1375,6 +1389,15 @@
 				A08551CB2E8376F2004633CA /* EditEmailViewController.swift */,
 			);
 			path = EditEmail;
+			sourceTree = "<group>";
+		};
+		A08551D32E837C27004633CA /* EditPhone */ = {
+			isa = PBXGroup;
+			children = (
+				A08551D42E837C38004633CA /* EditPhoneViewModel.swift */,
+				A08551D62E837C6F004633CA /* EditPhoneViewController.swift */,
+			);
+			path = EditPhone;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1528,6 +1551,7 @@
 				A08550D52E79BAE2004633CA /* CLGeocodingService.swift in Sources */,
 				A085508D2E71B19E004633CA /* DeliveryInfoCell.swift in Sources */,
 				A08550D12E78C4FE004633CA /* DeliveryAddressFormatter.swift in Sources */,
+				A08551D72E837C6F004633CA /* EditPhoneViewController.swift in Sources */,
 				A085514D2E80A044004633CA /* UnderlinedButton.swift in Sources */,
 				A08550822E6C1E75004633CA /* ProductDetailsCoordinator.swift in Sources */,
 				A08551B92E835BA9004633CA /* PaddedFieldState.swift in Sources */,
@@ -1539,6 +1563,7 @@
 				A08551132E7C4FDD004633CA /* OrdersCoordinator.swift in Sources */,
 				A08551AF2E833B80004633CA /* EditProfileCoordinatingProtocol.swift in Sources */,
 				A08551872E8212A7004633CA /* FavoritesCoordinatingProtocol.swift in Sources */,
+				A08551D52E837C38004633CA /* EditPhoneViewModel.swift in Sources */,
 				A08551262E7D94D6004633CA /* FormTextField.swift in Sources */,
 				A08551A22E8337A2004633CA /* AvatarStorageServiceProtocol.swift in Sources */,
 				A08551C12E8368A0004633CA /* EditNameViewController.swift in Sources */,
@@ -1637,6 +1662,7 @@
 				A08551972E822309004633CA /* ProfileUserCoordinatingProtocol.swift in Sources */,
 				A08551002E7AD580004633CA /* ProfileUserViewModel.swift in Sources */,
 				A0854FFB2E6123A5004633CA /* Category.swift in Sources */,
+				A08551D92E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift in Sources */,
 				A08551B12E835131004633CA /* EditProfileRow.swift in Sources */,
 				A08550572E6144CB004633CA /* Profile.swift in Sources */,
 				A08550022E612411004633CA /* AuthServiceProtocol.swift in Sources */,
@@ -1663,6 +1689,7 @@
 				A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */,
 				A08550802E6BF954004633CA /* CartItem.swift in Sources */,
 				A08550672E63F7EC004633CA /* FavoritesCoordinator.swift in Sources */,
+				A08551DB2E837CDC004633CA /* EditPhoneCoordinator.swift in Sources */,
 				A08551532E8182AC004633CA /* UIAlertController+ext.swift in Sources */,
 				A08550C92E78B543004633CA /* AddressConfirmSheetViewModelProtocol.swift in Sources */,
 				A08550632E63F006004633CA /* AppTab.swift in Sources */,
@@ -1706,6 +1733,7 @@
 				A085506F2E69444E004633CA /* CategoryCell.swift in Sources */,
 				A085512A2E7D95EF004633CA /* SignUpViewModel.swift in Sources */,
 				A08550FE2E7AD552004633CA /* ProfileUserViewModelProtocol.swift in Sources */,
+				A08551D22E837C01004633CA /* EditPhoneViewModelProtocol.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
