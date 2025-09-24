@@ -7,21 +7,6 @@
 
 import UIKit
 
-/// Тип поля — управляет клавиатурой/капсом и др. настройками
-public enum PaddedFieldKind {
-    case apt        // квартира
-    case entrance   // подъезд
-    case floor      // этаж
-    case intercom   // домофон (буквы+цифры, CAPS)
-}
-
-/// Состояние визуала поля
-public enum PaddedFieldState {
-    case normal
-    case active
-    case error
-}
-
 public final class PaddedField: UITextField {
 
     // MARK: - Public API

@@ -106,6 +106,12 @@ protocol CoordinatorBuildingProtocol {
         navigation: UINavigationController
     ) -> EditProfileCoordinatingProtocol
 
+    // MARK: - Edit Name
+    
+    func makeEditNameCoordinator(
+        navigation: UINavigationController
+    ) -> EditNameCoordinatingProtocol
+
     // MARK: - Main
 
     func makeMainCoordinator(

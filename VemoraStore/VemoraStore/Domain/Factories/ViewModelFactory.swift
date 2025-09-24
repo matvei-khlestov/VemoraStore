@@ -62,6 +62,10 @@ final class ViewModelFactory: ViewModelBuildingProtocol {
         container.editProfileViewModel()
     }
 
+    func makeEditNameViewModel() -> EditNameViewModelProtocol {
+        container.editNameViewModel()
+    }
+
     // MARK: - Checkout
 
     func makeCheckoutViewModel() -> CheckoutViewModelProtocol {

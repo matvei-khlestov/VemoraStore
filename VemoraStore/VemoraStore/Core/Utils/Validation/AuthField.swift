@@ -11,4 +11,5 @@ enum AuthField {
     case name
     case email
     case password
+    case phone
 }

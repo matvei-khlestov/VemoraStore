@@ -10,42 +10,42 @@ import Combine
 import PhotosUI
 
 final class EditProfileViewController: UIViewController {
-    
+
     // MARK: - Callbacks
-    
+
     var onEditName: (() -> Void)?
     var onEditEmail: (() -> Void)?
     var onEditPhone: (() -> Void)?
     var onBack: (() -> Void)?
-    
+
     // MARK: - Deps
-    
+
     private let viewModel: EditProfileViewModelProtocol
     private var bag = Set<AnyCancellable>()
-    
+
     // MARK: - UI
-    
+
     private static let cellId = "EditProfileCell"
-    
+
     private lazy var scroll: UIScrollView = {
         let v = UIScrollView()
-        v.alwaysBounceVertical = true
-        v.backgroundColor = .systemGroupedBackground
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.contentInsetAdjustmentBehavior = .automatic
+        v.alwaysBounceVertical = true
         return v
     }()
-    
+
     private lazy var content: UIStackView = {
         let v = UIStackView()
         v.axis = .vertical
-        v.spacing = 16
         v.alignment = .center
+        v.spacing = 16
         v.isLayoutMarginsRelativeArrangement = true
-        v.layoutMargins = .init(top: 20, left: 16, bottom: 20, right: 16)
+        v.layoutMargins = .init(top: 24, left: 16, bottom: 24, right: 16)
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
-    
+
     private lazy var avatarImageView: UIImageView = {
         let v = UIImageView()
         v.contentMode = .scaleAspectFill
@@ -54,9 +54,11 @@ final class EditProfileViewController: UIViewController {
         v.tintColor = .tertiaryLabel
         v.image = UIImage(systemName: "person.crop.circle.fill")
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.widthAnchor.constraint(equalToConstant: 112).isActive = true
+        v.heightAnchor.constraint(equalToConstant: 112).isActive = true
         return v
     }()
-    
+
     private lazy var changePhotoButton: UIButton = {
         let b = UIButton(type: .system)
         b.setTitle("Изменить фото", for: .normal)
@@ -64,46 +66,50 @@ final class EditProfileViewController: UIViewController {
         b.translatesAutoresizingMaskIntoConstraints = false
         return b
     }()
-    
+
+    private lazy var tableContainer: UIView = {
+        let v = UIView()
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
+    }()
+
     private lazy var tableView: UITableView = {
         let tv = UITableView(frame: .zero, style: .plain)
-        tv.dataSource = self
-        tv.delegate = self
+        tv.isScrollEnabled = false
+        tv.separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
         tv.rowHeight = 60
         tv.estimatedRowHeight = 60
-        tv.sectionHeaderHeight = 0.1
-        tv.sectionFooterHeight = 0.1
-        tv.tableFooterView = UIView(frame: .zero)
-        tv.isScrollEnabled = false
+        tv.tableFooterView = UIView()
         tv.translatesAutoresizingMaskIntoConstraints = false
+        tv.dataSource = self
+        tv.delegate = self
         tv.register(UITableViewCell.self, forCellReuseIdentifier: Self.cellId)
         return tv
     }()
-    
-    private var tableHeightConstraint: NSLayoutConstraint!
-    
+
+    private enum Row: Int, CaseIterable { case name, email, phone }
+
     // MARK: - Init
-    
+
     init(viewModel: EditProfileViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-    
+
     // MARK: - Lifecycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
-        scroll.backgroundColor = .systemBackground
         setupNav()
-        setupUI()
+        buildLayout()
         setupConstraints()
         bind()
         viewModel.load()
     }
-    
-    // MARK: - Setup Navigation
+
+    // MARK: - Navigation
 
     private func setupNav() {
         setupNavigationBarWithNavLeftItem(
@@ -113,19 +119,19 @@ final class EditProfileViewController: UIViewController {
             prefersLargeTitles: false
         )
     }
-    
-    // MARK: - Setup UI
 
-    private func setupUI() {
+    // MARK: - Layout
+
+    private func buildLayout() {
         view.addSubview(scroll)
         scroll.addSubview(content)
-    
+
         content.addArrangedSubview(avatarImageView)
         content.addArrangedSubview(changePhotoButton)
-        content.addArrangedSubview(tableView)
+
+        content.addArrangedSubview(tableContainer)
+        tableContainer.addSubview(tableView)
     }
-    
-    // MARK: - Constraints
 
     private func setupConstraints() {
         NSLayoutConstraint.activate([
@@ -133,24 +139,30 @@ final class EditProfileViewController: UIViewController {
             scroll.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-    
+
             content.topAnchor.constraint(equalTo: scroll.contentLayoutGuide.topAnchor),
             content.leadingAnchor.constraint(equalTo: scroll.frameLayoutGuide.leadingAnchor),
             content.trailingAnchor.constraint(equalTo: scroll.frameLayoutGuide.trailingAnchor),
-            content.bottomAnchor.constraint(equalTo: scroll.contentLayoutGuide.bottomAnchor)
+            content.bottomAnchor.constraint(equalTo: scroll.contentLayoutGuide.bottomAnchor),
         ])
-    
+
+        // tableContainer шириной как content margins
+        tableContainer.widthAnchor.constraint(equalTo: content.layoutMarginsGuide.widthAnchor).isActive = true
+
         NSLayoutConstraint.activate([
-            avatarImageView.widthAnchor.constraint(equalToConstant: 112),
-            avatarImageView.heightAnchor.constraint(equalToConstant: 112)
+            tableView.topAnchor.constraint(equalTo: tableContainer.topAnchor, constant: 8),
+            tableView.leadingAnchor.constraint(equalTo: tableContainer.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: tableContainer.trailingAnchor),
+            tableView.bottomAnchor.constraint(equalTo: tableContainer.bottomAnchor)
         ])
-    
-        tableView.widthAnchor.constraint(equalTo: content.layoutMarginsGuide.widthAnchor).isActive = true
-        tableHeightConstraint = tableView.heightAnchor.constraint(equalToConstant: 1)
-        tableHeightConstraint.isActive = true
+
+        // Высота таблицы = кол-во строк * rowHeight + верхний паддинг 8
+        tableView.heightAnchor.constraint(
+            equalToConstant: CGFloat(Row.allCases.count) * tableView.rowHeight + 8
+        ).isActive = true
     }
-    
-    // MARK: - Binding
+
+    // MARK: - Bindings
 
     private func bind() {
         viewModel.avatarDataPublisher
@@ -159,47 +171,50 @@ final class EditProfileViewController: UIViewController {
                 self?.avatarImageView.image = data.flatMap(UIImage.init(data:)) ?? UIImage(systemName: "person.crop.circle.fill")
             }
             .store(in: &bag)
-        
-        tableView.publisher(for: \.contentSize, options: [.initial, .new])
-            .receive(on: RunLoop.main)
-            .sink { [weak self] size in
-                self?.tableHeightConstraint.constant = size.height
-            }
-            .store(in: &bag)
     }
-    
-    // MARK: - Private Helpers
+
+    // MARK: - Helpers
 
     private func configureCell(_ cell: UITableViewCell, for row: Row) {
         cell.accessoryType = .disclosureIndicator
         var conf = cell.defaultContentConfiguration()
-        conf.text = row.title
-        conf.secondaryText = row.detail(from: viewModel)
+        switch row {
+        case .name:
+            conf.text = "Имя"
+            conf.secondaryText = viewModel.name
+            conf.image = UIImage(systemName: "person.fill")
+        case .email:
+            conf.text = "Почта"
+            conf.secondaryText = viewModel.email
+            conf.image = UIImage(systemName: "envelope.fill")
+        case .phone:
+            conf.text = "Телефон"
+            conf.secondaryText = viewModel.phone
+            conf.image = UIImage(systemName: "phone.fill")
+        }
         conf.secondaryTextProperties.font = .systemFont(ofSize: 16, weight: .regular)
         conf.secondaryTextProperties.color = .secondaryLabel
-        conf.image = UIImage(systemName: row.icon)
         conf.imageProperties.tintColor = .brightPurple
         conf.imageProperties.reservedLayoutSize = CGSize(width: 24, height: 24)
         conf.imageProperties.maximumSize = CGSize(width: 24, height: 24)
         cell.contentConfiguration = conf
-        cell.backgroundColor = .secondarySystemGroupedBackground
-        cell.separatorInset = .init(top: 0, left: 16, bottom: 0, right: 16)
+        cell.selectionStyle = .default
     }
-    
+
     // MARK: - Actions
-    
+
     @objc private func backTapped() { onBack?() }
-    
+
     @objc private func changePhotoTapped() {
         var configuration = PHPickerConfiguration(photoLibrary: .shared())
         configuration.selectionLimit = 1
         configuration.filter = .images
-        
+
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true)
     }
-    
+
     private func presentError(_ error: Error) {
         let alert = UIAlertController.makeError(error)
         present(alert, animated: true)
@@ -213,7 +228,7 @@ extension EditProfileViewController: PHPickerViewControllerDelegate {
         dismiss(animated: true)
         guard let itemProvider = results.first?.itemProvider,
               itemProvider.canLoadObject(ofClass: UIImage.self) else { return }
-        
+
         itemProvider.loadObject(ofClass: UIImage.self) { [weak self] reading, error in
             guard let self else { return }
             if let error { DispatchQueue.main.async { self.presentError(error) }; return }
@@ -236,7 +251,7 @@ extension EditProfileViewController: PHPickerViewControllerDelegate {
 extension EditProfileViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int { 1 }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int { Row.allCases.count }
-    
+
     func tableView(_ tableView: UITableView,
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let row = Row(rawValue: indexPath.row)!

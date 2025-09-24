@@ -106,6 +106,12 @@ final class CoordinatorFactory: CoordinatorBuildingProtocol {
         container.cartCoordinator(navigation)
     }
 
+    // MARK: - Edit Name
+    
+    func makeEditNameCoordinator(navigation: UINavigationController) -> EditNameCoordinatingProtocol {
+        container.editNameCoordinator(navigation)
+    }
+
     // MARK: - Edit Profile
 
     func makeEditProfileCoordinator(navigation: UINavigationController) -> EditProfileCoordinatingProtocol {
