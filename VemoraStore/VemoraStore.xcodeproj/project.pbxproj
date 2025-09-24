@@ -206,6 +206,8 @@
 		A08551D72E837C6F004633CA /* EditPhoneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551D62E837C6F004633CA /* EditPhoneViewController.swift */; };
 		A08551D92E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551D82E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift */; };
 		A08551DB2E837CDC004633CA /* EditPhoneCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */; };
+		A08551E12E838139004633CA /* BaseEditFieldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551E02E838139004633CA /* BaseEditFieldViewController.swift */; };
+		A08551E32E838493004633CA /* BaseEditFieldViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551E22E838493004633CA /* BaseEditFieldViewModelProtocol.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -428,6 +430,8 @@
 		A08551D62E837C6F004633CA /* EditPhoneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneViewController.swift; sourceTree = "<group>"; };
 		A08551D82E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneCoordinatingProtocol.swift; sourceTree = "<group>"; };
 		A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneCoordinator.swift; sourceTree = "<group>"; };
+		A08551E02E838139004633CA /* BaseEditFieldViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseEditFieldViewController.swift; sourceTree = "<group>"; };
+		A08551E22E838493004633CA /* BaseEditFieldViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseEditFieldViewModelProtocol.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -846,6 +850,7 @@
 		A085505F2E63EBD0004633CA /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				A08551DF2E838124004633CA /* Controllers */,
 				A08551182E7C6085004633CA /* Views */,
 				A08550AC2E783E72004633CA /* Buttons */,
 				A08550A92E782EFE004633CA /* TextFields */,
@@ -1085,6 +1090,7 @@
 				A08551BA2E8367BC004633CA /* EditNameViewModelProtocol.swift */,
 				A08551C72E837673004633CA /* EditEmailViewModelProtocol.swift */,
 				A08551D12E837C01004633CA /* EditPhoneViewModelProtocol.swift */,
+				A08551E22E838493004633CA /* BaseEditFieldViewModelProtocol.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1400,6 +1406,14 @@
 			path = EditPhone;
 			sourceTree = "<group>";
 		};
+		A08551DF2E838124004633CA /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				A08551E02E838139004633CA /* BaseEditFieldViewController.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1625,6 +1639,7 @@
 				A08551282E7D952F004633CA /* SignUpViewModelProtocol.swift in Sources */,
 				A085503E2E612AC6004633CA /* CheckoutViewController.swift in Sources */,
 				A0854FF12E612286004633CA /* FavoritesService.swift in Sources */,
+				A08551E12E838139004633CA /* BaseEditFieldViewController.swift in Sources */,
 				A085513E2E80839D004633CA /* AuthContainerViewController.swift in Sources */,
 				A085516C2E81D213004633CA /* CartViewModelProtocol.swift in Sources */,
 				A085510F2E7C4C03004633CA /* OrdersViewModel.swift in Sources */,
@@ -1685,6 +1700,7 @@
 				A08550FC2E7AD229004633CA /* ProfileUserCoordinator.swift in Sources */,
 				A08550A02E748A11004633CA /* OrderSuccessViewController.swift in Sources */,
 				A085512E2E7DE2B1004633CA /* UIButton+ext.swift in Sources */,
+				A08551E32E838493004633CA /* BaseEditFieldViewModelProtocol.swift in Sources */,
 				A085511D2E7D931C004633CA /* AuthValidatingProtocol.swift in Sources */,
 				A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */,
 				A08550802E6BF954004633CA /* CartItem.swift in Sources */,

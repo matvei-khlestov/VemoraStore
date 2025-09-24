@@ -64,3 +64,11 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
         try await profile.updatePhone(phone) // должен быть в формате +7XXXXXXXXXX
     }
 }
+
+// MARK: - BaseEditFieldViewModelProtocol
+
+extension EditPhoneViewModel: BaseEditFieldViewModelProtocol {
+    var currentValue: String { currentPhone }
+    var error: AnyPublisher<String?, Never> { phoneError }
+    func setValue(_ value: String) { setPhone(value) }
+}

@@ -60,3 +60,11 @@ final class EditNameViewModel: EditNameViewModelProtocol {
         try await profile.updateName(name)
     }
 }
+
+// MARK: - BaseEditFieldViewModelProtocol
+
+extension EditNameViewModel: BaseEditFieldViewModelProtocol {
+    var currentValue: String { currentName }
+    var error: AnyPublisher<String?, Never> { nameError }
+    func setValue(_ value: String) { setName(value) }
+}

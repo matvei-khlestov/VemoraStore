@@ -8,19 +8,8 @@
 import Foundation
 import Combine
 
-protocol EditEmailViewModelProtocol: AnyObject {
-    
-    // MARK: - Outputs
-    
+protocol EditEmailViewModelProtocol: BaseEditFieldViewModelProtocol, AnyObject {
     var currentEmail: String { get }
     var emailError: AnyPublisher<String?, Never> { get }
-    var isSubmitEnabled: AnyPublisher<Bool, Never> { get }
-    
-    // MARK: - Inputs
-    
     func setEmail(_ value: String)
-    
-    // MARK: - Actions
-    
-    func submit() async throws
 }
