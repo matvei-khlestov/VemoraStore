@@ -118,6 +118,12 @@ protocol CoordinatorBuildingProtocol {
         navigation: UINavigationController
     ) -> EditEmailCoordinatingProtocol
 
+    // MARK: - Edit Phone
+    
+    func makeEditPhoneCoordinator(
+        navigation: UINavigationController
+    ) -> EditPhoneCoordinatingProtocol
+
     // MARK: - Main
 
     func makeMainCoordinator(

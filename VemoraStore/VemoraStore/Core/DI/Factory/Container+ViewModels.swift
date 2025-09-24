@@ -96,6 +96,15 @@ extension Container {
         }
     }
     
+    var editPhoneViewModel: Factory<EditPhoneViewModelProtocol> {
+        self {
+            EditPhoneViewModel(
+                profile: self.profileService(),
+                validator: self.authValidator()
+            )
+        }
+    }
+    
     // MARK: - Checkout
     
     var checkoutViewModel: Factory<CheckoutViewModelProtocol> {

@@ -14,4 +14,7 @@ protocol ProfileServiceProtocol: AnyObject {
     
     var currentEmail: String { get }
     func updateEmail(_ value: String) async throws
+    
+    var currentPhone: String { get }
+    func updatePhone(_ value: String) async throws
 }

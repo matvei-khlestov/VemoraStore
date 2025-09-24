@@ -70,6 +70,10 @@ final class ViewModelFactory: ViewModelBuildingProtocol {
         container.editEmailViewModel()
     }
 
+    func makeEditPhoneViewModel() -> EditPhoneViewModelProtocol {
+        container.editPhoneViewModel()
+    }
+
     // MARK: - Checkout
 
     func makeCheckoutViewModel() -> CheckoutViewModelProtocol {

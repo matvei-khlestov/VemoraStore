@@ -118,6 +118,12 @@ final class CoordinatorFactory: CoordinatorBuildingProtocol {
         container.editEmailCoordinator(navigation)
     }
 
+    // MARK: - Edit Phone
+
+    func makeEditPhoneCoordinator(navigation: UINavigationController) -> EditPhoneCoordinatingProtocol {
+        container.editPhoneCoordinator(navigation)
+    }
+
     // MARK: - Edit Profile
 
     func makeEditProfileCoordinator(navigation: UINavigationController) -> EditProfileCoordinatingProtocol {

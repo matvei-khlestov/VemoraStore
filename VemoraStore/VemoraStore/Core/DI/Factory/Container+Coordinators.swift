@@ -208,6 +208,17 @@ extension Container {
         }
     }
 
+    // MARK: - Edit Phone
+
+    var editPhoneCoordinator: ParameterFactory<UINavigationController, EditPhoneCoordinatingProtocol> {
+        self { navigation in
+            EditPhoneCoordinator(
+                navigation: navigation,
+                viewModelFactory: self.viewModelFactory()
+            )
+        }
+    }
+
     // MARK: - Main
     
     var mainCoordinator: ParameterFactory<UINavigationController, MainCoordinatingProtocol> {
