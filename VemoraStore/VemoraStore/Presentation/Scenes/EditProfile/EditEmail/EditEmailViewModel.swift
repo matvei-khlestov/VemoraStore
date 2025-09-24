@@ -75,3 +75,11 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
         try await profile.updateEmail(email)
     }
 }
+
+// MARK: - BaseEditFieldViewModelProtocol
+
+extension EditEmailViewModel: BaseEditFieldViewModelProtocol {
+    var currentValue: String { currentEmail }
+    var error: AnyPublisher<String?, Never> { emailError }
+    func setValue(_ value: String) { setEmail(value) }
+}
