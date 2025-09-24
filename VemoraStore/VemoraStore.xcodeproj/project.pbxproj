@@ -188,6 +188,14 @@
 		A08551AD2E833B6A004633CA /* EditProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551AC2E833B6A004633CA /* EditProfileCoordinator.swift */; };
 		A08551AF2E833B80004633CA /* EditProfileCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551AE2E833B80004633CA /* EditProfileCoordinatingProtocol.swift */; };
 		A08551B12E835131004633CA /* EditProfileRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551B02E835131004633CA /* EditProfileRow.swift */; };
+		A08551B32E835AF3004633CA /* FormTextFieldKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551B22E835AF3004633CA /* FormTextFieldKind.swift */; };
+		A08551B62E835B38004633CA /* PaddedFieldKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551B52E835B38004633CA /* PaddedFieldKind.swift */; };
+		A08551B92E835BA9004633CA /* PaddedFieldState.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551B82E835BA9004633CA /* PaddedFieldState.swift */; };
+		A08551BB2E8367BC004633CA /* EditNameViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551BA2E8367BC004633CA /* EditNameViewModelProtocol.swift */; };
+		A08551BF2E836866004633CA /* EditNameViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551BE2E836866004633CA /* EditNameViewModel.swift */; };
+		A08551C12E8368A0004633CA /* EditNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551C02E83689F004633CA /* EditNameViewController.swift */; };
+		A08551C32E836900004633CA /* EditNameCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551C22E836900004633CA /* EditNameCoordinatingProtocol.swift */; };
+		A08551C52E83692E004633CA /* EditNameCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551C42E83692E004633CA /* EditNameCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -392,6 +400,14 @@
 		A08551AC2E833B6A004633CA /* EditProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileCoordinator.swift; sourceTree = "<group>"; };
 		A08551AE2E833B80004633CA /* EditProfileCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileCoordinatingProtocol.swift; sourceTree = "<group>"; };
 		A08551B02E835131004633CA /* EditProfileRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRow.swift; sourceTree = "<group>"; };
+		A08551B22E835AF3004633CA /* FormTextFieldKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormTextFieldKind.swift; sourceTree = "<group>"; };
+		A08551B52E835B38004633CA /* PaddedFieldKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedFieldKind.swift; sourceTree = "<group>"; };
+		A08551B82E835BA9004633CA /* PaddedFieldState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddedFieldState.swift; sourceTree = "<group>"; };
+		A08551BA2E8367BC004633CA /* EditNameViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewModelProtocol.swift; sourceTree = "<group>"; };
+		A08551BE2E836866004633CA /* EditNameViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewModel.swift; sourceTree = "<group>"; };
+		A08551C02E83689F004633CA /* EditNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewController.swift; sourceTree = "<group>"; };
+		A08551C22E836900004633CA /* EditNameCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameCoordinatingProtocol.swift; sourceTree = "<group>"; };
+		A08551C42E83692E004633CA /* EditNameCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -659,6 +675,7 @@
 				A085509B2E74817F004633CA /* MapPickerCoordinator.swift */,
 				A08550A12E748BE9004633CA /* OrderSuccessCoordinator.swift */,
 				A08551AC2E833B6A004633CA /* EditProfileCoordinator.swift */,
+				A08551C42E83692E004633CA /* EditNameCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -947,8 +964,8 @@
 		A08550A92E782EFE004633CA /* TextFields */ = {
 			isa = PBXGroup;
 			children = (
-				A08550AA2E782F1A004633CA /* PaddedField.swift */,
-				A08551252E7D94D6004633CA /* FormTextField.swift */,
+				A08551B72E835B43004633CA /* PaddedField */,
+				A08551B42E835B0F004633CA /* FormTextField */,
 			);
 			path = TextFields;
 			sourceTree = "<group>";
@@ -1043,6 +1060,7 @@
 				A08551692E81D024004633CA /* FavoritesViewModelProtocol.swift */,
 				A085516B2E81D213004633CA /* CartViewModelProtocol.swift */,
 				A08551A62E833844004633CA /* EditProfileViewModelProtocol.swift */,
+				A08551BA2E8367BC004633CA /* EditNameViewModelProtocol.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1267,6 +1285,7 @@
 				A08551962E822309004633CA /* ProfileUserCoordinatingProtocol.swift */,
 				A08551AE2E833B80004633CA /* EditProfileCoordinatingProtocol.swift */,
 				A08551982E822525004633CA /* OrdersCoordinatingProtocol.swift */,
+				A08551C22E836900004633CA /* EditNameCoordinatingProtocol.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -1291,11 +1310,48 @@
 		A08551A52E833828004633CA /* EditProfile */ = {
 			isa = PBXGroup;
 			children = (
+				A08551BC2E8367ED004633CA /* EditName */,
+				A08551BD2E836809004633CA /* EditProfileStart */,
+			);
+			path = EditProfile;
+			sourceTree = "<group>";
+		};
+		A08551B42E835B0F004633CA /* FormTextField */ = {
+			isa = PBXGroup;
+			children = (
+				A08551252E7D94D6004633CA /* FormTextField.swift */,
+				A08551B22E835AF3004633CA /* FormTextFieldKind.swift */,
+			);
+			path = FormTextField;
+			sourceTree = "<group>";
+		};
+		A08551B72E835B43004633CA /* PaddedField */ = {
+			isa = PBXGroup;
+			children = (
+				A08550AA2E782F1A004633CA /* PaddedField.swift */,
+				A08551B52E835B38004633CA /* PaddedFieldKind.swift */,
+				A08551B82E835BA9004633CA /* PaddedFieldState.swift */,
+			);
+			path = PaddedField;
+			sourceTree = "<group>";
+		};
+		A08551BC2E8367ED004633CA /* EditName */ = {
+			isa = PBXGroup;
+			children = (
+				A08551BE2E836866004633CA /* EditNameViewModel.swift */,
+				A08551C02E83689F004633CA /* EditNameViewController.swift */,
+			);
+			path = EditName;
+			sourceTree = "<group>";
+		};
+		A08551BD2E836809004633CA /* EditProfileStart */ = {
+			isa = PBXGroup;
+			children = (
 				A08551A82E83387C004633CA /* EditProfileViewModel.swift */,
 				A08551AA2E833A9A004633CA /* EditProfileViewController.swift */,
 				A08551B02E835131004633CA /* EditProfileRow.swift */,
 			);
-			path = EditProfile;
+			path = EditProfileStart;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1451,6 +1507,7 @@
 				A08550D12E78C4FE004633CA /* DeliveryAddressFormatter.swift in Sources */,
 				A085514D2E80A044004633CA /* UnderlinedButton.swift in Sources */,
 				A08550822E6C1E75004633CA /* ProductDetailsCoordinator.swift in Sources */,
+				A08551B92E835BA9004633CA /* PaddedFieldState.swift in Sources */,
 				A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */,
 				A08550F12E7AB69F004633CA /* PrivacyPolicyText.swift in Sources */,
 				A08551782E81F944004633CA /* Container+Factories.swift in Sources */,
@@ -1461,10 +1518,12 @@
 				A08551872E8212A7004633CA /* FavoritesCoordinatingProtocol.swift in Sources */,
 				A08551262E7D94D6004633CA /* FormTextField.swift in Sources */,
 				A08551A22E8337A2004633CA /* AvatarStorageServiceProtocol.swift in Sources */,
+				A08551C12E8368A0004633CA /* EditNameViewController.swift in Sources */,
 				A08550C02E789FA8004633CA /* AddressFormattingProtocol.swift in Sources */,
 				A08550C22E78A407004633CA /* DeliveryDetailsViewModel.swift in Sources */,
 				A08551172E7C5447004633CA /* OrdersService.swift in Sources */,
 				A08551512E81824C004633CA /* ConfirmationAlertType.swift in Sources */,
+				A08551BB2E8367BC004633CA /* EditNameViewModelProtocol.swift in Sources */,
 				A08550982E742082004633CA /* PhoneOrCommentInputSheetViewController.swift in Sources */,
 				A08550A82E781CDE004633CA /* DeliveryDetailsSheetViewController.swift in Sources */,
 				A08550102E61255A004633CA /* Coordinator.swift in Sources */,
@@ -1508,6 +1567,7 @@
 				A08550162E61258B004633CA /* MainCoordinator.swift in Sources */,
 				A08551A72E833844004633CA /* EditProfileViewModelProtocol.swift in Sources */,
 				A08550A22E748BE9004633CA /* OrderSuccessCoordinator.swift in Sources */,
+				A08551B62E835B38004633CA /* PaddedFieldKind.swift in Sources */,
 				A085509C2E74817F004633CA /* MapPickerCoordinator.swift in Sources */,
 				A08551222E7D9415004633CA /* AuthField.swift in Sources */,
 				A085519D2E822A01004633CA /* AppCoordinatingProtocol.swift in Sources */,
@@ -1521,8 +1581,10 @@
 				A08550D72E79BB53004633CA /* MapPickerViewModelProtocol.swift in Sources */,
 				A08550A62E76E9A5004633CA /* AddressConfirmSheetViewController.swift in Sources */,
 				A0854FF92E612395004633CA /* Product.swift in Sources */,
+				A08551BF2E836866004633CA /* EditNameViewModel.swift in Sources */,
 				A08551712E81F06E004633CA /* ViewModelFactory.swift in Sources */,
 				A08550532E613F5A004633CA /* Container+Utils.swift in Sources */,
+				A08551C32E836900004633CA /* EditNameCoordinatingProtocol.swift in Sources */,
 				A08550F52E7AB7C1004633CA /* PrivacyPolicyCoordinator.swift in Sources */,
 				A08550952E741943004633CA /* OrderCommentCell.swift in Sources */,
 				A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */,
@@ -1530,6 +1592,7 @@
 				A08550E42E79E357004633CA /* AboutCoordinator.swift in Sources */,
 				A08551442E80969E004633CA /* ResetPasswordViewModelProtocol.swift in Sources */,
 				A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */,
+				A08551B32E835AF3004633CA /* FormTextFieldKind.swift in Sources */,
 				A08551492E809747004633CA /* ResetPasswordViewController.swift in Sources */,
 				A085518F2E821AEF004633CA /* ContactUsCoordinatingProtocol.swift in Sources */,
 				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
@@ -1611,6 +1674,7 @@
 				A085517C2E820188004633CA /* CheckoutCoordinatingProtocol.swift in Sources */,
 				A0854FEA2E612206004633CA /* FirebaseNotificationService.swift in Sources */,
 				A085500A2E61244A004633CA /* FavoritesServiceProtocol.swift in Sources */,
+				A08551C52E83692E004633CA /* EditNameCoordinator.swift in Sources */,
 				A085506F2E69444E004633CA /* CategoryCell.swift in Sources */,
 				A085512A2E7D95EF004633CA /* SignUpViewModel.swift in Sources */,
 				A08550FE2E7AD552004633CA /* ProfileUserViewModelProtocol.swift in Sources */,

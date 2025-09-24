@@ -27,7 +27,7 @@ final class AuthValidator: AuthValidatingProtocol {
         case .password:
             var errors: [String] = []
             let pwd = text.trimmingCharacters(in: .whitespacesAndNewlines)
-
+            
             if pwd.count < 6 {
                 errors.append("Минимум 6 символов")
             }
@@ -46,7 +46,12 @@ final class AuthValidator: AuthValidatingProtocol {
             if pwd.range(of: #"[A-Z]"#, options: .regularExpression) == nil {
                 errors.append("Добавьте хотя бы одну заглавную букву")
             }
-
+            return .init(isValid: errors.isEmpty, messages: errors)
+            
+        case .phone:
+            let pattern = #"^\+7\d{10}$"#
+            let valid = text.range(of: pattern, options: .regularExpression) != nil
+            let errors = valid ? [] : ["Введите номер в формате +7XXXXXXXXXX"]
             return .init(isValid: errors.isEmpty, messages: errors)
         }
     }

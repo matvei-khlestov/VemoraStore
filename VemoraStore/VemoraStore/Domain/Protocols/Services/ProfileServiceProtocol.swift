@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-protocol ProfileServiceProtocol {
-    func loadProfile(uid: String) -> AnyPublisher<Profile, Error>
-    func updateProfile(_ profile: Profile, avatar: Data?) async throws
+protocol ProfileServiceProtocol: AnyObject {
+    var currentName: String { get }
+    func updateName(_ value: String) async throws
 }

@@ -77,6 +77,15 @@ extension Container {
     var editProfileViewModel: Factory<EditProfileViewModelProtocol> {
         self { EditProfileViewModel(avatarStorage: self.avatarStorageService()) }
     }
+
+    var editNameViewModel: Factory<EditNameViewModelProtocol> {
+        self {
+            EditNameViewModel(
+                profile: self.profileService(),
+                validator: self.authValidator()
+            )
+        }
+    }
     
     // MARK: - Checkout
     

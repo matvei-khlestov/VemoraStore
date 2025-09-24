@@ -15,16 +15,21 @@ final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
     var childCoordinators: [Coordinator] = []
     var onFinish: (() -> Void)?
     
+    // MARK: - Factories
+    
     private let viewModelFactory: ViewModelBuildingProtocol
+    private let coordinatorFactory: CoordinatorBuildingProtocol
     
     // MARK: - Init
     
     init(
         navigation: UINavigationController,
-        viewModelFactory: ViewModelBuildingProtocol
+        viewModelFactory: ViewModelBuildingProtocol,
+        coordinatorFactory: CoordinatorBuildingProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
+        self.coordinatorFactory = coordinatorFactory
     }
     
     // MARK: - Start
@@ -40,15 +45,32 @@ final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
             self.onFinish?()
         }
         
-        // Заглушки на экраны редактирования
-        vc.onEditName = { [weak self] in self?.openStub(title: "Изменить имя") }
-        vc.onEditEmail = { [weak self] in self?.openStub(title: "Изменить почту") }
-        vc.onEditPhone = { [weak self] in self?.openStub(title: "Изменить телефон") }
+        vc.onEditName = { [weak self] in
+            self?.showEditName()
+        }
+        vc.onEditEmail = { [weak self] in
+            self?.openStub(title: "Изменить почту")
+        }
+        vc.onEditPhone = { [weak self] in
+            self?.openStub(title: "Изменить телефон")
+        }
         
         navigation.pushViewController(vc, animated: true)
     }
     
-    // MARK: - Helpers
+    // MARK: - Private
+    
+    private func showEditName() {
+        let editName = coordinatorFactory.makeEditNameCoordinator(navigation: navigation)
+        add(editName)
+        
+        editName.onFinish = { [weak self, weak editName] in
+            guard let self else { return }
+            if let editName { self.remove(editName) }
+        }
+        
+        editName.start()
+    }
     
     private func openStub(title: String) {
         let stub = UIViewController()

@@ -9,25 +9,6 @@ import UIKit
 
 final class FormTextField: UIView {
     
-    enum Kind {
-        case name, email, password
-        
-        var title: String {
-            switch self {
-            case .name:     return "Имя"
-            case .email:    return "E-mail"
-            case .password: return "Пароль"
-            }
-        }
-        var placeholder: String {
-            switch self {
-            case .name:     return "Введите имя"
-            case .email:    return "Введите e-mail"
-            case .password: return "Введите пароль"
-            }
-        }
-    }
-    
     // MARK: UI
     private let titleLabel: UILabel = {
         let l = UILabel()
@@ -67,7 +48,7 @@ final class FormTextField: UIView {
     // MARK: API
     var onTextChanged: ((String) -> Void)?
     
-    private let kind: Kind
+    private let kind: FormTextFieldKind
     private var isSecure = false
     // Показывать ошибки только после первого взаимодействия,
     // либо по явному форсу при сабмите формы
@@ -75,12 +56,13 @@ final class FormTextField: UIView {
     private var pendingError: String? = nil
     private var errorLabelHeight: NSLayoutConstraint?
     
-    init(kind: Kind) {
+    init(kind: FormTextFieldKind) {
         self.kind = kind
         super.init(frame: .zero)
         build()
         applyKind(kind)
         textField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+        textField.delegate = self
         eyeButton.addTarget(self, action: #selector(toggleSecure), for: .touchUpInside)
     }
     
@@ -115,7 +97,7 @@ final class FormTextField: UIView {
         self.errorLabelHeight = c
     }
     
-    private func applyKind(_ kind: Kind) {
+    private func applyKind(_ kind: FormTextFieldKind) {
         titleLabel.text = kind.title
         textField.placeholder = kind.placeholder
         
@@ -169,6 +151,13 @@ final class FormTextField: UIView {
             
             textField.rightView = container
             textField.rightViewMode = .always
+        case .phone:
+            textField.autocapitalizationType = .none
+            textField.textContentType = .telephoneNumber
+            textField.keyboardType = .numberPad
+            textField.returnKeyType = .done
+            // дефолтное значение
+            textField.text = "+7"
         }
     }
     
@@ -193,12 +182,14 @@ final class FormTextField: UIView {
     }
     
     @objc private func editingChanged() {
-        // Показывать ошибки только после первого ввода пользователем
         if !hasInteracted {
             hasInteracted = true
             updateErrorVisibility(force: false)
         }
-        onTextChanged?(text)
+        // для телефона onTextChanged вызываем из delegate с нормализацией
+        if kind != .phone {
+            onTextChanged?(text)
+        }
     }
     
     @objc private func toggleSecure() {
@@ -206,5 +197,79 @@ final class FormTextField: UIView {
         textField.isSecureTextEntry = isSecure
         let img = UIImage(systemName: isSecure ? "eye" : "eye.slash")
         eyeButton.setImage(img, for: .normal)
+    }
+
+    // MARK: - Phone formatting helpers
+
+    /// Оставляем только цифры
+    private func digits(from string: String) -> String {
+        string.filter(\.isNumber)
+    }
+
+    /// Принимает текущий raw + новые изменения, возвращает:
+    /// - display: формат для показа "+7 (XXX) XXX-XX-XX"
+    /// - e164:     нормализованный "+7XXXXXXXXXX" (для хранения/валидации)
+    private func formatRussianPhone(displaying rawDigits: String) -> (display: String, e164: String) {
+        // гарантируем, что начинается на 7
+        var digitsOnly = rawDigits
+        if digitsOnly.first != "7" {
+            // удаляем ведущие 8, 9 и т.п., подставляем 7
+            digitsOnly = "7" + digitsOnly.drop(while: { $0 == "7" })
+        }
+        // ограничим максимум 11 цифр (включая первую 7)
+        digitsOnly = String(digitsOnly.prefix(11))
+
+        // e164: "+7XXXXXXXXXX" — 11 цифр, где первая '7'
+        let e164 = "+" + digitsOnly
+
+        // строим отображение: +7 (XXX) XXX-XX-XX
+        let tail = String(digitsOnly.dropFirst()) // 10 цифр после 7
+        let a = String(tail.prefix(3))
+        let b = String(tail.dropFirst(3).prefix(3))
+        let c = String(tail.dropFirst(6).prefix(2))
+        let d = String(tail.dropFirst(8).prefix(2))
+
+        var display = "+7"
+        if !a.isEmpty { display += " (\(a)" + (a.count == 3 ? ")" : "") }
+        if !b.isEmpty { display += a.isEmpty ? " (\(b)" : " \(b)" }
+        if !c.isEmpty { display += "-\(c)" }
+        if !d.isEmpty { display += "-\(d)" }
+
+        return (display, e164)
+    }
+}
+
+extension FormTextField: UITextFieldDelegate {
+    public func textField(_ textField: UITextField,
+                   shouldChangeCharactersIn range: NSRange,
+                   replacementString string: String) -> Bool {
+        guard kind == .phone else { return true }
+
+        let current = textField.text ?? "+7"
+        if let textRange = Range(range, in: current) {
+            let newText = current.replacingCharacters(in: textRange, with: string)
+
+            var digitsOnly = digits(from: newText)
+            if digitsOnly.isEmpty { digitsOnly = "7" }
+
+            let (display, e164) = formatRussianPhone(displaying: digitsOnly)
+            textField.text = display
+
+            // сообщаем наружу уже нормализованный вид: +7XXXXXXXXXX
+            onTextChanged?(e164)
+
+            // каретку в конец
+            if let endPos = textField.endOfDocument as UITextPosition? {
+                textField.selectedTextRange = textField.textRange(from: endPos, to: endPos)
+            }
+        }
+        return false // мы сами выставили text
+    }
+
+    public func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        if kind == .phone, (textField.text ?? "").isEmpty {
+            textField.text = "+7"
+        }
+        return true
     }
 }

@@ -180,6 +180,18 @@ extension Container {
         self { navigation in
             EditProfileCoordinator(
                 navigation: navigation,
+                viewModelFactory: self.viewModelFactory(),
+                coordinatorFactory: self.coordinatorFactory()
+            )
+        }
+    }
+
+    // MARK: - Edit Name
+
+    var editNameCoordinator: ParameterFactory<UINavigationController, EditNameCoordinatingProtocol> {
+        self { navigation in
+            EditNameCoordinator(
+                navigation: navigation,
                 viewModelFactory: self.viewModelFactory()
             )
         }
