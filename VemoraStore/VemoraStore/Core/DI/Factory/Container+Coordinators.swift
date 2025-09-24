@@ -197,6 +197,17 @@ extension Container {
         }
     }
 
+    // MARK: - Edit Email
+
+    var editEmailCoordinator: ParameterFactory<UINavigationController, EditEmailCoordinatingProtocol> {
+        self { navigation in
+            EditEmailCoordinator(
+                navigation: navigation,
+                viewModelFactory: self.viewModelFactory()
+            )
+        }
+    }
+
     // MARK: - Main
     
     var mainCoordinator: ParameterFactory<UINavigationController, MainCoordinatingProtocol> {

@@ -196,6 +196,11 @@
 		A08551C12E8368A0004633CA /* EditNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551C02E83689F004633CA /* EditNameViewController.swift */; };
 		A08551C32E836900004633CA /* EditNameCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551C22E836900004633CA /* EditNameCoordinatingProtocol.swift */; };
 		A08551C52E83692E004633CA /* EditNameCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551C42E83692E004633CA /* EditNameCoordinator.swift */; };
+		A08551C82E837673004633CA /* EditEmailViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551C72E837673004633CA /* EditEmailViewModelProtocol.swift */; };
+		A08551CA2E837691004633CA /* EditEmailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551C92E837691004633CA /* EditEmailViewModel.swift */; };
+		A08551CC2E8376F2004633CA /* EditEmailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551CB2E8376F2004633CA /* EditEmailViewController.swift */; };
+		A08551CE2E837733004633CA /* EditEmailCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551CD2E837733004633CA /* EditEmailCoordinatingProtocol.swift */; };
+		A08551D02E837782004633CA /* EditEmailCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551CF2E837782004633CA /* EditEmailCoordinator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -408,6 +413,11 @@
 		A08551C02E83689F004633CA /* EditNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameViewController.swift; sourceTree = "<group>"; };
 		A08551C22E836900004633CA /* EditNameCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameCoordinatingProtocol.swift; sourceTree = "<group>"; };
 		A08551C42E83692E004633CA /* EditNameCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditNameCoordinator.swift; sourceTree = "<group>"; };
+		A08551C72E837673004633CA /* EditEmailViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEmailViewModelProtocol.swift; sourceTree = "<group>"; };
+		A08551C92E837691004633CA /* EditEmailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEmailViewModel.swift; sourceTree = "<group>"; };
+		A08551CB2E8376F2004633CA /* EditEmailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEmailViewController.swift; sourceTree = "<group>"; };
+		A08551CD2E837733004633CA /* EditEmailCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEmailCoordinatingProtocol.swift; sourceTree = "<group>"; };
+		A08551CF2E837782004633CA /* EditEmailCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditEmailCoordinator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -676,6 +686,7 @@
 				A08550A12E748BE9004633CA /* OrderSuccessCoordinator.swift */,
 				A08551AC2E833B6A004633CA /* EditProfileCoordinator.swift */,
 				A08551C42E83692E004633CA /* EditNameCoordinator.swift */,
+				A08551CF2E837782004633CA /* EditEmailCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -1061,6 +1072,7 @@
 				A085516B2E81D213004633CA /* CartViewModelProtocol.swift */,
 				A08551A62E833844004633CA /* EditProfileViewModelProtocol.swift */,
 				A08551BA2E8367BC004633CA /* EditNameViewModelProtocol.swift */,
+				A08551C72E837673004633CA /* EditEmailViewModelProtocol.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1286,6 +1298,7 @@
 				A08551AE2E833B80004633CA /* EditProfileCoordinatingProtocol.swift */,
 				A08551982E822525004633CA /* OrdersCoordinatingProtocol.swift */,
 				A08551C22E836900004633CA /* EditNameCoordinatingProtocol.swift */,
+				A08551CD2E837733004633CA /* EditEmailCoordinatingProtocol.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -1310,6 +1323,7 @@
 		A08551A52E833828004633CA /* EditProfile */ = {
 			isa = PBXGroup;
 			children = (
+				A08551C62E8372F3004633CA /* EditEmail */,
 				A08551BC2E8367ED004633CA /* EditName */,
 				A08551BD2E836809004633CA /* EditProfileStart */,
 			);
@@ -1352,6 +1366,15 @@
 				A08551B02E835131004633CA /* EditProfileRow.swift */,
 			);
 			path = EditProfileStart;
+			sourceTree = "<group>";
+		};
+		A08551C62E8372F3004633CA /* EditEmail */ = {
+			isa = PBXGroup;
+			children = (
+				A08551C92E837691004633CA /* EditEmailViewModel.swift */,
+				A08551CB2E8376F2004633CA /* EditEmailViewController.swift */,
+			);
+			path = EditEmail;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1533,6 +1556,7 @@
 				A08550712E694489004633CA /* CatalogSectionHeader.swift in Sources */,
 				A085514F2E80A54F004633CA /* LabelLinkRow.swift in Sources */,
 				A08550932E7416B8004633CA /* ChangePhoneCell.swift in Sources */,
+				A08551C82E837673004633CA /* EditEmailViewModelProtocol.swift in Sources */,
 				A085513B2E807906004633CA /* SignInViewController.swift in Sources */,
 				A08550FA2E7AD0A9004633CA /* ProfileUserRow.swift in Sources */,
 				A08550B32E787298004633CA /* PhoneOrCommentInputSheetViewModel.swift in Sources */,
@@ -1547,6 +1571,8 @@
 				A08550652E63F518004633CA /* CatalogCoordinator.swift in Sources */,
 				A085504C2E612F78004633CA /* UserDefaultsKeys.swift in Sources */,
 				A08551912E821E2C004633CA /* ResetPasswordCoordinatingProtocol.swift in Sources */,
+				A08551CC2E8376F2004633CA /* EditEmailViewController.swift in Sources */,
+				A08551CE2E837733004633CA /* EditEmailCoordinatingProtocol.swift in Sources */,
 				A08551802E820734004633CA /* CoordinatorBuildingProtocol.swift in Sources */,
 				A08550BE2E789D27004633CA /* AddressSearchServiceProtocol.swift in Sources */,
 				A08551112E7C4D4B004633CA /* OrderModels.swift in Sources */,
@@ -1591,6 +1617,7 @@
 				A08550ED2E7A094C004633CA /* UIViewController+NavBar.swift in Sources */,
 				A08550E42E79E357004633CA /* AboutCoordinator.swift in Sources */,
 				A08551442E80969E004633CA /* ResetPasswordViewModelProtocol.swift in Sources */,
+				A08551D02E837782004633CA /* EditEmailCoordinator.swift in Sources */,
 				A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */,
 				A08551B32E835AF3004633CA /* FormTextFieldKind.swift in Sources */,
 				A08551492E809747004633CA /* ResetPasswordViewController.swift in Sources */,
@@ -1599,6 +1626,7 @@
 				A08551392E80789D004633CA /* SignInViewModel.swift in Sources */,
 				A08551992E822525004633CA /* OrdersCoordinatingProtocol.swift in Sources */,
 				A08551352E807837004633CA /* SignInViewModelProtocol.swift in Sources */,
+				A08551CA2E837691004633CA /* EditEmailViewModel.swift in Sources */,
 				A08551A92E83387C004633CA /* EditProfileViewModel.swift in Sources */,
 				A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */,
 				A08550F32E7AB6E0004633CA /* PrivacyPolicyViewController.swift in Sources */,

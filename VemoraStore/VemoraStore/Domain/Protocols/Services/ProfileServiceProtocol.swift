@@ -11,4 +11,7 @@ import Combine
 protocol ProfileServiceProtocol: AnyObject {
     var currentName: String { get }
     func updateName(_ value: String) async throws
+    
+    var currentEmail: String { get }
+    func updateEmail(_ value: String) async throws
 }

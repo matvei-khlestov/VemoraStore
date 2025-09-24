@@ -33,6 +33,7 @@ protocol ViewModelBuildingProtocol {
     func makeProfileUserViewModel() -> ProfileUserViewModelProtocol
     func makeEditProfileViewModel() -> EditProfileViewModelProtocol
     func makeEditNameViewModel() -> EditNameViewModelProtocol
+    func makeEditEmailViewModel() -> EditEmailViewModelProtocol
     
     // MARK: - Checkout
     

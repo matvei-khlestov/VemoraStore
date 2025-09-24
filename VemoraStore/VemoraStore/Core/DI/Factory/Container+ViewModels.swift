@@ -87,6 +87,15 @@ extension Container {
         }
     }
     
+    var editEmailViewModel: Factory<EditEmailViewModelProtocol> {
+        self {
+            EditEmailViewModel(
+                profile: self.profileService(),
+                validator: self.authValidator()
+            )
+        }
+    }
+    
     // MARK: - Checkout
     
     var checkoutViewModel: Factory<CheckoutViewModelProtocol> {

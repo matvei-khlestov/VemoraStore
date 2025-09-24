@@ -49,7 +49,7 @@ final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
             self?.showEditName()
         }
         vc.onEditEmail = { [weak self] in
-            self?.openStub(title: "Изменить почту")
+            self?.showEditEmail()
         }
         vc.onEditPhone = { [weak self] in
             self?.openStub(title: "Изменить телефон")
@@ -72,6 +72,18 @@ final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
         editName.start()
     }
     
+    private func showEditEmail() {
+        let editEmail = coordinatorFactory.makeEditEmailCoordinator(navigation: navigation)
+        add(editEmail)
+
+        editEmail.onFinish = { [weak self, weak editEmail] in
+            guard let self else { return }
+            if let editEmail { self.remove(editEmail) }
+        }
+
+        editEmail.start()
+    }
+
     private func openStub(title: String) {
         let stub = UIViewController()
         stub.view.backgroundColor = .systemBackground
