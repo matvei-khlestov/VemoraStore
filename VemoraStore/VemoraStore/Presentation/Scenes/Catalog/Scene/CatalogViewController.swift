@@ -15,9 +15,9 @@ final class CatalogViewController: UIViewController {
     
     // MARK: - Public callbacks
     
-    var onSelectProduct: ((Product) -> Void)?
-    var onAddToCart: ((Product) -> Void)?
-    var onToggleFavorite: ((Product) -> Void)?
+    var onSelectProduct: ((ProductTest) -> Void)?
+    var onAddToCart: ((ProductTest) -> Void)?
+    var onToggleFavorite: ((ProductTest) -> Void)?
     
     // MARK: - Deps
     
@@ -145,7 +145,7 @@ private extension CatalogViewController {
             .combineLatest(viewModel.productsPublisher)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] (_: [(title: String, count: Int, imageURL: URL?)],
-                                 _: [Product]) in
+                                 _: [ProductTest]) in
                 self?.collectionView.reloadData()
             }
             .store(in: &bag)

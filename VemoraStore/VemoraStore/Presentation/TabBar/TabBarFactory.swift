@@ -9,15 +9,22 @@ import UIKit
 
 struct TabBarFactory {
 
-    static func makeNav(root: UIViewController, tab: AppTab) -> UINavigationController {
-        let nav = UINavigationController(rootViewController: root)
+    static func makeNav(tab: AppTab) -> UINavigationController {
+        let nav = UINavigationController()
         nav.navigationBar.prefersLargeTitles = true
-        root.navigationItem.largeTitleDisplayMode = .always
-        root.navigationItem.title = tab.title
-        nav.tabBarItem = UITabBarItem(title: tab.title,
-                                      image: UIImage(systemName: tab.systemImage),
-                                      tag: tab.rawValue)
+        nav.tabBarItem = UITabBarItem(
+            title: tab.title,
+            image: UIImage(systemName: tab.systemImage),
+            tag: tab.rawValue
+        )
         return nav
+    }
+
+    /// Удобный помощник: выставляет корневой VC и заголовок под вкладку.
+    static func setRoot(_ vc: UIViewController, for nav: UINavigationController, tab: AppTab) {
+        vc.navigationItem.largeTitleDisplayMode = .always
+        vc.title = tab.title
+        nav.setViewControllers([vc], animated: false)
     }
 
     static func makeTabBar(viewControllers: [UIViewController], selected: AppTab = .catalog) -> UITabBarController {
@@ -40,9 +47,8 @@ struct TabBarFactory {
             .font: UIFont.systemFont(ofSize: 12)
         ]
         appearance.stackedLayoutAppearance.selected.iconColor = UIColor.brightPurple
-        
+
         tabBarController.tabBar.standardAppearance = appearance
-        
         if #available(iOS 15.0, *) {
             tabBarController.tabBar.scrollEdgeAppearance = appearance
         }

@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol ProductServiceProtocol {
-    func products() -> AnyPublisher<[Product], Error>
-    func products(in categoryId: String) -> AnyPublisher<[Product], Error>
-    func categories() -> AnyPublisher<[Category], Error>
+    func products() -> AnyPublisher<[ProductTest], Error>
+    func products(in categoryId: String) -> AnyPublisher<[ProductTest], Error>
+    func categories() -> AnyPublisher<[CategoryTest], Error>
 }

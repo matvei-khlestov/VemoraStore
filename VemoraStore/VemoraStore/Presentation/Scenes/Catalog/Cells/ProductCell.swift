@@ -149,7 +149,7 @@ final class ProductCell: UICollectionViewCell {
     }
 
     // MARK: - API
-    func configure(with product: Product, isFavorite: Bool = false, isInCart: Bool = false) {
+    func configure(with product: ProductTest, isFavorite: Bool = false, isInCart: Bool = false) {
         titleLabel.text = product.name
         categoryLabel.text = product.categoryId
         priceLabel.text = String(format: "$%.2f", product.price)

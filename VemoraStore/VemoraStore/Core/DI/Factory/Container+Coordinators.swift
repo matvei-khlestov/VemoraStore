@@ -25,7 +25,7 @@ extension Container {
     
     // MARK: - Product Details
     
-    var productDetailsCoordinator: ParameterFactory<(UINavigationController, Product), ProductDetailsCoordinatingProtocol> {
+    var productDetailsCoordinator: ParameterFactory<(UINavigationController, ProductTest), ProductDetailsCoordinatingProtocol> {
         self { navigation, product in
             ProductDetailsCoordinator(
                 navigation: navigation,
@@ -78,7 +78,7 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Cart
     
     var cartCoordinator: ParameterFactory<UINavigationController, CartCoordinatingProtocol> {
@@ -90,7 +90,7 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Orders
     
     var ordersCoordinator: ParameterFactory<UINavigationController, OrdersCoordinatingProtocol> {
@@ -109,7 +109,7 @@ extension Container {
             AboutCoordinator(navigation: navigation)
         }
     }
-
+    
     // MARK: - Privacy Policy
     
     var privacyPolicyCoordinator: ParameterFactory<UINavigationController, PrivacyPolicyCoordinatingProtocol> {
@@ -117,7 +117,7 @@ extension Container {
             PrivacyPolicyCoordinator(navigation: navigation)
         }
     }
-
+    
     // MARK: - Contact Us
     
     var contactUsCoordinator: ParameterFactory<UINavigationController, ContactUsCoordinatingProtocol> {
@@ -125,7 +125,7 @@ extension Container {
             ContactUsCoordinator(navigation: navigation)
         }
     }
-
+    
     // MARK: - Reset Password
     
     var resetPasswordCoordinator: ParameterFactory<UINavigationController, ResetPasswordCoordinatingProtocol> {
@@ -136,7 +136,7 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Auth
     
     var authCoordinator: ParameterFactory<UINavigationController, AuthCoordinatingProtocol> {
@@ -149,7 +149,7 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Profile Guest
     
     var profileGuestCoordinator: ParameterFactory<UINavigationController, ProfileGuestCoordinatingProtocol> {
@@ -161,7 +161,7 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Profile User
     
     var profileUserCoordinator: ParameterFactory<UINavigationController, ProfileUserCoordinatingProtocol> {
@@ -173,9 +173,9 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Edit Profile
-
+    
     var editProfileCoordinator: ParameterFactory<UINavigationController, EditProfileCoordinatingProtocol> {
         self { navigation in
             EditProfileCoordinator(
@@ -185,9 +185,9 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Edit Name
-
+    
     var editNameCoordinator: ParameterFactory<UINavigationController, EditNameCoordinatingProtocol> {
         self { navigation in
             EditNameCoordinator(
@@ -196,9 +196,9 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Edit Email
-
+    
     var editEmailCoordinator: ParameterFactory<UINavigationController, EditEmailCoordinatingProtocol> {
         self { navigation in
             EditEmailCoordinator(
@@ -207,9 +207,9 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Edit Phone
-
+    
     var editPhoneCoordinator: ParameterFactory<UINavigationController, EditPhoneCoordinatingProtocol> {
         self { navigation in
             EditPhoneCoordinator(
@@ -218,7 +218,7 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - Main
     
     var mainCoordinator: ParameterFactory<UINavigationController, MainCoordinatingProtocol> {
@@ -230,7 +230,7 @@ extension Container {
             )
         }
     }
-
+    
     // MARK: - App
     
     var appCoordinator: ParameterFactory<UINavigationController, AppCoordinatingProtocol> {
@@ -242,4 +242,17 @@ extension Container {
             )
         }
     }
+    
+    // MARK: - Debug
+    
+#if DEBUG
+    var debugImportCoordinator: ParameterFactory<UINavigationController, DebugCoordinatingProtocol> {
+        self { navigation in
+            DebugImportCoordinator(
+                navigation: navigation,
+                viewModelFactory: self.viewModelFactory()
+            )
+        }
+    }
+#endif
 }

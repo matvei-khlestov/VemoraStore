@@ -10,17 +10,19 @@ import UIKit
 final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     
     // MARK: - Properties
+    
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     
-    private let product: Product
+    private let product: ProductTest
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
     
     // MARK: - Init
+    
     init(
         navigation: UINavigationController,
-        product: Product,
+        product: ProductTest,
         viewModelFactory: ViewModelBuildingProtocol,
         coordinatorFactory: CoordinatorBuildingProtocol
     ) {
@@ -31,6 +33,7 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     }
     
     // MARK: - Start
+    
     func start() {
         let vm = viewModelFactory.makeProductDetailsViewModel(product: product)
         let vc = ProductDetailsViewController(viewModel: vm)
@@ -46,6 +49,7 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     }
     
     // MARK: - Private
+    
     private func startCheckout() {
         let checkout = coordinatorFactory.makeCheckoutCoordinator(navigation: navigation)
         add(checkout)

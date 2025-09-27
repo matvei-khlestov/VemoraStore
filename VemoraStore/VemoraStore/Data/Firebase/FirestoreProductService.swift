@@ -10,25 +10,25 @@ import Combine
 
 final class FirestoreProductService: ProductServiceProtocol {
 
-    func products() -> AnyPublisher<[Product], any Error> {
+    func products() -> AnyPublisher<[ProductTest], any Error> {
         let p = placeholderProducts()
         return Just(p)
             .setFailureType(to: Error.self)
             .eraseToAnyPublisher()
     }
 
-    func products(in categoryId: String) -> AnyPublisher<[Product], any Error> {
+    func products(in categoryId: String) -> AnyPublisher<[ProductTest], any Error> {
         let p = placeholderProducts().filter { $0.categoryId == categoryId }
         return Just(p)
             .setFailureType(to: Error.self)
             .eraseToAnyPublisher()
     }
 
-    func categories() -> AnyPublisher<[Category], any Error> {
-        let cats: [Category] = [
-            Category(id: "chairs", name: "Стулья", icon: nil),
-            Category(id: "tables", name: "Столы", icon: nil),
-            Category(id: "sofas",  name: "Диваны", icon: nil)
+    func categories() -> AnyPublisher<[CategoryTest], any Error> {
+        let cats: [CategoryTest] = [
+            CategoryTest(id: "chairs", name: "Стулья", icon: nil),
+            CategoryTest(id: "tables", name: "Столы", icon: nil),
+            CategoryTest(id: "sofas",  name: "Диваны", icon: nil)
         ]
         return Just(cats)
             .setFailureType(to: Error.self)
@@ -38,13 +38,13 @@ final class FirestoreProductService: ProductServiceProtocol {
 
 // MARK: - Stubs
 private extension FirestoreProductService {
-    func placeholderProducts() -> [Product] {
+    func placeholderProducts() -> [ProductTest] {
         let img1 = URL(string: "https://via.placeholder.com/600x600?text=Chair")!
         let img2 = URL(string: "https://via.placeholder.com/600x600?text=Table")!
         let img3 = URL(string: "https://via.placeholder.com/600x600?text=Sofa")!
 
         return [
-            Product(
+            ProductTest(
                 id: "1",
                 name: "Стул «Comfort»",
                 description: "Удобный стул для кухни и гостиной.",
@@ -53,7 +53,7 @@ private extension FirestoreProductService {
                 categoryId: "chairs",
                 brendId: "brand1"
             ),
-            Product(
+            ProductTest(
                 id: "2",
                 name: "Стол обеденный «Classic»",
                 description: "Прочный стол на 4–6 персон.",
@@ -62,7 +62,7 @@ private extension FirestoreProductService {
                 categoryId: "tables",
                 brendId: "brand2"
             ),
-            Product(
+            ProductTest(
                 id: "3",
                 name: "Диван «Relax»",
                 description: "Комфортный диван для уютных вечеров.",

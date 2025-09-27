@@ -12,7 +12,7 @@ import FactoryKit
 final class FavoritesViewModel: FavoritesViewModelProtocol {
     
     // MARK: - Publishers (protocol conformance)
-    var favoriteProductsPublisher: AnyPublisher<[Product], Never> {
+    var favoriteProductsPublisher: AnyPublisher<[ProductTest], Never> {
         $favoriteProducts.eraseToAnyPublisher()
     }
 
@@ -25,7 +25,7 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     private let productService: ProductServiceProtocol
     
     // MARK: - State (Outputs for Controller)
-    @Published private(set) var favoriteProducts: [Product] = []
+    @Published private(set) var favoriteProducts: [ProductTest] = []
     /// Локальная корзина для отражения состояния кнопок в UI (мок).
     @Published private(set) var inCartIds: Set<String> = []
     
@@ -73,7 +73,7 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     /// Кол-во элементов в таблице
     var count: Int { favoriteProducts.count }
     
-    func product(at indexPath: IndexPath) -> Product { favoriteProducts[indexPath.row] }
+    func product(at indexPath: IndexPath) -> ProductTest { favoriteProducts[indexPath.row] }
     
     func isFavorite(_ id: String) -> Bool { favoritesService.isFavorite(id) }
     
@@ -112,8 +112,8 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
 
 // MARK: - MockData
 private enum MockData {
-    static let products: [Product] = [
-        Product(
+    static let products: [ProductTest] = [
+        ProductTest(
             id: "p_sofa_oslo",
             name: "Vemora Oslo Sofa 3-Seater",
             description: "Compact 3-seater sofa with soft fabric upholstery and wooden legs.",
@@ -122,7 +122,7 @@ private enum MockData {
             categoryId: "sofas",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_table_nordic",
             name: "Nordic Oak Coffee Table",
             description: "Minimal coffee table made of solid oak with rounded corners.",
@@ -131,7 +131,7 @@ private enum MockData {
             categoryId: "coffee_tables",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_chair_luna",
             name: "Luna Accent Chair",
             description: "Ergonomic accent chair with textured upholstery and metal frame.",

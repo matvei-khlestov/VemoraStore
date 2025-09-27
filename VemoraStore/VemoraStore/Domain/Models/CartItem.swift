@@ -10,6 +10,6 @@ import Foundation
 /// Элемент корзины
 struct CartItem: Identifiable, Equatable {
     let id: String
-    let product: Product
+    let product: ProductTest
     var quantity: Int
 }

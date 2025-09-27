@@ -26,7 +26,7 @@ final class CartService: CartServiceProtocol {
         itemsSubject.eraseToAnyPublisher()
     }
     
-    func add(product: Product, quantity: Int = 1) {
+    func add(product: ProductTest, quantity: Int = 1) {
         if let idx = items.firstIndex(where: { $0.id == product.id }) {
             items[idx].quantity += quantity
         } else {
@@ -61,8 +61,8 @@ final class CartService: CartServiceProtocol {
 
 // MARK: - MockData
 private enum MockData {
-    static let products: [Product] = [
-        Product(
+    static let products: [ProductTest] = [
+        ProductTest(
             id: "p_sofa_oslo",
             name: "Vemora Oslo Sofa 3-Seater",
             description: "Compact 3-seater sofa with soft fabric upholstery and wooden legs.",
@@ -71,7 +71,7 @@ private enum MockData {
             categoryId: "sofas",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_table_nordic",
             name: "Nordic Oak Coffee Table",
             description: "Minimal coffee table made of solid oak with rounded corners.",
@@ -80,7 +80,7 @@ private enum MockData {
             categoryId: "coffee_tables",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_chair_luna",
             name: "Luna Accent Chair",
             description: "Ergonomic accent chair with textured upholstery and metal frame.",
@@ -89,7 +89,7 @@ private enum MockData {
             categoryId: "chairs",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_bed_eden",
             name: "Eden King Size Bed",
             description: "Elegant king size bed frame with padded headboard and wooden legs.",
@@ -98,7 +98,7 @@ private enum MockData {
             categoryId: "beds",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_dresser_metro",
             name: "Metro 6-Drawer Dresser",
             description: "Spacious dresser with six drawers and sleek metal handles.",
@@ -107,7 +107,7 @@ private enum MockData {
             categoryId: "dressers",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_lamp_aurora",
             name: "Aurora Floor Lamp",
             description: "Modern floor lamp with adjustable arm and soft LED light.",
@@ -116,7 +116,7 @@ private enum MockData {
             categoryId: "lighting",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_rug_sahara",
             name: "Sahara Area Rug",
             description: "Handwoven area rug with geometric patterns in warm tones.",
@@ -125,7 +125,7 @@ private enum MockData {
             categoryId: "rugs",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_shelf_urban",
             name: "Urban Wall Shelf",
             description: "Floating wall shelf made of reclaimed wood and black metal brackets.",
@@ -134,7 +134,7 @@ private enum MockData {
             categoryId: "shelves",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_desk_nova",
             name: "Nova Writing Desk",
             description: "Compact writing desk with drawer and metal frame, perfect for small spaces.",
@@ -143,7 +143,7 @@ private enum MockData {
             categoryId: "desks",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_cabinet_alto",
             name: "Alto Storage Cabinet",
             description: "Tall storage cabinet with adjustable shelves and matte finish.",
@@ -152,7 +152,7 @@ private enum MockData {
             categoryId: "cabinets",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_stool_milo",
             name: "Milo Bar Stool",
             description: "Comfortable bar stool with cushioned seat and wooden legs.",
@@ -161,7 +161,7 @@ private enum MockData {
             categoryId: "stools",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_mirror_elysium",
             name: "Elysium Wall Mirror",
             description: "Round wall mirror with thin gold frame and minimalist design.",
@@ -170,7 +170,7 @@ private enum MockData {
             categoryId: "mirrors",
             brendId: "vemora"
         ),
-        Product(
+        ProductTest(
             id: "p_couch_venice",
             name: "Venice Velvet Couch",
             description: "Luxurious velvet couch with deep seating and button tufting.",

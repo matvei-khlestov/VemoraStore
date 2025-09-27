@@ -1,0 +1,42 @@
+[
+    {
+        "id": "vemora",
+        "name": "Vemora",
+        "imageURL": "https://storage.yandexcloud.net/vemora-store-images/brands/vemora-logo.jpg",
+        "isActive": true,
+        "createdAt": "2025-09-24T10:00:00Z",
+        "updatedAt": "2025-09-24T10:00:00Z"
+    },
+    {
+        "id": "ikea",
+        "name": "IKEA",
+        "imageURL": "https://storage.yandexcloud.net/vemora-store-images/brands/ikea-logo.jpg",
+        "isActive": true,
+        "createdAt": "2025-09-24T10:00:00Z",
+        "updatedAt": "2025-09-24T10:00:00Z"
+    },
+    {
+        "id": "hoff",
+        "name": "Hoff",
+        "imageURL": "https://storage.yandexcloud.net/vemora-store-images/brands/hoff-logo.jpg",
+        "isActive": true,
+        "createdAt": "2025-09-24T10:00:00Z",
+        "updatedAt": "2025-09-24T10:00:00Z"
+    },
+    {
+        "id": "divanru",
+        "name": "Диван.ру",
+        "imageURL": "https://storage.yandexcloud.net/vemora-store-images/brands/divanru-logo.jpg",
+        "isActive": true,
+        "createdAt": "2025-09-24T10:00:00Z",
+        "updatedAt": "2025-09-24T10:00:00Z"
+    },
+    {
+        "id": "mnogomebeli",
+        "name": "Много Мебели",
+        "imageURL": "https://storage.yandexcloud.net/vemora-store-images/brands/mnogomebeli-logo.jpg",
+        "isActive": true,
+        "createdAt": "2025-09-24T10:00:00Z",
+        "updatedAt": "2025-09-24T10:00:00Z"
+    }
+]

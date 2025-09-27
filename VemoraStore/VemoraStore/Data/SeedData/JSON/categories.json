@@ -1,0 +1,47 @@
+[
+    {
+        "id": "1",
+        "name": "Стулья и кресла",
+        "imageURL": "https://storage.yandexcloud.net/vemora-store-images/categories/stulya-i-kresla.jpg",
+        "brandIds": ["vemora", "ikea", "hoff", "divanru", "mnogomebeli"],
+        "isActive": true,
+        "createdAt": "2025-09-24T10:00:00Z",
+        "updatedAt": "2025-09-24T10:00:00Z"
+    },
+    {
+        "id": "2",
+        "name": "Диваны",
+        "imageURL": "https://storage.yandexcloud.net/vemora-store-images/categories/divany.jpg",
+        "brandIds": ["vemora", "ikea", "hoff", "divanru", "mnogomebeli"],
+        "isActive": true,
+        "createdAt": "2025-09-24T10:00:00Z",
+        "updatedAt": "2025-09-24T10:00:00Z"
+    },
+    {
+        "id": "3",
+        "name": "Столы",
+        "imageURL": "https://storage.yandexcloud.net/vemora-store-images/categories/stoly.jpg",
+        "brandIds": ["vemora", "ikea", "hoff", "divanru", "mnogomebeli"],
+        "isActive": true,
+        "createdAt": "2025-09-24T10:00:00Z",
+        "updatedAt": "2025-09-24T10:00:00Z"
+    },
+    {
+        "id": "4",
+        "name": "Кровати",
+        "imageURL": "https://storage.yandexcloud.net/vemora-store-images/categories/krovati.jpg",
+        "brandIds": ["vemora", "ikea", "hoff", "divanru", "mnogomebeli"],
+        "isActive": true,
+        "createdAt": "2025-09-24T10:00:00Z",
+        "updatedAt": "2025-09-24T10:00:00Z"
+    },
+    {
+        "id": "5",
+        "name": "Шкафы и комоды",
+        "imageURL": "https://storage.yandexcloud.net/vemora-store-images/categories/shkafy-i-komody.jpg",
+        "brandIds": ["vemora", "ikea", "hoff", "divanru", "mnogomebeli"],
+        "isActive": true,
+        "createdAt": "2025-09-24T10:00:00Z",
+        "updatedAt": "2025-09-24T10:00:00Z"
+    }
+]

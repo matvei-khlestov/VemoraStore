@@ -165,7 +165,7 @@ final class FavoritesCell: UITableViewCell {
     }
     
     // MARK: - API
-    func configure(with product: Product, isInCart: Bool = false) {
+    func configure(with product: ProductTest, isInCart: Bool = false) {
         titleLabel.text = product.name
         categoryLabel.text = product.categoryId
         priceLabel.text = String(format: "$%.2f", product.price)

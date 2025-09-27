@@ -385,7 +385,7 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
                 withIdentifier: CheckoutCell.reuseId,
                 for: indexPath
             ) as! CheckoutCell
-            let product = Product(
+            let product = ProductTest(
                 id: "mock_\(indexPath.row)",
                 name: "Vemora Oslo Sofa 3-Seater",
                 description: "Mock item for checkout preview",

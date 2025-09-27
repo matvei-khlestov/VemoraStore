@@ -66,4 +66,37 @@ extension Container {
     var ordersService: Factory<OrdersServiceProtocol> {
         self { OrdersService() }
     }
+    
+    // MARK: - Debug
+    
+#if DEBUG
+    var debugImportStorage: Factory<DebugImportStoringProtocol> {
+        self { DebugImportStorage.shared }
+    }
+    
+    var checksumStorage: ParameterFactory<String, ChecksumStoringProtocol> {
+        self { namespace in
+            ChecksumStorage(namespace: namespace)
+        }
+    }
+    
+    var debugImportService: Factory<DebugImportServicingProtocol> {
+        self { [unowned self] in
+            DebugImportService(
+                checksumStoreFactory: { namespace in
+                    self.checksumStorage(namespace)
+                }
+            )
+        }.singleton
+    }
+    
+    var debugImporter: Factory<DebugImportingProtocol> {
+        self { [unowned self] in
+            DebugImporter(
+                debugImportService: self.debugImportService(),
+                debugImportStorage: self.debugImportStorage()
+            )
+        }.singleton
+    }
+#endif
 }

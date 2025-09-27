@@ -5,7 +5,7 @@
 //  Created by Matvei Khlestov on 23.09.2025.
 //
 
-import UIKit
+import Foundation
 
 protocol OrdersCoordinatingProtocol: Coordinator {
     func start()
