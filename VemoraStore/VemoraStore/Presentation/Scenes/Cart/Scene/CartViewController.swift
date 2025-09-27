@@ -13,7 +13,7 @@ final class CartViewController: UIViewController {
 
     // MARK: - Public Callbacks
     var onCheckout: (() -> Void)?
-    var onSelectProduct: ((Product) -> Void)?
+    var onSelectProduct: ((ProductTest) -> Void)?
 
     // MARK: - Deps
     private let viewModel: CartViewModelProtocol

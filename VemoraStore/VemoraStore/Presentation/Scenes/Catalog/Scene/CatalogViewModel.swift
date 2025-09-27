@@ -13,12 +13,12 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     @Published var query: String = ""
     
     @Published private(set) var categories: [(title: String, count: Int, imageURL: URL?)] = []
-    @Published private(set) var products: [Product] = []
+    @Published private(set) var products: [ProductTest] = []
     
     var categoriesPublisher: AnyPublisher<[(title: String, count: Int, imageURL: URL?)], Never> {
         $categories.eraseToAnyPublisher()
     }
-    var productsPublisher: AnyPublisher<[Product], Never> {
+    var productsPublisher: AnyPublisher<[ProductTest], Never> {
         $products.eraseToAnyPublisher()
     }
     
@@ -56,7 +56,7 @@ final class CatalogViewModel: CatalogViewModelProtocol {
         ]
         
         products = [
-            Product(
+            ProductTest(
                 id: "1",
                 name: "Modern Nesting Wood Coffee Table with Gold...",
                 description: "Elegant nesting coffee table with gold accents.",
@@ -65,7 +65,16 @@ final class CatalogViewModel: CatalogViewModelProtocol {
                 categoryId: "coffee",
                 brendId: "brand1"
             ),
-            Product(
+            ProductTest(
+                id: "2",
+                name: "Tribesigns Modern Home Decor Round Side Table",
+                description: "Компактное кресло с мягкой бежевой обивкой и ножками из натурального дуба. Подойдёт для небольших гостиных или спален, создавая уютное место для отдыха.",
+                price: 7.48,
+                image: URL(string: "https://via.placeholder.com/300")!,
+                categoryId: "coffee",
+                brendId: "brand2"
+            ),
+            ProductTest(
                 id: "2",
                 name: "Tribesigns Modern Home Decor Round Side Table",
                 description: "Round side table for living room.",
@@ -74,7 +83,7 @@ final class CatalogViewModel: CatalogViewModelProtocol {
                 categoryId: "coffee",
                 brendId: "brand2"
             ),
-            Product(
+            ProductTest(
                 id: "2",
                 name: "Tribesigns Modern Home Decor Round Side Table",
                 description: "Round side table for living room.",
@@ -83,7 +92,7 @@ final class CatalogViewModel: CatalogViewModelProtocol {
                 categoryId: "coffee",
                 brendId: "brand2"
             ),
-            Product(
+            ProductTest(
                 id: "2",
                 name: "Tribesigns Modern Home Decor Round Side Table",
                 description: "Round side table for living room.",
@@ -92,16 +101,7 @@ final class CatalogViewModel: CatalogViewModelProtocol {
                 categoryId: "coffee",
                 brendId: "brand2"
             ),
-            Product(
-                id: "2",
-                name: "Tribesigns Modern Home Decor Round Side Table",
-                description: "Round side table for living room.",
-                price: 7.48,
-                image: URL(string: "https://via.placeholder.com/300")!,
-                categoryId: "coffee",
-                brendId: "brand2"
-            ),
-            Product(
+            ProductTest(
                 id: "2",
                 name: "Tribesigns Modern Home Decor Round Side Table",
                 description: "Round side table for living room.",

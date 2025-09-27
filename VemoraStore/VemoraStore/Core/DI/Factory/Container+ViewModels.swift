@@ -11,7 +11,7 @@ import FactoryKit
 extension Container {
     
     // MARK: - Auth
-
+    
     var signUpViewModel: Factory<SignUpViewModelProtocol> {
         self {
             SignUpViewModel(
@@ -20,7 +20,7 @@ extension Container {
             )
         }
     }
-
+    
     var signInViewModel: Factory<SignInViewModelProtocol> {
         self {
             SignInViewModel(
@@ -45,7 +45,7 @@ extension Container {
         self { CatalogViewModel(productService: self.productService()) }.singleton
     }
     
-    var productDetailsViewModel: ParameterFactory<Product, ProductDetailsViewModelProtocol> {
+    var productDetailsViewModel: ParameterFactory<ProductTest, ProductDetailsViewModelProtocol> {
         self { product in
             ProductDetailsViewModel(
                 product: product,
@@ -77,7 +77,7 @@ extension Container {
     var editProfileViewModel: Factory<EditProfileViewModelProtocol> {
         self { EditProfileViewModel(avatarStorage: self.avatarStorageService()) }
     }
-
+    
     var editNameViewModel: Factory<EditNameViewModelProtocol> {
         self {
             EditNameViewModel(
@@ -158,4 +158,17 @@ extension Container {
             )
         }
     }
+    
+    // MARK: - Debug
+    
+#if DEBUG
+    var debugImportViewModel: Factory<DebugImportViewModelProtocol> {
+        self {
+            DebugImportViewModel(
+                debugImportStorage: self.debugImportStorage(),
+                debugImporter: self.debugImporter()
+            )
+        }
+    }
+#endif
 }

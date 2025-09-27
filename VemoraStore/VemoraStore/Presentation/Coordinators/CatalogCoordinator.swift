@@ -46,7 +46,7 @@ final class CatalogCoordinator: CatalogCoordinatingProtocol {
     
     // MARK: - Private
     
-    private func showProductDetails(for product: Product) {
+    private func showProductDetails(for product: ProductTest) {
         let detailsCoordinator = coordinatorFactory.makeProductDetailsCoordinator(
             navigation: navigation,
             product: product

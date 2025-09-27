@@ -2,13 +2,17 @@
 //  Category.swift
 //  VemoraStore
 //
-//  Created by Matvei Khlestov on 29.08.2025.
+//  Created by Matvei Khlestov on 26.09.2025.
 //
 
 import Foundation
 
-struct Category: Codable, Hashable {
+struct Category: Codable {
     let id: String
     let name: String
-    let icon: URL?
+    let imageURL: String
+    let brandIds: [String]
+    let isActive: Bool
+    let createdAt: String?
+    let updatedAt: String?
 }

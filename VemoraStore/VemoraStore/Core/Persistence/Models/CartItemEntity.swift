@@ -9,7 +9,7 @@ import Foundation
 
 struct CartItemEntity: Identifiable, Equatable {
     let id: String
-    let product: Product
+    let product: ProductTest
     var quantity: Int
     
     var totalPrice: Double {

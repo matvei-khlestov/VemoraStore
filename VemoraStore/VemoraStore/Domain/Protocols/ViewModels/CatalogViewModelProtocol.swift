@@ -14,11 +14,11 @@ protocol CatalogViewModelProtocol: AnyObject {
     
     // Текущие значения для data source
     var categories: [(title: String, count: Int, imageURL: URL?)] { get }
-    var products: [Product] { get }
+    var products: [ProductTest] { get }
     
     // Паблишеры для биндингов
     var categoriesPublisher: AnyPublisher<[(title: String, count: Int, imageURL: URL?)], Never> { get }
-    var productsPublisher: AnyPublisher<[Product], Never> { get }
+    var productsPublisher: AnyPublisher<[ProductTest], Never> { get }
     
     // Действия
     func reload()

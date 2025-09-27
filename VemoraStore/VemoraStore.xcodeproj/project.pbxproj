@@ -23,8 +23,8 @@
 		A0854FEA2E612206004633CA /* FirebaseNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE92E612206004633CA /* FirebaseNotificationService.swift */; };
 		A0854FEF2E612272004633CA /* CartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FEE2E612272004633CA /* CartService.swift */; };
 		A0854FF12E612286004633CA /* FavoritesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FF02E612286004633CA /* FavoritesService.swift */; };
-		A0854FF92E612395004633CA /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FF82E612395004633CA /* Product.swift */; };
-		A0854FFB2E6123A5004633CA /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FFA2E6123A5004633CA /* Category.swift */; };
+		A0854FF92E612395004633CA /* ProductTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FF82E612395004633CA /* ProductTest.swift */; };
+		A0854FFB2E6123A5004633CA /* CategoryTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FFA2E6123A5004633CA /* CategoryTest.swift */; };
 		A0854FFF2E6123D0004633CA /* Address.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FFE2E6123D0004633CA /* Address.swift */; };
 		A08550022E612411004633CA /* AuthServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550012E612411004633CA /* AuthServiceProtocol.swift */; };
 		A08550042E612420004633CA /* ProductServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550032E612420004633CA /* ProductServiceProtocol.swift */; };
@@ -49,8 +49,6 @@
 		A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085503F2E612ADB004633CA /* CheckoutViewModel.swift */; };
 		A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550412E612AEA004633CA /* MapPickerViewController.swift */; };
 		A08550452E612B4D004633CA /* TabBarFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550442E612B4D004633CA /* TabBarFactory.swift */; };
-		A085504A2E612C55004633CA /* UserDefaultsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550492E612C55004633CA /* UserDefaultsService.swift */; };
-		A085504C2E612F78004633CA /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085504B2E612F78004633CA /* UserDefaultsKeys.swift */; };
 		A085504F2E613EF8004633CA /* Container+Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085504E2E613EF8004633CA /* Container+Services.swift */; };
 		A08550512E613F2D004633CA /* Container+ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550502E613F2D004633CA /* Container+ViewModels.swift */; };
 		A08550532E613F5A004633CA /* Container+Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08550522E613F5A004633CA /* Container+Utils.swift */; };
@@ -208,6 +206,40 @@
 		A08551DB2E837CDC004633CA /* EditPhoneCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */; };
 		A08551E12E838139004633CA /* BaseEditFieldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551E02E838139004633CA /* BaseEditFieldViewController.swift */; };
 		A08551E32E838493004633CA /* BaseEditFieldViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551E22E838493004633CA /* BaseEditFieldViewModelProtocol.swift */; };
+		A08551E52E843EE6004633CA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A08551E42E843EE6004633CA /* GoogleService-Info.plist */; };
+		A08551E82E843FFB004633CA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A08551E72E843FFB004633CA /* FirebaseAuth */; };
+		A08551EC2E843FFB004633CA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = A08551EB2E843FFB004633CA /* FirebaseFirestore */; };
+		A08551EE2E843FFB004633CA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A08551ED2E843FFB004633CA /* FirebaseStorage */; };
+		A08551F02E8440B2004633CA /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = A08551EF2E8440B2004633CA /* FirebaseMessaging */; };
+		A08551F22E8440BF004633CA /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = A08551F12E8440BF004633CA /* FirebaseCrashlytics */; };
+		A08551F42E8440F3004633CA /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = A08551F32E8440F3004633CA /* FirebaseCore */; };
+		A08551F72E85F21B004633CA /* brands.json in Resources */ = {isa = PBXBuildFile; fileRef = A08551F62E85F21B004633CA /* brands.json */; };
+		A08551F92E85F228004633CA /* categories.json in Resources */ = {isa = PBXBuildFile; fileRef = A08551F82E85F228004633CA /* categories.json */; };
+		A08551FB2E85F232004633CA /* products.json in Resources */ = {isa = PBXBuildFile; fileRef = A08551FA2E85F232004633CA /* products.json */; };
+		A08551FE2E85F2A8004633CA /* DebugImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551FD2E85F2A8004633CA /* DebugImportService.swift */; };
+		A08552012E860892004633CA /* DebugImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552002E860892004633CA /* DebugImporter.swift */; };
+		A08552062E860C0E004633CA /* DebugImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552052E860C0E004633CA /* DebugImportViewModel.swift */; };
+		A08552082E860C9F004633CA /* DebugImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552072E860C9F004633CA /* DebugImportViewController.swift */; };
+		A085520A2E86216D004633CA /* DebugImportStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552092E86216D004633CA /* DebugImportStorage.swift */; };
+		A085520C2E862BE2004633CA /* ChecksumStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085520B2E862BE2004633CA /* ChecksumStorage.swift */; };
+		A085520E2E862C1B004633CA /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085520D2E862C1B004633CA /* SHA256.swift */; };
+		A08552112E867031004633CA /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552102E867031004633CA /* Product.swift */; };
+		A08552132E8670D0004633CA /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552122E8670D0004633CA /* Category.swift */; };
+		A08552172E867177004633CA /* Brand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552162E867177004633CA /* Brand.swift */; };
+		A08552192E8671E1004633CA /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552182E8671E1004633CA /* ImportError.swift */; };
+		A085521B2E867318004633CA /* DryRunReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085521A2E867318004633CA /* DryRunReport.swift */; };
+		A085521D2E86755A004633CA /* ImportOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085521C2E86755A004633CA /* ImportOutcome.swift */; };
+		A085521F2E867BA5004633CA /* SectionWriteResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085521E2E867BA5004633CA /* SectionWriteResult.swift */; };
+		A08552212E871B6B004633CA /* SeedConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552202E871B6B004633CA /* SeedConfig.swift */; };
+		A08552232E872CCF004633CA /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552222E872CCF004633CA /* State.swift */; };
+		A08552252E872E64004633CA /* DebugImportStoringProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552242E872E64004633CA /* DebugImportStoringProtocol.swift */; };
+		A08552272E8741AA004633CA /* ChecksumStoringProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552262E8741AA004633CA /* ChecksumStoringProtocol.swift */; };
+		A08552292E87469F004633CA /* DebugImportServicingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552282E87469F004633CA /* DebugImportServicingProtocol.swift */; };
+		A085522B2E875149004633CA /* DebugImportingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085522A2E875149004633CA /* DebugImportingProtocol.swift */; };
+		A085522D2E875614004633CA /* DebugImportViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085522C2E875614004633CA /* DebugImportViewModelProtocol.swift */; };
+		A085522F2E875EBF004633CA /* DebugImportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085522E2E875EBF004633CA /* DebugImportCoordinator.swift */; };
+		A08552332E875FAB004633CA /* DebugCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552322E875FAB004633CA /* DebugCoordinatingProtocol.swift */; };
+		A08552352E879A6C004633CA /* PreparedInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552342E879A6C004633CA /* PreparedInputs.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -248,8 +280,8 @@
 		A0854FE92E612206004633CA /* FirebaseNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseNotificationService.swift; sourceTree = "<group>"; };
 		A0854FEE2E612272004633CA /* CartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartService.swift; sourceTree = "<group>"; };
 		A0854FF02E612286004633CA /* FavoritesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoritesService.swift; sourceTree = "<group>"; };
-		A0854FF82E612395004633CA /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
-		A0854FFA2E6123A5004633CA /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		A0854FF82E612395004633CA /* ProductTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductTest.swift; sourceTree = "<group>"; };
+		A0854FFA2E6123A5004633CA /* CategoryTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTest.swift; sourceTree = "<group>"; };
 		A0854FFE2E6123D0004633CA /* Address.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Address.swift; sourceTree = "<group>"; };
 		A08550012E612411004633CA /* AuthServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthServiceProtocol.swift; sourceTree = "<group>"; };
 		A08550032E612420004633CA /* ProductServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductServiceProtocol.swift; sourceTree = "<group>"; };
@@ -274,8 +306,6 @@
 		A085503F2E612ADB004633CA /* CheckoutViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckoutViewModel.swift; sourceTree = "<group>"; };
 		A08550412E612AEA004633CA /* MapPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapPickerViewController.swift; sourceTree = "<group>"; };
 		A08550442E612B4D004633CA /* TabBarFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarFactory.swift; sourceTree = "<group>"; };
-		A08550492E612C55004633CA /* UserDefaultsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsService.swift; sourceTree = "<group>"; };
-		A085504B2E612F78004633CA /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		A085504E2E613EF8004633CA /* Container+Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Services.swift"; sourceTree = "<group>"; };
 		A08550502E613F2D004633CA /* Container+ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+ViewModels.swift"; sourceTree = "<group>"; };
 		A08550522E613F5A004633CA /* Container+Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Utils.swift"; sourceTree = "<group>"; };
@@ -432,6 +462,34 @@
 		A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneCoordinator.swift; sourceTree = "<group>"; };
 		A08551E02E838139004633CA /* BaseEditFieldViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseEditFieldViewController.swift; sourceTree = "<group>"; };
 		A08551E22E838493004633CA /* BaseEditFieldViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseEditFieldViewModelProtocol.swift; sourceTree = "<group>"; };
+		A08551E42E843EE6004633CA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		A08551F62E85F21B004633CA /* brands.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = brands.json; sourceTree = "<group>"; };
+		A08551F82E85F228004633CA /* categories.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = categories.json; sourceTree = "<group>"; };
+		A08551FA2E85F232004633CA /* products.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = products.json; sourceTree = "<group>"; };
+		A08551FD2E85F2A8004633CA /* DebugImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportService.swift; sourceTree = "<group>"; };
+		A08552002E860892004633CA /* DebugImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImporter.swift; sourceTree = "<group>"; };
+		A08552052E860C0E004633CA /* DebugImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportViewModel.swift; sourceTree = "<group>"; };
+		A08552072E860C9F004633CA /* DebugImportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportViewController.swift; sourceTree = "<group>"; };
+		A08552092E86216D004633CA /* DebugImportStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportStorage.swift; sourceTree = "<group>"; };
+		A085520B2E862BE2004633CA /* ChecksumStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecksumStorage.swift; sourceTree = "<group>"; };
+		A085520D2E862C1B004633CA /* SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
+		A08552102E867031004633CA /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
+		A08552122E8670D0004633CA /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
+		A08552162E867177004633CA /* Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Brand.swift; sourceTree = "<group>"; };
+		A08552182E8671E1004633CA /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
+		A085521A2E867318004633CA /* DryRunReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DryRunReport.swift; sourceTree = "<group>"; };
+		A085521C2E86755A004633CA /* ImportOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportOutcome.swift; sourceTree = "<group>"; };
+		A085521E2E867BA5004633CA /* SectionWriteResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionWriteResult.swift; sourceTree = "<group>"; };
+		A08552202E871B6B004633CA /* SeedConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedConfig.swift; sourceTree = "<group>"; };
+		A08552222E872CCF004633CA /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
+		A08552242E872E64004633CA /* DebugImportStoringProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportStoringProtocol.swift; sourceTree = "<group>"; };
+		A08552262E8741AA004633CA /* ChecksumStoringProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecksumStoringProtocol.swift; sourceTree = "<group>"; };
+		A08552282E87469F004633CA /* DebugImportServicingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportServicingProtocol.swift; sourceTree = "<group>"; };
+		A085522A2E875149004633CA /* DebugImportingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportingProtocol.swift; sourceTree = "<group>"; };
+		A085522C2E875614004633CA /* DebugImportViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportViewModelProtocol.swift; sourceTree = "<group>"; };
+		A085522E2E875EBF004633CA /* DebugImportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportCoordinator.swift; sourceTree = "<group>"; };
+		A08552322E875FAB004633CA /* DebugCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCoordinatingProtocol.swift; sourceTree = "<group>"; };
+		A08552342E879A6C004633CA /* PreparedInputs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreparedInputs.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -439,7 +497,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A08551EC2E843FFB004633CA /* FirebaseFirestore in Frameworks */,
 				A085505C2E614D79004633CA /* FactoryKit in Frameworks */,
+				A08551F02E8440B2004633CA /* FirebaseMessaging in Frameworks */,
+				A08551F22E8440BF004633CA /* FirebaseCrashlytics in Frameworks */,
+				A08551F42E8440F3004633CA /* FirebaseCore in Frameworks */,
+				A08551EE2E843FFB004633CA /* FirebaseStorage in Frameworks */,
+				A08551E82E843FFB004633CA /* FirebaseAuth in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -518,6 +582,7 @@
 				A0854FB42E611307004633CA /* AppDelegate.swift */,
 				A0854FBB2E611307004633CA /* SceneDelegate.swift */,
 				A0854FB62E611307004633CA /* Info.plist */,
+				A08551E42E843EE6004633CA /* GoogleService-Info.plist */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -525,6 +590,7 @@
 		A0854FD12E6117F4004633CA /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				A08551FC2E85F26F004633CA /* Services */,
 				A0854FD22E611805004633CA /* DI */,
 				A0854FD52E61186A004633CA /* Extensions */,
 				A08550B82E7893F6004633CA /* Utils */,
@@ -583,6 +649,7 @@
 		A0854FDF2E611B1B004633CA /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				A08551FF2E860851004633CA /* SeedData */,
 				A08551A02E833782004633CA /* AvatarStorage */,
 				A0854FE02E612180004633CA /* Firebase */,
 				A0854FED2E61224B004633CA /* Local */,
@@ -644,12 +711,15 @@
 		A0854FF72E612380004633CA /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A0854FF82E612395004633CA /* Product.swift */,
-				A0854FFA2E6123A5004633CA /* Category.swift */,
+				A0854FF82E612395004633CA /* ProductTest.swift */,
+				A0854FFA2E6123A5004633CA /* CategoryTest.swift */,
 				A0854FFE2E6123D0004633CA /* Address.swift */,
 				A08550562E6144CB004633CA /* Profile.swift */,
 				A085507F2E6BF954004633CA /* CartItem.swift */,
 				A08551102E7C4D4B004633CA /* OrderModels.swift */,
+				A08552102E867031004633CA /* Product.swift */,
+				A08552122E8670D0004633CA /* Category.swift */,
+				A08552162E867177004633CA /* Brand.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -702,6 +772,7 @@
 				A08551C42E83692E004633CA /* EditNameCoordinator.swift */,
 				A08551CF2E837782004633CA /* EditEmailCoordinator.swift */,
 				A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */,
+				A085522E2E875EBF004633CA /* DebugImportCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -709,6 +780,7 @@
 		A08550172E6125A4004633CA /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				A08552042E860BBC004633CA /* DebugImport */,
 				A08551A52E833828004633CA /* EditProfile */,
 				A08550182E6125CC004633CA /* Auth */,
 				A08550EF2E7AB680004633CA /* PrivacyPolicy */,
@@ -812,8 +884,8 @@
 		A08550482E612C25004633CA /* UserDefaults */ = {
 			isa = PBXGroup;
 			children = (
-				A08550492E612C55004633CA /* UserDefaultsService.swift */,
-				A085504B2E612F78004633CA /* UserDefaultsKeys.swift */,
+				A08552092E86216D004633CA /* DebugImportStorage.swift */,
+				A085520B2E862BE2004633CA /* ChecksumStorage.swift */,
 			);
 			path = UserDefaults;
 			sourceTree = "<group>";
@@ -1056,6 +1128,10 @@
 				A08550D22E79BA69004633CA /* GeocodingServiceProtocol.swift */,
 				A08551142E7C5405004633CA /* OrdersServiceProtocol.swift */,
 				A08551A12E8337A2004633CA /* AvatarStorageServiceProtocol.swift */,
+				A08552242E872E64004633CA /* DebugImportStoringProtocol.swift */,
+				A08552262E8741AA004633CA /* ChecksumStoringProtocol.swift */,
+				A08552282E87469F004633CA /* DebugImportServicingProtocol.swift */,
+				A085522A2E875149004633CA /* DebugImportingProtocol.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1091,6 +1167,7 @@
 				A08551C72E837673004633CA /* EditEmailViewModelProtocol.swift */,
 				A08551D12E837C01004633CA /* EditPhoneViewModelProtocol.swift */,
 				A08551E22E838493004633CA /* BaseEditFieldViewModelProtocol.swift */,
+				A085522C2E875614004633CA /* DebugImportViewModelProtocol.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1318,6 +1395,7 @@
 				A08551C22E836900004633CA /* EditNameCoordinatingProtocol.swift */,
 				A08551CD2E837733004633CA /* EditEmailCoordinatingProtocol.swift */,
 				A08551D82E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift */,
+				A08552322E875FAB004633CA /* DebugCoordinatingProtocol.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -1414,6 +1492,58 @@
 			path = Controllers;
 			sourceTree = "<group>";
 		};
+		A08551FC2E85F26F004633CA /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A085520F2E866EC9004633CA /* DebugImport */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A08551FF2E860851004633CA /* SeedData */ = {
+			isa = PBXGroup;
+			children = (
+				A08552032E8608EC004633CA /* JSON */,
+				A08552002E860892004633CA /* DebugImporter.swift */,
+				A08552202E871B6B004633CA /* SeedConfig.swift */,
+			);
+			path = SeedData;
+			sourceTree = "<group>";
+		};
+		A08552032E8608EC004633CA /* JSON */ = {
+			isa = PBXGroup;
+			children = (
+				A08551F62E85F21B004633CA /* brands.json */,
+				A08551F82E85F228004633CA /* categories.json */,
+				A08551FA2E85F232004633CA /* products.json */,
+			);
+			path = JSON;
+			sourceTree = "<group>";
+		};
+		A08552042E860BBC004633CA /* DebugImport */ = {
+			isa = PBXGroup;
+			children = (
+				A08552222E872CCF004633CA /* State.swift */,
+				A08552052E860C0E004633CA /* DebugImportViewModel.swift */,
+				A08552072E860C9F004633CA /* DebugImportViewController.swift */,
+			);
+			path = DebugImport;
+			sourceTree = "<group>";
+		};
+		A085520F2E866EC9004633CA /* DebugImport */ = {
+			isa = PBXGroup;
+			children = (
+				A08551FD2E85F2A8004633CA /* DebugImportService.swift */,
+				A085521E2E867BA5004633CA /* SectionWriteResult.swift */,
+				A085521A2E867318004633CA /* DryRunReport.swift */,
+				A085521C2E86755A004633CA /* ImportOutcome.swift */,
+				A08552342E879A6C004633CA /* PreparedInputs.swift */,
+				A08552182E8671E1004633CA /* ImportError.swift */,
+				A085520D2E862C1B004633CA /* SHA256.swift */,
+			);
+			path = DebugImport;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1432,6 +1562,12 @@
 			name = VemoraStore;
 			packageProductDependencies = (
 				A085505B2E614D79004633CA /* FactoryKit */,
+				A08551E72E843FFB004633CA /* FirebaseAuth */,
+				A08551EB2E843FFB004633CA /* FirebaseFirestore */,
+				A08551ED2E843FFB004633CA /* FirebaseStorage */,
+				A08551EF2E8440B2004633CA /* FirebaseMessaging */,
+				A08551F12E8440BF004633CA /* FirebaseCrashlytics */,
+				A08551F32E8440F3004633CA /* FirebaseCore */,
 			);
 			productName = VemoraStore;
 			productReference = A0854F7D2E6112A3004633CA /* VemoraStore.app */;
@@ -1511,6 +1647,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				A08550552E6140B5004633CA /* XCRemoteSwiftPackageReference "Factory" */,
+				A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A0854F7E2E6112A3004633CA /* Products */;
@@ -1530,7 +1667,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0854FC02E611307004633CA /* Assets.xcassets in Resources */,
+				A08551F72E85F21B004633CA /* brands.json in Resources */,
 				A0854FC22E611307004633CA /* LaunchScreen.storyboard in Resources */,
+				A08551FB2E85F232004633CA /* products.json in Resources */,
+				A08551F92E85F228004633CA /* categories.json in Resources */,
+				A08551E52E843EE6004633CA /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1559,6 +1700,7 @@
 				A08551402E8094A8004633CA /* PasswordResetServiceProtocol.swift in Sources */,
 				A08550EB2E7A056D004633CA /* ProfileGuestRow.swift in Sources */,
 				A08550D92E79BB7E004633CA /* MapPickerViewModel.swift in Sources */,
+				A085522B2E875149004633CA /* DebugImportingProtocol.swift in Sources */,
 				A085510B2E7C4B0B004633CA /* OrdersViewController.swift in Sources */,
 				A08551422E8094DF004633CA /* FirebasePasswordResetService.swift in Sources */,
 				A0854FE62E6121E3004633CA /* FirebaseAuthService.swift in Sources */,
@@ -1571,6 +1713,7 @@
 				A08551B92E835BA9004633CA /* PaddedFieldState.swift in Sources */,
 				A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */,
 				A08550F12E7AB69F004633CA /* PrivacyPolicyText.swift in Sources */,
+				A085520E2E862C1B004633CA /* SHA256.swift in Sources */,
 				A08551782E81F944004633CA /* Container+Factories.swift in Sources */,
 				A08551932E8220A9004633CA /* AuthCoordinatingProtocol.swift in Sources */,
 				A08551832E820888004633CA /* CoordinatorFactory.swift in Sources */,
@@ -1582,6 +1725,7 @@
 				A08551A22E8337A2004633CA /* AvatarStorageServiceProtocol.swift in Sources */,
 				A08551C12E8368A0004633CA /* EditNameViewController.swift in Sources */,
 				A08550C02E789FA8004633CA /* AddressFormattingProtocol.swift in Sources */,
+				A08552252E872E64004633CA /* DebugImportStoringProtocol.swift in Sources */,
 				A08550C22E78A407004633CA /* DeliveryDetailsViewModel.swift in Sources */,
 				A08551172E7C5447004633CA /* OrdersService.swift in Sources */,
 				A08551512E81824C004633CA /* ConfirmationAlertType.swift in Sources */,
@@ -1591,15 +1735,18 @@
 				A08550102E61255A004633CA /* Coordinator.swift in Sources */,
 				A0854FC42E611307004633CA /* AppDelegate.swift in Sources */,
 				A085516A2E81D024004633CA /* FavoritesViewModelProtocol.swift in Sources */,
+				A08552082E860C9F004633CA /* DebugImportViewController.swift in Sources */,
 				A08550AB2E782F1A004633CA /* PaddedField.swift in Sources */,
 				A08550712E694489004633CA /* CatalogSectionHeader.swift in Sources */,
 				A085514F2E80A54F004633CA /* LabelLinkRow.swift in Sources */,
+				A085520C2E862BE2004633CA /* ChecksumStorage.swift in Sources */,
 				A08550932E7416B8004633CA /* ChangePhoneCell.swift in Sources */,
 				A08551C82E837673004633CA /* EditEmailViewModelProtocol.swift in Sources */,
 				A085513B2E807906004633CA /* SignInViewController.swift in Sources */,
 				A08550FA2E7AD0A9004633CA /* ProfileUserRow.swift in Sources */,
 				A08550B32E787298004633CA /* PhoneOrCommentInputSheetViewModel.swift in Sources */,
 				A085519B2E8227E6004633CA /* MainCoordinatingProtocol.swift in Sources */,
+				A085521F2E867BA5004633CA /* SectionWriteResult.swift in Sources */,
 				A08550042E612420004633CA /* ProductServiceProtocol.swift in Sources */,
 				A085507E2E6BF434004633CA /* CartCell.swift in Sources */,
 				A08550082E61243C004633CA /* CartServiceProtocol.swift in Sources */,
@@ -1608,7 +1755,6 @@
 				A08551952E822223004633CA /* ProfileGuestCoordinatingProtocol.swift in Sources */,
 				A08551852E820F10004633CA /* OrderSuccessCoordinatingProtocol.swift in Sources */,
 				A08550652E63F518004633CA /* CatalogCoordinator.swift in Sources */,
-				A085504C2E612F78004633CA /* UserDefaultsKeys.swift in Sources */,
 				A08551912E821E2C004633CA /* ResetPasswordCoordinatingProtocol.swift in Sources */,
 				A08551CC2E8376F2004633CA /* EditEmailViewController.swift in Sources */,
 				A08551CE2E837733004633CA /* EditEmailCoordinatingProtocol.swift in Sources */,
@@ -1620,7 +1766,6 @@
 				A085517E2E8204A1004633CA /* MapPickerCoordinatingProtocol.swift in Sources */,
 				A0854FC52E611307004633CA /* SceneDelegate.swift in Sources */,
 				A08550282E612945004633CA /* ProductDetailsViewModel.swift in Sources */,
-				A085504A2E612C55004633CA /* UserDefaultsService.swift in Sources */,
 				A08550322E612A46004633CA /* CartViewController.swift in Sources */,
 				A08550892E718F03004633CA /* CheckoutCell.swift in Sources */,
 				A08550DE2E79D1CD004633CA /* ProfileGuestCoordinator.swift in Sources */,
@@ -1639,28 +1784,35 @@
 				A08551282E7D952F004633CA /* SignUpViewModelProtocol.swift in Sources */,
 				A085503E2E612AC6004633CA /* CheckoutViewController.swift in Sources */,
 				A0854FF12E612286004633CA /* FavoritesService.swift in Sources */,
+				A08552132E8670D0004633CA /* Category.swift in Sources */,
 				A08551E12E838139004633CA /* BaseEditFieldViewController.swift in Sources */,
 				A085513E2E80839D004633CA /* AuthContainerViewController.swift in Sources */,
+				A08552172E867177004633CA /* Brand.swift in Sources */,
 				A085516C2E81D213004633CA /* CartViewModelProtocol.swift in Sources */,
 				A085510F2E7C4C03004633CA /* OrdersViewModel.swift in Sources */,
 				A08550DB2E79D024004633CA /* ProfileGuestViewController.swift in Sources */,
 				A08550D72E79BB53004633CA /* MapPickerViewModelProtocol.swift in Sources */,
 				A08550A62E76E9A5004633CA /* AddressConfirmSheetViewController.swift in Sources */,
-				A0854FF92E612395004633CA /* Product.swift in Sources */,
+				A0854FF92E612395004633CA /* ProductTest.swift in Sources */,
 				A08551BF2E836866004633CA /* EditNameViewModel.swift in Sources */,
+				A08552272E8741AA004633CA /* ChecksumStoringProtocol.swift in Sources */,
 				A08551712E81F06E004633CA /* ViewModelFactory.swift in Sources */,
+				A085521B2E867318004633CA /* DryRunReport.swift in Sources */,
 				A08550532E613F5A004633CA /* Container+Utils.swift in Sources */,
 				A08551C32E836900004633CA /* EditNameCoordinatingProtocol.swift in Sources */,
 				A08550F52E7AB7C1004633CA /* PrivacyPolicyCoordinator.swift in Sources */,
+				A085521D2E86755A004633CA /* ImportOutcome.swift in Sources */,
 				A08550952E741943004633CA /* OrderCommentCell.swift in Sources */,
 				A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */,
 				A08550ED2E7A094C004633CA /* UIViewController+NavBar.swift in Sources */,
 				A08550E42E79E357004633CA /* AboutCoordinator.swift in Sources */,
 				A08551442E80969E004633CA /* ResetPasswordViewModelProtocol.swift in Sources */,
 				A08551D02E837782004633CA /* EditEmailCoordinator.swift in Sources */,
+				A08552012E860892004633CA /* DebugImporter.swift in Sources */,
 				A085502D2E6129A3004633CA /* FavoritesViewModel.swift in Sources */,
 				A08551B32E835AF3004633CA /* FormTextFieldKind.swift in Sources */,
 				A08551492E809747004633CA /* ResetPasswordViewController.swift in Sources */,
+				A08552292E87469F004633CA /* DebugImportServicingProtocol.swift in Sources */,
 				A085518F2E821AEF004633CA /* ContactUsCoordinatingProtocol.swift in Sources */,
 				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
 				A08551392E80789D004633CA /* SignInViewModel.swift in Sources */,
@@ -1669,14 +1821,16 @@
 				A08551CA2E837691004633CA /* EditEmailViewModel.swift in Sources */,
 				A08551A92E83387C004633CA /* EditProfileViewModel.swift in Sources */,
 				A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */,
+				A08551FE2E85F2A8004633CA /* DebugImportService.swift in Sources */,
 				A08550F32E7AB6E0004633CA /* PrivacyPolicyViewController.swift in Sources */,
 				A08550692E64005F004633CA /* CartCoordinator.swift in Sources */,
+				A08552232E872CCF004633CA /* State.swift in Sources */,
 				A08551322E7DE3B4004633CA /* UITextField+ext.swift in Sources */,
 				A08551A42E8337DB004633CA /* AvatarStorageService.swift in Sources */,
 				A08550912E71D835004633CA /* DeliveryAddressCell.swift in Sources */,
 				A08551972E822309004633CA /* ProfileUserCoordinatingProtocol.swift in Sources */,
 				A08551002E7AD580004633CA /* ProfileUserViewModel.swift in Sources */,
-				A0854FFB2E6123A5004633CA /* Category.swift in Sources */,
+				A0854FFB2E6123A5004633CA /* CategoryTest.swift in Sources */,
 				A08551D92E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift in Sources */,
 				A08551B12E835131004633CA /* EditProfileRow.swift in Sources */,
 				A08550572E6144CB004633CA /* Profile.swift in Sources */,
@@ -1688,6 +1842,7 @@
 				A08550BA2E789476004633CA /* AddressFormatter.swift in Sources */,
 				A08551092E7C4A95004633CA /* OrderItemCell.swift in Sources */,
 				A08550E72E79F73B004633CA /* ContactUsViewController.swift in Sources */,
+				A08552352E879A6C004633CA /* PreparedInputs.swift in Sources */,
 				A085514B2E809897004633CA /* ResetPasswordCoordinator.swift in Sources */,
 				A08551AD2E833B6A004633CA /* EditProfileCoordinator.swift in Sources */,
 				A08550A42E749374004633CA /* OrderSuccessViewModel.swift in Sources */,
@@ -1696,14 +1851,18 @@
 				A085518D2E8218B0004633CA /* PrivacyPolicyCoordinatingProtocol.swift in Sources */,
 				A085507B2E6ADDBB004633CA /* UIView+Animations.swift in Sources */,
 				A08551242E7D9440004633CA /* ValidationResult.swift in Sources */,
+				A085520A2E86216D004633CA /* DebugImportStorage.swift in Sources */,
 				A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */,
 				A08550FC2E7AD229004633CA /* ProfileUserCoordinator.swift in Sources */,
 				A08550A02E748A11004633CA /* OrderSuccessViewController.swift in Sources */,
 				A085512E2E7DE2B1004633CA /* UIButton+ext.swift in Sources */,
+				A085522F2E875EBF004633CA /* DebugImportCoordinator.swift in Sources */,
 				A08551E32E838493004633CA /* BaseEditFieldViewModelProtocol.swift in Sources */,
 				A085511D2E7D931C004633CA /* AuthValidatingProtocol.swift in Sources */,
 				A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */,
 				A08550802E6BF954004633CA /* CartItem.swift in Sources */,
+				A08552062E860C0E004633CA /* DebugImportViewModel.swift in Sources */,
+				A085522D2E875614004633CA /* DebugImportViewModelProtocol.swift in Sources */,
 				A08550672E63F7EC004633CA /* FavoritesCoordinator.swift in Sources */,
 				A08551DB2E837CDC004633CA /* EditPhoneCoordinator.swift in Sources */,
 				A08551532E8182AC004633CA /* UIAlertController+ext.swift in Sources */,
@@ -1718,8 +1877,11 @@
 				A08550E22E79E1AC004633CA /* AboutViewController.swift in Sources */,
 				A085516E2E81F010004633CA /* ViewModelBuildingProtocol.swift in Sources */,
 				A08551022E7B0A41004633CA /* CheckoutViewModelProtocol.swift in Sources */,
+				A08552332E875FAB004633CA /* DebugCoordinatingProtocol.swift in Sources */,
 				A08551152E7C5405004633CA /* OrdersServiceProtocol.swift in Sources */,
 				A08550CF2E78C4AC004633CA /* DeliveryAddressFormattingProtocol.swift in Sources */,
+				A08552112E867031004633CA /* Product.swift in Sources */,
+				A08552192E8671E1004633CA /* ImportError.swift in Sources */,
 				A085517A2E81FDCB004633CA /* ProductDetailsCoordinatingProtocol.swift in Sources */,
 				A08550262E612936004633CA /* ProductDetailsViewController.swift in Sources */,
 				A08550B72E788972004633CA /* AddressConfirmSheetViewModel.swift in Sources */,
@@ -1737,6 +1899,7 @@
 				A085502B2E612977004633CA /* FavoritesViewController.swift in Sources */,
 				A08550232E61265E004633CA /* ProductCell.swift in Sources */,
 				A08551472E809712004633CA /* ResetPasswordViewModel.swift in Sources */,
+				A08552212E871B6B004633CA /* SeedConfig.swift in Sources */,
 				A08550E92E79F7A4004633CA /* ContactUsCoordinator.swift in Sources */,
 				A08551892E821536004633CA /* CartCoordinatingProtocol.swift in Sources */,
 				A08551742E81F2EC004633CA /* CatalogCoordinatingProtocol.swift in Sources */,
@@ -2106,6 +2269,14 @@
 				minimumVersion = 2.5.3;
 			};
 		};
+		A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2113,6 +2284,36 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A08550552E6140B5004633CA /* XCRemoteSwiftPackageReference "Factory" */;
 			productName = FactoryKit;
+		};
+		A08551E72E843FFB004633CA /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		A08551EB2E843FFB004633CA /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+		A08551ED2E843FFB004633CA /* FirebaseStorage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseStorage;
+		};
+		A08551EF2E8440B2004633CA /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		A08551F12E8440BF004633CA /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
+		};
+		A08551F32E8440F3004633CA /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
 		};
 /* End XCSwiftPackageProductDependency section */
 

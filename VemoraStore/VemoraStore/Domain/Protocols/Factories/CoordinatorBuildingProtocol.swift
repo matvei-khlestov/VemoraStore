@@ -19,7 +19,7 @@ protocol CoordinatorBuildingProtocol {
     
     func makeProductDetailsCoordinator(
         navigation: UINavigationController,
-        product: Product
+        product: ProductTest
     ) -> ProductDetailsCoordinatingProtocol
     
     // MARK: - Map Picker
@@ -135,4 +135,12 @@ protocol CoordinatorBuildingProtocol {
     func makeAppCoordinator(
         navigation: UINavigationController
     ) -> AppCoordinatingProtocol
+    
+    // MARK: - Debug
+    
+#if DEBUG
+    func makeDebugCoordinator(
+        navigation: UINavigationController
+    ) -> DebugCoordinatingProtocol
+#endif
 }

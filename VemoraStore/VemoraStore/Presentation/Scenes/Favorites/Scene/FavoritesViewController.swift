@@ -12,7 +12,7 @@ import FactoryKit
 final class FavoritesViewController: UIViewController {
     
     // MARK: - Public
-    var onSelectProduct: ((Product) -> Void)?
+    var onSelectProduct: ((ProductTest) -> Void)?
     
     // MARK: - Deps
     private let viewModel: FavoritesViewModelProtocol
@@ -42,7 +42,7 @@ final class FavoritesViewController: UIViewController {
     }()
     
     // MARK: - State
-    private var items: [Product] = [] {
+    private var items: [ProductTest] = [] {
         didSet { updateEmptyState() }
     }
     private var bag = Set<AnyCancellable>()

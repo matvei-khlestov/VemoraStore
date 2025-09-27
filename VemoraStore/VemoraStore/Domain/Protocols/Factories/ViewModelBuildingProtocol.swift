@@ -18,7 +18,7 @@ protocol ViewModelBuildingProtocol {
     // MARK: - Catalog
     
     func makeCatalogViewModel() -> CatalogViewModelProtocol
-    func makeProductDetailsViewModel(product: Product) -> ProductDetailsViewModelProtocol
+    func makeProductDetailsViewModel(product: ProductTest) -> ProductDetailsViewModelProtocol
     
     // MARK: - Favorites
     
@@ -60,4 +60,10 @@ protocol ViewModelBuildingProtocol {
     // MARK: - Map Picker
     
     func makeMapPickerViewModel() -> MapPickerViewModelProtocol
+    
+    // MARK: - Debug
+    
+#if DEBUG
+    func makeDebugImortViewModel() -> DebugImportViewModelProtocol
+#endif
 }

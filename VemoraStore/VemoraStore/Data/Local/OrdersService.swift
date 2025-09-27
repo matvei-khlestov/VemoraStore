@@ -12,7 +12,7 @@ import Foundation
 final class OrdersService: OrdersServiceProtocol {
     func fetchOrders() -> [OrderEntity] {
         // Моки для примера
-        let p1 = Product(
+        let p1 = ProductTest(
             id: "sofa_1",
             name: "Vemora Oslo Sofa 3-Seater",
             description: "…",
@@ -21,7 +21,7 @@ final class OrdersService: OrdersServiceProtocol {
             categoryId: "sofas",
             brendId: "vemora"
         )
-        let p2 = Product(
+        let p2 = ProductTest(
             id: "chair_2",
             name: "Vemora Luton Chair",
             description: "…",

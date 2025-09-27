@@ -34,35 +34,31 @@ final class MainCoordinator: MainCoordinatingProtocol {
     // MARK: - Start
     
     func start() {
-        // Catalog
-        let catalogNav = TabBarFactory.makeNav(root: UIViewController(), tab: .catalog)
-        let catalog = coordinatorFactory.makeCatalogCoordinator(navigation: catalogNav)
-        add(catalog)
-        catalog.start()
-        
-        // Favorites
-        let favoritesNav = TabBarFactory.makeNav(root: UIViewController(), tab: .favorites)
-        let favorites = coordinatorFactory.makeFavoritesCoordinator(navigation: favoritesNav)
-        add(favorites)
-        favorites.start()
-        
-        // Cart
-        let cartNav = TabBarFactory.makeNav(root: UIViewController(), tab: .cart)
-        let cart = coordinatorFactory.makeCartCoordinator(navigation: cartNav)
-        add(cart)
-        cart.start()
-        
-        // Profile (User)
-        let profileNav = TabBarFactory.makeNav(root: UIViewController(), tab: .profile)
-        let profile = coordinatorFactory.makeProfileUserCoordinator(navigation: profileNav)
-        profile.onLogout = { [weak self] in
-            self?.onLogout?()
-        }
-        profile.onDeleteAccount = { [weak self] in
-            self?.onDeleteAccount?()
-        }
-        add(profile)
-        profile.start()
+            // Catalog
+            let catalogNav = TabBarFactory.makeNav(tab: .catalog)
+            let catalog = coordinatorFactory.makeCatalogCoordinator(navigation: catalogNav)
+            add(catalog)
+            catalog.start()
+
+            // Favorites
+            let favoritesNav = TabBarFactory.makeNav(tab: .favorites)
+            let favorites = coordinatorFactory.makeFavoritesCoordinator(navigation: favoritesNav)
+            add(favorites)
+            favorites.start()
+
+            // Cart
+            let cartNav = TabBarFactory.makeNav(tab: .cart)
+            let cart = coordinatorFactory.makeCartCoordinator(navigation: cartNav)
+            add(cart)
+            cart.start()
+
+            // Profile (User)
+            let profileNav = TabBarFactory.makeNav(tab: .profile)
+            let profile = coordinatorFactory.makeProfileUserCoordinator(navigation: profileNav)
+            profile.onLogout = { [weak self] in self?.onLogout?() }
+            profile.onDeleteAccount = { [weak self] in self?.onDeleteAccount?() }
+            add(profile)
+            profile.start()
         
         // Tab bar
         let tab = TabBarFactory.makeTabBar(

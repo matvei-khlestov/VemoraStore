@@ -32,12 +32,14 @@ final class AppCoordinator: AppCoordinatingProtocol {
     // MARK: - Start
     
     func start() {
+        
+//        showDebugImport()
+        showMain()
 //        if authService.currentUserId != nil {
 //            showMain()
 //        } else {
 //            showAuth()
 //        }
-        showMain()
     }
     
     // MARK: - Public helper
@@ -87,5 +89,15 @@ final class AppCoordinator: AppCoordinatingProtocol {
         }
         main.start()
     }
+    
+    #if DEBUG
+    private func showDebugImport() {
+        let debug = coordinatorFactory.makeDebugCoordinator(navigation: navigation)
+        add(debug)
+        debug.onFinish = { [weak self, weak debug] in
+            if let debug { self?.remove(debug) }
+        }
+        debug.start()
+    }
+    #endif
 }
-

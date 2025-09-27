@@ -6,19 +6,18 @@
 //
 
 import Foundation
-import FactoryKit
 
 final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     
-    private let product: Product
+    private let product: ProductTest
     private let favoritesService: FavoritesServiceProtocol
     private let cartService: CartServiceProtocol
     
     // MARK: - Init
     init(
-        product: Product,
-        favoritesService: FavoritesServiceProtocol = Container.shared.favoritesService(),
-        cartService: CartServiceProtocol = Container.shared.cartService()
+        product: ProductTest,
+        favoritesService: FavoritesServiceProtocol,
+        cartService: CartServiceProtocol
     ) {
         self.product = product
         self.favoritesService = favoritesService
