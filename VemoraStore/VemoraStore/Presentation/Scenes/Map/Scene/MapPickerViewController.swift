@@ -22,58 +22,112 @@ final class MapPickerViewController: UIViewController {
     var onBack: (() -> Void)?
     var onAddressComposed: ((String) -> Void)?
     
+    // MARK: - Metrics / Texts / Symbols
+    
+    private enum Metrics {
+        enum Insets {
+            static let side: CGFloat = 16
+        }
+        
+        enum Spacing {
+            static let rightButtonsStack: CGFloat = 15
+        }
+        
+        enum Layout {
+            static let rightButtonsCenterYOffset: CGFloat = -40
+            static let rightStackTopMinFromSafe: CGFloat = 80
+            static let rightStackBottomMinFromSafe: CGFloat = 180
+        }
+        
+        enum Sizes {
+            static let circleButton: CGFloat = 44
+            static let squareButton: CGFloat = 44
+            static let pinSide: CGFloat = 32
+        }
+        
+        enum Corners {
+            static let square: CGFloat = 8
+            static let circle: CGFloat = 22
+        }
+        
+        enum Shadows {
+            static let opacity: Float = 0.08
+            static let radius: CGFloat = 6
+            static let offset: CGSize = .init(width: 0, height: 2)
+        }
+        
+        enum Fonts {
+            static let zoomButton: UIFont = .systemFont(ofSize: 22, weight: .bold)
+        }
+        
+        enum Durations {
+            static let cameraSettleDelay: TimeInterval = 0.35
+        }
+    }
+    
+    private enum Texts {
+        static let zoomInTitle  = "+"
+        static let zoomOutTitle = "−"
+    }
+    
+    private enum Symbols {
+        static let locationFill = "location.fill"
+        static let centerPin    = "mappin.circle.fill"
+    }
+    
     // MARK: - UI
     
     private let mapView = MKMapView()
     
     // три кнопки справа: гео, +, −
     private let locateButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.setImage(UIImage(systemName: "location.fill"), for: .normal)
-        b.tintColor = .brightPurple
-        b.backgroundColor = .systemBackground
-        b.layer.cornerRadius = 22
-        b.layer.shadowOpacity = 0.08
-        b.layer.shadowRadius = 6
-        b.layer.shadowOffset = .init(width: 0, height: 2)
-        b.widthAnchor.constraint(equalToConstant: 44).isActive = true
-        b.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        return b
+        let button = UIButton(type: .system)
+        button.setImage(UIImage(systemName: Symbols.locationFill), for: .normal)
+        button.tintColor = .brightPurple
+        button.backgroundColor = .systemBackground
+        button.layer.cornerRadius = Metrics.Corners.circle
+        button.layer.shadowOpacity = Metrics.Shadows.opacity
+        button.layer.shadowRadius = Metrics.Shadows.radius
+        button.layer.shadowOffset = Metrics.Shadows.offset
+        button.widthAnchor.constraint(equalToConstant: Metrics.Sizes.circleButton).isActive = true
+        button.heightAnchor.constraint(equalToConstant: Metrics.Sizes.circleButton).isActive = true
+        return button
     }()
     
-    private let zoomInButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.setTitle("+", for: .normal)
-        b.titleLabel?.font = .systemFont(ofSize: 22, weight: .bold)
-        b.tintColor = .brightPurple
-        b.backgroundColor = .systemBackground
-        b.layer.cornerRadius = 8
-        b.widthAnchor.constraint(equalToConstant: 44).isActive = true
-        b.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        return b
+    private lazy var zoomInButton: UIButton = {
+        Factory.makeSquareTextButton(
+            title: Texts.zoomInTitle,
+            font: Metrics.Fonts.zoomButton,
+            tint: .brightPurple
+        )
     }()
     
-    private let zoomOutButton: UIButton = {
-        let b = UIButton(type: .system)
-        b.setTitle("−", for: .normal)
-        b.titleLabel?.font = .systemFont(ofSize: 22, weight: .bold)
-        b.tintColor = .brightPurple
-        b.backgroundColor = .systemBackground
-        b.layer.cornerRadius = 8
-        b.widthAnchor.constraint(equalToConstant: 44).isActive = true
-        b.heightAnchor.constraint(equalToConstant: 44).isActive = true
-        return b
+    private lazy var zoomOutButton: UIButton = {
+        Factory.makeSquareTextButton(
+            title: Texts.zoomOutTitle,
+            font: Metrics.Fonts.zoomButton,
+            tint: .brightPurple
+        )
+    }()
+    
+    private let rightButtonsStack: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.spacing = Metrics.Spacing.rightButtonsStack
+        return stackView
     }()
     
     private let centerPin: UIImageView = {
-        let iv = UIImageView(image: UIImage(systemName: "mappin.circle.fill"))
-        iv.tintColor = .brightPurple
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.contentMode = .scaleAspectFit
-        return iv
+        let imageView = UIImageView(image: UIImage(
+            systemName: Symbols.centerPin
+        ))
+        imageView.contentMode = .scaleAspectFit
+        imageView.tintColor = .brightPurple
+        return imageView
     }()
     
-    // MARK: - Location
+    // MARK: - Location/State
     
     private let locationManager = CLLocationManager()
     private let geocoder = CLGeocoder()
@@ -88,7 +142,7 @@ final class MapPickerViewController: UIViewController {
     private var lastGeocodeCoordinate: CLLocationCoordinate2D?
     private var isProgrammaticMove = false
     
-    // MARK: - Lifecycle
+    // MARK: - Init
     
     init(
         viewModel: MapPickerViewModelProtocol,
@@ -101,18 +155,17 @@ final class MapPickerViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        setupNavigationBarWithNavLeftItem(
-            action: #selector(backTapped),
-            largeTitleDisplayMode: .never,
-            prefersLargeTitles: false
-        )
-        setupMap()
-        setupRightButtons()
+        setupAppearance()
+        setupHierarchy()
+        setupLayout()
         setupActions()
         bindViewModel()
         requestLocation()
@@ -127,49 +180,42 @@ final class MapPickerViewController: UIViewController {
 // MARK: - Setup
 
 private extension MapPickerViewController {
-    func setupMap() {
+    func setupAppearance() {
+        view.backgroundColor = .systemBackground
+        setupNavigationBarWithNavLeftItem(
+            action: #selector(backTapped),
+            largeTitleDisplayMode: .never,
+            prefersLargeTitles: false
+        )
+        
         mapView.showsUserLocation = true
         mapView.userTrackingMode = .none
         mapView.delegate = self
-        view.addSubview(mapView)
-        mapView.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            mapView.topAnchor.constraint(equalTo: view.topAnchor),
-            mapView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            mapView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            mapView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        
-        // центровой пин
-        view.addSubview(centerPin)
-        NSLayoutConstraint.activate([
-            centerPin.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            centerPin.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            centerPin.widthAnchor.constraint(equalToConstant: 32),
-            centerPin.heightAnchor.constraint(equalToConstant: 32)
-        ])
     }
     
-    func setupRightButtons() {
-        let stack = UIStackView(arrangedSubviews: [zoomInButton, zoomOutButton, locateButton])
-        stack.axis = .vertical
-        stack.spacing = 15
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(stack)
-        
-        NSLayoutConstraint.activate([
-            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40),
-            stack.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
-            stack.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -180)
-        ])
+    func setupHierarchy() {
+        view.addSubviews(
+            mapView,
+            centerPin,
+            rightButtonsStack
+        )
+        rightButtonsStack.addArrangedSubviews(
+            zoomInButton,
+            zoomOutButton,
+            locateButton
+        )
+    }
+    
+    func setupLayout() {
+        prepareForAutoLayout()
+        setupMapAndPinConstraints()
+        setupRightButtonsConstraints()
     }
     
     func setupActions() {
-        zoomInButton.addTarget(self, action: #selector(zoomInTapped), for: .touchUpInside)
-        zoomOutButton.addTarget(self, action: #selector(zoomOutTapped), for: .touchUpInside)
-        locateButton.addTarget(self, action: #selector(locateTapped), for: .touchUpInside)
+        zoomInButton.onTap(self, action: #selector(zoomInTapped))
+        zoomOutButton.onTap(self, action: #selector(zoomOutTapped))
+        locateButton.onTap(self, action: #selector(locateTapped))
     }
     
     func bindViewModel() {
@@ -188,19 +234,82 @@ private extension MapPickerViewController {
         locationManager.delegate = self
         locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         locationManager.requestWhenInUseAuthorization()
-        // Do not startUpdatingLocation here; wait for authorization callback
+    }
+}
+
+// MARK: - Layout
+
+private extension MapPickerViewController {
+    func prepareForAutoLayout() {
+        [mapView, centerPin, rightButtonsStack].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
     
+    func setupMapAndPinConstraints() {
+        NSLayoutConstraint.activate([
+            // карта
+            mapView.topAnchor.constraint(
+                equalTo: view.topAnchor
+            ),
+            mapView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor
+            ),
+            mapView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor
+            ),
+            mapView.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor
+            ),
+            
+            // пин в центре
+            centerPin.centerXAnchor.constraint(
+                equalTo: view.centerXAnchor
+            ),
+            centerPin.centerYAnchor.constraint(
+                equalTo: view.centerYAnchor
+            ),
+            centerPin.widthAnchor.constraint(
+                equalToConstant: Metrics.Sizes.pinSide
+            ),
+            centerPin.heightAnchor.constraint(
+                equalToConstant: Metrics.Sizes.pinSide
+            )
+        ])
+    }
+    
+    func setupRightButtonsConstraints() {
+        NSLayoutConstraint.activate([
+            rightButtonsStack.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -Metrics.Insets.side
+            ),
+            rightButtonsStack.centerYAnchor.constraint(
+                equalTo: view.centerYAnchor,
+                constant: Metrics.Layout.rightButtonsCenterYOffset
+            ),
+            rightButtonsStack.topAnchor.constraint(
+                greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: Metrics.Layout.rightStackTopMinFromSafe
+            ),
+            rightButtonsStack.bottomAnchor.constraint(
+                lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -Metrics.Layout.rightStackBottomMinFromSafe
+            )
+        ])
+    }
+}
+
+// MARK: - Address Sheet
+private extension MapPickerViewController {
     func presentAddressSheet(with text: String?) {
         let sheet = AddressConfirmSheetViewController(
             viewModel: makeAddressConfirmVM(),
             makeDeliveryDetailsVM: makeDeliveryDetailsVM
         )
         sheet.address = text
-        // передаём регион карты для подсказок и поиска
         sheet.searchRegion = mapView.region
         
-        // когда пользователь выбирает адрес или жмёт Return — центрируем карту и сворачиваемся
         sheet.onAddressPicked = { [weak self] formatted, coordinate in
             guard let self else { return }
             self.centerMap(on: coordinate)
@@ -214,58 +323,53 @@ private extension MapPickerViewController {
         
         sheet.onFullAddressComposed = { [weak self] full in
             guard let self else { return }
-            // Передаём наружу (в координатор/Checkout)
             self.onAddressComposed?(full)
-            
-            // Закрываем любые представленные поверх шиты (если ещё открыты)
             self.presentedViewController?.dismiss(animated: true)
         }
         
-        self.addressSheet = sheet
+        addressSheet = sheet
         present(sheet, animated: true)
     }
     
     func updateAddressSheet(with text: String) {
-        // Не обновляем, если пользователь сейчас редактирует адрес вручную
         guard !isSheetEditing else { return }
         addressSheet?.address = text
     }
+}
+
+// MARK: - Map helpers
+private extension MapPickerViewController {
+    var currentCenterLocation: CLLocation {
+        CLLocation(latitude: mapView.centerCoordinate.latitude,
+                   longitude: mapView.centerCoordinate.longitude)
+    }
     
-    private func centerMap(on coordinate: CLLocationCoordinate2D, meters: CLLocationDistance = 600) {
+    func centerMap(on coordinate: CLLocationCoordinate2D, meters: CLLocationDistance = 600) {
         isProgrammaticMove = true
         let region = MKCoordinateRegion(center: coordinate,
                                         latitudinalMeters: meters,
                                         longitudinalMeters: meters)
         mapView.setRegion(region, animated: true)
-        // trigger geocode once after the camera move completes
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) { [weak self] in
+        // триггерим обратное геокодирование после завершения движения камеры
+        DispatchQueue.main.asyncAfter(deadline: .now() + Metrics.Durations.cameraSettleDelay) { [weak self] in
             self?.isProgrammaticMove = false
             self?.reverseGeocodeCenterAndFillSheet()
         }
     }
     
-    private func reverseGeocodeCenterAndFillSheet() {
+    func reverseGeocodeCenterAndFillSheet() {
         let center = currentCenterLocation.coordinate
         viewModel.onRegionDidChange(center: center)
     }
     
-    private func performReverseGeocode(at coordinate: CLLocationCoordinate2D) {
+    func performReverseGeocode(at coordinate: CLLocationCoordinate2D) {
         viewModel.onRegionDidChange(center: coordinate)
     }
-}
-
-func clampedSpan(_ span: MKCoordinateSpan) -> MKCoordinateSpan {
-    let minDelta = 0.0001
-    let maxDelta = 180.0
-    let lat = min(max(span.latitudeDelta, minDelta), maxDelta)
-    let lon = min(max(span.longitudeDelta, minDelta), maxDelta)
-    return MKCoordinateSpan(latitudeDelta: lat, longitudeDelta: lon)
 }
 
 // MARK: - Actions
 
 private extension MapPickerViewController {
-    
     @objc func zoomInTapped() {
         let newRegion = viewModel.onZoomIn(currentRegion: mapView.region)
         mapView.setRegion(newRegion, animated: true)
@@ -286,30 +390,26 @@ private extension MapPickerViewController {
     }
 }
 
-// MARK: - Геокодинг
-
-private extension MapPickerViewController {
-    var currentCenterLocation: CLLocation {
-        CLLocation(latitude: mapView.centerCoordinate.latitude,
-                   longitude: mapView.centerCoordinate.longitude)
-    }
-}
-
 // MARK: - CLLocationManagerDelegate
 
 extension MapPickerViewController: CLLocationManagerDelegate {
-    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+    func locationManager(_ manager: CLLocationManager,
+                         didChangeAuthorization status: CLAuthorizationStatus) {
         viewModel.onLocationAuthChanged(status, manager: manager)
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    func locationManager(_ manager: CLLocationManager,
+                         didUpdateLocations locations: [CLLocation]) {
         viewModel.onLocationsUpdated(locations, manager: manager)
     }
     
-    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+    func locationManager(_ manager: CLLocationManager,
+                         didFailWithError error: Error) {
         viewModel.onLocationFailed(error)
     }
 }
+
+// MARK: - MKMapViewDelegate
 
 extension MapPickerViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
@@ -318,24 +418,40 @@ extension MapPickerViewController: MKMapViewDelegate {
     }
 }
 
-// MARK: - Хранилки
+// MARK: - Free helpers
+
+func clampedSpan(_ span: MKCoordinateSpan) -> MKCoordinateSpan {
+    let minDelta = 0.0001
+    let maxDelta = 180.0
+    let lat = min(max(span.latitudeDelta, minDelta), maxDelta)
+    let lon = min(max(span.longitudeDelta, minDelta), maxDelta)
+    return MKCoordinateSpan(latitudeDelta: lat, longitudeDelta: lon)
+}
+
+// MARK: - Factory
 
 private extension MapPickerViewController {
-    // чтобы собрать Address при подтверждении
-    var currentCityKey: String { "currentCityKey" }
-    var currentStreetKey: String { "currentStreetKey" }
-    
-    private struct Holder {
-        static var city: String?
-        static var street: String?
-    }
-    
-    var currentCity: String? {
-        get { Holder.city }
-        set { Holder.city = newValue }
-    }
-    var currentStreet: String? {
-        get { Holder.street }
-        set { Holder.street = newValue }
+    enum Factory {
+        static func makeSquareTextButton(
+            title: String,
+            font: UIFont,
+            tint: UIColor
+        ) -> UIButton {
+            let b = UIButton(type: .system)
+            b.setTitle(title, for: .normal)
+            b.titleLabel?.font = font
+            b.tintColor = tint
+            b.backgroundColor = .systemBackground
+            b.layer.cornerRadius = Metrics.Corners.square
+            b.layer.shadowOpacity = Metrics.Shadows.opacity
+            b.layer.shadowRadius = Metrics.Shadows.radius
+            b.layer.shadowOffset = Metrics.Shadows.offset
+            b.translatesAutoresizingMaskIntoConstraints = false
+            NSLayoutConstraint.activate([
+                b.widthAnchor.constraint(equalToConstant: Metrics.Sizes.squareButton),
+                b.heightAnchor.constraint(equalToConstant: Metrics.Sizes.squareButton)
+            ])
+            return b
+        }
     }
 }

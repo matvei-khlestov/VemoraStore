@@ -51,11 +51,8 @@ protocol ViewModelBuildingProtocol {
     
     // MARK: - Sheets
     
-    func makePhoneInputSheetViewModel(
-        kind: PhoneOrCommentInputSheetViewModel.Kind,
-        initialPhone: String?,
-        initialComment: String?
-    ) -> PhoneOrCommentInputSheetViewModelProtocol
+    func makePhoneInputSheetViewModel(initialPhone: String?) -> PhoneInputSheetViewModelProtocol
+    func makeCommentInputSheetViewModel(initialComment: String?) -> CommentInputSheetViewModelProtocol
     
     // MARK: - Map Picker
     

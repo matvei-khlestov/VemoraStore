@@ -9,4 +9,5 @@ import UIKit
 
 protocol CartCoordinatingProtocol: Coordinator {
     func start()
+    var onOrderSuccess: (() -> Void)? { get set }
 }

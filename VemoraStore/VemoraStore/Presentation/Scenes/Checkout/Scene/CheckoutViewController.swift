@@ -13,23 +13,107 @@ final class CheckoutViewController: UIViewController {
     // MARK: - Callbacks
     
     var onPickOnMap: (() -> Void)?
-    var onFinished: (() -> Void)?
-    var onBack: (() -> Void)?
+    var onFinished:  (() -> Void)?
+    var onBack:      (() -> Void)?
     
     // MARK: - Deps
     
     private let viewModel: CheckoutViewModelProtocol
     
-    private let makeSheetVM: (
-        PhoneOrCommentInputSheetViewModel.Kind,
-        String?,
-        String?
-    ) -> PhoneOrCommentInputSheetViewModelProtocol
+    private let makePhoneSheetVM: (String?) -> PhoneInputSheetViewModelProtocol
+    private let makeCommentSheetVM: (String?) -> CommentInputSheetViewModelProtocol
+    
+    private let phoneFormatter: PhoneFormattingProtocol
+    
+    // MARK: - Metrics
+    
+    private enum Metrics {
+        enum Insets {
+            static let horizontal: CGFloat = 16
+            static let verticalTop: CGFloat = 0
+            static let verticalBottom: CGFloat = 0
+            
+            static let bottomContainer: UIEdgeInsets = .init(
+                top: 12,
+                left: horizontal,
+                bottom: 16,
+                right: horizontal
+            )
+            static let orderButtonContent: UIEdgeInsets = .init(
+                top: 8,
+                left: 16,
+                bottom: 8,
+                right: 16
+            )
+        }
+        enum Spacing {
+            static let topBarTop: CGFloat = 12
+            static let topBarBottom: CGFloat = 8
+            static let tableTop: CGFloat = 8
+            static let sectionHeader: CGFloat = 12
+            static let summaryRows: CGFloat = 12
+            static let orderButtonStack: CGFloat = 10
+        }
+        enum Sizes {
+            static let orderButtonHeight: CGFloat = 52
+        }
+        enum Corners {
+            static let orderButton: CGFloat = 14
+        }
+        enum Fonts {
+            static let total: UIFont = .systemFont(ofSize: 17, weight: .semibold)
+            static let summaryTitle: UIFont = .systemFont(ofSize: 15, weight: .regular)
+            static let summaryValue: UIFont = .systemFont(ofSize: 15, weight: .medium)
+            static let orderButton: UIFont = .systemFont(ofSize: 17, weight: .semibold)
+        }
+    }
+    
+    // MARK: - Texts
+    
+    private enum Texts {
+        static let navTitle = "Оформление заказа"
+        static let segmentPickup = "Самовывоз"
+        static let segmentDelivery = "Доставка"
+        
+        static let totalTitle = "Итого"
+        static let totalValueExample = "940 ₽"
+        
+        static let deliveryTitle = "Доставка"
+        static let deliveryFree = "Бесплатно"
+        static let deliveryWhenPickup = "Послезавтра"
+        static let deliveryWhenCourier = "В течение 5 рабочих дней"
+        static let cost = "Доставка 0 ₽"
+        
+        static let orderButtonTitle = "Заказать"
+        static let orderAmountExample = "940 ₽"
+        
+        static let pickupAddressExample = "Москва, Ходынский бульвар 4"
+        
+        static let paymentTitle = "Как оплатить заказ?"
+        static let paymentMethod = "При получении"
+        
+        static let phonePlaceholder = "Указать номер телефона"
+        static let commentPlaceholder = "Оставить комментарий"
+    }
+    
+    // MARK: - Symbols
+    
+    private enum Symbols {
+        static let orderIcon = "shippingbox"
+    }
     
     // MARK: - UI
     
-    private let deliveryControl: UISegmentedControl = {
-        let sc = UISegmentedControl(items: ["Самовывоз", "Доставка"])
+    private lazy var topBar: UIView = {
+        let v = UIView()
+        return v
+    }()
+    
+    private lazy var deliveryControl: UISegmentedControl = {
+        let sc = UISegmentedControl(items: [
+            Texts.segmentPickup,
+            Texts.segmentDelivery
+        ])
         sc.selectedSegmentIndex = 0
         return sc
     }()
@@ -40,97 +124,145 @@ final class CheckoutViewController: UIViewController {
         tv.dataSource = self
         tv.delegate = self
         tv.separatorStyle = .none
-        // Регистрация кастомных ячеек
-        tv.register(PickupAddressCell.self, forCellReuseIdentifier: PickupAddressCell.reuseId)
-        tv.register(DeliveryAddressCell.self, forCellReuseIdentifier: DeliveryAddressCell.reuseId)
-        tv.register(DeliveryInfoCell.self,   forCellReuseIdentifier: DeliveryInfoCell.reuseId)
-        tv.register(PaymentMethodCell.self,  forCellReuseIdentifier: PaymentMethodCell.reuseId)
-        tv.register(CheckoutCell.self, forCellReuseIdentifier: CheckoutCell.reuseId)
-        tv.register(ChangePhoneCell.self, forCellReuseIdentifier: ChangePhoneCell.reuseId)
-        tv.register(OrderCommentCell.self, forCellReuseIdentifier: OrderCommentCell.reuseId)
+        
+        tv.register([
+            PickupAddressCell.self,
+            DeliveryAddressCell.self,
+            DeliveryInfoCell.self,
+            PaymentMethodCell.self,
+            CheckoutCell.self,
+            ChangePhoneCell.self,
+            OrderCommentCell.self
+        ])
+        
         if #available(iOS 15.0, *) {
             tv.sectionHeaderTopPadding = 0
         }
         return tv
     }()
     
-    // bottom summary
-    private let bottomContainer = UIStackView()
-    private let summaryRow1 = UIStackView()
-    private let summaryRow2 = UIStackView()
-    
-    private let totalTitleLabel: UILabel = {
-        let l = UILabel()
-        l.text = "Итого"
-        l.font = .systemFont(ofSize: 17, weight: .semibold)
-        l.textColor = .label
-        return l
+    private lazy var bottomContainer: UIStackView = {
+        let st = UIStackView()
+        st.axis = .vertical
+        st.alignment = .fill
+        st.distribution = .fill
+        st.spacing = Metrics.Spacing.summaryRows
+        st.isLayoutMarginsRelativeArrangement = true
+        st.layoutMargins = Metrics.Insets.bottomContainer
+        st.backgroundColor = .systemBackground
+        return st
     }()
     
-    private let totalValueLabel: UILabel = {
-        let l = UILabel()
-        l.textAlignment = .right
-        l.font = .systemFont(ofSize: 17, weight: .semibold)
-        l.text = "940 ₽"
-        return l
+    private lazy var summaryRow1: UIStackView = {
+        let stackView = Self.makeSummaryRow()
+        return stackView
     }()
     
-    private let deliveryTitleLabel: UILabel = {
-        let l = UILabel()
-        l.text = "Доставка"
-        l.textColor = .secondaryLabel
-        l.font = .systemFont(ofSize: 15, weight: .regular)
-        return l
+    private lazy var summaryRow2: UIStackView = {
+        let stackView = Self.makeSummaryRow()
+        return stackView
     }()
     
-    private let deliveryValueLabel: UILabel = {
-        let l = UILabel()
-        l.textAlignment = .right
-        l.text = "Бесплатно"
-        l.textColor = .systemGreen
-        l.font = .systemFont(ofSize: 15, weight: .medium)
-        return l
+    private lazy var totalTitleLabel: UILabel = {
+        let label = Self.makeLabel(
+            text: Texts.totalTitle,
+            font: Metrics.Fonts.total,
+            textColor: .label
+        )
+        return label
     }()
     
-    private let orderButton: UIButton = {
+    private lazy var totalValueLabel: UILabel = {
+        let label = Self.makeLabel(
+            text: Texts.totalValueExample,
+            font: Metrics.Fonts.total,
+            alignment: .right
+        )
+        return label
+    }()
+    
+    private lazy var deliveryTitleLabel: UILabel = {
+        let label = Self.makeLabel(
+            text: Texts.deliveryTitle,
+            font: Metrics.Fonts.summaryTitle,
+            textColor: .secondaryLabel
+        )
+        return label
+    }()
+    
+    private lazy var deliveryValueLabel: UILabel = {
+        let label = Self.makeLabel(
+            text: Texts.deliveryFree,
+            font: Metrics.Fonts.summaryValue,
+            textColor: .systemGreen,
+            alignment: .right
+        )
+        return label
+    }()
+    
+    
+    private lazy var orderButton: UIButton = {
         let b = UIButton(type: .system)
-        b.backgroundColor = UIColor.systemOrange
-        b.layer.cornerRadius = 14
+        b.backgroundColor = .systemOrange
+        b.layer.cornerRadius = Metrics.Corners.orderButton
         b.layer.masksToBounds = true
-        b.heightAnchor.constraint(equalToConstant: 52).isActive = true
-        
+        b.heightAnchor.constraint(equalToConstant: Metrics.Sizes.orderButtonHeight).isActive = true
         return b
     }()
     
-    private let orderIconView: UIImageView = {
-        let iv = UIImageView(image: UIImage(systemName: "shippingbox"))
+    private lazy var orderButtonContentStack: UIStackView = {
+        let st = UIStackView()
+        st.axis = .horizontal
+        st.alignment = .center
+        st.spacing = Metrics.Spacing.orderButtonStack
+        st.isUserInteractionEnabled = false
+        return st
+    }()
+    
+    private lazy var orderIconView: UIImageView = {
+        let iv = UIImageView(image: UIImage(systemName: Symbols.orderIcon))
         iv.tintColor = .white
         iv.contentMode = .scaleAspectFit
         iv.setContentHuggingPriority(.required, for: .horizontal)
         return iv
     }()
-    private let orderTitleLabel: UILabel = {
-        let l = UILabel()
-        l.text = "Заказать"
-        l.font = .systemFont(ofSize: 17, weight: .semibold)
-        l.textColor = .white
-        l.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        return l
+    
+    private lazy var orderTitleLabel: UILabel = {
+        let label = Self.makeLabel(
+            text: Texts.orderButtonTitle,
+            font: Metrics.Fonts.orderButton,
+            textColor: .white,
+            hugging: (.defaultLow, .horizontal)
+        )
+        return label
     }()
-    private let orderAmountLabel: UILabel = {
-        let l = UILabel()
-        l.text = "940 ₽"
-        l.font = .systemFont(ofSize: 17, weight: .semibold)
-        l.textColor = .white
-        l.textAlignment = .right
-        l.setContentHuggingPriority(.required, for: .horizontal)
-        return l
+    
+    private lazy var orderButtonSpacer: UIView = {
+        let v = UIView()
+        v.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        return v
+    }()
+    
+    private lazy var orderAmountLabel: UILabel = {
+        let label = Self.makeLabel(
+            text: Texts.orderAmountExample,
+            font: Metrics.Fonts.orderButton,
+            textColor: .white,
+            alignment: .right,
+            hugging: (.required, .horizontal)
+        )
+        return label
     }()
     
     // MARK: - State
+    
     private var bag = Set<AnyCancellable>()
+    private var isPickup: Bool {
+        deliveryControl.selectedSegmentIndex == 0
+    }
     
     // MARK: - Sections
+    
     private enum Section: Int, CaseIterable {
         case pickupAddress
         case checkout
@@ -139,125 +271,93 @@ final class CheckoutViewController: UIViewController {
     }
     
     // MARK: - Init
+    
     init(
         viewModel: CheckoutViewModelProtocol,
-        makeSheetVM: @escaping (PhoneOrCommentInputSheetViewModel.Kind, String?, String?) -> PhoneOrCommentInputSheetViewModelProtocol
+        makePhoneSheetVM: @escaping (String?) -> PhoneInputSheetViewModelProtocol,
+        makeCommentSheetVM: @escaping (String?) -> CommentInputSheetViewModelProtocol,
+        phoneFormatter: PhoneFormattingProtocol
+        
     ) {
         self.viewModel = viewModel
-        self.makeSheetVM = makeSheetVM
+        self.makePhoneSheetVM = makePhoneSheetVM
+        self.makeCommentSheetVM = makeCommentSheetVM
+        self.phoneFormatter = phoneFormatter
         super.init(nibName: nil, bundle: nil)
     }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        setupNavigationBarWithNavLeftItem(
-            title: "Оформление заказа",
-            action: #selector(backTapped),
-            largeTitleDisplayMode: .never,
-            prefersLargeTitles: false
-        )
+        setupAppearance()
+        setupNavigationBar()
+        setupHierarchy()
         setupLayout()
-        setupOrderButtonContent()
         setupActions()
-        bindViewModel()
+        setupBindViewModel()
     }
 }
 
 // MARK: - Setup
 
 private extension CheckoutViewController {
-    func setupLayout() {
-        let topBar = UIView()
-        topBar.translatesAutoresizingMaskIntoConstraints = false
-        deliveryControl.translatesAutoresizingMaskIntoConstraints = false
-        topBar.addSubview(deliveryControl)
-        
-        NSLayoutConstraint.activate([
-            deliveryControl.leadingAnchor.constraint(equalTo: topBar.leadingAnchor, constant: 16),
-            deliveryControl.trailingAnchor.constraint(equalTo: topBar.trailingAnchor, constant: -16),
-            deliveryControl.topAnchor.constraint(equalTo: topBar.topAnchor, constant: 12),
-            deliveryControl.bottomAnchor.constraint(equalTo: topBar.bottomAnchor, constant: -8)
-        ])
-        
-        view.addSubview(topBar)
-        view.addSubview(tableView)
-        view.addSubview(bottomContainer)
-        
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        bottomContainer.translatesAutoresizingMaskIntoConstraints = false
-        
-        // bottom container
-        bottomContainer.axis = .vertical
-        bottomContainer.alignment = .fill
-        bottomContainer.distribution = .fill
-        bottomContainer.spacing = 12
-        bottomContainer.isLayoutMarginsRelativeArrangement = true
-        bottomContainer.layoutMargins = .init(top: 12, left: 16, bottom: 16, right: 16)
-        bottomContainer.backgroundColor = .systemBackground
-        
-        // rows inside bottom summary
-        summaryRow1.axis = .horizontal
-        summaryRow1.alignment = .center
-        summaryRow1.distribution = .fill
-        summaryRow1.addArrangedSubview(totalTitleLabel)
-        summaryRow1.addArrangedSubview(totalValueLabel)
-        
-        summaryRow2.axis = .horizontal
-        summaryRow2.alignment = .center
-        summaryRow2.distribution = .fill
-        summaryRow2.addArrangedSubview(deliveryTitleLabel)
-        summaryRow2.addArrangedSubview(deliveryValueLabel)
-        
-        bottomContainer.addArrangedSubview(summaryRow1)
-        bottomContainer.addArrangedSubview(summaryRow2)
-        bottomContainer.addArrangedSubview(orderButton)
-        
-        NSLayoutConstraint.activate([
-            // top bar
-            topBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            topBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            topBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            
-            // table
-            tableView.topAnchor.constraint(equalTo: topBar.bottomAnchor, constant: 8),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: bottomContainer.topAnchor),
-            
-            // bottom summary + button
-            bottomContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            bottomContainer.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            bottomContainer.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
+    func setupAppearance() {
+        view.backgroundColor = .systemBackground
     }
     
-    func setupOrderButtonContent() {
-        let content = UIStackView()
-        content.axis = .horizontal
-        content.alignment = .center
-        content.spacing = 10
-        content.translatesAutoresizingMaskIntoConstraints = false
-        content.isUserInteractionEnabled = false // ensure whole button receives taps
+    func setupNavigationBar() {
+        setupNavigationBarWithNavLeftItem(
+            title: Texts.navTitle,
+            action: #selector(backTapped),
+            largeTitleDisplayMode: .never,
+            prefersLargeTitles: false
+        )
+    }
+    
+    func setupHierarchy() {
+        view.addSubviews(
+            topBar,
+            tableView,
+            bottomContainer
+        )
+        topBar.addSubviews(deliveryControl)
         
-        let spacer = UIView()
-        spacer.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        summaryRow1.addArrangedSubviews(
+            totalTitleLabel,
+            totalValueLabel
+        )
+        summaryRow2.addArrangedSubviews(
+            deliveryTitleLabel,
+            deliveryValueLabel
+        )
+        bottomContainer.addArrangedSubviews(
+            summaryRow1,
+            summaryRow2,
+            orderButton
+        )
         
-        content.addArrangedSubview(orderIconView)
-        content.addArrangedSubview(orderTitleLabel)
-        content.addArrangedSubview(spacer)
-        content.addArrangedSubview(orderAmountLabel)
-        
-        orderButton.addSubview(content)
-        
-        NSLayoutConstraint.activate([
-            content.leadingAnchor.constraint(equalTo: orderButton.leadingAnchor, constant: 16),
-            content.trailingAnchor.constraint(equalTo: orderButton.trailingAnchor, constant: -16),
-            content.topAnchor.constraint(equalTo: orderButton.topAnchor, constant: 8),
-            content.bottomAnchor.constraint(equalTo: orderButton.bottomAnchor, constant: -8)
-        ])
+        orderButton.addSubviews(
+            orderButtonContentStack
+        )
+        orderButtonContentStack.addArrangedSubviews(
+            orderIconView,
+            orderTitleLabel,
+            orderButtonSpacer,
+            orderAmountLabel
+        )
+    }
+    
+    func setupLayout() {
+        prepareForAutoLayout()
+        setupTopBarConstraints()
+        setupTableConstraints()
+        setupBottomContainerConstraints()
+        setupOrderButtonContentConstraints()
     }
     
     func setupActions() {
@@ -265,8 +365,19 @@ private extension CheckoutViewController {
         orderButton.addTarget(self, action: #selector(placeTapped), for: .touchUpInside)
     }
     
-    func bindViewModel() {
-        // Reflect delivery method in segmented control and update section
+    func setupBindViewModel() {
+        bindDeliveryMethod()
+        bindDeliveryAddress()
+        bindReceiverPhone()
+        bindOrderComment()
+        bindPlaceOrderEnabled()
+    }
+}
+
+// MARK: - Bindings
+
+private extension CheckoutViewController {
+    func bindDeliveryMethod() {
         viewModel.deliveryMethodPublisher
             .receive(on: RunLoop.main)
             .sink { [weak self] method in
@@ -275,30 +386,24 @@ private extension CheckoutViewController {
                 if self.deliveryControl.selectedSegmentIndex != index {
                     self.deliveryControl.selectedSegmentIndex = index
                 }
-                let section = Section.pickupAddress.rawValue
-                self.tableView.reloadSections(IndexSet(integer: section), with: .automatic)
+                self.tableView.reloadSections(
+                    IndexSet(integer: Section.pickupAddress.rawValue),
+                    with: .automatic
+                )
             }
             .store(in: &bag)
-
-        // Update DeliveryAddressCell when address string changes
+    }
+    
+    func bindDeliveryAddress() {
         viewModel.deliveryAddressStringPublisher
             .receive(on: RunLoop.main)
             .sink { [weak self] _ in
-                guard let self else { return }
-                guard self.deliveryControl.selectedSegmentIndex == 1 else { return }
-                let indexPath = IndexPath(row: 0, section: Section.pickupAddress.rawValue)
-                if let cell = self.tableView.cellForRow(at: indexPath) as? DeliveryAddressCell {
-                    cell.configure(address: self.viewModel.deliveryAddressString)
-                    self.tableView.beginUpdates()
-                    self.tableView.endUpdates()
-                } else if self.tableView.numberOfSections > Section.pickupAddress.rawValue,
-                          self.tableView.numberOfRows(inSection: Section.pickupAddress.rawValue) > 0 {
-                    self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                }
+                self?.reloadDeliveryAddressCellIfNeeded()
             }
             .store(in: &bag)
-
-        // Enable/disable order button based on validation
+    }
+    
+    func bindPlaceOrderEnabled() {
         viewModel.isPlaceOrderEnabled
             .receive(on: RunLoop.main)
             .sink { [weak self] enabled in
@@ -307,13 +412,131 @@ private extension CheckoutViewController {
             }
             .store(in: &bag)
     }
+    
+    func bindReceiverPhone() {
+        viewModel.receiverPhoneDisplayPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.reloadPhoneCellIfNeeded()
+            }
+            .store(in: &bag)
+    }
+    
+    func bindOrderComment() {
+        viewModel.orderCommentPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.reloadCommentCellIfNeeded()
+            }
+            .store(in: &bag)
+    }
+}
+
+// MARK: - Layout
+
+private extension CheckoutViewController {
+    func prepareForAutoLayout() {
+        [topBar,
+         deliveryControl,
+         tableView,
+         bottomContainer,
+         orderButtonContentStack].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    
+    func setupTopBarConstraints() {
+        NSLayoutConstraint.activate([
+            // deliveryControl в topBar
+            deliveryControl.leadingAnchor.constraint(
+                equalTo: topBar.leadingAnchor,
+                constant: Metrics.Insets.horizontal
+            ),
+            deliveryControl.trailingAnchor.constraint(
+                equalTo: topBar.trailingAnchor,
+                constant: -Metrics.Insets.horizontal
+            ),
+            deliveryControl.topAnchor.constraint(
+                equalTo: topBar.topAnchor,
+                constant: Metrics.Spacing.topBarTop
+            ),
+            deliveryControl.bottomAnchor.constraint(
+                equalTo: topBar.bottomAnchor,
+                constant: -Metrics.Spacing.topBarBottom
+            ),
+            
+            // сам topBar
+            topBar.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            topBar.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
+            ),
+            topBar.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
+            )
+        ])
+    }
+    
+    func setupTableConstraints() {
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(
+                equalTo: topBar.bottomAnchor,
+                constant: Metrics.Spacing.tableTop
+            ),
+            tableView.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
+            ),
+            tableView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
+            ),
+            tableView.bottomAnchor.constraint(
+                equalTo: bottomContainer.topAnchor
+            )
+        ])
+    }
+    
+    func setupBottomContainerConstraints() {
+        NSLayoutConstraint.activate([
+            bottomContainer.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
+            ),
+            bottomContainer.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
+            ),
+            bottomContainer.bottomAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.bottomAnchor
+            )
+        ])
+    }
+    
+    func setupOrderButtonContentConstraints() {
+        NSLayoutConstraint.activate([
+            orderButtonContentStack.leadingAnchor.constraint(
+                equalTo: orderButton.leadingAnchor,
+                constant: Metrics.Insets.orderButtonContent.left
+            ),
+            orderButtonContentStack.trailingAnchor.constraint(
+                equalTo: orderButton.trailingAnchor,
+                constant: -Metrics.Insets.orderButtonContent.right
+            ),
+            orderButtonContentStack.topAnchor.constraint(
+                equalTo: orderButton.topAnchor,
+                constant: Metrics.Insets.orderButtonContent.top
+            ),
+            orderButtonContentStack.bottomAnchor.constraint(
+                equalTo: orderButton.bottomAnchor,
+                constant: -Metrics.Insets.orderButtonContent.bottom
+            )
+        ])
+    }
 }
 
 // MARK: - Actions
 
 private extension CheckoutViewController {
     @objc func deliveryChanged() {
-        let method: CheckoutViewModel.DeliveryMethod = (deliveryControl.selectedSegmentIndex == 0) ? .pickup : .delivery
+        let method: CheckoutViewModel.DeliveryMethod = isPickup ? .pickup : .delivery
         viewModel.setDeliveryMethod(method)
     }
     
@@ -322,20 +545,21 @@ private extension CheckoutViewController {
         onFinished?()
     }
     
-    @objc private func backTapped() {
+    @objc func backTapped() {
         onBack?()
     }
 }
 
-// MARK: - Table (pickup UI)
-extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
+// MARK: - UITableViewDataSource
+
+extension CheckoutViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int { Section.allCases.count }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         guard let sec = Section(rawValue: section) else { return 0 }
         switch sec {
         case .pickupAddress:
-            // Самовывоз: 1 строка (адрес ПВЗ); Доставка: 3 строки (адрес доставки + телефон + комментарий)
-            return (deliveryControl.selectedSegmentIndex == 0) ? 1 : 3
+            return isPickup ? 1 : 3
         case .checkout:
             return 2
         case .deliveryInfo, .payment:
@@ -347,44 +571,35 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
                    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch Section(rawValue: indexPath.section)! {
         case .pickupAddress:
-            if deliveryControl.selectedSegmentIndex == 0 {
-                // Самовывоз: показываем адрес пункта выдачи
-                let cell = tableView.dequeueReusableCell(
-                    withIdentifier: PickupAddressCell.reuseId,
-                    for: indexPath
-                ) as! PickupAddressCell
-                cell.configure(address: "Москва, Ходынский бульвар 4")
+            if isPickup {
+                let cell: PickupAddressCell = tableView.dequeueReusableCell(for: indexPath)
+                cell.configure(address: Texts.pickupAddressExample)
                 return cell
             } else {
-                if indexPath.row == 0 {
-                    let cell = tableView.dequeueReusableCell(
-                        withIdentifier: DeliveryAddressCell.reuseId,
-                        for: indexPath
-                    ) as! DeliveryAddressCell
+                switch indexPath.row {
+                case 0:
+                    let cell: DeliveryAddressCell = tableView.dequeueReusableCell(for: indexPath)
                     cell.configure(address: viewModel.deliveryAddressString)
                     return cell
-                } else if indexPath.row == 1 {
-                    let cell = tableView.dequeueReusableCell(
-                        withIdentifier: ChangePhoneCell.reuseId,
-                        for: indexPath
-                    ) as! ChangePhoneCell
-                    cell.configure(phone: nil)
+                case 1:
+                    let cell: ChangePhoneCell = tableView.dequeueReusableCell(for: indexPath)
+                    cell.configure(
+                        phone: viewModel.receiverPhoneDisplay,
+                        placeholder: Texts.phonePlaceholder
+                    )
                     return cell
-                } else {
-                    let cell = tableView.dequeueReusableCell(
-                        withIdentifier: OrderCommentCell.reuseId,
-                        for: indexPath
-                    ) as! OrderCommentCell
-                    cell.configure(comment: nil)
+                default:
+                    let cell: OrderCommentCell = tableView.dequeueReusableCell(for: indexPath)
+                    cell.configure(
+                        comment: viewModel.orderCommentText,
+                        placeholder: Texts.commentPlaceholder
+                    )
                     return cell
                 }
             }
             
         case .checkout:
-            let cell = tableView.dequeueReusableCell(
-                withIdentifier: CheckoutCell.reuseId,
-                for: indexPath
-            ) as! CheckoutCell
+            let cell: CheckoutCell = tableView.dequeueReusableCell(for: indexPath)
             let product = ProductTest(
                 id: "mock_\(indexPath.row)",
                 name: "Vemora Oslo Sofa 3-Seater",
@@ -395,91 +610,175 @@ extension CheckoutViewController: UITableViewDataSource, UITableViewDelegate {
                 brendId: "vemora"
             )
             cell.configure(with: product, quantity: indexPath.row + 1)
-            
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.showsSeparator = !isLastRow
             return cell
             
         case .deliveryInfo:
-            let cell = tableView.dequeueReusableCell(
-                withIdentifier: DeliveryInfoCell.reuseId,
-                for: indexPath
-            ) as! DeliveryInfoCell
-            
-            // If segmented control is on pickup (index 0) show "Послезавтра",
-            // otherwise (delivery) show "В течение 5 рабочих дней".
-            let whenText: String = (deliveryControl.selectedSegmentIndex == 0)
-            ? "Послезавтра"
-            : "В течение 5 рабочих дней"
-            
-            cell.configure(when: whenText, cost: "Доставка 0 ₽")
+            let cell: DeliveryInfoCell = tableView.dequeueReusableCell(for: indexPath)
+            let whenText = isPickup ? Texts.deliveryWhenPickup : Texts.deliveryWhenCourier
+            cell.configure(when: whenText, cost: Texts.cost)
             return cell
             
         case .payment:
-            let cell = tableView.dequeueReusableCell(
-                withIdentifier: PaymentMethodCell.reuseId,
-                for: indexPath
-            ) as! PaymentMethodCell
-            cell.configure(title: "Как оплатить заказ?", method: "При получении")
+            let cell: PaymentMethodCell = tableView.dequeueReusableCell(for: indexPath)
+            cell.configure(title: Texts.paymentTitle, method: Texts.paymentMethod)
             return cell
         }
     }
     
+    func tableView(_ tableView: UITableView,
+                   heightForHeaderInSection section: Int) -> CGFloat {
+        Metrics.Spacing.sectionHeader
+    }
+    func tableView(_ tableView: UITableView,
+                   viewForHeaderInSection section: Int) -> UIView? {
+        UIView(frame: .zero)
+    }
+    func tableView(_ tableView: UITableView,
+                   heightForFooterInSection section: Int) -> CGFloat {
+        .leastNormalMagnitude
+    }
+    func tableView(_ tableView: UITableView,
+                   viewForFooterInSection section: Int) -> UIView? {
+        UIView(frame: .zero)
+    }
+}
+
+// MARK: - UITableViewDelegate
+
+extension CheckoutViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        guard let sec = Section(rawValue: indexPath.section) else { return }
-        switch sec {
+        guard let section = Section(rawValue: indexPath.section) else { return }
+        
+        switch section {
         case .pickupAddress:
-            if deliveryControl.selectedSegmentIndex == 0 {
-                return
-            } else {
-                if indexPath.row == 0 {
-                    onPickOnMap?()
-                } else if indexPath.row == 1 {
-                    let viewModel = makeSheetVM(.phone, "+79001234567", nil)
-                    let sheet = PhoneOrCommentInputSheetViewController(viewModel: viewModel)
-                    sheet.onSave = { [weak self] phone in
-                        guard let self = self else { return }
-                        if let cell = self.tableView.cellForRow(at: indexPath) as? ChangePhoneCell {
-                            cell.configure(phone: phone, placeholder: "Указать номер телефона")
-                        } else {
-                            self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                        }
-                    }
-                    present(sheet, animated: true)
-                } else {
-                    let viewModel = makeSheetVM(.comment, nil, "Kомментарий")
-                    let sheet = PhoneOrCommentInputSheetViewController(viewModel: viewModel)
-                    sheet.onSave = { [weak self] comment in
-                        guard let self = self else { return }
-                        if let cell = self.tableView.cellForRow(at: indexPath) as? OrderCommentCell {
-                            cell.configure(comment: comment, placeholder: "Оставить комментарий")
-                        } else {
-                            self.tableView.reloadRows(at: [indexPath], with: .automatic)
-                        }
-                    }
-                    present(sheet, animated: true)
-                }
-            }
+            handlePickupAddressSelection(at: indexPath)
         default:
             break
         }
     }
-    
-    // MARK: - Compact section spacing
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 12
+}
+
+// MARK: - Cell Selection Handling
+
+private extension CheckoutViewController {
+    func handlePickupAddressSelection(at indexPath: IndexPath) {
+        guard !isPickup else { return }
+        
+        switch indexPath.row {
+        case 0:
+            onPickOnMap?()
+        case 1:
+            presentPhoneInputSheet(at: indexPath)
+        default:
+            presentCommentInputSheet(at: indexPath)
+        }
     }
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return UIView(frame: .zero)
+    func presentPhoneInputSheet(at indexPath: IndexPath) {
+        let vm = makePhoneSheetVM(viewModel.receiverPhoneE164)
+        let sheet = PhoneInputSheetViewController(
+            viewModel: vm,
+            phoneFormatter: phoneFormatter
+        )
+
+        sheet.onSavePhone = { [weak self] phone in
+            guard let self else { return }
+            self.viewModel.updateReceiverPhone(phone)
+        }
+        present(sheet, animated: true)
     }
     
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return .leastNormalMagnitude
+    func presentCommentInputSheet(at indexPath: IndexPath) {
+        let vm = makeCommentSheetVM(viewModel.orderCommentText)
+        let sheet = CommentInputSheetViewController(viewModel: vm)
+
+        sheet.onSaveComment = { [weak self] comment in
+            guard let self else { return }
+            self.viewModel.updateOrderComment(comment)
+        }
+
+        present(sheet, animated: true)
+    }
+}
+
+// MARK: - Helpers
+
+private extension CheckoutViewController {
+    static func makeSummaryRow() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .fill
+        return stackView
     }
     
-    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        return UIView(frame: .zero)
+    static func makeLabel(
+        text: String? = nil,
+        font: UIFont,
+        textColor: UIColor = .label,
+        alignment: NSTextAlignment = .natural,
+        hugging: (priority: UILayoutPriority,
+                  axis: NSLayoutConstraint.Axis)? = nil
+    ) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        
+        label.font = font
+        label.textColor = textColor
+        label.textAlignment = alignment
+        if let hugging = hugging {
+            label.setContentHuggingPriority(hugging.priority, for: hugging.axis)
+        }
+        return label
+    }
+}
+
+// MARK: - Reload helpers
+
+private extension CheckoutViewController {
+    func reloadCellIfNeeded<Cell: UITableViewCell>(
+        row: Int,
+        configure visibleCell: (Cell) -> Void
+    ) {
+        guard !isPickup else { return }
+        
+        let section = Section.pickupAddress.rawValue
+        let indexPath = IndexPath(row: row, section: section)
+        
+        if let cell: Cell = tableView.visibleCell(at: indexPath) {
+            visibleCell(cell)
+            tableView.beginUpdates()
+            tableView.endUpdates()
+        } else if tableView.numberOfSections > section,
+                  tableView.numberOfRows(inSection: section) > row {
+            tableView.reloadRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
+    func reloadDeliveryAddressCellIfNeeded() {
+        reloadCellIfNeeded(row: 0) { (cell: DeliveryAddressCell) in
+            cell.configure(address: viewModel.deliveryAddressString)
+        }
+    }
+    
+    func reloadPhoneCellIfNeeded() {
+        reloadCellIfNeeded(row: 1) { (cell: ChangePhoneCell) in
+            cell.configure(
+                phone: viewModel.receiverPhoneDisplay,
+                placeholder: Texts.phonePlaceholder
+            )
+        }
+    }
+    
+    func reloadCommentCellIfNeeded() {
+        reloadCellIfNeeded(row: 2) { (cell: OrderCommentCell) in
+            cell.configure(
+                comment: viewModel.orderCommentText,
+                placeholder: Texts.commentPlaceholder
+            )
+        }
     }
 }

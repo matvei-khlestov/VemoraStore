@@ -14,22 +14,27 @@ final class CheckoutCoordinator: CheckoutCoordinatingProtocol {
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     var onFinish: (() -> Void)?
+    var onOrderSuccess: (() -> Void)?
     
-    // MARK: - Factories
+    // MARK: - Deps
     
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
-
+    
+    private let phoneFormatter: PhoneFormattingProtocol
+    
     // MARK: - Init
     
     init(
         navigation: UINavigationController,
         viewModelFactory: ViewModelBuildingProtocol,
-        coordinatorFactory: CoordinatorBuildingProtocol
+        coordinatorFactory: CoordinatorBuildingProtocol,
+        phoneFormatter: PhoneFormattingProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
         self.coordinatorFactory = coordinatorFactory
+        self.phoneFormatter = phoneFormatter
     }
     
     // MARK: - Start
@@ -38,21 +43,25 @@ final class CheckoutCoordinator: CheckoutCoordinatingProtocol {
         let vm = viewModelFactory.makeCheckoutViewModel()
         let vc = CheckoutViewController(
             viewModel: vm,
-            makeSheetVM: { kind, initialPhone, initialComment in
-                PhoneOrCommentInputSheetViewModel(
-                    kind: kind,
-                    initialPhone: initialPhone,
+            makePhoneSheetVM: { initialPhone in
+                self.viewModelFactory.makePhoneInputSheetViewModel(
+                    initialPhone: initialPhone
+                )
+            }, makeCommentSheetVM: { initialComment in
+                self.viewModelFactory.makeCommentInputSheetViewModel(
                     initialComment: initialComment
-                ) as PhoneOrCommentInputSheetViewModelProtocol
-            }
+                )
+            }, phoneFormatter: phoneFormatter
         )
         
         vc.onPickOnMap = { [weak self] in
             self?.showMapPicker(viewModel: vm)
         }
+        
         vc.onFinished = { [weak self] in
-            self?.showOrderSuccess()
+            self?.onOrderSuccess?()
         }
+        
         vc.onBack = { [weak self] in
             self?.navigation.popViewController(animated: true)
         }
@@ -64,8 +73,6 @@ final class CheckoutCoordinator: CheckoutCoordinatingProtocol {
     
     private func showMapPicker(viewModel: CheckoutViewModelProtocol) {
         let picker = coordinatorFactory.makeMapPickerCoordinator(navigation: navigation)
-        add(picker)
-        
         picker.onFullAddressPicked = { [weak self, weak picker] fullAddress in
             guard let self else { return }
             viewModel.updateDeliveryAddress(fullAddress)
@@ -76,23 +83,7 @@ final class CheckoutCoordinator: CheckoutCoordinatingProtocol {
             if let picker { self?.remove(picker) }
         }
         
+        add(picker)
         picker.start()
-    }
-    
-    private func showOrderSuccess() {
-        let success = coordinatorFactory.makeOrderSuccessCoordinator(navigation: navigation)
-        
-        success.onOpenOrder = { [weak self] in
-            let detailsVC = UIViewController()
-            detailsVC.view.backgroundColor = .systemBackground
-            self?.navigation.pushViewController(detailsVC, animated: true)
-        }
-        
-        success.onFinish = { [weak self] in
-            self?.remove(success)
-        }
-        
-        add(success)
-        success.start()
     }
 }

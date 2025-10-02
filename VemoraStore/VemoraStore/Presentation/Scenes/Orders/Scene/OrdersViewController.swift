@@ -10,82 +10,141 @@ import UIKit
 final class OrdersViewController: UIViewController {
     
     // MARK: - Callbacks
+    
     var onBack: (() -> Void)?
     
     // MARK: - VM
+    
     private let viewModel: OrdersViewModelProtocol
+    
+    // MARK: - Metrics
+    
+    private enum Metrics {
+        enum Table {
+            static let sectionHeaderTopPadding: CGFloat = 20
+            static let headerHeight: CGFloat = 28
+            static let footerHeight: CGFloat = .leastNormalMagnitude
+        }
+    }
+    
+    // MARK: - Texts
+    
+    private enum Texts {
+        static let screenTitle = "Мои заказы"
+        static let sectionHeaderPrefix = "Заказ"
+    }
     
     // MARK: - UI
     
     private lazy var tableView: UITableView = {
-        let tv = UITableView(frame: .zero, style: .insetGrouped)
-        tv.backgroundColor = .systemGroupedBackground
-        tv.dataSource = self
-        tv.delegate = self
-        tv.separatorStyle = .none
-        tv.register(OrderItemCell.self, forCellReuseIdentifier: OrderItemCell.reuseId)
-        if #available(iOS 15.0, *) { tv.sectionHeaderTopPadding = 20 }
-        return tv
+        let v = UITableView(frame: .zero, style: .insetGrouped)
+        v.backgroundColor = .systemGroupedBackground
+        v.dataSource = self
+        v.delegate = self
+        v.separatorStyle = .none
+        v.register(OrderItemCell.self)
+        if #available(iOS 15.0, *) {
+            v.sectionHeaderTopPadding = Metrics.Table.sectionHeaderTopPadding
+        }
+        return v
     }()
     
     // MARK: - Init
+    
     init(viewModel: OrdersViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupAppearance()
+        setupNavigationBar()
+        setupHierarchy()
+        setupLayout()
+    }
+}
+
+// MARK: - Setup
+
+private extension OrdersViewController {
+    func setupAppearance() {
         view.backgroundColor = .systemBackground
+    }
+    
+    func setupNavigationBar() {
         setupNavigationBarWithNavLeftItem(
-            title: "Мои заказы",
+            title: Texts.screenTitle,
             action: #selector(backTapped),
             largeTitleDisplayMode: .always,
             prefersLargeTitles: true
         )
-        view.addSubview(tableView)
-        setupConstraints()
     }
     
-    private func setupConstraints() {
+    func setupHierarchy() {
+        view.addSubview(tableView)
+    }
+    
+    func setupLayout() {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            tableView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            tableView.leadingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.leadingAnchor
+            ),
+            tableView.trailingAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.trailingAnchor
+            ),
+            tableView.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor
+            )
         ])
     }
-    
-    @objc private func backTapped() { onBack?() }
 }
 
-// MARK: - UITableViewDataSource / Delegate
-extension OrdersViewController: UITableViewDataSource, UITableViewDelegate {
-    
+// MARK: - Actions
+
+@objc private extension OrdersViewController {
+    func backTapped() {
+        onBack?()
+    }
+}
+
+// MARK: - UITableViewDataSource
+
+extension OrdersViewController: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
         viewModel.sectionsCount
     }
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(
+        _ tableView: UITableView,
+        numberOfRowsInSection section: Int
+    ) -> Int {
         viewModel.rows(in: section)
     }
     
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+    func tableView(
+        _ tableView: UITableView,
+        titleForHeaderInSection section: Int
+    ) -> String? {
         guard let order = viewModel.order(at: section) else { return nil }
-        return "Заказ \(order.id)"
+        return "\(Texts.sectionHeaderPrefix) \(order.id)"
     }
     
-    func tableView(_ tableView: UITableView,
-                   cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(
-            withIdentifier: OrderItemCell.reuseId,
-            for: indexPath
-        ) as? OrderItemCell else {
-            return UITableViewCell()
-        }
+    func tableView(
+        _ tableView: UITableView,
+        cellForRowAt indexPath: IndexPath
+    ) -> UITableViewCell {
+        let cell: OrderItemCell = tableView.dequeueReusableCell(for: indexPath)
         
         if let order = viewModel.order(at: indexPath.section),
            let item = viewModel.item(at: indexPath) {
@@ -95,7 +154,22 @@ extension OrdersViewController: UITableViewDataSource, UITableViewDelegate {
         }
         return cell
     }
+}
+
+// MARK: - UITableViewDelegate
+
+extension OrdersViewController: UITableViewDelegate {
+    func tableView(
+        _ tableView: UITableView,
+        heightForHeaderInSection section: Int
+    ) -> CGFloat {
+        Metrics.Table.headerHeight
+    }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat { 28 }
-    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat { .leastNormalMagnitude }
+    func tableView(
+        _ tableView: UITableView,
+        heightForFooterInSection section: Int
+    ) -> CGFloat {
+        Metrics.Table.footerHeight
+    }
 }

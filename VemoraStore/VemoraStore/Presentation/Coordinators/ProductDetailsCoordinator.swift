@@ -37,27 +37,11 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     func start() {
         let vm = viewModelFactory.makeProductDetailsViewModel(product: product)
         let vc = ProductDetailsViewController(viewModel: vm)
-        
-        vc.onCheckout = { [weak self] in
-            self?.startCheckout()
-        }
+    
         vc.onBack = { [weak self] in
             self?.navigation.popViewController(animated: true)
         }
         
         navigation.pushViewController(vc, animated: true)
-    }
-    
-    // MARK: - Private
-    
-    private func startCheckout() {
-        let checkout = coordinatorFactory.makeCheckoutCoordinator(navigation: navigation)
-        add(checkout)
-        
-        checkout.onFinish = { [weak self, weak checkout] in
-            if let checkout { self?.remove(checkout) }
-        }
-        
-        checkout.start()
     }
 }

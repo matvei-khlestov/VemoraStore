@@ -14,7 +14,6 @@ import FirebaseFirestore
 
 final class DebugImporter: DebugImportingProtocol {
     
-    // Локальный форматтер времени для логов.
     private let df = ISO8601DateFormatter()
     
     private let debugImportStorage: DebugImportStoringProtocol

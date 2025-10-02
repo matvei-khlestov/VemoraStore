@@ -11,109 +11,225 @@ final class OrderSuccessViewController: UIViewController {
     
     // MARK: - Callbacks
     
-    var onViewOrder: (() -> Void)?
+    var onViewCatalog: (() -> Void)?
+    
+    // MARK: - Metrics
+    
+    private enum Metrics {
+        enum Spacing {
+            static let stack: CGFloat = 24
+            static let textStack: CGFloat = 8
+        }
+        
+        enum Sizes {
+            static let iconPointSize: CGFloat = 96
+            static let buttonMinHeight: CGFloat = 44
+        }
+        
+        enum Fonts {
+            static let title: UIFont    = .systemFont(ofSize: 28, weight: .bold)
+            static let subtitle: UIFont = .systemFont(ofSize: 16, weight: .regular)
+            static let button: UIFont   = .systemFont(ofSize: 17, weight: .semibold)
+        }
+        
+        enum SymbolConfig {
+            static let iconWeight: UIImage.SymbolWeight = .semibold
+        }
+    }
+    
+    // MARK: - Colors
+    
+    private enum Colors {
+        static let title: UIColor      = .white
+        static let subtitle: UIColor   = UIColor.white.withAlphaComponent(0.8)
+        static let buttonBackground: UIColor = UIColor.white.withAlphaComponent(0.9)
+        static let buttonForeground: UIColor = .brightPurple
+        static let background: UIColor = .brightPurple
+    }
+    
+    // MARK: - Texts
+    
+    private enum Texts {
+        static let title = "Заказ успешно оформлен"
+        static let subtitle = "Спасибо, что выбрали нас! Продолжайте шопинг."
+        static let button = "Вернуться в магазин"
+    }
+    
+    // MARK: - Symbols
+    
+    private enum Symbols {
+        static let success = "checkmark.circle.fill"
+    }
     
     // MARK: - UI
-    private let iconView: UIImageView = {
-        let config = UIImage.SymbolConfiguration(pointSize: 96, weight: .semibold)
-        let iv = UIImageView(image: UIImage(systemName: "checkmark.circle.fill", withConfiguration: config))
-        iv.tintColor = .white
-        iv.contentMode = .scaleAspectFit
-        iv.setContentHuggingPriority(.required, for: .vertical)
-        return iv
+    
+    private lazy var iconView: UIImageView = {
+        let cfg = UIImage.SymbolConfiguration(
+            pointSize: Metrics.Sizes.iconPointSize,
+            weight: Metrics.SymbolConfig.iconWeight
+        )
+        let v = UIImageView(image: UIImage(
+            systemName: Symbols.success,
+            withConfiguration: cfg
+        ))
+        v.tintColor = .white
+        v.contentMode = .scaleAspectFit
+        v.setContentHuggingPriority(.required, for: .vertical)
+        return v
     }()
     
-    private let titleLabel: UILabel = {
-        let l = UILabel()
-        l.text = "Заказ успешно оформлен"
-        l.font = .systemFont(ofSize: 28, weight: .bold)
-        l.textAlignment = .center
-        l.textColor = .white
-        l.numberOfLines = 0
-        return l
+    private lazy var titleLabel: UILabel = {
+        Factory.makeLabel(
+            text: Texts.title,
+            font: Metrics.Fonts.title,
+            color: Colors.title,
+            numberOfLines: 0,
+            alignment: .center
+        )
     }()
     
-    private let subtitleLabel: UILabel = {
-        let l = UILabel()
-        l.text = "Перейдите к деталям заказа и отслеживанию."
-        l.font = .systemFont(ofSize: 16, weight: .regular)
-        l.textAlignment = .center
-        l.textColor = UIColor.white.withAlphaComponent(0.8)
-        l.numberOfLines = 0
-        return l
+    private lazy var subtitleLabel: UILabel = {
+        Factory.makeLabel(
+            text: Texts.subtitle,
+            font: Metrics.Fonts.subtitle,
+            color: Colors.subtitle,
+            numberOfLines: 0,
+            alignment: .center
+        )
     }()
     
-    private let viewOrderButton: UIButton = {
-        var config = UIButton.Configuration.filled()
-        config.title = "Открыть заказ"
-        config.baseBackgroundColor = UIColor.white.withAlphaComponent(0.9)
-        config.baseForegroundColor = .brightPurple
-        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-            var outgoing = incoming
-            outgoing.font = .systemFont(ofSize: 17, weight: .semibold)
-            return outgoing
+    private lazy var viewOrderButton: UIButton = {
+        var conf = UIButton.Configuration.filled()
+        conf.title = Texts.button
+        conf.baseBackgroundColor = Colors.buttonBackground
+        conf.baseForegroundColor = Colors.buttonForeground
+        conf.cornerStyle = .capsule
+        conf.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+            var out = incoming
+            out.font = Metrics.Fonts.button
+            return out
         }
-        config.cornerStyle = .capsule
-        let b = UIButton(configuration: config)
+        let b = UIButton(configuration: conf)
         b.setContentHuggingPriority(.required, for: .vertical)
+        b.onTap(self, action: #selector(viewOrderTapped))
         return b
     }()
     
-    private let stack = UIStackView()
+    private lazy var textStack: UIStackView = {
+        Factory.makeStack(
+            axis: .vertical,
+            alignment: .fill,
+            spacing: Metrics.Spacing.textStack
+        )
+    }()
+    
+    private lazy var rootStack: UIStackView = {
+        Factory.makeStack(
+            axis: .vertical,
+            alignment: .center,
+            spacing: Metrics.Spacing.stack
+        )
+    }()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAppearance()
+        setupHierarchy()
         setupLayout()
-        viewOrderButton.addTarget(self, action: #selector(viewOrderTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
-    
-    // MARK: - Setup
-    private func setupAppearance() {
-        view.backgroundColor = .brightPurple
+}
+
+// MARK: - Setup
+
+private extension OrderSuccessViewController {
+    func setupAppearance() {
+        view.backgroundColor = Colors.background
     }
     
-    private func setupLayout() {
-        stack.axis = .vertical
-        stack.alignment = .center
-        stack.spacing = 24
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        
-        // Вложенный стек для текстов — ширина по лайаут-гайду
-        let textStack = UIStackView(arrangedSubviews: [titleLabel, subtitleLabel])
-        textStack.axis = .vertical
-        textStack.alignment = .fill
-        textStack.spacing = 8
-        textStack.translatesAutoresizingMaskIntoConstraints = false
-        
-        stack.addArrangedSubview(iconView)
-        stack.addArrangedSubview(textStack)
-        stack.addArrangedSubview(viewOrderButton)
-        
-        view.addSubview(stack)
-        
+    func setupHierarchy() {
+        textStack.addArrangedSubviews(
+            titleLabel,
+            subtitleLabel
+        )
+        rootStack.addArrangedSubviews(
+            iconView,
+            textStack,
+            viewOrderButton
+        )
+        view.addSubview(rootStack)
+    }
+    
+    func setupLayout() {
+        rootStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            stack.leadingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor, constant: 0),
-            stack.trailingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor, constant: 0),
+            rootStack.centerXAnchor.constraint(
+                equalTo: view.centerXAnchor
+            ),
+            rootStack.centerYAnchor.constraint(
+                equalTo: view.centerYAnchor
+            ),
+            rootStack.leadingAnchor.constraint(
+                greaterThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor
+            ),
+            rootStack.trailingAnchor.constraint(
+                lessThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor
+            ),
             
-            textStack.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor, multiplier: 1.0),
-            viewOrderButton.heightAnchor.constraint(greaterThanOrEqualToConstant: 44)
+            viewOrderButton.heightAnchor.constraint(
+                greaterThanOrEqualToConstant: Metrics.Sizes.buttonMinHeight
+            )
         ])
     }
-    
-    // MARK: - Actions
-    
-    @objc private func viewOrderTapped() {
+}
+
+// MARK: - Actions
+
+@objc private extension OrderSuccessViewController {
+    func viewOrderTapped() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        onViewOrder?()
+        onViewCatalog?()
+    }
+}
+
+// MARK: - Helpers
+
+private extension OrderSuccessViewController {
+    enum Factory {
+        static func makeLabel(
+            text: String? = nil,
+            font: UIFont,
+            color: UIColor,
+            numberOfLines: Int = 1,
+            alignment: NSTextAlignment = .natural
+        ) -> UILabel {
+            let l = UILabel()
+            l.text = text
+            l.font = font
+            l.textColor = color
+            l.numberOfLines = numberOfLines
+            l.textAlignment = alignment
+            return l
+        }
+        
+        static func makeStack(
+            axis: NSLayoutConstraint.Axis = .vertical,
+            alignment: UIStackView.Alignment = .fill,
+            spacing: CGFloat = 0,
+            distribution: UIStackView.Distribution = .fill
+        ) -> UIStackView {
+            let v = UIStackView()
+            v.axis = axis
+            v.alignment = alignment
+            v.spacing = spacing
+            v.distribution = distribution
+            return v
+        }
     }
 }

@@ -9,5 +9,6 @@ import UIKit
 
 protocol CheckoutCoordinatingProtocol: Coordinator {
     var onFinish: (() -> Void)? { get set }
+    var onOrderSuccess: (() -> Void)? { get set }
     func start()
 }

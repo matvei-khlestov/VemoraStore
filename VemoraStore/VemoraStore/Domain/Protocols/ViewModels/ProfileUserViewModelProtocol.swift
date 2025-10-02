@@ -15,7 +15,8 @@ protocol ProfileUserViewModelProtocol: AnyObject {
     var rowsCount: Int { get }
     func row(at index: Int) -> ProfileUserRow?
 
-    // Интенты с результатом
     func logout() async throws
     func deleteAccount() async throws
+    
+    func loadAvatarData() -> Data?
 }

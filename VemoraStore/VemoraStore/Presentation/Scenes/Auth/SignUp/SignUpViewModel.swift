@@ -11,7 +11,7 @@ import Combine
 final class SignUpViewModel: SignUpViewModelProtocol {
     
     private let auth: AuthServiceProtocol
-    private let validator: AuthValidatingProtocol
+    private let validator: FormValidatingProtocol
     
     // State
     @Published private var name: String = ""
@@ -26,7 +26,7 @@ final class SignUpViewModel: SignUpViewModelProtocol {
     
     private var bag = Set<AnyCancellable>()
     
-    init(auth: AuthServiceProtocol, validator: AuthValidatingProtocol) {
+    init(auth: AuthServiceProtocol, validator: FormValidatingProtocol) {
         self.auth = auth
         self.validator = validator
         

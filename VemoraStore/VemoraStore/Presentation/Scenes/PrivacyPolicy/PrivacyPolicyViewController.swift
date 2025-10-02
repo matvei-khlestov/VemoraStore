@@ -13,77 +13,139 @@ final class PrivacyPolicyViewController: UIViewController {
     
     var onBack: (() -> Void)?
     
+    // MARK: - Metrics
+    
+    private enum Metrics {
+        enum Insets {
+            static let horizontal: CGFloat = 16
+            static let verticalTop: CGFloat = 16
+            static let verticalBottom: CGFloat = 24
+        }
+        enum Fonts {
+            static let body: UIFont = .systemFont(ofSize: 15, weight: .regular)
+        }
+        enum Paragraph {
+            static let lineSpacing: CGFloat = 2
+            static let paragraphSpacing: CGFloat = 6
+        }
+    }
+    
+    // MARK: - Texts
+    
+    private enum Texts {
+        static let navigationTitle = "Политика конфиденциальности"
+    }
+    
     // MARK: - UI
     
     private lazy var textView: UITextView = {
-        let textView = UITextView()
-        textView.isEditable = false
-        textView.isSelectable = true
-        textView.alwaysBounceVertical = true
-        textView.backgroundColor = .systemBackground
-        textView.textContainerInset = .init(top: 16, left: 16, bottom: 24, right: 16)
-        textView.font = .systemFont(ofSize: 15)
-        textView.textColor = .label
-        textView.adjustsFontForContentSizeCategory = true
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        return textView
+        let view = UITextView()
+        view.isEditable = false
+        view.isSelectable = true
+        view.alwaysBounceVertical = true
+        view.backgroundColor = .systemBackground
+        view.textContainerInset = .init(
+            top: Metrics.Insets.verticalTop,
+            left: Metrics.Insets.horizontal,
+            bottom: Metrics.Insets.verticalBottom,
+            right: Metrics.Insets.horizontal
+        )
+        view.adjustsFontForContentSizeCategory = true
+        return view
     }()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        
-        setupNavigationBarWithNavLeftItem(
-            title: "Политика конфиденциальности",
-            action:  #selector(backTapped),
-            largeTitleDisplayMode: .never,
-            prefersLargeTitles: false
-        )
-        
+        setupAppearance()
+        setupNavigationBar()
+        setupHierarchy()
         setupLayout()
         applyContent()
     }
+}
+
+// MARK: - Setup
+
+private extension PrivacyPolicyViewController {
+    func setupAppearance() {
+        view.backgroundColor = .systemBackground
+    }
     
-    // MARK: - UI Build
+    func setupNavigationBar() {
+        setupNavigationBarWithNavLeftItem(
+            title: Texts.navigationTitle,
+            action: #selector(backTapped),
+            largeTitleDisplayMode: .never,
+            prefersLargeTitles: false
+        )
+    }
     
-    private func setupLayout() {
-        view.addSubview(textView)
+    func setupHierarchy() {
+        view.addSubviews(textView)
+    }
+    
+    func setupLayout() {
+        prepareForAutoLayout()
         setupConstraints()
     }
-    
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            textView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            textView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            textView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+}
+
+// MARK: - Layout
+
+private extension PrivacyPolicyViewController {
+    func prepareForAutoLayout() {
+        [textView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
     
-    // MARK: - Content
+    func setupConstraints() {
+        NSLayoutConstraint.activate([
+            textView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            textView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor
+            ),
+            textView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor
+            ),
+            textView.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor
+            )
+        ])
+    }
+}
+
+// MARK: - Content
+
+private extension PrivacyPolicyViewController {
+    func applyContent() {
+        textView.attributedText = makeAttributedPolicyText(PrivacyPolicyText.body)
+    }
     
-    private func applyContent() {
+    func makeAttributedPolicyText(_ text: String) -> NSAttributedString {
         let paragraph = NSMutableParagraphStyle()
-        paragraph.lineSpacing = 2
-        paragraph.paragraphSpacing = 6
+        paragraph.lineSpacing = Metrics.Paragraph.lineSpacing
+        paragraph.paragraphSpacing = Metrics.Paragraph.paragraphSpacing
         
-        let attr = NSMutableAttributedString(
-            string: PrivacyPolicyText.body,
+        return NSAttributedString(
+            string: text,
             attributes: [
-                .font: UIFont.systemFont(ofSize: 15),
+                .font: Metrics.Fonts.body,
                 .foregroundColor: UIColor.label,
                 .paragraphStyle: paragraph
             ]
         )
-        
-        textView.attributedText = attr
     }
-    
-    // MARK: - Actions
-    
-    @objc private func backTapped() {
+}
+
+// MARK: - Actions
+
+private extension PrivacyPolicyViewController {
+    @objc func backTapped() {
         onBack?()
     }
 }
