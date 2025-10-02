@@ -17,7 +17,11 @@ extension Container {
         self { DefaultDeliveryAddressFormatter() }
     }
     
-    var authValidator: Factory<AuthValidatingProtocol> {
-        self { AuthValidator() }
+    var formValidator: Factory<FormValidatingProtocol> {
+        self { FormValidator() }
+    }
+    
+    var phoneFormatter: Factory<PhoneFormattingProtocol> {
+        self { PhoneFormatter() }
     }
 }

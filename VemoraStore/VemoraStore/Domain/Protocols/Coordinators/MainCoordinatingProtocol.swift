@@ -10,4 +10,5 @@ import Foundation
 protocol MainCoordinatingProtocol: Coordinator {
     var onDeleteAccount: (() -> Void)? { get set }
     var onLogout: (() -> Void)? { get set }
+    var onOrderSuccess: (() -> Void)? { get set }
 }

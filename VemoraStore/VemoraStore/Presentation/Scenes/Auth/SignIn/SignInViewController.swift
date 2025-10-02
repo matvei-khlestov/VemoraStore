@@ -10,7 +10,7 @@ import Combine
 
 final class SignInViewController: UIViewController {
     
-    // MARK: - Public callbacks
+    // MARK: - Callbacks
     
     var onBack: (() -> Void)?
     var onOpenSignUp: (() -> Void)?
@@ -21,37 +21,65 @@ final class SignInViewController: UIViewController {
     private let viewModel: SignInViewModelProtocol
     private var bag = Set<AnyCancellable>()
     
+    // MARK: - Metrics
+    
+    private enum Metrics {
+        enum Insets {
+            static let horizontal: CGFloat = 20
+            static let verticalTop: CGFloat = 70
+            static let verticalBottom: CGFloat = 24
+        }
+        
+        enum Spacing {
+            static let formSpacing: CGFloat = 15
+        }
+        
+        enum Fonts {
+            static let forgot: UIFont = .systemFont(ofSize: 15, weight: .regular)
+        }
+    }
+    
+    // MARK: - Texts
+    
+    private enum Texts {
+        static let forgotPasswordTitle = "Забыли пароль?"
+        static let submitTitle = "Войти"
+        static let noteText = "Ещё нет аккаунта?"
+        static let noteAction = "Регистрация"
+    }
+    
     // MARK: - UI
     
-    private lazy var emailField: FormTextField = {
-        FormTextField(kind: .email)
-    }()
-    
-    private lazy var passwordField: FormTextField = {
-        FormTextField(kind: .password)
-    }()
+    private lazy var emailField = FormTextField(kind: .email)
+    private lazy var passwordField = FormTextField(kind: .password)
     
     private lazy var forgotButton: UIButton = {
-        let b = UnderlinedButton(
-            text: "Забыли пароль?",
+        UnderlinedButton(
+            text: Texts.forgotPasswordTitle,
             color: .brightPurple,
-            font: .systemFont(ofSize: 15),
+            font: Metrics.Fonts.forgot,
             alignment: .trailing
         )
-        return b
+    }()
+    
+    private lazy var forgotRowSpacer: UIView = {
+        let spacer = UIView()
+        return spacer
     }()
     
     private lazy var forgotRow: UIStackView = {
-        let spacer = UIView()
-        let sv = UIStackView(arrangedSubviews: [spacer, forgotButton])
-        sv.axis = .horizontal
-        sv.alignment = .fill
-        sv.distribution = .fill
-        return sv
+        let row = UIStackView()
+        row.axis = .horizontal
+        row.alignment = .fill
+        row.distribution = .fill
+        return row
     }()
     
     private lazy var submitButton: BrandedButton = {
-        let b = BrandedButton(style: .submit, title: "Войти")
+        let b = BrandedButton(
+            style: .submit,
+            title: Texts.submitTitle
+        )
         b.isEnabled = false
         b.setNeedsUpdateConfiguration()
         return b
@@ -59,23 +87,19 @@ final class SignInViewController: UIViewController {
     
     private lazy var bottomNoteRow: LabelLinkRow = {
         let row = LabelLinkRow(
-            label: "Ещё нет аккаунта?",
-            button: "Регистрация"
+            label: Texts.noteText,
+            button: Texts.noteAction
         )
-        row.onTap = { [weak self] in self?.openSignUp() }
+        row.onTap = { [weak self] in
+            self?.openSignUp()
+        }
         return row
     }()
     
     private lazy var formStack: UIStackView = {
-        let sv = UIStackView(arrangedSubviews: [
-            emailField,
-            passwordField,
-            forgotRow,
-            submitButton,
-            bottomNoteRow
-        ])
+        let sv = UIStackView()
         sv.axis = .vertical
-        sv.spacing = 15
+        sv.spacing = Metrics.Spacing.formSpacing
         return sv
     }()
     
@@ -85,61 +109,114 @@ final class SignInViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        setupAppearance()
         setupHierarchy()
-        setupConstraints()
+        setupLayout()
+        setupActions()
         wire()
         bind()
         setupKeyboardDismissRecognizer()
     }
-    
-    // MARK: - Layout
-    
-    private func setupHierarchy() {
-        view.addSubview(formStack)
+}
+
+// MARK: - Setup
+
+private extension SignInViewController {
+    func setupAppearance() {
+        view.backgroundColor = .systemBackground
     }
     
-    private func setupConstraints() {
-        formStack.translatesAutoresizingMaskIntoConstraints = false
+    func setupHierarchy() {
+        
+        forgotRow.addArrangedSubviews(
+            forgotRowSpacer,
+            forgotButton
+        )
+        
+        formStack.addArrangedSubviews(
+            emailField,
+            passwordField,
+            forgotRow,
+            submitButton,
+            bottomNoteRow
+        )
+
+        view.addSubviews(formStack)
+    }
+    
+    func setupLayout() {
+        [formStack].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
         NSLayoutConstraint.activate([
-            formStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 70),
-            formStack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            formStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            formStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            formStack.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24)
+            formStack.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: Metrics.Insets.verticalTop
+            ),
+            formStack.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: Metrics.Insets.horizontal
+            ),
+            formStack.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -Metrics.Insets.horizontal
+            ),
+            formStack.bottomAnchor.constraint(
+                lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -Metrics.Insets.verticalBottom
+            )
         ])
     }
     
-    // MARK: - Wiring
-    
-    private func wire() {
-        emailField.onTextChanged = { [weak self] in self?.viewModel.setEmail($0) }
-        passwordField.onTextChanged = { [weak self] in self?.viewModel.setPassword($0) }
-        
+    func setupActions() {
         emailField.textField.onReturn(self, action: #selector(focusPasswordField))
         passwordField.textField.onReturn(self, action: #selector(submitFromKeyboard))
         
         submitButton.onTap(self, action: #selector(submitTapped))
         forgotButton.onTap(self, action: #selector(forgotTapped))
     }
-    
-    // MARK: - Bindings
-    
-    private func bind() {
+}
+
+// MARK: - Wiring
+
+private extension SignInViewController {
+    func wire() {
+        emailField.onTextChanged = { [weak self] in
+            self?.viewModel.setEmail($0)
+        }
+        
+        passwordField.onTextChanged = { [weak self] in
+            self?.viewModel.setPassword($0)
+        }
+    }
+}
+
+// MARK: - Bindings
+
+private extension SignInViewController {
+    func bind() {
         viewModel.emailError
             .receive(on: RunLoop.main)
-            .sink { [weak self] in self?.emailField.showError($0) }
+            .sink { [weak self] in
+                self?.emailField.showError($0)
+            }
             .store(in: &bag)
         
         viewModel.passwordError
             .receive(on: RunLoop.main)
-            .sink { [weak self] in self?.passwordField.showError($0) }
+            .sink { [weak self] in
+                self?.passwordField.showError($0)
+            }
             .store(in: &bag)
         
         viewModel.isSubmitEnabled
@@ -150,35 +227,56 @@ final class SignInViewController: UIViewController {
             }
             .store(in: &bag)
     }
+}
+
+// MARK: - Actions
+
+private extension SignInViewController {
+    @objc func backTapped() {
+        onBack?()
+    }
     
-    // MARK: - Actions
+    @objc func openSignUp() {
+        onOpenSignUp?()
+    }
     
-    @objc private func backTapped() { onBack?() }
+    @objc func forgotTapped() {
+        onForgotPassword?()
+    }
     
-    @objc private func openSignUp() { onOpenSignUp?() }
-    
-    @objc private func forgotTapped() { onForgotPassword?() }
-    
-    @objc private func submitTapped() {
+    @objc func submitTapped() {
         Task {
             do {
                 try await viewModel.signIn()
             } catch {
-                let errorAlert = UIAlertController.makeError(error)
-                present(errorAlert, animated: true)
+                let alert = UIAlertController.makeError(error)
+                present(alert, animated: true)
             }
         }
     }
     
-    @objc private func focusPasswordField() { passwordField.textField.becomeFirstResponder() }
-    @objc private func submitFromKeyboard() { view.endEditing(true) }
+    @objc func focusPasswordField() {
+        passwordField.textField.becomeFirstResponder()
+    }
     
-    // MARK: - Keyboard Dismissal
-    
-    private func setupKeyboardDismissRecognizer() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+    @objc func submitFromKeyboard() {
+        view.endEditing(true)
+    }
+}
+
+// MARK: - Keyboard Dismissal
+
+private extension SignInViewController {
+    func setupKeyboardDismissRecognizer() {
+        let tap = UITapGestureRecognizer(
+            target: self,
+            action: #selector(dismissKeyboard)
+        )
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
-    @objc private func dismissKeyboard() { view.endEditing(true) }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
 }

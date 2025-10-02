@@ -9,77 +9,197 @@ import UIKit
 
 final class OrderCommentCell: UITableViewCell {
     
-    static let reuseId = "OrderCommentCell"
+    // MARK: - Reuse Id
+    
+    static let reuseId = String(describing: OrderCommentCell.self)
+    
+    // MARK: - Metrics
+    
+    private enum Metrics {
+        enum Insets {
+            // Универсальные базовые отступы экрана (для единообразия)
+            static let horizontal: CGFloat = 0
+            static let verticalTop: CGFloat = 0
+            static let verticalBottom: CGFloat = 0
+            
+            // Контентные отступы строки
+            static let content: NSDirectionalEdgeInsets = .init(
+                top: 15, leading: 16, bottom: 15, trailing: 16
+            )
+        }
+        
+        enum Spacing {
+            static let inlineElements: CGFloat = 12
+        }
+        
+        enum Fonts {
+            static let comment: UIFont = .systemFont(ofSize: 15, weight: .regular)
+        }
+        
+        enum Sizes {
+            static let icon: CGFloat = 30
+        }
+        
+        enum Table {
+            static let separatorHeight: CGFloat = 0.5
+            static let separatorLeading: CGFloat = 16
+        }
+    }
+    
+    // MARK: - Texts
+    
+    private enum Texts {
+        static let placeholder = "Оставить комментарий"
+    }
+    
+    // MARK: - Symbols
+    
+    private enum Symbols {
+        static let comment = "text.bubble.fill"
+    }
     
     // MARK: - UI
     
     private let iconView: UIImageView = {
-        let iv = UIImageView(image: UIImage(systemName: "text.bubble.fill"))
-        iv.tintColor = .brightPurple
-        iv.contentMode = .scaleAspectFit
-        iv.translatesAutoresizingMaskIntoConstraints = false
-        iv.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        iv.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        return iv
+        let v = UIImageView(image: UIImage(systemName: Symbols.comment))
+        v.contentMode = .scaleAspectFit
+        v.tintColor = .brightPurple
+        return v
     }()
     
     private let commentLabel: UILabel = {
         let l = UILabel()
-        l.font = .systemFont(ofSize: 15, weight: .regular)
+        l.font = Metrics.Fonts.comment
         l.textColor = .secondaryLabel
         l.numberOfLines = 0
-        l.text = "Оставить комментарий"
+        l.text = Texts.placeholder
         return l
     }()
     
-    private let hStack = UIStackView()
+    private let hStack: UIStackView = {
+        let v = UIStackView()
+        v.axis = .horizontal
+        v.alignment = .center
+        v.spacing = Metrics.Spacing.inlineElements
+        v.isLayoutMarginsRelativeArrangement = true
+        v.directionalLayoutMargins = Metrics.Insets.content
+        return v
+    }()
+    
+    private let separatorView: UIView = {
+        let v = UIView()
+        v.backgroundColor = .separator
+        return v
+    }()
+    
+    /// Показ/скрытие тонкой линии внизу
+    var showsSeparator: Bool = true {
+        didSet { separatorView.isHidden = !showsSeparator }
+    }
     
     // MARK: - Init
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        selectionStyle = .none
-        backgroundColor = .systemBackground
-        contentView.backgroundColor = .systemBackground
-        accessoryType = .disclosureIndicator
+        setupAppearance()
+        setupHierarchy()
         setupLayout()
     }
     
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - Setup
+
+private extension OrderCommentCell {
+    func setupAppearance() {
+        selectionStyle = .default
+        accessoryType = .disclosureIndicator
+    }
     
-    // MARK: - Layout
+    func setupHierarchy() {
+        hStack.addArrangedSubviews(iconView, commentLabel)
+        contentView.addSubviews(hStack, separatorView)
+    }
     
-    private func setupLayout() {
-        hStack.axis = .horizontal
-        hStack.alignment = .center
-        hStack.spacing = 12
-        hStack.isLayoutMarginsRelativeArrangement = true
-        hStack.layoutMargins = .init(top: 15, left: 16, bottom: 15, right: 16)
-        
-        hStack.addArrangedSubview(iconView)
-        hStack.addArrangedSubview(commentLabel)
-        
-        contentView.addSubview(hStack)
-        hStack.translatesAutoresizingMaskIntoConstraints = false
+    func setupLayout() {
+        prepareForAutoLayout()
+        setupStackConstraints()
+        setupIconConstraints()
+        setupSeparatorConstraints()
+        separatorView.isHidden = !showsSeparator
+    }
+}
+
+// MARK: - Layout
+
+private extension OrderCommentCell {
+    func prepareForAutoLayout() {
+        [hStack, iconView, separatorView].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    
+    func setupStackConstraints() {
         NSLayoutConstraint.activate([
-            hStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            hStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            hStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            hStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            hStack.topAnchor.constraint(
+                equalTo: contentView.topAnchor
+            ),
+            hStack.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor
+            ),
+            hStack.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor
+            ),
+            hStack.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor
+            )
         ])
     }
     
-    // MARK: - API
+    func setupIconConstraints() {
+        NSLayoutConstraint.activate([
+            iconView.widthAnchor.constraint(
+                equalToConstant: Metrics.Sizes.icon
+            ),
+            iconView.heightAnchor.constraint(
+                equalToConstant: Metrics.Sizes.icon
+            )
+        ])
+    }
     
-    /// Если `comment == nil` или пустой — показываем плейсхолдер серым.
-    /// Иначе — показываем сам комментарий обычным цветом.
-    func configure(comment: String?, placeholder: String = "Оставить комментарий") {
-        if let text = comment, !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            commentLabel.text = text
-            commentLabel.textColor = .label
-        } else {
-            commentLabel.text = placeholder
-            commentLabel.textColor = .secondaryLabel
-        }
+    func setupSeparatorConstraints() {
+        NSLayoutConstraint.activate([
+            separatorView.heightAnchor.constraint(
+                equalToConstant: Metrics.Table.separatorHeight
+            ),
+            separatorView.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: Metrics.Table.separatorLeading
+            ),
+            separatorView.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor
+            ),
+            separatorView.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor
+            )
+        ])
+    }
+}
+
+// MARK: - Configure API
+
+extension OrderCommentCell {
+    /// Если `comment == nil/empty` → плейсхолдер серым; иначе — текст обычным цветом.
+    func configure(
+        comment: String?,
+        placeholder: String = Texts.placeholder
+    ) {
+        let text = comment?.trimmingCharacters(in: .whitespacesAndNewlines)
+        let hasText = (text?.isEmpty == false)
+        commentLabel.text = hasText ? text : placeholder
+        commentLabel.textColor = hasText ? .label : .secondaryLabel
     }
 }

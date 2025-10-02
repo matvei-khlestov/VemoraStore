@@ -11,33 +11,45 @@ import Combine
 final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     
     // MARK: - Deps
+    
     private let profile: ProfileServiceProtocol
-    private let validator: AuthValidatingProtocol
+    private let validator: FormValidatingProtocol
     
     // MARK: - State
+    
     @Published private var phone: String
     @Published private var _phoneError: String? = nil
     private var bag = Set<AnyCancellable>()
     
     // MARK: - Init
-    init(profile: ProfileServiceProtocol, validator: AuthValidatingProtocol) {
+    
+    init(profile: ProfileServiceProtocol, validator: FormValidatingProtocol) {
         self.profile = profile
         self.validator = validator
         self.phone = profile.currentPhone
         
-        // live validation
         $phone
+            .removeDuplicates()
             .map { [validator] in validator.validate($0, for: .phone).message }
             .assign(to: &$_phoneError)
     }
     
     // MARK: - Outputs
-    var currentPhone: String { phone }
     
-    var phoneError: AnyPublisher<String?, Never> { $_phoneError.eraseToAnyPublisher() }
+    var currentPhone: String { phone }
+    var currentError: String? { _phoneError }
+    
+    var phoneError: AnyPublisher<String?, Never> {
+        $_phoneError.eraseToAnyPublisher()
+    }
+    var phonePublisher: AnyPublisher<String, Never> {
+        $phone.eraseToAnyPublisher()
+    }
     
     var isSubmitEnabled: AnyPublisher<Bool, Never> {
-        let isValid = $_phoneError.map { $0 == nil }
+        let isValid = $_phoneError.map {
+            $0 == nil
+        }
         let isChanged = $phone
             .map { [initial = profile.currentPhone] in
                 $0.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -50,9 +62,11 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     }
     
     // MARK: - Inputs
+    
     func setPhone(_ value: String) { phone = value }
     
     // MARK: - Actions
+    
     func submit() async throws {
         guard validator.validate(phone, for: .phone).isValid else {
             throw NSError(
@@ -61,7 +75,7 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
                 userInfo: [NSLocalizedDescriptionKey: "Проверьте корректность телефона"]
             )
         }
-        try await profile.updatePhone(phone) // должен быть в формате +7XXXXXXXXXX
+        try await profile.updatePhone(phone)
     }
 }
 

@@ -33,8 +33,8 @@ final class AppCoordinator: AppCoordinatingProtocol {
     
     func start() {
         
-//        showDebugImport()
-        showMain()
+        ////        showDebugImport()
+                showMain()
 //        if authService.currentUserId != nil {
 //            showMain()
 //        } else {
@@ -56,10 +56,10 @@ final class AppCoordinator: AppCoordinatingProtocol {
     
     private func showAuth(onFinish: (() -> Void)? = nil) {
         navigation.setNavigationBarHidden(false, animated: false)
-
+        
         let auth = coordinatorFactory.makeAuthCoordinator(navigation: navigation)
         add(auth)
-
+        
         auth.onFinish = { [weak self, weak auth] in
             guard let self else { return }
             if let auth { self.remove(auth) }
@@ -69,7 +69,7 @@ final class AppCoordinator: AppCoordinatingProtocol {
                 self.showMain()
             }
         }
-
+        
         auth.start()
     }
     
@@ -87,10 +87,39 @@ final class AppCoordinator: AppCoordinatingProtocol {
             if let main { self?.remove(main) }
             self?.showAuth()
         }
+        
+        main.onOrderSuccess = { [weak self, weak main] in
+            guard let self else { return }
+            if let main { self.remove(main) }
+            self.showOrderSuccess()
+        }
         main.start()
     }
     
-    #if DEBUG
+    private func showOrderSuccess() {
+        let success = coordinatorFactory.makeOrderSuccessCoordinator(
+            navigation: navigation
+        )
+        add(success)
+        
+        success.onOpenCatalog = { [weak self, weak success] in
+            guard let self else { return }
+            if let success {
+                self.remove(success)
+            }
+            self.showMain()
+        }
+        
+        success.onFinish = { [weak self, weak success] in
+            if let success {
+                self?.remove(success)
+            }
+        }
+        
+        success.start()
+    }
+    
+#if DEBUG
     private func showDebugImport() {
         let debug = coordinatorFactory.makeDebugCoordinator(navigation: navigation)
         add(debug)
@@ -99,5 +128,5 @@ final class AppCoordinator: AppCoordinatingProtocol {
         }
         debug.start()
     }
-    #endif
+#endif
 }

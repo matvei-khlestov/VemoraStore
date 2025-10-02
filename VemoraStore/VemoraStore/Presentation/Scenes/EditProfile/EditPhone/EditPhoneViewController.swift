@@ -9,12 +9,19 @@ import UIKit
 
 final class EditPhoneViewController: BaseEditFieldViewController {
     
-    init(viewModel: EditPhoneViewModelProtocol) {
+    init(
+        viewModel: EditPhoneViewModelProtocol,
+        phoneFormatter: PhoneFormattingProtocol
+    ) {
         super.init(
             viewModel: viewModel,
             fieldKind: .phone,
-            navTitle: "Изменить телефон"
+            navTitle: "Изменить номер телефона",
+            phoneFormatter: phoneFormatter 
         )
     }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

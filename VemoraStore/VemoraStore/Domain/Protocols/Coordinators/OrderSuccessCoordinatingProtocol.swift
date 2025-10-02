@@ -8,7 +8,7 @@
 import UIKit
 
 protocol OrderSuccessCoordinatingProtocol: Coordinator {
-    var onOpenOrder: (() -> Void)? { get set }
+    var onOpenCatalog: (() -> Void)? { get set }
     var onFinish: (() -> Void)? { get set }
     func start()
 }

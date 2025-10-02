@@ -38,7 +38,8 @@ extension Container {
     
     // MARK: - Map Picker
     
-    var mapPickerCoordinator: ParameterFactory<UINavigationController, MapPickerCoordinatingProtocol> {
+    var mapPickerCoordinator: ParameterFactory<UINavigationController,
+                                               MapPickerCoordinatingProtocol> {
         self { nav in
             MapPickerCoordinator(
                 navigation: nav,
@@ -54,7 +55,8 @@ extension Container {
             CheckoutCoordinator(
                 navigation: navigation,
                 viewModelFactory: self.viewModelFactory(),
-                coordinatorFactory: self.coordinatorFactory()
+                coordinatorFactory: self.coordinatorFactory(),
+                phoneFormatter: self.phoneFormatter()
             )
         }
     }
@@ -63,7 +65,10 @@ extension Container {
     
     var orderSuccessCoordinator: ParameterFactory<UINavigationController, OrderSuccessCoordinatingProtocol> {
         self { navigation in
-            OrderSuccessCoordinator(navigation: navigation)
+            OrderSuccessCoordinator(
+                navigation: navigation,
+                coordinatorFactory: self.coordinatorFactory()
+            )
         }
     }
     
@@ -214,7 +219,8 @@ extension Container {
         self { navigation in
             EditPhoneCoordinator(
                 navigation: navigation,
-                viewModelFactory: self.viewModelFactory()
+                viewModelFactory: self.viewModelFactory(),
+                phoneFormatter: self.phoneFormatter()
             )
         }
     }

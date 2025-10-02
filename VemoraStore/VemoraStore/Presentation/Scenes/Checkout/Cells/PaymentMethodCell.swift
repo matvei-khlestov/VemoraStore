@@ -9,82 +9,195 @@ import UIKit
 
 final class PaymentMethodCell: UITableViewCell {
     
-    static let reuseId = "PaymentMethodCell"
-
-    private let titleLabel: UILabel = {
-        let l = UILabel()
-        l.text = "Как оплатить заказ?"
-        l.font = .systemFont(ofSize: 15, weight: .semibold)
-        l.textColor = .label
-        return l
-    }()
-
+    // MARK: - Reuse Id
+    
+    static let reuseId = String(describing: PaymentMethodCell.self)
+    
+    // MARK: - Metrics
+    
+    private enum Metrics {
+        enum Insets {
+            static let content: NSDirectionalEdgeInsets = .init(
+                top: 15, leading: 16, bottom: 15, trailing: 16
+            )
+            static let pill: NSDirectionalEdgeInsets = .init(
+                top: 10, leading: 12, bottom: 10, trailing: 12
+            )
+            static let horizontal: CGFloat = 0
+            static let verticalTop: CGFloat = 0
+            static let verticalBottom: CGFloat = 0
+        }
+        
+        enum Spacing {
+            static let verticalStack: CGFloat = 10
+        }
+        
+        enum Fonts {
+            static let title: UIFont  = .systemFont(ofSize: 15, weight: .semibold)
+            static let method: UIFont = .systemFont(ofSize: 15, weight: .regular)
+        }
+        
+        enum Corners {
+            static let pill: CGFloat = 10
+        }
+        
+        enum Borders {
+            static let pillWidth: CGFloat = 1.2
+        }
+    }
+    
+    // MARK: - Colors
+    
+    private enum Colors {
+        static let title: UIColor  = .label
+        static let method: UIColor = .label
+        static let pillBackground: UIColor = .secondarySystemBackground
+        static let pillBorder: UIColor = .brightPurple
+    }
+    
+    // MARK: - Texts
+    
+    private enum Texts {
+        static let title  = "Как оплатить заказ?"
+        static let method = "При получении"
+    }
+    
+    // MARK: - UI
+    
+    private let titleLabel = UILabel.make(
+        text: Texts.title,
+        font: Metrics.Fonts.title,
+        color: Colors.title
+    )
+    
+    private let pillLabel = UILabel.make(
+        text: Texts.method,
+        font: Metrics.Fonts.method,
+        color: Colors.method,
+        numberOfLines: 1
+    )
+    
     private let pillView: UIView = {
         let v = UIView()
-        v.backgroundColor = .secondarySystemBackground
-        v.layer.cornerRadius = 10
-        v.layer.borderWidth = 1.2
-        v.layer.borderColor = UIColor.brightPurple.cgColor
+        v.backgroundColor = Colors.pillBackground
+        v.layer.cornerRadius = Metrics.Corners.pill
+        v.layer.borderWidth = Metrics.Borders.pillWidth
+        v.layer.borderColor = Colors.pillBorder.cgColor
         return v
     }()
-
-    private let pillLabel: UILabel = {
-        let l = UILabel()
-        l.text = "При получении"
-        l.font = .systemFont(ofSize: 15, weight: .regular)
-        l.textColor = .label
-        return l
+    
+    private let rootStack: UIStackView = {
+        let v = UIStackView()
+        v.axis = .vertical
+        v.alignment = .leading
+        v.spacing = Metrics.Spacing.verticalStack
+        v.isLayoutMarginsRelativeArrangement = true
+        v.directionalLayoutMargins = Metrics.Insets.content
+        return v
     }()
-
-    private let rootStack = UIStackView()
-
+    
+    private let pillContent: UIStackView = {
+        let v = UIStackView()
+        v.axis = .horizontal
+        v.alignment = .center
+        v.isLayoutMarginsRelativeArrangement = true
+        v.directionalLayoutMargins = Metrics.Insets.pill
+        return v
+    }()
+    
+    // MARK: - Init
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupAppearance()
+        setupHierarchy()
+        setupLayout()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - Setup
+
+private extension PaymentMethodCell {
+    func setupAppearance() {
         selectionStyle = .none
         backgroundColor = .systemBackground
         contentView.backgroundColor = .systemBackground
-        setupLayout()
     }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
-
-    private func setupLayout() {
-        
-        let pillContent = UIStackView(arrangedSubviews: [pillLabel])
-        pillContent.axis = .horizontal
-        pillContent.alignment = .center
-        pillContent.isLayoutMarginsRelativeArrangement = true
-        pillContent.layoutMargins = .init(top: 10, left: 12, bottom: 10, right: 12)
-
+    
+    func setupHierarchy() {
+        pillContent.addArrangedSubview(pillLabel)
         pillView.addSubview(pillContent)
-        pillContent.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            pillContent.topAnchor.constraint(equalTo: pillView.topAnchor),
-            pillContent.leadingAnchor.constraint(equalTo: pillView.leadingAnchor),
-            pillContent.trailingAnchor.constraint(equalTo: pillView.trailingAnchor),
-            pillContent.bottomAnchor.constraint(equalTo: pillView.bottomAnchor)
-        ])
-
-        rootStack.axis = .vertical
-        rootStack.alignment = .leading
-        rootStack.spacing = 10
-        rootStack.isLayoutMarginsRelativeArrangement = true
-        rootStack.layoutMargins = .init(top: 15, left: 16, bottom: 15, right: 16)
-
-        rootStack.addArrangedSubview(titleLabel)
-        rootStack.addArrangedSubview(pillView)
-
+        rootStack.addArrangedSubviews(titleLabel, pillView)
         contentView.addSubview(rootStack)
-        rootStack.translatesAutoresizingMaskIntoConstraints = false
+    }
+    
+    func setupLayout() {
+        [rootStack, pillContent].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
         NSLayoutConstraint.activate([
-            rootStack.topAnchor.constraint(equalTo: contentView.topAnchor),
-            rootStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            rootStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            rootStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor)
+            rootStack.topAnchor.constraint(
+                equalTo: contentView.topAnchor
+            ),
+            rootStack.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor
+            ),
+            rootStack.trailingAnchor.constraint(
+                equalTo: contentView.trailingAnchor
+            ),
+            rootStack.bottomAnchor.constraint(
+                equalTo: contentView.bottomAnchor
+            ),
+            
+            pillContent.topAnchor.constraint(
+                equalTo: pillView.topAnchor
+            ),
+            pillContent.leadingAnchor.constraint(
+                equalTo: pillView.leadingAnchor
+            ),
+            pillContent.trailingAnchor.constraint(
+                equalTo: pillView.trailingAnchor
+            ),
+            pillContent.bottomAnchor.constraint(
+                equalTo: pillView.bottomAnchor
+            )
         ])
     }
+}
 
-    func configure(title: String = "Как оплатить заказ?", method: String = "При получении") {
+// MARK: - Configure API
+
+extension PaymentMethodCell {
+    func configure(
+        title: String = Texts.title,
+        method: String = Texts.method
+    ) {
         titleLabel.text = title
         pillLabel.text = method
+    }
+}
+
+// MARK: - Helper
+
+private extension UILabel {
+    static func make(
+        text: String? = nil,
+        font: UIFont,
+        color: UIColor,
+        numberOfLines: Int = 0,
+        alignment: NSTextAlignment = .natural
+    ) -> UILabel {
+        let l = UILabel()
+        l.text = text
+        l.font = font
+        l.textColor = color
+        l.numberOfLines = numberOfLines
+        l.textAlignment = alignment
+        return l
     }
 }

@@ -11,14 +11,14 @@ import Combine
 final class ResetPasswordViewModel: ResetPasswordViewModelProtocol {
 
     private let service: PasswordResetServiceProtocol
-    private let validator: AuthValidatingProtocol
+    private let validator: FormValidatingProtocol
 
     @Published private var email: String = ""
     @Published private var _emailError: String? = nil
 
     private var bag = Set<AnyCancellable>()
 
-    init(service: PasswordResetServiceProtocol, validator: AuthValidatingProtocol) {
+    init(service: PasswordResetServiceProtocol, validator: FormValidatingProtocol) {
         self.service = service
         self.validator = validator
 

@@ -16,7 +16,7 @@ extension Container {
         self {
             SignUpViewModel(
                 auth: self.authService(),
-                validator: self.authValidator()
+                validator: self.formValidator()
             )
         }
     }
@@ -25,7 +25,7 @@ extension Container {
         self {
             SignInViewModel(
                 auth: self.authService(),
-                validator: self.authValidator()
+                validator: self.formValidator()
             )
         }
     }
@@ -34,7 +34,7 @@ extension Container {
         self {
             ResetPasswordViewModel(
                 service: self.passwordResetService(),
-                validator: self.authValidator()
+                validator: self.formValidator()
             )
         }
     }
@@ -58,20 +58,31 @@ extension Container {
     // MARK: - Favorites
     
     var favoritesViewModel: Factory<FavoritesViewModelProtocol> {
-        self { FavoritesViewModel(favoritesService: self.favoritesService(),
-                                  productService: self.productService()) }.singleton
+        self {
+            FavoritesViewModel(
+                favoritesService: self.favoritesService(),
+                productService: self.productService()
+            )
+        }.singleton
     }
     
     // MARK: - Cart
     
     var cartViewModel: Factory<CartViewModelProtocol> {
-        self { CartViewModel(cartService: self.cartService()) }.singleton
+        self {
+            CartViewModel(cartService: self.cartService())
+        }.singleton
     }
     
     // MARK: - Profile
     
     var profileUserViewModel: Factory<ProfileUserViewModelProtocol> {
-        self { ProfileUserViewModel(auth: self.authService()) }.singleton
+        self {
+            ProfileUserViewModel(
+                auth: self.authService(),
+                avatarStorage: self.avatarStorageService()
+            )
+        }.singleton
     }
     
     var editProfileViewModel: Factory<EditProfileViewModelProtocol> {
@@ -82,7 +93,7 @@ extension Container {
         self {
             EditNameViewModel(
                 profile: self.profileService(),
-                validator: self.authValidator()
+                validator: self.formValidator()
             )
         }
     }
@@ -91,7 +102,7 @@ extension Container {
         self {
             EditEmailViewModel(
                 profile: self.profileService(),
-                validator: self.authValidator()
+                validator: self.formValidator()
             )
         }
     }
@@ -100,7 +111,7 @@ extension Container {
         self {
             EditPhoneViewModel(
                 profile: self.profileService(),
-                validator: self.authValidator()
+                validator: self.formValidator()
             )
         }
     }
@@ -108,14 +119,21 @@ extension Container {
     // MARK: - Checkout
     
     var checkoutViewModel: Factory<CheckoutViewModelProtocol> {
-        self { CheckoutViewModel(cart: self.cartService(),
-                                 auth: self.authService()) }
+        self {
+            CheckoutViewModel(
+                cart: self.cartService(),
+                auth: self.authService(),
+                phoneFormatter: self.phoneFormatter()
+            )
+        }
     }
     
     // MARK: - Orders
     
     var ordersViewModel: Factory<OrdersViewModelProtocol> {
-        self { OrdersViewModel(service: self.ordersService()) }
+        self {
+            OrdersViewModel(service: self.ordersService())
+        }
     }
     
     // MARK: - Address / Delivery
@@ -142,9 +160,23 @@ extension Container {
     
     // MARK: - Phone Input
     
-    var phoneInputSheetViewModel: ParameterFactory<(PhoneOrCommentInputSheetViewModel.Kind, String?, String?), PhoneOrCommentInputSheetViewModelProtocol> {
-        self { (kind, initialPhone, initialComment) in
-            PhoneOrCommentInputSheetViewModel(kind: kind, initialPhone: initialPhone, initialComment: initialComment)
+    var phoneInputSheetViewModel: ParameterFactory<String?, PhoneInputSheetViewModelProtocol> {
+        self { initialPhone in
+            PhoneInputSheetViewModel(
+                initialPhone: initialPhone,
+                validator: self.formValidator()
+            )
+        }
+    }
+    
+    // MARK: - Comment Input
+    
+    var commentInputSheetViewModel: ParameterFactory<String?, CommentInputSheetViewModelProtocol> {
+        self { initialComment in
+            CommentInputSheetViewModel(
+                initialComment: initialComment,
+                validator: self.formValidator()
+            )
         }
     }
     

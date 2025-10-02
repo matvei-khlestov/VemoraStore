@@ -11,86 +11,138 @@ import Combine
 final class ResetPasswordViewController: UIViewController {
     
     // MARK: - Callbacks
+    
     var onBack: (() -> Void)?
     var onDone: (() -> Void)?
     
-    // MARK: - Deps
+    // MARK: - Dependencies
+    
     private let viewModel: ResetPasswordViewModelProtocol
     private var bag = Set<AnyCancellable>()
     
+    // MARK: - Metrics
+    
+    private enum Metrics {
+        enum Insets {
+            static let horizontal: CGFloat = 20
+            static let verticalTop: CGFloat = 70
+            static let verticalBottom: CGFloat = 24
+        }
+        
+        enum Spacing {
+            static let form: CGFloat = 18
+        }
+        
+        enum Fonts {
+            static let title: UIFont = .systemFont(ofSize: 28, weight: .bold)
+            static let subtitle: UIFont = .systemFont(ofSize: 15, weight: .regular)
+        }
+    }
+    
+    // MARK: - Texts
+    
+    private enum Texts {
+        static let title = "Восстановление пароля"
+        static let subtitle = "Укажите e-mail, мы отправим ссылку для смены пароля."
+        static let submit = "Отправить"
+        static let backRowLabel = "Вспомнили пароль?"
+        static let backRowButton = "Назад ко входу"
+        static let alertTitleDone = "Готово"
+        static let alertMessageSent = "Мы отправили письмо. Проверьте почту."
+    }
+    
     // MARK: - UI
+    
     private lazy var titleLabel: UILabel = {
-        let l = UILabel()
-        l.text = "Восстановление пароля"
-        l.font = .systemFont(ofSize: 28, weight: .bold)
-        l.numberOfLines = 0
-        return l
+        let v = UILabel()
+        v.text = Texts.title
+        v.font = Metrics.Fonts.title
+        v.textColor = .label
+        v.numberOfLines = 0
+        return v
     }()
     
     private lazy var subtitleLabel: UILabel = {
-        let l = UILabel()
-        l.text = "Укажите e-mail, мы отправим ссылку для смены пароля."
-        l.textColor = .secondaryLabel
-        l.numberOfLines = 0
-        return l
+        let v = UILabel()
+        v.text = Texts.subtitle
+        v.font = Metrics.Fonts.subtitle
+        v.textColor = .secondaryLabel
+        v.numberOfLines = 0
+        return v
     }()
     
-    private lazy var emailField: FormTextField = {
-        FormTextField(kind: .email)
-    }()
+    private lazy var emailField = FormTextField(kind: .email)
     
     private lazy var submitButton: BrandedButton = {
-        let b = BrandedButton(style: .submit, title: "Отправить")
+        let b = BrandedButton(style: .submit, title: Texts.submit)
         b.isEnabled = false
         b.setNeedsUpdateConfiguration()
-        b.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
+        b.onTap(self, action: #selector(submitTapped))
         return b
     }()
     
     private lazy var backNoteRow: LabelLinkRow = {
-        let row = LabelLinkRow(label: "Вспомнили пароль?", button: "Назад ко входу")
-        row.onTap = { [weak self] in self?.backTapped() }
+        let row = LabelLinkRow(
+            label: Texts.backRowLabel,
+            button: Texts.backRowButton
+        )
+        row.onTap = { [weak self] in
+            self?.backTapped()
+        }
         return row
     }()
     
     private lazy var formStack: UIStackView = {
-        let sv = UIStackView(arrangedSubviews: [
+        let v = UIStackView(arrangedSubviews: [
             titleLabel,
             subtitleLabel,
             emailField,
             submitButton,
             backNoteRow
         ])
-        sv.axis = .vertical
-        sv.spacing = 18
-        return sv
+        v.axis = .vertical
+        v.spacing = Metrics.Spacing.form
+        return v
     }()
     
     // MARK: - Init
+    
     init(viewModel: ResetPasswordViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Lifecycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        setupNav()
-        layout()
+        setupAppearance()
+        setupNavigationBar()
+        setupHierarchy()
+        setupLayout()
         wire()
         bind()
-        setupKeyboardDismiss()
+        setupKeyboardDismissRecognizer()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNav()
+        setupNavigationBar()
+    }
+}
+
+// MARK: - Setup
+
+private extension ResetPasswordViewController {
+    func setupAppearance() {
+        view.backgroundColor = .systemBackground
     }
     
-    // MARK: - Private Methods
-    private func setupNav() {
+    func setupNavigationBar() {
         setupNavigationBarWithNavLeftItem(
             action: #selector(backTapped),
             largeTitleDisplayMode: .never,
@@ -98,26 +150,55 @@ final class ResetPasswordViewController: UIViewController {
         )
     }
     
-    private func layout() {
-        view.addSubview(formStack)
-        formStack.translatesAutoresizingMaskIntoConstraints = false
+    func setupHierarchy() {
+        view.addSubviews(formStack)
+    }
+    
+    func setupLayout() {
+        [formStack].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
         NSLayoutConstraint.activate([
-            formStack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            formStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            formStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
-            formStack.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -24)
+            formStack.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor,
+                constant: Metrics.Insets.verticalTop
+            ),
+            formStack.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor,
+                constant: Metrics.Insets.horizontal
+            ),
+            formStack.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -Metrics.Insets.horizontal
+            ),
+            formStack.bottomAnchor.constraint(
+                lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor,
+                constant: -Metrics.Insets.verticalBottom
+            )
         ])
     }
-    
-    private func wire() {
-        emailField.onTextChanged = { [weak self] in self?.viewModel.setEmail($0) }
-        emailField.textField.addTarget(self, action: #selector(submitFromKeyboard), for: .editingDidEndOnExit)
+}
+
+// MARK: - Wiring
+
+private extension ResetPasswordViewController {
+    func wire() {
+        emailField.onTextChanged = { [weak self] in
+            self?.viewModel.setEmail($0)
+        }
+        emailField.textField.onReturn(self, action: #selector(submitFromKeyboard))
     }
-    
-    private func bind() {
+}
+
+// MARK: - Bindings
+
+private extension ResetPasswordViewController {
+    func bind() {
         viewModel.emailError
             .receive(on: RunLoop.main)
-            .sink { [weak self] msg in self?.emailField.showError(msg) }
+            .sink { [weak self] in
+                self?.emailField.showError($0)
+            }
             .store(in: &bag)
         
         viewModel.isSubmitEnabled
@@ -128,41 +209,55 @@ final class ResetPasswordViewController: UIViewController {
             }
             .store(in: &bag)
     }
-    
-    private func setupKeyboardDismiss() {
-        let tap = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+}
+
+// MARK: - Keyboard Dismissal
+
+private extension ResetPasswordViewController {
+    func setupKeyboardDismissRecognizer() {
+        let tap = UITapGestureRecognizer(
+            target: self,
+            action: #selector(dismissKeyboard)
+        )
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
     }
+}
+
+// MARK: - Actions
+
+private extension ResetPasswordViewController {
+    @objc func backTapped() {
+        onBack?()
+    }
     
-    // MARK: - Actions
-    @objc private func backTapped() { onBack?() }
-    
-    @objc private func submitTapped() {
+    @objc func submitTapped() {
+        view.endEditing(true)
         Task {
             do {
                 try await viewModel.resetPassword()
                 let ac = UIAlertController.makeInfo(
-                    title: "Готово",
-                    message: "Мы отправили письмо. Проверьте почту.",
+                    title: Texts.alertTitleDone,
+                    message: Texts.alertMessageSent,
                     onOk: { [weak self] in
                         self?.onDone?() ?? self?.onBack?()
                     }
                 )
                 present(ac, animated: true)
             } catch {
-                let ac = UIAlertController.makeError(error)
-                present(ac, animated: true)
+                present(UIAlertController.makeError(error), animated: true)
             }
         }
     }
     
-    @objc private func submitFromKeyboard() {
+    @objc func submitFromKeyboard() {
         view.endEditing(true)
-        if submitButton.isEnabled { submitTapped() }
+        if submitButton.isEnabled {
+            submitTapped()
+        }
     }
     
-    @objc private func dismissKeyboard() {
+    @objc func dismissKeyboard() {
         view.endEditing(true)
     }
 }

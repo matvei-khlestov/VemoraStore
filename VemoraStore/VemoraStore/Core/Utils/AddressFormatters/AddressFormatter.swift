@@ -9,6 +9,7 @@ import Foundation
 import MapKit
 
 // MARK: - Default impl
+
 struct DefaultAddressFormatter: AddressFormattingProtocol {
     func displayString(from placemark: MKPlacemark, fallback: String) -> String {
         let parts = [

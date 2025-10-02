@@ -10,146 +10,254 @@ import Combine
 
 final class DeliveryDetailsSheetViewController: UIViewController {
     
-    // MARK: - Public
+    // MARK: - Public Callback
     
     var onSave: ((String) -> Void)?
     
-    // MARK: - ViewModel
+    // MARK: - Dependencies
     
     private let viewModel: DeliveryDetailsViewModelProtocol
     private var cancellables = Set<AnyCancellable>()
     
+    // MARK: - Constants
+    
+    private enum Metrics {
+        enum Corners {
+            static let sheet: CGFloat = 16
+            static let typeBox: CGFloat = 18
+            static let checkbox: CGFloat = 6
+        }
+        
+        enum Insets {
+            static let container: NSDirectionalEdgeInsets = .init(
+                top: 16,
+                leading: 16,
+                bottom: 24,
+                trailing: 16
+            )
+            static let typeBoxContent: NSDirectionalEdgeInsets = .init(
+                top: 14,
+                leading: 14,
+                bottom: 14,
+                trailing: 14
+            )
+            static let containerTop: CGFloat = 8
+            static let closeTop: CGFloat = 10
+            static let closeTrailing: CGFloat = 10
+        }
+        
+        enum Spacing {
+            static let blocks: CGFloat = 18
+            static let rows: CGFloat = 12
+            static let inlineElements: CGFloat = 12
+            static let typeBoxTitleBlock: CGFloat = 2
+        }
+        
+        enum Fonts {
+            static let title: UIFont = .systemFont(ofSize: 28, weight: .bold)
+            static let noFlatTitle: UIFont = .systemFont(ofSize: 17, weight: .semibold)
+            static let noFlatSubtitle: UIFont = .systemFont(ofSize: 15, weight: .regular)
+        }
+        
+        enum Sizes {
+            static let fieldHeight: CGFloat = 52
+            static let checkboxSide: CGFloat = 22
+            static let checkboxBorderWidth: CGFloat = 2
+            static let closeButtonSide: CGFloat = 30
+        }
+    }
+    
+    private enum Texts {
+        static let titleNoFlat = "Без квартиры"
+        static let subtitleNoFlat = "Частный дом, БЦ, склад или магазин"
+        
+        static let placeholderApt = "Квартира *"
+        static let placeholderEntrance = "Подъезд"
+        static let placeholderFloor = "Этаж"
+        static let placeholderIntercom = "Код домофона"
+        
+        static let save = "Сохранить адрес"
+    }
+    
+    private enum Symbols {
+        static let close = "xmark"
+        static let checkmark = "checkmark"
+        static let checkmarkConfig = UIImage.SymbolConfiguration(
+            pointSize: 10,
+            weight: .medium
+        )
+    }
+    
     // MARK: - UI
     
-    private let typeBoxContentStack = UIStackView()
-    
     private lazy var titleLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .label
-        label.numberOfLines = 0
-        label.font = .systemFont(ofSize: 28, weight: .bold)
-        return label
+        let v = UILabel()
+        v.textColor = .label
+        v.numberOfLines = 0
+        v.font = Metrics.Fonts.title
+        return v
     }()
     
     private lazy var noFlatTitle: UILabel = {
-        let label = UILabel()
-        label.text = "Без квартиры"
-        label.font = .systemFont(ofSize: 17, weight: .semibold)
-        label.textColor = .label
-        return label
+        let v = UILabel()
+        v.text = Texts.titleNoFlat
+        v.font = Metrics.Fonts.noFlatTitle
+        v.textColor = .label
+        return v
     }()
     
     private lazy var noFlatSubtitle: UILabel = {
-        let label = UILabel()
-        label.text = "Частный дом, БЦ, склад или магазин"
-        label.font = .systemFont(ofSize: 15, weight: .regular)
-        label.textColor = .secondaryLabel
-        label.numberOfLines = 0
-        return label
+        let v = UILabel()
+        v.text = Texts.subtitleNoFlat
+        v.font = Metrics.Fonts.noFlatSubtitle
+        v.textColor = .secondaryLabel
+        v.numberOfLines = 0
+        return v
     }()
     
     private lazy var checkboxButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.layer.cornerRadius = 6
-        button.layer.borderWidth = 2
-        button.layer.borderColor = UIColor.brightPurple.cgColor
-        button.backgroundColor = .clear
-        button.configuration = .plain()
-        button.configuration?.imagePadding = 0
-        return button
+        let b = UIButton(type: .system)
+        b.layer.cornerRadius = Metrics.Corners.checkbox
+        b.layer.borderWidth = Metrics.Sizes.checkboxBorderWidth
+        b.layer.borderColor = UIColor.brightPurple.cgColor
+        b.backgroundColor = .clear
+        b.configuration = .plain()
+        b.configuration?.imagePadding = 0
+        return b
     }()
     
     private lazy var aptField: PaddedField = {
-        let textField = PaddedField(kind: .apt, placeholder: "Квартира *")
-        textField.delegate = self
-        textField.addTarget(self, action: #selector(aptChanged(_:)), for: .editingChanged)
-        return textField
+        let tf = PaddedField(
+            kind: .apt,
+            placeholder: Texts.placeholderApt
+        )
+        tf.delegate = self
+        tf.addTarget(
+            self,
+            action: #selector(aptChanged(_:)),
+            for: .editingChanged
+        )
+        return tf
     }()
     
     private lazy var entranceField: PaddedField = {
-        let textField = PaddedField(kind: .entrance, placeholder: "Подъезд")
-        textField.delegate = self
-        textField.addTarget(self, action: #selector(entranceChanged(_:)), for: .editingChanged)
-        return textField
+        let tf = PaddedField(
+            kind: .entrance,
+            placeholder: Texts.placeholderEntrance
+        )
+        tf.delegate = self
+        tf.addTarget(
+            self,
+            action: #selector(entranceChanged(_:)),
+            for: .editingChanged
+        )
+        return tf
     }()
     
     private lazy var floorField: PaddedField = {
-        let textField = PaddedField(kind: .floor, placeholder: "Этаж")
-        textField.delegate = self
-        textField.addTarget(self, action: #selector(floorChanged(_:)), for: .editingChanged)
-        return textField
+        let tf = PaddedField(
+            kind: .floor,
+            placeholder: Texts.placeholderFloor
+        )
+        tf.delegate = self
+        tf.addTarget(
+            self,
+            action: #selector(floorChanged(_:)),
+            for: .editingChanged
+        )
+        return tf
     }()
     
     private lazy var intercomField: PaddedField = {
-        let textField = PaddedField(kind: .intercom, placeholder: "Код домофона")
-        textField.delegate = self
-        textField.addTarget(self, action: #selector(intercomChanged(_:)), for: .editingChanged)
-        return textField
+        let tf = PaddedField(
+            kind: .intercom,
+            placeholder: Texts.placeholderIntercom
+        )
+        tf.delegate = self
+        tf.addTarget(
+            self,
+            action: #selector(intercomChanged(_:)),
+            for: .editingChanged
+        )
+        return tf
     }()
     
-    private lazy var saveButton = BrandedButton(style: .primary, title: "Сохранить адрес")
+    private lazy var saveButton: BrandedButton = {
+        BrandedButton(
+            style: .primary,
+            title: Texts.save
+        )
+    }()
     
     private lazy var closeButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "xmark"), for: .normal)
-        button.tintColor = .tertiaryLabel
-        return button
+        let b = UIButton(type: .system)
+        b.setImage(UIImage(systemName: Symbols.close), for: .normal)
+        b.tintColor = .tertiaryLabel
+        return b
     }()
     
+    // контейнер “тип адреса”
     private lazy var typeBox: UIView = {
-        let containerView = UIView()
-        containerView.backgroundColor = .secondarySystemBackground
-        containerView.layer.cornerRadius = 18
-        
-        let verticalStack = UIStackView(arrangedSubviews: [noFlatTitle, noFlatSubtitle])
-        verticalStack.axis = .vertical
-        verticalStack.spacing = 2
-        
-        typeBoxContentStack.axis = .horizontal
-        typeBoxContentStack.alignment = .center
-        typeBoxContentStack.distribution = .fill
-        typeBoxContentStack.spacing = 12
-        typeBoxContentStack.isLayoutMarginsRelativeArrangement = true
-        typeBoxContentStack.layoutMargins = .init(top: 14, left: 14, bottom: 14, right: 14)
-        typeBoxContentStack.addArrangedSubview(verticalStack)
-        typeBoxContentStack.addArrangedSubview(checkboxButton)
-        
-        containerView.addSubview(typeBoxContentStack)
-        return containerView
+        let v = UIView()
+        v.backgroundColor = .secondarySystemBackground
+        v.layer.cornerRadius = Metrics.Corners.typeBox
+        return v
     }()
     
+    // горизонтальный стек для typeBox (подписи + чекбокс)
+    private lazy var typeBoxContentStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.alignment = .center
+        stack.distribution = .fill
+        stack.spacing = Metrics.Spacing.inlineElements
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.directionalLayoutMargins = Metrics.Insets.typeBoxContent
+        return stack
+    }()
+    
+    // вертикальный стек для заголовка и подзаголовка внутри typeBox
+    private lazy var typeBoxVerticalStack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = Metrics.Spacing.typeBoxTitleBlock
+        return stack
+    }()
+    
+    // общий вертикальный стек полей (две строки)
     private lazy var fieldsStack: UIStackView = {
-        let verticalStack = UIStackView()
-        verticalStack.axis = .vertical
-        verticalStack.spacing = 12
-        
-        let firstRowStack = UIStackView(arrangedSubviews: [aptField, entranceField])
-        firstRowStack.axis = .horizontal
-        firstRowStack.spacing = 12
-        firstRowStack.distribution = .fillEqually
-        
-        let secondRowStack = UIStackView(arrangedSubviews: [floorField, intercomField])
-        secondRowStack.axis = .horizontal
-        secondRowStack.spacing = 12
-        secondRowStack.distribution = .fillEqually
-        
-        verticalStack.addArrangedSubview(firstRowStack)
-        verticalStack.addArrangedSubview(secondRowStack)
-        return verticalStack
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.spacing = Metrics.Spacing.rows
+        return stack
     }()
     
+    // первая строка полей
+    private lazy var fieldsRow1Stack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = Metrics.Spacing.rows
+        stack.distribution = .fillEqually
+        return stack
+    }()
+    
+    // вторая строка полей
+    private lazy var fieldsRow2Stack: UIStackView = {
+        let stack = UIStackView()
+        stack.axis = .horizontal
+        stack.spacing = Metrics.Spacing.rows
+        stack.distribution = .fillEqually
+        return stack
+    }()
+    
+    // корневой контейнер
     private lazy var container: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.spacing = 18
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = .init(top: 16, left: 16, bottom: 24, right: 16)
-        
-        stackView.addArrangedSubview(titleLabel)
-        stackView.addArrangedSubview(typeBox)
-        stackView.addArrangedSubview(fieldsStack)
-        stackView.addArrangedSubview(saveButton)
-        return stackView
+        let v = UIStackView()
+        v.axis = .vertical
+        v.spacing = Metrics.Spacing.blocks
+        v.isLayoutMarginsRelativeArrangement = true
+        v.directionalLayoutMargins = Metrics.Insets.container
+        return v
     }()
     
     // MARK: - Init
@@ -157,11 +265,29 @@ final class DeliveryDetailsSheetViewController: UIViewController {
     init(viewModel: DeliveryDetailsViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        configureSheet()
+        setupSheet()
     }
-    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
-    private func configureSheet() {
+    // MARK: - Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupAppearance()
+        setupHierarchy()
+        setupLayout()
+        setupActions()
+        configure()
+        bindViewModel()
+    }
+}
+
+// MARK: - Setup
+
+private extension DeliveryDetailsSheetViewController {
+    func setupSheet() {
         modalPresentationStyle = .pageSheet
         isModalInPresentation = true
         if let sheet = sheetPresentationController {
@@ -175,34 +301,155 @@ final class DeliveryDetailsSheetViewController: UIViewController {
             sheet.prefersScrollingExpandsWhenScrolledToEdge = false
             sheet.largestUndimmedDetentIdentifier = .medium
             sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 16
+            sheet.preferredCornerRadius = Metrics.Corners.sheet
         }
     }
     
-    // MARK: - Lifecycle
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    func setupAppearance() {
         view.backgroundColor = .systemBackground
-        buildUI()
-        applyBaseAddress()
-        wireActions()
-        bindViewModel()
     }
     
-    // MARK: - UI build
-    
-    private func buildUI() {
-        view.addSubview(closeButton)
-        view.addSubview(container)
-        setupConstraints()
+    func setupHierarchy() {
+        // typeBox стеки и содержимое
+        typeBoxVerticalStack.addArrangedSubviews(
+            noFlatTitle,
+            noFlatSubtitle
+        )
+        typeBoxContentStack.addArrangedSubviews(
+            typeBoxVerticalStack,
+            checkboxButton
+        )
+        typeBox.addSubview(typeBoxContentStack)
+        
+        // поля
+        fieldsRow1Stack.addArrangedSubviews(
+            aptField,
+            entranceField
+        )
+        fieldsRow2Stack.addArrangedSubviews(
+            floorField,
+            intercomField
+        )
+        fieldsStack.addArrangedSubviews(
+            fieldsRow1Stack,
+            fieldsRow2Stack
+        )
+        
+        // корневой контейнер
+        container.addArrangedSubviews(
+            titleLabel,
+            typeBox,
+            fieldsStack,
+            saveButton
+        )
+        
+        view.addSubviews(closeButton, container)
         view.bringSubviewToFront(closeButton)
     }
     
-    // MARK: - Bindings
+    func setupLayout() {
+        prepareForAutoLayout()
+        setupCloseConstraints()
+        setupContainerConstraints()
+        setupTypeBoxConstraints()
+        setupFieldsHeights()
+    }
     
-    private func bindViewModel() {
-        // Отображение/скрытие полей при переключении чекбокса
+    func setupActions() {
+        closeButton.onTap(self, action: #selector(closeTapped))
+        checkboxButton.onTap(self, action: #selector(toggleNoFlat))
+        saveButton.onTap(self, action: #selector(saveTapped))
+    }
+    
+    func configure() {
+        titleLabel.text = viewModel.baseAddress
+    }
+}
+
+// MARK: - Layout
+
+private extension DeliveryDetailsSheetViewController {
+    func prepareForAutoLayout() {
+        [closeButton,
+         container,
+         typeBoxContentStack,
+         checkboxButton,
+         aptField, entranceField, floorField, intercomField].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    
+    func setupCloseConstraints() {
+        NSLayoutConstraint.activate([
+            closeButton.topAnchor.constraint(
+                equalTo: view.topAnchor,
+                constant: Metrics.Insets.closeTop
+            ),
+            closeButton.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor,
+                constant: -Metrics.Insets.closeTrailing
+            ),
+            closeButton.widthAnchor.constraint(
+                equalToConstant: Metrics.Sizes.closeButtonSide
+            ),
+            closeButton.heightAnchor.constraint(
+                equalToConstant: Metrics.Sizes.closeButtonSide
+            )
+        ])
+    }
+    
+    func setupContainerConstraints() {
+        NSLayoutConstraint.activate([
+            container.topAnchor.constraint(
+                equalTo: view.topAnchor,
+                constant: Metrics.Insets.containerTop
+            ),
+            container.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor
+            ),
+            container.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor
+            ),
+            container.bottomAnchor.constraint(
+                lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor
+            )
+        ])
+    }
+    
+    func setupTypeBoxConstraints() {
+        NSLayoutConstraint.activate([
+            typeBoxContentStack.topAnchor.constraint(
+                equalTo: typeBox.topAnchor
+            ),
+            typeBoxContentStack.leadingAnchor.constraint(
+                equalTo: typeBox.leadingAnchor
+            ),
+            typeBoxContentStack.trailingAnchor.constraint(
+                equalTo: typeBox.trailingAnchor
+            ),
+            typeBoxContentStack.bottomAnchor.constraint(
+                equalTo: typeBox.bottomAnchor
+            ),
+            checkboxButton.widthAnchor.constraint(
+                equalToConstant: Metrics.Sizes.checkboxSide
+            ),
+            checkboxButton.heightAnchor.constraint(
+                equalToConstant: Metrics.Sizes.checkboxSide
+            )
+        ])
+    }
+    
+    func setupFieldsHeights() {
+        [aptField, entranceField, floorField, intercomField].forEach { tf in
+            tf.heightAnchor.constraint(equalToConstant: Metrics.Sizes.fieldHeight).isActive = true
+        }
+    }
+}
+
+// MARK: - Binding
+
+private extension DeliveryDetailsSheetViewController {
+    func bindViewModel() {
         viewModel.noFlat
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
@@ -215,29 +462,20 @@ final class DeliveryDetailsSheetViewController: UIViewController {
             }
             .store(in: &cancellables)
     }
-    
-    // MARK: - Actions & State
-    
-    private func wireActions() {
-        closeButton.addTarget(self, action: #selector(closeTapped), for: .touchUpInside)
-        checkboxButton.addTarget(self, action: #selector(toggleNoFlat), for: .touchUpInside)
-        saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
-    }
-    
-    private func applyBaseAddress() {
-        titleLabel.text = viewModel.baseAddress
-    }
-    
-    @objc private func closeTapped() {
+}
+
+// MARK: - Actions
+
+private extension DeliveryDetailsSheetViewController {
+    @objc func closeTapped() {
         dismiss(animated: true)
     }
     
-    @objc private func toggleNoFlat() {
+    @objc func toggleNoFlat() {
         viewModel.toggleNoFlat()
     }
     
-    @objc private func saveTapped() {
-        // Валидация квартиры при необходимости
+    @objc func saveTapped() {
         if !viewModel.validateAptIfNeeded() {
             aptField.setState(.error)
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
@@ -250,30 +488,33 @@ final class DeliveryDetailsSheetViewController: UIViewController {
         onSave?(formatted)
     }
     
-    // MARK: - Text Change Handlers
-    
-    @objc private func aptChanged(_ sender: UITextField) {
+    @objc func aptChanged(_ sender: UITextField) {
         viewModel.apt.send(sender.text ?? "")
     }
-    @objc private func entranceChanged(_ sender: UITextField) {
+    
+    @objc func entranceChanged(_ sender: UITextField) {
         viewModel.entrance.send(sender.text ?? "")
     }
-    @objc private func floorChanged(_ sender: UITextField) {
+    
+    @objc func floorChanged(_ sender: UITextField) {
         viewModel.floor.send(sender.text ?? "")
     }
-    @objc private func intercomChanged(_ sender: UITextField) {
+    
+    @objc func intercomChanged(_ sender: UITextField) {
         viewModel.intercom.send(sender.text ?? "")
     }
-    
-    // MARK: - Helpers
-    
-    private func updateCheckboxUI(isSelected: Bool) {
+}
+
+// MARK: - Helpers
+
+private extension DeliveryDetailsSheetViewController {
+    func updateCheckboxUI(isSelected: Bool) {
         if isSelected {
             checkboxButton.backgroundColor = .brightPurple
             checkboxButton.setImage(
                 UIImage(
-                    systemName: "checkmark",
-                    withConfiguration: UIImage.SymbolConfiguration(pointSize: 10, weight: .medium)
+                    systemName: Symbols.checkmark,
+                    withConfiguration: Symbols.checkmarkConfig
                 ),
                 for: .normal
             )
@@ -293,60 +534,10 @@ extension DeliveryDetailsSheetViewController: UITextFieldDelegate {
     func textField(_ textField: UITextField,
                    shouldChangeCharactersIn range: NSRange,
                    replacementString string: String) -> Bool {
-        // Allow deletion
-        if string.isEmpty { return true }
-        let allowed: CharacterSet
-        if textField == intercomField {
-            allowed = CharacterSet.alphanumerics
-        } else {
-            allowed = CharacterSet.decimalDigits
-        }
-        return string.unicodeScalars.allSatisfy { allowed.contains($0) }
-    }
-}
-
-// MARK: - Constraints
-
-private extension DeliveryDetailsSheetViewController {
-    func setupConstraints() {
-        // Close button
-        closeButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            closeButton.topAnchor.constraint(equalTo: view.topAnchor, constant: 10),
-            closeButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            closeButton.widthAnchor.constraint(equalToConstant: 30),
-            closeButton.heightAnchor.constraint(equalToConstant: 30)
-        ])
-        
-        // Container
-        container.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            container.topAnchor.constraint(equalTo: view.topAnchor, constant: 8),
-            container.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            container.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            container.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor)
-        ])
-        
-        // Type box content stack pinned to edges
-        typeBoxContentStack.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            typeBoxContentStack.topAnchor.constraint(equalTo: typeBox.topAnchor),
-            typeBoxContentStack.leadingAnchor.constraint(equalTo: typeBox.leadingAnchor),
-            typeBoxContentStack.trailingAnchor.constraint(equalTo: typeBox.trailingAnchor),
-            typeBoxContentStack.bottomAnchor.constraint(equalTo: typeBox.bottomAnchor)
-        ])
-        
-        // Fixed sizes
-        checkboxButton.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            checkboxButton.widthAnchor.constraint(equalToConstant: 22),
-            checkboxButton.heightAnchor.constraint(equalToConstant: 22)
-        ])
-        
-        // Text fields heights
-        [aptField, entranceField, floorField, intercomField].forEach { tf in
-            tf.translatesAutoresizingMaskIntoConstraints = false
-            tf.heightAnchor.constraint(equalToConstant: 52).isActive = true
+        if string.isEmpty { return true } // allow deletion
+        let allowed: CharacterSet = (textField == intercomField) ? .alphanumerics : .decimalDigits
+        return string.unicodeScalars.allSatisfy {
+            allowed.contains($0)
         }
     }
 }

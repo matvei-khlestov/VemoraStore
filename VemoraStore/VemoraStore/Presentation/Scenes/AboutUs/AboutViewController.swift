@@ -13,30 +13,69 @@ final class AboutViewController: UIViewController {
     
     var onBack: (() -> Void)?
     
+    // MARK: - Metrics
+    
+    private enum Metrics {
+        enum Insets {
+            static let horizontal: CGFloat = 16
+            static let verticalContent: CGFloat = 24
+        }
+        enum Spacing {
+            static let verticalStack: CGFloat = 20
+        }
+        enum Bullets {
+            static let rowSpacing: CGFloat = 12
+            static let iconSize: CGFloat = 22
+            static let interLabelSpacing: CGFloat = 4
+        }
+        enum Fonts {
+            static let intro: UIFont = .preferredFont(forTextStyle: .body)
+            static let bulletTitle: UIFont = .preferredFont(forTextStyle: .headline)
+            static let bulletSubtitle: UIFont = .preferredFont(forTextStyle: .subheadline)
+        }
+    }
+    
+    // MARK: - Texts
+    
+    private enum Texts {
+        static let navigationTitle = "О нас"
+    }
+    
+    // MARK: - Symbols
+    
+    private enum Symbols {
+        static let bulletIcon = "checkmark.seal.fill"
+    }
+    
     // MARK: - UI
     
     private lazy var scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.alwaysBounceVertical = true
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
+        let view = UIScrollView()
+        view.alwaysBounceVertical = true
+        view.showsVerticalScrollIndicator = true
+        return view
     }()
     
     private lazy var contentStack: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = 20
-        stackView.isLayoutMarginsRelativeArrangement = true
-        stackView.layoutMargins = .init(top: 24, left: 16, bottom: 24, right: 16)
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .fill
+        stack.spacing = Metrics.Spacing.verticalStack
+        stack.isLayoutMarginsRelativeArrangement = true
+        stack.layoutMargins = .init(
+            top: Metrics.Insets.verticalContent,
+            left: Metrics.Insets.horizontal,
+            bottom: Metrics.Insets.verticalContent,
+            right: Metrics.Insets.horizontal
+        )
+        stack.addArrangedSubviews(introLabel, bulletsStack)
+        return stack
     }()
     
     private lazy var introLabel: UILabel = {
         let label = UILabel()
-        label.text = "Vemora — современный магазин мебели и товаров для дома, где каждая деталь создана с заботой о вашем комфорте. Мы верим, что уют начинается с правильной атмосферы, а атмосфера — с качественной мебели, которая отражает ваш стиль и характер."
-        label.font = .preferredFont(forTextStyle: .body)
+        label.text = AboutTexts.intro
+        label.font = Metrics.Fonts.intro
         label.adjustsFontForContentSizeCategory = true
         label.textColor = .label
         label.numberOfLines = 0
@@ -44,123 +83,169 @@ final class AboutViewController: UIViewController {
     }()
     
     private lazy var bulletsStack: UIStackView = {
-        let stackView = UIStackView()
-        stackView.axis = .vertical
-        stackView.alignment = .fill
-        stackView.spacing = 12
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
+        let stack = UIStackView()
+        stack.axis = .vertical
+        stack.alignment = .fill
+        stack.spacing = Metrics.Bullets.rowSpacing
+        return stack
     }()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
-        setupNavigationBarWithNavLeftItem(
-            title: "О нас",
-            action:  #selector(backTapped)
-        )
-        buildLayout()
-        setupConstraints()
+        setupAppearance()
+        setupNavigationBar()
+        setupHierarchy()
+        setupLayout()
         populateBullets()
     }
+}
+
+// MARK: - Setup
+
+private extension AboutViewController {
+    func setupAppearance() {
+        view.backgroundColor = .systemBackground
+    }
     
-    // MARK: - Layout
+    func setupNavigationBar() {
+        setupNavigationBarWithNavLeftItem(
+            title: Texts.navigationTitle,
+            action: #selector(backTapped)
+        )
+    }
     
-    private func buildLayout() {
-        view.addSubview(scrollView)
+    func setupHierarchy() {
+        view.addSubviews(scrollView)
         scrollView.addSubview(contentStack)
-        
-        // Вступительный текст
-        contentStack.addArrangedSubview(introLabel)
-        
-        // Блок преимуществ (буллеты)
-        contentStack.addArrangedSubview(bulletsStack)
     }
     
-    private func setupConstraints() {
-        NSLayoutConstraint.activate([
-            // scrollView to edges
-            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
-            // contentStack inside scrollView
-            contentStack.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor),
-            contentStack.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
-            contentStack.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor),
-            contentStack.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor)
-        ])
-        
-        // Выравнивание ширины контента по фрейму скролла (учитывая layoutMargins у contentStack)
-        // Здесь ничего дополнительного не нужно: мы пинем stack к frameLayoutGuide по сторонам.
+    func setupLayout() {
+        prepareForAutoLayout()
+        setupScrollConstraints()
+        setupContentConstraints()
     }
-    
-    // MARK: - Data
-    
-    private func populateBullets() {
-        bulletsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        let items: [(String, String)] = [
-            ("Качество и надёжность", "Мы работаем только с проверенными поставщиками и используем экологичные материалы, чтобы каждая покупка радовала вас долгие годы."),
-            ("Дизайн и вдохновение", "Коллекции Vemora — это сочетание современных трендов и функциональности. От минимализма до классики — у нас найдётся решение для любого интерьера."),
-            ("Доступность", "Регулярные акции, бонусная система и быстрая доставка помогают сэкономить без компромиссов в качестве."),
-            ("Забота о клиентах", "Мы помогаем выбрать идеальный вариант, подскажем по уходу за мебелью и организуем удобную доставку и сборку.")
-        ]
-        
-        items.forEach { title, subtitle in
-            let row = makeBulletRow(title: title, subtitle: subtitle)
-            bulletsStack.addArrangedSubview(row)
+}
+
+// MARK: - Layout
+
+private extension AboutViewController {
+    func prepareForAutoLayout() {
+        [scrollView, contentStack].forEach {
+            $0.translatesAutoresizingMaskIntoConstraints = false
         }
     }
     
-    private func makeBulletRow(title: String, subtitle: String) -> UIView {
-        let containerView = UIStackView()
-        containerView.axis = .horizontal
-        containerView.alignment = .top
-        containerView.spacing = 12
-        
-        let dotView = UIImageView(image: UIImage(systemName: "checkmark.seal.fill"))
-        dotView.tintColor = .brightPurple
-        dotView.contentMode = .scaleAspectFit
-        dotView.translatesAutoresizingMaskIntoConstraints = false
-        dotView.widthAnchor.constraint(equalToConstant: 22).isActive = true
-        dotView.heightAnchor.constraint(equalToConstant: 22).isActive = true
-        
-        let labelsStack = UIStackView()
-        labelsStack.axis = .vertical
-        labelsStack.alignment = .fill
-        labelsStack.spacing = 4
-        
-        let titleLabel = UILabel()
-        titleLabel.text = title
-        titleLabel.font = .preferredFont(forTextStyle: .headline)
-        titleLabel.adjustsFontForContentSizeCategory = true
-        titleLabel.textColor = .label
-        titleLabel.numberOfLines = 0
-        
-        let subtitleLabel = UILabel()
-        subtitleLabel.text = subtitle
-        subtitleLabel.font = .preferredFont(forTextStyle: .subheadline)
-        subtitleLabel.adjustsFontForContentSizeCategory = true
-        subtitleLabel.textColor = .secondaryLabel
-        subtitleLabel.numberOfLines = 0
-        
-        labelsStack.addArrangedSubview(titleLabel)
-        labelsStack.addArrangedSubview(subtitleLabel)
-        
-        containerView.addArrangedSubview(dotView)
-        containerView.addArrangedSubview(labelsStack)
-        return containerView
+    func setupScrollConstraints() {
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(
+                equalTo: view.safeAreaLayoutGuide.topAnchor
+            ),
+            scrollView.leadingAnchor.constraint(
+                equalTo: view.leadingAnchor
+            ),
+            scrollView.trailingAnchor.constraint(
+                equalTo: view.trailingAnchor
+            ),
+            scrollView.bottomAnchor.constraint(
+                equalTo: view.bottomAnchor
+            )
+        ])
     }
     
-    // MARK: - Actions
+    func setupContentConstraints() {
+        NSLayoutConstraint.activate([
+            contentStack.topAnchor.constraint(
+                equalTo: scrollView.contentLayoutGuide.topAnchor
+            ),
+            contentStack.leadingAnchor.constraint(
+                equalTo: scrollView.frameLayoutGuide.leadingAnchor
+            ),
+            contentStack.trailingAnchor.constraint(
+                equalTo: scrollView.frameLayoutGuide.trailingAnchor
+            ),
+            contentStack.bottomAnchor.constraint(
+                equalTo: scrollView.contentLayoutGuide.bottomAnchor
+            )
+        ])
+    }
+}
+
+// MARK: - Data
+
+private extension AboutViewController {
+    func populateBullets() {
+        bulletsStack.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        AboutTexts.bullets.forEach { title, subtitle in
+            bulletsStack.addArrangedSubview(
+                Self.makeBulletRow(title: title, subtitle: subtitle)
+            )
+        }
+    }
+}
+
+// MARK: - Actions
+
+private extension AboutViewController {
+    @objc func backTapped() { onBack?() }
+}
+
+// MARK: - Helpers
+
+private extension AboutViewController {
+    static func makeLabel(
+        text: String? = nil,
+        font: UIFont,
+        color: UIColor,
+        lines: Int,
+        alignment: NSTextAlignment = .natural
+    ) -> UILabel {
+        let label = UILabel()
+        label.text = text
+        label.font = font
+        label.textColor = color
+        label.numberOfLines = lines
+        label.textAlignment = alignment
+        label.adjustsFontForContentSizeCategory = true
+        return label
+    }
     
-    @objc private func backTapped() {
-        onBack?()
+    static func makeBulletRow(title: String, subtitle: String) -> UIView {
+        let row = UIStackView()
+        row.axis = .horizontal
+        row.alignment = .top
+        row.spacing = Metrics.Bullets.rowSpacing
+        
+        let icon = UIImageView(image: UIImage(systemName: Symbols.bulletIcon))
+        icon.tintColor = .brightPurple
+        icon.contentMode = .scaleAspectFit
+        icon.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            icon.widthAnchor.constraint(equalToConstant: Metrics.Bullets.iconSize),
+            icon.heightAnchor.constraint(equalToConstant: Metrics.Bullets.iconSize)
+        ])
+        
+        let labels = UIStackView()
+        labels.axis = .vertical
+        labels.alignment = .fill
+        labels.spacing = Metrics.Bullets.interLabelSpacing
+        
+        let titleLabel = makeLabel(
+            text: title,
+            font: Metrics.Fonts.bulletTitle,
+            color: .label,
+            lines: 0
+        )
+        let subtitleLabel = makeLabel(
+            text: subtitle,
+            font: Metrics.Fonts.bulletSubtitle,
+            color: .secondaryLabel,
+            lines: 0
+        )
+        
+        labels.addArrangedSubviews(titleLabel, subtitleLabel)
+        row.addArrangedSubviews(icon, labels)
+        return row
     }
 }

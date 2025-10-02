@@ -10,6 +10,7 @@ import UIKit
 final class EditNameCoordinator: EditNameCoordinatingProtocol {
 
     // MARK: - Deps
+    
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
 
@@ -17,6 +18,7 @@ final class EditNameCoordinator: EditNameCoordinatingProtocol {
     var onFinish: (() -> Void)?
 
     // MARK: - Init
+    
     init(
         navigation: UINavigationController,
         viewModelFactory: ViewModelBuildingProtocol
@@ -26,6 +28,7 @@ final class EditNameCoordinator: EditNameCoordinatingProtocol {
     }
 
     // MARK: - Start
+    
     func start() {
         let vm = viewModelFactory.makeEditNameViewModel()
         let vc = EditNameViewController(viewModel: vm)
@@ -35,7 +38,6 @@ final class EditNameCoordinator: EditNameCoordinatingProtocol {
             self?.navigation.popViewController(animated: true)
         }
         vc.onFinish = { [weak self] in
-            // вернёмся назад и сообщим наверх
             self?.navigation.popViewController(animated: true)
             self?.onFinish?()
         }

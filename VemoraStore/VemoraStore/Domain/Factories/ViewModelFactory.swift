@@ -98,12 +98,14 @@ final class ViewModelFactory: ViewModelBuildingProtocol {
     
     // MARK: - Phone Input
     
-    func makePhoneInputSheetViewModel(
-        kind: PhoneOrCommentInputSheetViewModel.Kind,
-        initialPhone: String?,
-        initialComment: String?
-    ) -> PhoneOrCommentInputSheetViewModelProtocol {
-        container.phoneInputSheetViewModel((kind, initialPhone, initialComment))
+    func makePhoneInputSheetViewModel(initialPhone: String? = nil) -> PhoneInputSheetViewModelProtocol {
+        container.phoneInputSheetViewModel(initialPhone)
+    }
+    
+    // MARK: - Comment Input
+    
+    func makeCommentInputSheetViewModel(initialComment: String? = nil) -> CommentInputSheetViewModelProtocol {
+        container.commentInputSheetViewModel(initialComment)
     }
     
     // MARK: - Map Picker
