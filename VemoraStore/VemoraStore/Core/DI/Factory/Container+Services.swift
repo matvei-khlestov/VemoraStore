@@ -11,12 +11,22 @@ extension Container {
     
     // MARK: - Auth
     
+    var authSessionStorage: Factory<AuthSessionStoringProtocol> {
+        self { AuthSessionStorage(keychain: self.keychainService()) }.singleton
+    }
+    
     var authService: Factory<AuthServiceProtocol> {
         self { FirebaseAuthService() }.singleton
     }
     
     var passwordResetService: Factory<PasswordResetServiceProtocol> {
         self { FirebasePasswordResetService() }.singleton
+    }
+    
+    // MARK: - Security
+    
+    var keychainService: Factory<KeychainServiceProtocol> {
+        self { KeychainService() }.singleton
     }
     
     // MARK: - Catalog
