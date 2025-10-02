@@ -19,6 +19,12 @@
 		A03AC8092E8DE7E000AAEE87 /* String+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8082E8DE7E000AAEE87 /* String+ext.swift */; };
 		A03AC80C2E8DEDBF00AAEE87 /* PhoneFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC80B2E8DEDBF00AAEE87 /* PhoneFormatter.swift */; };
 		A03AC80E2E8DF25A00AAEE87 /* PhoneFormattingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC80D2E8DF25A00AAEE87 /* PhoneFormattingProtocol.swift */; };
+		A03AC8102E8E277800AAEE87 /* AuthSessionStoringProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC80F2E8E277800AAEE87 /* AuthSessionStoringProtocol.swift */; };
+		A03AC8122E8E27CA00AAEE87 /* AuthSessionStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8112E8E27CA00AAEE87 /* AuthSessionStorage.swift */; };
+		A03AC8162E8E2B6100AAEE87 /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8152E8E2B6100AAEE87 /* KeychainService.swift */; };
+		A03AC8192E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8182E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift */; };
+		A03AC81B2E8E2D7700AAEE87 /* KeychainKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC81A2E8E2D7700AAEE87 /* KeychainKey.swift */; };
+		A03AC81D2E8E2E7400AAEE87 /* AuthSessionStoringPrortocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC81C2E8E2E7400AAEE87 /* AuthSessionStoringPrortocol.swift */; };
 		A0854FC02E611307004633CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0854FB52E611307004633CA /* Assets.xcassets */; };
 		A0854FC22E611307004633CA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0854FB82E611307004633CA /* LaunchScreen.storyboard */; };
 		A0854FC42E611307004633CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FB42E611307004633CA /* AppDelegate.swift */; };
@@ -28,7 +34,6 @@
 		A0854FCE2E611324004633CA /* VemoraStoreUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FCB2E611324004633CA /* VemoraStoreUITests.swift */; };
 		A0854FCF2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FCC2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift */; };
 		A0854FDA2E61199A004633CA /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FD92E61199A004633CA /* CoreDataManager.swift */; };
-		A0854FDE2E6119E6004633CA /* KeychainService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FDD2E6119E6004633CA /* KeychainService.swift */; };
 		A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE12E6121BC004633CA /* FirestoreProductService.swift */; };
 		A0854FE62E6121E3004633CA /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */; };
 		A0854FE82E6121F4004633CA /* FirebaseProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE72E6121F4004633CA /* FirebaseProfileService.swift */; };
@@ -294,6 +299,12 @@
 		A03AC8082E8DE7E000AAEE87 /* String+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+ext.swift"; sourceTree = "<group>"; };
 		A03AC80B2E8DEDBF00AAEE87 /* PhoneFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneFormatter.swift; sourceTree = "<group>"; };
 		A03AC80D2E8DF25A00AAEE87 /* PhoneFormattingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneFormattingProtocol.swift; sourceTree = "<group>"; };
+		A03AC80F2E8E277800AAEE87 /* AuthSessionStoringProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSessionStoringProtocol.swift; sourceTree = "<group>"; };
+		A03AC8112E8E27CA00AAEE87 /* AuthSessionStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSessionStorage.swift; sourceTree = "<group>"; };
+		A03AC8152E8E2B6100AAEE87 /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
+		A03AC8182E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainServiceProtocol.swift; sourceTree = "<group>"; };
+		A03AC81A2E8E2D7700AAEE87 /* KeychainKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKey.swift; sourceTree = "<group>"; };
+		A03AC81C2E8E2E7400AAEE87 /* AuthSessionStoringPrortocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSessionStoringPrortocol.swift; sourceTree = "<group>"; };
 		A0854F7D2E6112A3004633CA /* VemoraStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VemoraStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0854F962E6112A5004633CA /* VemoraStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VemoraStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0854FA02E6112A5004633CA /* VemoraStoreUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VemoraStoreUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -307,7 +318,6 @@
 		A0854FCB2E611324004633CA /* VemoraStoreUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreUITests.swift; sourceTree = "<group>"; };
 		A0854FCC2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		A0854FD92E61199A004633CA /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
-		A0854FDD2E6119E6004633CA /* KeychainService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainService.swift; sourceTree = "<group>"; };
 		A0854FE12E6121BC004633CA /* FirestoreProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProductService.swift; sourceTree = "<group>"; };
 		A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
 		A0854FE72E6121F4004633CA /* FirebaseProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseProfileService.swift; sourceTree = "<group>"; };
@@ -643,6 +653,14 @@
 			path = PhoneFormatter;
 			sourceTree = "<group>";
 		};
+		A03AC8172E8E2CF300AAEE87 /* Auth */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC8112E8E27CA00AAEE87 /* AuthSessionStorage.swift */,
+			);
+			path = Auth;
+			sourceTree = "<group>";
+		};
 		A0854F742E6112A3004633CA = {
 			isa = PBXGroup;
 			children = (
@@ -765,7 +783,8 @@
 		A0854FDC2E6119CA004633CA /* Security */ = {
 			isa = PBXGroup;
 			children = (
-				A0854FDD2E6119E6004633CA /* KeychainService.swift */,
+				A03AC8152E8E2B6100AAEE87 /* KeychainService.swift */,
+				A03AC81A2E8E2D7700AAEE87 /* KeychainKey.swift */,
 			);
 			path = Security;
 			sourceTree = "<group>";
@@ -773,6 +792,7 @@
 		A0854FDF2E611B1B004633CA /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				A03AC8172E8E2CF300AAEE87 /* Auth */,
 				A08551FF2E860851004633CA /* SeedData */,
 				A08551A02E833782004633CA /* AvatarStorage */,
 				A0854FE02E612180004633CA /* Firebase */,
@@ -1248,6 +1268,9 @@
 				A08552262E8741AA004633CA /* ChecksumStoringProtocol.swift */,
 				A08552282E87469F004633CA /* DebugImportServicingProtocol.swift */,
 				A085522A2E875149004633CA /* DebugImportingProtocol.swift */,
+				A03AC80F2E8E277800AAEE87 /* AuthSessionStoringProtocol.swift */,
+				A03AC8182E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift */,
+				A03AC81C2E8E2E7400AAEE87 /* AuthSessionStoringPrortocol.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -2006,6 +2029,7 @@
 				A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */,
 				A08550F12E7AB69F004633CA /* PrivacyPolicyText.swift in Sources */,
 				A085520E2E862C1B004633CA /* SHA256.swift in Sources */,
+				A03AC81B2E8E2D7700AAEE87 /* KeychainKey.swift in Sources */,
 				A085525D2E893AE2004633CA /* ProfileRowCell.swift in Sources */,
 				A08551782E81F944004633CA /* Container+Factories.swift in Sources */,
 				A08551932E8220A9004633CA /* AuthCoordinatingProtocol.swift in Sources */,
@@ -2101,12 +2125,14 @@
 				A08551C32E836900004633CA /* EditNameCoordinatingProtocol.swift in Sources */,
 				A03AC7EC2E8CE2EA00AAEE87 /* PhoneInputSheetViewModelProtocol.swift in Sources */,
 				A08550F52E7AB7C1004633CA /* PrivacyPolicyCoordinator.swift in Sources */,
+				A03AC81D2E8E2E7400AAEE87 /* AuthSessionStoringPrortocol.swift in Sources */,
 				A085521D2E86755A004633CA /* ImportOutcome.swift in Sources */,
 				A08550952E741943004633CA /* OrderCommentCell.swift in Sources */,
 				A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */,
 				A08550ED2E7A094C004633CA /* UIViewController+NavBar.swift in Sources */,
 				A08550E42E79E357004633CA /* AboutCoordinator.swift in Sources */,
 				A08551442E80969E004633CA /* ResetPasswordViewModelProtocol.swift in Sources */,
+				A03AC8122E8E27CA00AAEE87 /* AuthSessionStorage.swift in Sources */,
 				A08551D02E837782004633CA /* EditEmailCoordinator.swift in Sources */,
 				A03AC7FD2E8D023700AAEE87 /* CommentInputSheetViewController.swift in Sources */,
 				A08552012E860892004633CA /* DebugImporter.swift in Sources */,
@@ -2137,6 +2163,7 @@
 				A08551D92E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift in Sources */,
 				A08551B12E835131004633CA /* EditProfileRow.swift in Sources */,
 				A08550572E6144CB004633CA /* Profile.swift in Sources */,
+				A03AC8162E8E2B6100AAEE87 /* KeychainService.swift in Sources */,
 				A08550022E612411004633CA /* AuthServiceProtocol.swift in Sources */,
 				A08550512E613F2D004633CA /* Container+ViewModels.swift in Sources */,
 				A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */,
@@ -2157,6 +2184,7 @@
 				A03AC7FB2E8D020200AAEE87 /* CommentInputSheetViewModel.swift in Sources */,
 				A08551242E7D9440004633CA /* ValidationResult.swift in Sources */,
 				A085520A2E86216D004633CA /* DebugImportStorage.swift in Sources */,
+				A03AC8192E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift in Sources */,
 				A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */,
 				A08550FC2E7AD229004633CA /* ProfileUserCoordinator.swift in Sources */,
 				A08550A02E748A11004633CA /* OrderSuccessViewController.swift in Sources */,
@@ -2164,6 +2192,7 @@
 				A085522F2E875EBF004633CA /* DebugImportCoordinator.swift in Sources */,
 				A08551E32E838493004633CA /* BaseEditFieldViewModelProtocol.swift in Sources */,
 				A085511D2E7D931C004633CA /* FormValidatingProtocol.swift in Sources */,
+				A03AC8102E8E277800AAEE87 /* AuthSessionStoringProtocol.swift in Sources */,
 				A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */,
 				A08550802E6BF954004633CA /* CartItem.swift in Sources */,
 				A08552062E860C0E004633CA /* DebugImportViewModel.swift in Sources */,
@@ -2175,7 +2204,6 @@
 				A08550632E63F006004633CA /* AppTab.swift in Sources */,
 				A08551762E81F6B7004633CA /* Container+Coordinators.swift in Sources */,
 				A08551662E81C8C8004633CA /* CatalogViewModelProtocol.swift in Sources */,
-				A0854FDE2E6119E6004633CA /* KeychainService.swift in Sources */,
 				A08552672E8A1C1B004633CA /* ContactItem.swift in Sources */,
 				A085518B2E821787004633CA /* AboutCoordinatingProtocol.swift in Sources */,
 				A08550062E61242E004633CA /* ProfileServiceProtocol.swift in Sources */,
