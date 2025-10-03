@@ -93,7 +93,7 @@ final class OrderCommentCell: UITableViewCell {
     }()
     
     /// Показ/скрытие тонкой линии внизу
-    var showsSeparator: Bool = true {
+    var showsSeparator: Bool = false {
         didSet { separatorView.isHidden = !showsSeparator }
     }
     

@@ -11,8 +11,6 @@ import UIKit
 protocol CartCellDelegate: AnyObject {
     /// Вызывается при изменении количества (после каждого тапа −/+)
     func cartCell(_ cell: CartCell, didChangeQuantity quantity: Int)
-    /// Тап по кнопке удаления
-    func cartCellDidTapDelete(_ cell: CartCell)
 }
 
 final class CartCell: UITableViewCell {
@@ -149,21 +147,6 @@ final class CartCell: UITableViewCell {
         return label
     }()
     
-    private let deleteButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: Symbols.trash), for: .normal)
-        button.tintColor = .systemRed
-        button.backgroundColor = .systemBackground
-        button.layer.cornerRadius = Metrics.Corners.deleteButton
-        button.widthAnchor.constraint(
-            equalToConstant: Metrics.Sizes.deleteButton
-        ).isActive = true
-        button.heightAnchor.constraint(
-            equalToConstant: Metrics.Sizes.deleteButton
-        ).isActive = true
-        return button
-    }()
-    
     /// Вертикальный стек справа от картинки
     private let rightStack: UIStackView = {
         let stack = UIStackView()
@@ -251,8 +234,7 @@ private extension CartCell {
         
         actionsRow.addArrangedSubviews(
             qtyContainer,
-            spacer,
-            deleteButton
+            spacer
         )
     }
     
@@ -270,7 +252,6 @@ private extension CartCell {
     func setupActions() {
         minusButton.onTap(self, action: #selector(decreaseTapped))
         plusButton.onTap(self, action: #selector(increaseTapped))
-        deleteButton.onTap(self, action: #selector(deleteTapped))
     }
 }
 
@@ -402,12 +383,6 @@ private extension CartCell {
         quantity += 1
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
         delegate?.cartCell(self, didChangeQuantity: quantity)
-    }
-    
-    @objc func deleteTapped() {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        deleteButton.pulse()
-        delegate?.cartCellDidTapDelete(self)
     }
 }
 

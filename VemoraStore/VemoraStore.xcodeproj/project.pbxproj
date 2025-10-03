@@ -25,6 +25,22 @@
 		A03AC8192E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8182E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift */; };
 		A03AC81B2E8E2D7700AAEE87 /* KeychainKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC81A2E8E2D7700AAEE87 /* KeychainKey.swift */; };
 		A03AC81D2E8E2E7400AAEE87 /* AuthSessionStoringPrortocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC81C2E8E2E7400AAEE87 /* AuthSessionStoringPrortocol.swift */; };
+		A03AC8202E8E389800AAEE87 /* ProfileCollectingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC81F2E8E389800AAEE87 /* ProfileCollectingProtocol.swift */; };
+		A03AC8242E8E391600AAEE87 /* ProfileCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8232E8E391600AAEE87 /* ProfileCollection.swift */; };
+		A03AC82A2E8E3F4E00AAEE87 /* Container+Collections.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8292E8E3F4E00AAEE87 /* Container+Collections.swift */; };
+		A03AC82D2E8F9FF500AAEE87 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC82C2E8F9FF500AAEE87 /* UserProfile.swift */; };
+		A03AC8312E8FA08D00AAEE87 /* ProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8302E8FA08D00AAEE87 /* ProfileDTO.swift */; };
+		A03AC8342E8FA1CE00AAEE87 /* LocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8332E8FA1CE00AAEE87 /* LocalStore.swift */; };
+		A03AC8382E8FA25000AAEE87 /* Profile+CDMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8372E8FA25000AAEE87 /* Profile+CDMapper.swift */; };
+		A03AC83C2E8FA69F00AAEE87 /* CDProfile+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC83A2E8FA69F00AAEE87 /* CDProfile+CoreDataClass.swift */; };
+		A03AC83D2E8FA69F00AAEE87 /* CDProfile+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC83B2E8FA69F00AAEE87 /* CDProfile+CoreDataProperties.swift */; };
+		A03AC8402E8FA77500AAEE87 /* ProfileFRCPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC83F2E8FA77500AAEE87 /* ProfileFRCPublisher.swift */; };
+		A03AC8432E8FA7E400AAEE87 /* LocalStoreCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8422E8FA7E400AAEE87 /* LocalStoreCoreData.swift */; };
+		A03AC8452E8FAA0300AAEE87 /* Container+Stores.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8442E8FAA0300AAEE87 /* Container+Stores.swift */; };
+		A03AC8472E8FAA4F00AAEE87 /* AppPersistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8462E8FAA4F00AAEE87 /* AppPersistent.swift */; };
+		A03AC84A2E8FAC2F00AAEE87 /* ProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8492E8FAC2F00AAEE87 /* ProfileRepository.swift */; };
+		A03AC84D2E8FACA100AAEE87 /* DefaultProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC84C2E8FACA100AAEE87 /* DefaultProfileRepository.swift */; };
+		A03AC84F2E8FAF2A00AAEE87 /* Container+Repositories.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC84E2E8FAF2A00AAEE87 /* Container+Repositories.swift */; };
 		A0854FC02E611307004633CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0854FB52E611307004633CA /* Assets.xcassets */; };
 		A0854FC22E611307004633CA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0854FB82E611307004633CA /* LaunchScreen.storyboard */; };
 		A0854FC42E611307004633CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FB42E611307004633CA /* AppDelegate.swift */; };
@@ -33,7 +49,6 @@
 		A0854FCA2E611320004633CA /* VemoraStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FC82E611320004633CA /* VemoraStoreTests.swift */; };
 		A0854FCE2E611324004633CA /* VemoraStoreUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FCB2E611324004633CA /* VemoraStoreUITests.swift */; };
 		A0854FCF2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FCC2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift */; };
-		A0854FDA2E61199A004633CA /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FD92E61199A004633CA /* CoreDataManager.swift */; };
 		A0854FE22E6121BC004633CA /* FirestoreProductService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE12E6121BC004633CA /* FirestoreProductService.swift */; };
 		A0854FE62E6121E3004633CA /* FirebaseAuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */; };
 		A0854FE82E6121F4004633CA /* FirebaseProfileService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FE72E6121F4004633CA /* FirebaseProfileService.swift */; };
@@ -305,6 +320,22 @@
 		A03AC8182E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainServiceProtocol.swift; sourceTree = "<group>"; };
 		A03AC81A2E8E2D7700AAEE87 /* KeychainKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainKey.swift; sourceTree = "<group>"; };
 		A03AC81C2E8E2E7400AAEE87 /* AuthSessionStoringPrortocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthSessionStoringPrortocol.swift; sourceTree = "<group>"; };
+		A03AC81F2E8E389800AAEE87 /* ProfileCollectingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollectingProtocol.swift; sourceTree = "<group>"; };
+		A03AC8232E8E391600AAEE87 /* ProfileCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCollection.swift; sourceTree = "<group>"; };
+		A03AC8292E8E3F4E00AAEE87 /* Container+Collections.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Collections.swift"; sourceTree = "<group>"; };
+		A03AC82C2E8F9FF500AAEE87 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
+		A03AC8302E8FA08D00AAEE87 /* ProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDTO.swift; sourceTree = "<group>"; };
+		A03AC8332E8FA1CE00AAEE87 /* LocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStore.swift; sourceTree = "<group>"; };
+		A03AC8372E8FA25000AAEE87 /* Profile+CDMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profile+CDMapper.swift"; sourceTree = "<group>"; };
+		A03AC83A2E8FA69F00AAEE87 /* CDProfile+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDProfile+CoreDataClass.swift"; sourceTree = "<group>"; };
+		A03AC83B2E8FA69F00AAEE87 /* CDProfile+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDProfile+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A03AC83F2E8FA77500AAEE87 /* ProfileFRCPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFRCPublisher.swift; sourceTree = "<group>"; };
+		A03AC8422E8FA7E400AAEE87 /* LocalStoreCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStoreCoreData.swift; sourceTree = "<group>"; };
+		A03AC8442E8FAA0300AAEE87 /* Container+Stores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Stores.swift"; sourceTree = "<group>"; };
+		A03AC8462E8FAA4F00AAEE87 /* AppPersistent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPersistent.swift; sourceTree = "<group>"; };
+		A03AC8492E8FAC2F00AAEE87 /* ProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRepository.swift; sourceTree = "<group>"; };
+		A03AC84C2E8FACA100AAEE87 /* DefaultProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultProfileRepository.swift; sourceTree = "<group>"; };
+		A03AC84E2E8FAF2A00AAEE87 /* Container+Repositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Repositories.swift"; sourceTree = "<group>"; };
 		A0854F7D2E6112A3004633CA /* VemoraStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VemoraStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0854F962E6112A5004633CA /* VemoraStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VemoraStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0854FA02E6112A5004633CA /* VemoraStoreUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VemoraStoreUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -317,7 +348,6 @@
 		A0854FC82E611320004633CA /* VemoraStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreTests.swift; sourceTree = "<group>"; };
 		A0854FCB2E611324004633CA /* VemoraStoreUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreUITests.swift; sourceTree = "<group>"; };
 		A0854FCC2E611324004633CA /* VemoraStoreUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VemoraStoreUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		A0854FD92E61199A004633CA /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
 		A0854FE12E6121BC004633CA /* FirestoreProductService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirestoreProductService.swift; sourceTree = "<group>"; };
 		A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAuthService.swift; sourceTree = "<group>"; };
 		A0854FE72E6121F4004633CA /* FirebaseProfileService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseProfileService.swift; sourceTree = "<group>"; };
@@ -661,6 +691,129 @@
 			path = Auth;
 			sourceTree = "<group>";
 		};
+		A03AC81E2E8E386D00AAEE87 /* Collections */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC81F2E8E389800AAEE87 /* ProfileCollectingProtocol.swift */,
+			);
+			path = Collections;
+			sourceTree = "<group>";
+		};
+		A03AC8212E8E38ED00AAEE87 /* Remote */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC8222E8E38F700AAEE87 /* Collections */,
+			);
+			path = Remote;
+			sourceTree = "<group>";
+		};
+		A03AC8222E8E38F700AAEE87 /* Collections */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC8232E8E391600AAEE87 /* ProfileCollection.swift */,
+			);
+			path = Collections;
+			sourceTree = "<group>";
+		};
+		A03AC82B2E8F9FDC00AAEE87 /* DELETE */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FF82E612395004633CA /* ProductTest.swift */,
+				A0854FFA2E6123A5004633CA /* CategoryTest.swift */,
+				A0854FFE2E6123D0004633CA /* Address.swift */,
+				A08550562E6144CB004633CA /* Profile.swift */,
+				A085507F2E6BF954004633CA /* CartItem.swift */,
+				A08551102E7C4D4B004633CA /* OrderModels.swift */,
+			);
+			path = DELETE;
+			sourceTree = "<group>";
+		};
+		A03AC82E2E8FA01800AAEE87 /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC8302E8FA08D00AAEE87 /* ProfileDTO.swift */,
+			);
+			path = DTO;
+			sourceTree = "<group>";
+		};
+		A03AC82F2E8FA03700AAEE87 /* Entities */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC82C2E8F9FF500AAEE87 /* UserProfile.swift */,
+				A08552102E867031004633CA /* Product.swift */,
+				A08552122E8670D0004633CA /* Category.swift */,
+				A08552162E867177004633CA /* Brand.swift */,
+			);
+			path = Entities;
+			sourceTree = "<group>";
+		};
+		A03AC8322E8FA1B300AAEE87 /* Stores */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC8332E8FA1CE00AAEE87 /* LocalStore.swift */,
+			);
+			path = Stores;
+			sourceTree = "<group>";
+		};
+		A03AC8352E8FA21600AAEE87 /* DELETE */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FEE2E612272004633CA /* CartService.swift */,
+				A0854FF02E612286004633CA /* FavoritesService.swift */,
+				A08551162E7C5447004633CA /* OrdersService.swift */,
+			);
+			path = DELETE;
+			sourceTree = "<group>";
+		};
+		A03AC8362E8FA22C00AAEE87 /* Mappers */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC8372E8FA25000AAEE87 /* Profile+CDMapper.swift */,
+			);
+			path = Mappers;
+			sourceTree = "<group>";
+		};
+		A03AC8392E8FA39500AAEE87 /* CoreDataEntities */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC83A2E8FA69F00AAEE87 /* CDProfile+CoreDataClass.swift */,
+				A03AC83B2E8FA69F00AAEE87 /* CDProfile+CoreDataProperties.swift */,
+			);
+			path = CoreDataEntities;
+			sourceTree = "<group>";
+		};
+		A03AC83E2E8FA75000AAEE87 /* FRC */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC83F2E8FA77500AAEE87 /* ProfileFRCPublisher.swift */,
+			);
+			path = FRC;
+			sourceTree = "<group>";
+		};
+		A03AC8412E8FA7C100AAEE87 /* LocalStoreCoreData */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC8422E8FA7E400AAEE87 /* LocalStoreCoreData.swift */,
+			);
+			path = LocalStoreCoreData;
+			sourceTree = "<group>";
+		};
+		A03AC8482E8FAC1800AAEE87 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC8492E8FAC2F00AAEE87 /* ProfileRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
+		A03AC84B2E8FAC8600AAEE87 /* Repositories */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC84C2E8FACA100AAEE87 /* DefaultProfileRepository.swift */,
+			);
+			path = Repositories;
+			sourceTree = "<group>";
+		};
 		A0854F742E6112A3004633CA = {
 			isa = PBXGroup;
 			children = (
@@ -765,19 +918,19 @@
 		A0854FD82E611972004633CA /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
-				A0854FD92E61199A004633CA /* CoreDataManager.swift */,
-				A0854FDB2E6119B1004633CA /* Models */,
+				A03AC8462E8FAA4F00AAEE87 /* AppPersistent.swift */,
 				A0854FBC2E611307004633CA /* VemoraStore.xcdatamodeld */,
+				A0854FDB2E6119B1004633CA /* DELETE */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
 		};
-		A0854FDB2E6119B1004633CA /* Models */ = {
+		A0854FDB2E6119B1004633CA /* DELETE */ = {
 			isa = PBXGroup;
 			children = (
 				A085505D2E614EA3004633CA /* CartItemEntity.swift */,
 			);
-			path = Models;
+			path = DELETE;
 			sourceTree = "<group>";
 		};
 		A0854FDC2E6119CA004633CA /* Security */ = {
@@ -792,11 +945,13 @@
 		A0854FDF2E611B1B004633CA /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				A03AC84B2E8FAC8600AAEE87 /* Repositories */,
+				A03AC8212E8E38ED00AAEE87 /* Remote */,
+				A0854FED2E61224B004633CA /* Local */,
 				A03AC8172E8E2CF300AAEE87 /* Auth */,
 				A08551FF2E860851004633CA /* SeedData */,
 				A08551A02E833782004633CA /* AvatarStorage */,
 				A0854FE02E612180004633CA /* Firebase */,
-				A0854FED2E61224B004633CA /* Local */,
 				A0854FF22E61229E004633CA /* Location */,
 				A08550482E612C25004633CA /* UserDefaults */,
 			);
@@ -818,9 +973,10 @@
 		A0854FED2E61224B004633CA /* Local */ = {
 			isa = PBXGroup;
 			children = (
-				A0854FEE2E612272004633CA /* CartService.swift */,
-				A0854FF02E612286004633CA /* FavoritesService.swift */,
-				A08551162E7C5447004633CA /* OrdersService.swift */,
+				A03AC8412E8FA7C100AAEE87 /* LocalStoreCoreData */,
+				A03AC83E2E8FA75000AAEE87 /* FRC */,
+				A03AC8362E8FA22C00AAEE87 /* Mappers */,
+				A03AC8352E8FA21600AAEE87 /* DELETE */,
 			);
 			path = Local;
 			sourceTree = "<group>";
@@ -856,15 +1012,10 @@
 		A0854FF72E612380004633CA /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				A0854FF82E612395004633CA /* ProductTest.swift */,
-				A0854FFA2E6123A5004633CA /* CategoryTest.swift */,
-				A0854FFE2E6123D0004633CA /* Address.swift */,
-				A08550562E6144CB004633CA /* Profile.swift */,
-				A085507F2E6BF954004633CA /* CartItem.swift */,
-				A08551102E7C4D4B004633CA /* OrderModels.swift */,
-				A08552102E867031004633CA /* Product.swift */,
-				A08552122E8670D0004633CA /* Category.swift */,
-				A08552162E867177004633CA /* Brand.swift */,
+				A03AC82B2E8F9FDC00AAEE87 /* DELETE */,
+				A03AC8392E8FA39500AAEE87 /* CoreDataEntities */,
+				A03AC82F2E8FA03700AAEE87 /* Entities */,
+				A03AC82E2E8FA01800AAEE87 /* DTO */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -872,6 +1023,9 @@
 		A08550002E6123E2004633CA /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				A03AC8482E8FAC1800AAEE87 /* Repositories */,
+				A03AC8322E8FA1B300AAEE87 /* Stores */,
+				A03AC81E2E8E386D00AAEE87 /* Collections */,
 				A085524E2E88F4DC004633CA /* Models */,
 				A08551812E8207EE004633CA /* Factories */,
 				A08550C32E78AFD9004633CA /* Services */,
@@ -1054,6 +1208,9 @@
 				A08551752E81F6B7004633CA /* Container+Coordinators.swift */,
 				A08551772E81F944004633CA /* Container+Factories.swift */,
 				A085519E2E822C41004633CA /* CompositionRoot.swift */,
+				A03AC8292E8E3F4E00AAEE87 /* Container+Collections.swift */,
+				A03AC8442E8FAA0300AAEE87 /* Container+Stores.swift */,
+				A03AC84E2E8FAF2A00AAEE87 /* Container+Repositories.swift */,
 			);
 			path = Factory;
 			sourceTree = "<group>";
@@ -2013,6 +2170,8 @@
 				A08550AE2E783E88004633CA /* BrandedButton.swift in Sources */,
 				A08551402E8094A8004633CA /* PasswordResetServiceProtocol.swift in Sources */,
 				A08550EB2E7A056D004633CA /* ProfileGuestRow.swift in Sources */,
+				A03AC83C2E8FA69F00AAEE87 /* CDProfile+CoreDataClass.swift in Sources */,
+				A03AC83D2E8FA69F00AAEE87 /* CDProfile+CoreDataProperties.swift in Sources */,
 				A08550D92E79BB7E004633CA /* MapPickerViewModel.swift in Sources */,
 				A085522B2E875149004633CA /* DebugImportingProtocol.swift in Sources */,
 				A085510B2E7C4B0B004633CA /* OrdersViewController.swift in Sources */,
@@ -2041,9 +2200,11 @@
 				A08551D52E837C38004633CA /* EditPhoneViewModel.swift in Sources */,
 				A08551262E7D94D6004633CA /* FormTextField.swift in Sources */,
 				A08551A22E8337A2004633CA /* AvatarStorageServiceProtocol.swift in Sources */,
+				A03AC8452E8FAA0300AAEE87 /* Container+Stores.swift in Sources */,
 				A08551C12E8368A0004633CA /* EditNameViewController.swift in Sources */,
 				A08550C02E789FA8004633CA /* AddressFormattingProtocol.swift in Sources */,
 				A08552252E872E64004633CA /* DebugImportStoringProtocol.swift in Sources */,
+				A03AC8242E8E391600AAEE87 /* ProfileCollection.swift in Sources */,
 				A08550C22E78A407004633CA /* DeliveryDetailsViewModel.swift in Sources */,
 				A08551172E7C5447004633CA /* OrdersService.swift in Sources */,
 				A08551512E81824C004633CA /* ConfirmationAlertType.swift in Sources */,
@@ -2062,6 +2223,7 @@
 				A08551C82E837673004633CA /* EditEmailViewModelProtocol.swift in Sources */,
 				A085513B2E807906004633CA /* SignInViewController.swift in Sources */,
 				A08550FA2E7AD0A9004633CA /* ProfileUserRow.swift in Sources */,
+				A03AC8312E8FA08D00AAEE87 /* ProfileDTO.swift in Sources */,
 				A03AC7F12E8CE3CC00AAEE87 /* PhoneInputSheetViewController.swift in Sources */,
 				A085519B2E8227E6004633CA /* MainCoordinatingProtocol.swift in Sources */,
 				A085521F2E867BA5004633CA /* SectionWriteResult.swift in Sources */,
@@ -2083,6 +2245,7 @@
 				A08551112E7C4D4B004633CA /* OrderModels.swift in Sources */,
 				A08552532E89062E004633CA /* ProductViewData.swift in Sources */,
 				A0854FEF2E612272004633CA /* CartService.swift in Sources */,
+				A03AC8402E8FA77500AAEE87 /* ProfileFRCPublisher.swift in Sources */,
 				A03AC8092E8DE7E000AAEE87 /* String+ext.swift in Sources */,
 				A0854FFF2E6123D0004633CA /* Address.swift in Sources */,
 				A085517E2E8204A1004633CA /* MapPickerCoordinatingProtocol.swift in Sources */,
@@ -2090,6 +2253,7 @@
 				A08550282E612945004633CA /* ProductDetailsViewModel.swift in Sources */,
 				A08550322E612A46004633CA /* CartViewController.swift in Sources */,
 				A08550892E718F03004633CA /* CheckoutCell.swift in Sources */,
+				A03AC8382E8FA25000AAEE87 /* Profile+CDMapper.swift in Sources */,
 				A08550DE2E79D1CD004633CA /* ProfileGuestCoordinator.swift in Sources */,
 				A08550212E61264B004633CA /* CatalogViewModel.swift in Sources */,
 				A085508B2E71B14A004633CA /* PickupAddressCell.swift in Sources */,
@@ -2100,6 +2264,7 @@
 				A08551A72E833844004633CA /* EditProfileViewModelProtocol.swift in Sources */,
 				A08550A22E748BE9004633CA /* OrderSuccessCoordinator.swift in Sources */,
 				A08551B62E835B38004633CA /* PaddedFieldKind.swift in Sources */,
+				A03AC8342E8FA1CE00AAEE87 /* LocalStore.swift in Sources */,
 				A085509C2E74817F004633CA /* MapPickerCoordinator.swift in Sources */,
 				A08551222E7D9415004633CA /* AuthField.swift in Sources */,
 				A085519D2E822A01004633CA /* AppCoordinatingProtocol.swift in Sources */,
@@ -2116,6 +2281,7 @@
 				A08550DB2E79D024004633CA /* ProfileGuestViewController.swift in Sources */,
 				A08550D72E79BB53004633CA /* MapPickerViewModelProtocol.swift in Sources */,
 				A08550A62E76E9A5004633CA /* AddressConfirmSheetViewController.swift in Sources */,
+				A03AC82D2E8F9FF500AAEE87 /* UserProfile.swift in Sources */,
 				A0854FF92E612395004633CA /* ProductTest.swift in Sources */,
 				A08551BF2E836866004633CA /* EditNameViewModel.swift in Sources */,
 				A08552272E8741AA004633CA /* ChecksumStoringProtocol.swift in Sources */,
@@ -2130,6 +2296,7 @@
 				A08550952E741943004633CA /* OrderCommentCell.swift in Sources */,
 				A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */,
 				A08550ED2E7A094C004633CA /* UIViewController+NavBar.swift in Sources */,
+				A03AC84A2E8FAC2F00AAEE87 /* ProfileRepository.swift in Sources */,
 				A08550E42E79E357004633CA /* AboutCoordinator.swift in Sources */,
 				A08551442E80969E004633CA /* ResetPasswordViewModelProtocol.swift in Sources */,
 				A03AC8122E8E27CA00AAEE87 /* AuthSessionStorage.swift in Sources */,
@@ -2143,12 +2310,14 @@
 				A08552292E87469F004633CA /* DebugImportServicingProtocol.swift in Sources */,
 				A085518F2E821AEF004633CA /* ContactUsCoordinatingProtocol.swift in Sources */,
 				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
+				A03AC8432E8FA7E400AAEE87 /* LocalStoreCoreData.swift in Sources */,
 				A08551392E80789D004633CA /* SignInViewModel.swift in Sources */,
 				A08551992E822525004633CA /* OrdersCoordinatingProtocol.swift in Sources */,
 				A08551352E807837004633CA /* SignInViewModelProtocol.swift in Sources */,
 				A08551CA2E837691004633CA /* EditEmailViewModel.swift in Sources */,
 				A08551A92E83387C004633CA /* EditProfileViewModel.swift in Sources */,
 				A0854FC62E611307004633CA /* VemoraStore.xcdatamodeld in Sources */,
+				A03AC8202E8E389800AAEE87 /* ProfileCollectingProtocol.swift in Sources */,
 				A08551FE2E85F2A8004633CA /* DebugImportService.swift in Sources */,
 				A08550F32E7AB6E0004633CA /* PrivacyPolicyViewController.swift in Sources */,
 				A08550692E64005F004633CA /* CartCoordinator.swift in Sources */,
@@ -2170,6 +2339,7 @@
 				A085512C2E7D99F7004633CA /* SignUpViewController.swift in Sources */,
 				A08552462E88B43E004633CA /* UIView+ext.swift in Sources */,
 				A08551682E81C9BD004633CA /* ProductDetailsViewModelProtocol.swift in Sources */,
+				A03AC84D2E8FACA100AAEE87 /* DefaultProfileRepository.swift in Sources */,
 				A08550BA2E789476004633CA /* AddressFormatter.swift in Sources */,
 				A08552392E886F2E004633CA /* AddToCartButton.swift in Sources */,
 				A08551092E7C4A95004633CA /* OrderItemCell.swift in Sources */,
@@ -2190,12 +2360,15 @@
 				A08550A02E748A11004633CA /* OrderSuccessViewController.swift in Sources */,
 				A085512E2E7DE2B1004633CA /* UIButton+ext.swift in Sources */,
 				A085522F2E875EBF004633CA /* DebugImportCoordinator.swift in Sources */,
+				A03AC8472E8FAA4F00AAEE87 /* AppPersistent.swift in Sources */,
 				A08551E32E838493004633CA /* BaseEditFieldViewModelProtocol.swift in Sources */,
 				A085511D2E7D931C004633CA /* FormValidatingProtocol.swift in Sources */,
 				A03AC8102E8E277800AAEE87 /* AuthSessionStoringProtocol.swift in Sources */,
 				A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */,
+				A03AC84F2E8FAF2A00AAEE87 /* Container+Repositories.swift in Sources */,
 				A08550802E6BF954004633CA /* CartItem.swift in Sources */,
 				A08552062E860C0E004633CA /* DebugImportViewModel.swift in Sources */,
+				A03AC82A2E8E3F4E00AAEE87 /* Container+Collections.swift in Sources */,
 				A085522D2E875614004633CA /* DebugImportViewModelProtocol.swift in Sources */,
 				A08550672E63F7EC004633CA /* FavoritesCoordinator.swift in Sources */,
 				A08551DB2E837CDC004633CA /* EditPhoneCoordinator.swift in Sources */,
@@ -2207,7 +2380,6 @@
 				A08552672E8A1C1B004633CA /* ContactItem.swift in Sources */,
 				A085518B2E821787004633CA /* AboutCoordinatingProtocol.swift in Sources */,
 				A08550062E61242E004633CA /* ProfileServiceProtocol.swift in Sources */,
-				A0854FDA2E61199A004633CA /* CoreDataManager.swift in Sources */,
 				A08550E22E79E1AC004633CA /* AboutViewController.swift in Sources */,
 				A085516E2E81F010004633CA /* ViewModelBuildingProtocol.swift in Sources */,
 				A08551022E7B0A41004633CA /* CheckoutViewModelProtocol.swift in Sources */,

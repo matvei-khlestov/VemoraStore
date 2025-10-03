@@ -34,12 +34,12 @@ final class AppCoordinator: AppCoordinatingProtocol {
     func start() {
         
         ////        showDebugImport()
-                showMain()
-//        if authService.currentUserId != nil {
-//            showMain()
-//        } else {
-//            showAuth()
-//        }
+//                showMain()
+        if authService.currentUserId != nil {
+            showMain()
+        } else {
+            showAuth()
+        }
     }
     
     // MARK: - Public helper
