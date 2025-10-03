@@ -285,9 +285,4 @@ extension FavoritesViewController: FavoritesCellDelegate {
         let newState = viewModel.isInCart(product.id)
         cell.setInCart(newState, animated: false)
     }
-    
-    func favoritesCellDidTapDelete(_ cell: FavoritesCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else { return }
-        deleteRow(at: indexPath)
-    }
 }

@@ -345,12 +345,6 @@ extension CartViewController: CartCellDelegate {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let item = items[indexPath.row]
         viewModel.setQuantity(for: item.id, quantity: newValue)
-        // Быстро синхронизируем локальный snapshot, чтобы не ждать паблишера
         items[indexPath.row].quantity = max(1, newValue)
-    }
-    
-    func cartCellDidTapDelete(_ cell: CartCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else { return }
-        deleteRow(at: indexPath)
     }
 }

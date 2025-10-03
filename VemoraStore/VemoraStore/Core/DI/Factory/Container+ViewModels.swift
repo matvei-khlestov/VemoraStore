@@ -13,13 +13,16 @@ extension Container {
     // MARK: - Auth
     
     var signUpViewModel: Factory<SignUpViewModelProtocol> {
-        self {
-            SignUpViewModel(
-                auth: self.authService(),
-                validator: self.formValidator()
-            )
+            self {
+                let auth = self.authService()
+                let repo = self.profileRepository(auth.currentUserId ?? "")
+                return SignUpViewModel(
+                    auth: auth,
+                    profileRepo: repo,
+                    validator: self.formValidator()
+                )
+            }
         }
-    }
     
     var signInViewModel: Factory<SignInViewModelProtocol> {
         self {

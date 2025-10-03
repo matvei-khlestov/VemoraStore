@@ -9,7 +9,6 @@ import UIKit
 
 protocol FavoritesCellDelegate: AnyObject {
     func favoritesCellDidTapCart(_ cell: FavoritesCell)
-    func favoritesCellDidTapDelete(_ cell: FavoritesCell)
 }
 
 final class FavoritesCell: UITableViewCell {
@@ -30,7 +29,9 @@ final class FavoritesCell: UITableViewCell {
     
     private enum Metrics {
         enum Insets {
-            static let content: UIEdgeInsets = .init(top: 12, left: 16, bottom: 12, right: 16)
+            static let content: UIEdgeInsets = .init(
+                top: 12, left: 16, bottom: 12, right: 16
+            )
         }
         enum Spacing {
             static let rightColumn: CGFloat = 8
@@ -41,20 +42,12 @@ final class FavoritesCell: UITableViewCell {
             static let thumbWidth: CGFloat = 108
             static let thumbHeight: CGFloat = 106
             static let thumbCornerRadius: CGFloat = 12
-            static let deleteButtonSide: CGFloat = 30
-            static let deleteButtonCornerRadius: CGFloat = 16
         }
         enum Fonts {
             static let title: UIFont = .systemFont(ofSize: 16, weight: .semibold)
             static let category: UIFont = .systemFont(ofSize: 12, weight: .regular)
             static let price: UIFont = .systemFont(ofSize: 18, weight: .bold)
         }
-    }
-    
-    // MARK: - Symbols
-    
-    private enum Symbols {
-        static let delete = "trash"
     }
     
     // MARK: - UI
@@ -96,17 +89,6 @@ final class FavoritesCell: UITableViewCell {
     }()
     
     private let cartButton = AddToCartButton()
-    
-    private let deleteButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: Symbols.delete), for: .normal)
-        button.tintColor = .systemRed
-        button.backgroundColor = .systemBackground
-        button.layer.cornerRadius = Metrics.Sizes.deleteButtonCornerRadius
-        button.widthAnchor.constraint(equalToConstant: Metrics.Sizes.deleteButtonSide).isActive = true
-        button.heightAnchor.constraint(equalToConstant: Metrics.Sizes.deleteButtonSide).isActive = true
-        return button
-    }()
     
     private let rightStack: UIStackView = {
         let stack = UIStackView()
@@ -179,8 +161,7 @@ private extension FavoritesCell {
         
         actionsRow.addArrangedSubviews(
             cartButton,
-            spacer,
-            deleteButton
+            spacer
         )
     }
     
@@ -192,7 +173,6 @@ private extension FavoritesCell {
     
     func setupActions() {
         cartButton.onTap(self, action: #selector(cartTapped))
-        deleteButton.onTap(self, action: #selector(deleteTapped))
     }
 }
 
@@ -275,12 +255,6 @@ private extension FavoritesCell {
         setInCart(!isInCart, animated: true)
         cartButton.pulse()
         delegate?.favoritesCellDidTapCart(self)
-    }
-    
-    @objc func deleteTapped() {
-        UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        deleteButton.pulse()
-        delegate?.favoritesCellDidTapDelete(self)
     }
 }
 

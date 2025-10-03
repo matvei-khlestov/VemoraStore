@@ -16,7 +16,7 @@ extension Container {
     }
     
     var authService: Factory<AuthServiceProtocol> {
-        self { FirebaseAuthService() }.singleton
+        self { FirebaseAuthService(session: self.authSessionStorage()) }.singleton
     }
     
     var passwordResetService: Factory<PasswordResetServiceProtocol> {
