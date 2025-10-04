@@ -10,6 +10,4 @@ import Foundation
 import CoreData
 
 @objc(CDProfile)
-public class CDProfile: NSManagedObject {
-
-}
+public class CDProfile: NSManagedObject {}

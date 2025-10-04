@@ -19,4 +19,8 @@ extension Container {
     var coordinatorFactory: Factory<CoordinatorBuildingProtocol> {
         self { CoordinatorFactory(container: self) }.singleton
     }
+    
+    var repositoryProvider: Factory<RepositoryFactoryProtocol> {
+        self { RepositoryFactory(container: self) }.singleton
+    }
 }

@@ -15,22 +15,26 @@ final class EditNameCoordinator: EditNameCoordinatingProtocol {
     var childCoordinators: [Coordinator] = []
 
     private let viewModelFactory: ViewModelBuildingProtocol
+    private let authService: AuthServiceProtocol
+    
     var onFinish: (() -> Void)?
 
     // MARK: - Init
     
     init(
         navigation: UINavigationController,
-        viewModelFactory: ViewModelBuildingProtocol
+        viewModelFactory: ViewModelBuildingProtocol,
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
+        self.authService = authService
     }
 
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeEditNameViewModel()
+        let vm = viewModelFactory.makeEditNameViewModel(uid: authService.currentUserId ?? "")
         let vc = EditNameViewController(viewModel: vm)
         vc.hidesBottomBarWhenPushed = true
 

@@ -19,23 +19,26 @@ final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
     
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
+    private let authService: AuthServiceProtocol
     
     // MARK: - Init
     
     init(
         navigation: UINavigationController,
         viewModelFactory: ViewModelBuildingProtocol,
-        coordinatorFactory: CoordinatorBuildingProtocol
+        coordinatorFactory: CoordinatorBuildingProtocol,
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
         self.coordinatorFactory = coordinatorFactory
+        self.authService = authService
     }
     
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeEditProfileViewModel()
+        let vm = viewModelFactory.makeEditProfileViewModel(userId: authService.currentUserId!)
         let vc = EditProfileViewController(viewModel: vm)
         vc.hidesBottomBarWhenPushed = true
         

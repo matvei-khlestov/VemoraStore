@@ -15,22 +15,26 @@ final class EditEmailCoordinator: EditEmailCoordinatingProtocol {
     var childCoordinators: [Coordinator] = []
     
     private let viewModelFactory: ViewModelBuildingProtocol
+    private let authService: AuthServiceProtocol
+    
     var onFinish: (() -> Void)?
     
     // MARK: - Init
     
     init(
         navigation: UINavigationController,
-        viewModelFactory: ViewModelBuildingProtocol
+        viewModelFactory: ViewModelBuildingProtocol,
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
+        self.authService = authService
     }
     
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeEditEmailViewModel()
+        let vm = viewModelFactory.makeEditEmailViewModel(userId: authService.currentUserId ?? "")
         let vc = EditEmailViewController(viewModel: vm)
         vc.hidesBottomBarWhenPushed = true
         

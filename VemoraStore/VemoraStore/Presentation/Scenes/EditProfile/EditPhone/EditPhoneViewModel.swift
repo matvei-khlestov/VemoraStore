@@ -12,26 +12,30 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     
     // MARK: - Deps
     
-    private let profile: ProfileServiceProtocol
+    private let repos: RepositoryFactoryProtocol
     private let validator: FormValidatingProtocol
+    private let userId: String
     
     // MARK: - State
     
-    @Published private var phone: String
+    @Published private var phone: String = ""
     @Published private var _phoneError: String? = nil
+    
+    private var initialPhone: String = ""
     private var bag = Set<AnyCancellable>()
     
     // MARK: - Init
     
-    init(profile: ProfileServiceProtocol, validator: FormValidatingProtocol) {
-        self.profile = profile
+    init(
+        repos: RepositoryFactoryProtocol,
+        validator: FormValidatingProtocol,
+        userId: String
+    ) {
+        self.repos = repos
         self.validator = validator
-        self.phone = profile.currentPhone
+        self.userId = userId
         
-        $phone
-            .removeDuplicates()
-            .map { [validator] in validator.validate($0, for: .phone).message }
-            .assign(to: &$_phoneError)
+        bindProfile()
     }
     
     // MARK: - Outputs
@@ -42,19 +46,22 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     var phoneError: AnyPublisher<String?, Never> {
         $_phoneError.eraseToAnyPublisher()
     }
+    
     var phonePublisher: AnyPublisher<String, Never> {
         $phone.eraseToAnyPublisher()
     }
     
     var isSubmitEnabled: AnyPublisher<Bool, Never> {
-        let isValid = $_phoneError.map {
-            $0 == nil
-        }
+        let isValid = $_phoneError.map { $0 == nil }
+        
         let isChanged = $phone
-            .map { [initial = profile.currentPhone] in
-                $0.trimmingCharacters(in: .whitespacesAndNewlines)
-                != initial.trimmingCharacters(in: .whitespacesAndNewlines)
+            .map { [weak self] new in
+                guard let self else { return false }
+                let a = new.trimmingCharacters(in: .whitespacesAndNewlines)
+                let b = self.initialPhone.trimmingCharacters(in: .whitespacesAndNewlines)
+                return !a.isEmpty && a != b
             }
+        
         return Publishers.CombineLatest(isValid, isChanged)
             .map { $0 && $1 }
             .removeDuplicates()
@@ -75,7 +82,36 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
                 userInfo: [NSLocalizedDescriptionKey: "Проверьте корректность телефона"]
             )
         }
-        try await profile.updatePhone(phone)
+        
+        try await repos
+            .profileRepository(for: userId)
+            .updatePhone(uid: userId, phone: phone)
+        
+        await MainActor.run {
+            self.initialPhone = self.phone
+        }
+    }
+    
+    private func bindProfile() {
+        let repo = repos.profileRepository(for: userId)
+        
+        // подтягиваем phone из Firebase через репозиторий
+        repo.observeProfile()
+            .compactMap { $0 }
+            .prefix(1) // только первый раз для начального значения
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] profile in
+                guard let self else { return }
+                self.initialPhone = profile.phone
+                self.phone = profile.phone
+            }
+            .store(in: &bag)
+        
+        $phone
+        
+            .removeDuplicates()
+            .map { [validator] in validator.validate($0, for: .phone).message }
+            .assign(to: &$_phoneError)
     }
 }
 

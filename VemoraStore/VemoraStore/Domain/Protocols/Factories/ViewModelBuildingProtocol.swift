@@ -30,11 +30,11 @@ protocol ViewModelBuildingProtocol {
     
     // MARK: - Profile
     
-    func makeProfileUserViewModel() -> ProfileUserViewModelProtocol
-    func makeEditProfileViewModel() -> EditProfileViewModelProtocol
-    func makeEditNameViewModel() -> EditNameViewModelProtocol
-    func makeEditEmailViewModel() -> EditEmailViewModelProtocol
-    func makeEditPhoneViewModel() -> EditPhoneViewModelProtocol
+    func makeProfileUserViewModel(uid: String) -> ProfileUserViewModelProtocol
+    func makeEditProfileViewModel(userId: String) -> EditProfileViewModelProtocol
+    func makeEditNameViewModel(uid: String) -> EditNameViewModelProtocol
+    func makeEditEmailViewModel(userId: String) -> EditEmailViewModelProtocol
+    func makeEditPhoneViewModel(userId: String) -> EditPhoneViewModelProtocol
     
     // MARK: - Checkout
     

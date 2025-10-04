@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import FirebaseCore
 
 struct ProfileDTO: Equatable {
     let userId: String
@@ -13,7 +14,7 @@ struct ProfileDTO: Equatable {
     let email: String
     let phone: String
     let updatedAt: Date
-
+    
     func toEntity() -> UserProfile {
         .init(
             userId: userId,

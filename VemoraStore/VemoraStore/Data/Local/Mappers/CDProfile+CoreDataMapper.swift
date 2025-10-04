@@ -1,8 +1,8 @@
 //
-//  Profile+CDMapper.swift
+//  CDProfile+CoreDataMapper.swift
 //  VemoraStore
 //
-//  Created by Matvei Khlestov on 03.10.2025.
+//  Created by Matvei Khlestov on 04.10.2025.
 //
 
 import CoreData

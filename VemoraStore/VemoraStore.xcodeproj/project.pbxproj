@@ -31,16 +31,20 @@
 		A03AC82D2E8F9FF500AAEE87 /* UserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC82C2E8F9FF500AAEE87 /* UserProfile.swift */; };
 		A03AC8312E8FA08D00AAEE87 /* ProfileDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8302E8FA08D00AAEE87 /* ProfileDTO.swift */; };
 		A03AC8342E8FA1CE00AAEE87 /* LocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8332E8FA1CE00AAEE87 /* LocalStore.swift */; };
-		A03AC8382E8FA25000AAEE87 /* Profile+CDMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8372E8FA25000AAEE87 /* Profile+CDMapper.swift */; };
 		A03AC83C2E8FA69F00AAEE87 /* CDProfile+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC83A2E8FA69F00AAEE87 /* CDProfile+CoreDataClass.swift */; };
 		A03AC83D2E8FA69F00AAEE87 /* CDProfile+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC83B2E8FA69F00AAEE87 /* CDProfile+CoreDataProperties.swift */; };
 		A03AC8402E8FA77500AAEE87 /* ProfileFRCPublisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC83F2E8FA77500AAEE87 /* ProfileFRCPublisher.swift */; };
-		A03AC8432E8FA7E400AAEE87 /* LocalStoreCoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8422E8FA7E400AAEE87 /* LocalStoreCoreData.swift */; };
 		A03AC8452E8FAA0300AAEE87 /* Container+Stores.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8442E8FAA0300AAEE87 /* Container+Stores.swift */; };
-		A03AC8472E8FAA4F00AAEE87 /* AppPersistent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8462E8FAA4F00AAEE87 /* AppPersistent.swift */; };
+		A03AC8472E8FAA4F00AAEE87 /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8462E8FAA4F00AAEE87 /* CoreDataStack.swift */; };
 		A03AC84A2E8FAC2F00AAEE87 /* ProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8492E8FAC2F00AAEE87 /* ProfileRepository.swift */; };
 		A03AC84D2E8FACA100AAEE87 /* DefaultProfileRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC84C2E8FACA100AAEE87 /* DefaultProfileRepository.swift */; };
 		A03AC84F2E8FAF2A00AAEE87 /* Container+Repositories.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC84E2E8FAF2A00AAEE87 /* Container+Repositories.swift */; };
+		A03AC8542E90065400AAEE87 /* RepositoryFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8532E90065400AAEE87 /* RepositoryFactoryProtocol.swift */; };
+		A03AC8572E90067F00AAEE87 /* RepositoryFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8562E90067F00AAEE87 /* RepositoryFactory.swift */; };
+		A03AC8602E91169300AAEE87 /* ProfileDTO+FirebaseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC85F2E91169300AAEE87 /* ProfileDTO+FirebaseMapper.swift */; };
+		A03AC8642E911F4700AAEE87 /* CDProfile+CoreDataMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8632E911F4700AAEE87 /* CDProfile+CoreDataMapper.swift */; };
+		A03AC8662E911F8B00AAEE87 /* CDProfile+MatchingHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8652E911F8B00AAEE87 /* CDProfile+MatchingHelper.swift */; };
+		A03AC8692E9128A800AAEE87 /* CoreDataLocalStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = A03AC8682E9128A800AAEE87 /* CoreDataLocalStore.swift */; };
 		A0854FC02E611307004633CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0854FB52E611307004633CA /* Assets.xcassets */; };
 		A0854FC22E611307004633CA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0854FB82E611307004633CA /* LaunchScreen.storyboard */; };
 		A0854FC42E611307004633CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FB42E611307004633CA /* AppDelegate.swift */; };
@@ -326,16 +330,20 @@
 		A03AC82C2E8F9FF500AAEE87 /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		A03AC8302E8FA08D00AAEE87 /* ProfileDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileDTO.swift; sourceTree = "<group>"; };
 		A03AC8332E8FA1CE00AAEE87 /* LocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStore.swift; sourceTree = "<group>"; };
-		A03AC8372E8FA25000AAEE87 /* Profile+CDMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Profile+CDMapper.swift"; sourceTree = "<group>"; };
 		A03AC83A2E8FA69F00AAEE87 /* CDProfile+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDProfile+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A03AC83B2E8FA69F00AAEE87 /* CDProfile+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDProfile+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A03AC83F2E8FA77500AAEE87 /* ProfileFRCPublisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileFRCPublisher.swift; sourceTree = "<group>"; };
-		A03AC8422E8FA7E400AAEE87 /* LocalStoreCoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalStoreCoreData.swift; sourceTree = "<group>"; };
 		A03AC8442E8FAA0300AAEE87 /* Container+Stores.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Stores.swift"; sourceTree = "<group>"; };
-		A03AC8462E8FAA4F00AAEE87 /* AppPersistent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPersistent.swift; sourceTree = "<group>"; };
+		A03AC8462E8FAA4F00AAEE87 /* CoreDataStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		A03AC8492E8FAC2F00AAEE87 /* ProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileRepository.swift; sourceTree = "<group>"; };
 		A03AC84C2E8FACA100AAEE87 /* DefaultProfileRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultProfileRepository.swift; sourceTree = "<group>"; };
 		A03AC84E2E8FAF2A00AAEE87 /* Container+Repositories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Repositories.swift"; sourceTree = "<group>"; };
+		A03AC8532E90065400AAEE87 /* RepositoryFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryFactoryProtocol.swift; sourceTree = "<group>"; };
+		A03AC8562E90067F00AAEE87 /* RepositoryFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryFactory.swift; sourceTree = "<group>"; };
+		A03AC85F2E91169300AAEE87 /* ProfileDTO+FirebaseMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ProfileDTO+FirebaseMapper.swift"; sourceTree = "<group>"; };
+		A03AC8632E911F4700AAEE87 /* CDProfile+CoreDataMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDProfile+CoreDataMapper.swift"; sourceTree = "<group>"; };
+		A03AC8652E911F8B00AAEE87 /* CDProfile+MatchingHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDProfile+MatchingHelper.swift"; sourceTree = "<group>"; };
+		A03AC8682E9128A800AAEE87 /* CoreDataLocalStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataLocalStore.swift; sourceTree = "<group>"; };
 		A0854F7D2E6112A3004633CA /* VemoraStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VemoraStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0854F962E6112A5004633CA /* VemoraStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VemoraStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0854FA02E6112A5004633CA /* VemoraStoreUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VemoraStoreUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -702,7 +710,10 @@
 		A03AC8212E8E38ED00AAEE87 /* Remote */ = {
 			isa = PBXGroup;
 			children = (
-				A03AC8222E8E38F700AAEE87 /* Collections */,
+				A03AC85A2E9114F700AAEE87 /* DTO */,
+				A03AC85B2E91151300AAEE87 /* Mappers */,
+				A03AC85C2E91152700AAEE87 /* Services */,
+				A03AC8592E9114DA00AAEE87 /* Sources */,
 			);
 			path = Remote;
 			sourceTree = "<group>";
@@ -726,14 +737,6 @@
 				A08551102E7C4D4B004633CA /* OrderModels.swift */,
 			);
 			path = DELETE;
-			sourceTree = "<group>";
-		};
-		A03AC82E2E8FA01800AAEE87 /* DTO */ = {
-			isa = PBXGroup;
-			children = (
-				A03AC8302E8FA08D00AAEE87 /* ProfileDTO.swift */,
-			);
-			path = DTO;
 			sourceTree = "<group>";
 		};
 		A03AC82F2E8FA03700AAEE87 /* Entities */ = {
@@ -768,34 +771,29 @@
 		A03AC8362E8FA22C00AAEE87 /* Mappers */ = {
 			isa = PBXGroup;
 			children = (
-				A03AC8372E8FA25000AAEE87 /* Profile+CDMapper.swift */,
+				A03AC8632E911F4700AAEE87 /* CDProfile+CoreDataMapper.swift */,
+				A03AC8652E911F8B00AAEE87 /* CDProfile+MatchingHelper.swift */,
 			);
 			path = Mappers;
 			sourceTree = "<group>";
 		};
-		A03AC8392E8FA39500AAEE87 /* CoreDataEntities */ = {
+		A03AC8392E8FA39500AAEE87 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
 				A03AC83A2E8FA69F00AAEE87 /* CDProfile+CoreDataClass.swift */,
 				A03AC83B2E8FA69F00AAEE87 /* CDProfile+CoreDataProperties.swift */,
+				A03AC8462E8FAA4F00AAEE87 /* CoreDataStack.swift */,
+				A0854FBC2E611307004633CA /* VemoraStore.xcdatamodeld */,
 			);
-			path = CoreDataEntities;
+			path = "Core Data";
 			sourceTree = "<group>";
 		};
-		A03AC83E2E8FA75000AAEE87 /* FRC */ = {
+		A03AC8412E8FA7C100AAEE87 /* Store */ = {
 			isa = PBXGroup;
 			children = (
-				A03AC83F2E8FA77500AAEE87 /* ProfileFRCPublisher.swift */,
+				A03AC8682E9128A800AAEE87 /* CoreDataLocalStore.swift */,
 			);
-			path = FRC;
-			sourceTree = "<group>";
-		};
-		A03AC8412E8FA7C100AAEE87 /* LocalStoreCoreData */ = {
-			isa = PBXGroup;
-			children = (
-				A03AC8422E8FA7E400AAEE87 /* LocalStoreCoreData.swift */,
-			);
-			path = LocalStoreCoreData;
+			path = Store;
 			sourceTree = "<group>";
 		};
 		A03AC8482E8FAC1800AAEE87 /* Repositories */ = {
@@ -812,6 +810,57 @@
 				A03AC84C2E8FACA100AAEE87 /* DefaultProfileRepository.swift */,
 			);
 			path = Repositories;
+			sourceTree = "<group>";
+		};
+		A03AC8592E9114DA00AAEE87 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC8222E8E38F700AAEE87 /* Collections */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		A03AC85A2E9114F700AAEE87 /* DTO */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC8302E8FA08D00AAEE87 /* ProfileDTO.swift */,
+			);
+			path = DTO;
+			sourceTree = "<group>";
+		};
+		A03AC85B2E91151300AAEE87 /* Mappers */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC85F2E91169300AAEE87 /* ProfileDTO+FirebaseMapper.swift */,
+			);
+			path = Mappers;
+			sourceTree = "<group>";
+		};
+		A03AC85C2E91152700AAEE87 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FE02E612180004633CA /* DELETE */,
+				A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */,
+				A08551412E8094DF004633CA /* FirebasePasswordResetService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		A03AC8672E91206E00AAEE87 /* Publishers */ = {
+			isa = PBXGroup;
+			children = (
+				A03AC83F2E8FA77500AAEE87 /* ProfileFRCPublisher.swift */,
+			);
+			path = Publishers;
+			sourceTree = "<group>";
+		};
+		A03AC86A2E912E7A00AAEE87 /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				A08552092E86216D004633CA /* DebugImportStorage.swift */,
+				A085520B2E862BE2004633CA /* ChecksumStorage.swift */,
+			);
+			path = Import;
 			sourceTree = "<group>";
 		};
 		A0854F742E6112A3004633CA = {
@@ -884,7 +933,6 @@
 				A0854FD22E611805004633CA /* DI */,
 				A0854FD52E61186A004633CA /* Extensions */,
 				A08550B82E7893F6004633CA /* Utils */,
-				A0854FD82E611972004633CA /* Persistence */,
 				A0854FDC2E6119CA004633CA /* Security */,
 			);
 			path = Core;
@@ -918,8 +966,6 @@
 		A0854FD82E611972004633CA /* Persistence */ = {
 			isa = PBXGroup;
 			children = (
-				A03AC8462E8FAA4F00AAEE87 /* AppPersistent.swift */,
-				A0854FBC2E611307004633CA /* VemoraStore.xcdatamodeld */,
 				A0854FDB2E6119B1004633CA /* DELETE */,
 			);
 			path = Persistence;
@@ -950,32 +996,31 @@
 				A0854FED2E61224B004633CA /* Local */,
 				A03AC8172E8E2CF300AAEE87 /* Auth */,
 				A08551FF2E860851004633CA /* SeedData */,
-				A08551A02E833782004633CA /* AvatarStorage */,
-				A0854FE02E612180004633CA /* Firebase */,
+				A08551A02E833782004633CA /* FileManager */,
 				A0854FF22E61229E004633CA /* Location */,
 				A08550482E612C25004633CA /* UserDefaults */,
 			);
 			path = Data;
 			sourceTree = "<group>";
 		};
-		A0854FE02E612180004633CA /* Firebase */ = {
+		A0854FE02E612180004633CA /* DELETE */ = {
 			isa = PBXGroup;
 			children = (
-				A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */,
 				A0854FE12E6121BC004633CA /* FirestoreProductService.swift */,
 				A0854FE72E6121F4004633CA /* FirebaseProfileService.swift */,
 				A0854FE92E612206004633CA /* FirebaseNotificationService.swift */,
-				A08551412E8094DF004633CA /* FirebasePasswordResetService.swift */,
 			);
-			path = Firebase;
+			path = DELETE;
 			sourceTree = "<group>";
 		};
 		A0854FED2E61224B004633CA /* Local */ = {
 			isa = PBXGroup;
 			children = (
-				A03AC8412E8FA7C100AAEE87 /* LocalStoreCoreData */,
-				A03AC83E2E8FA75000AAEE87 /* FRC */,
+				A03AC8392E8FA39500AAEE87 /* Core Data */,
+				A03AC8412E8FA7C100AAEE87 /* Store */,
 				A03AC8362E8FA22C00AAEE87 /* Mappers */,
+				A03AC8672E91206E00AAEE87 /* Publishers */,
+				A0854FD82E611972004633CA /* Persistence */,
 				A03AC8352E8FA21600AAEE87 /* DELETE */,
 			);
 			path = Local;
@@ -1001,8 +1046,8 @@
 		A0854FF62E612317004633CA /* Domain */ = {
 			isa = PBXGroup;
 			children = (
-				A08552542E890646004633CA /* ViewData */,
 				A085516F2E81F043004633CA /* Factories */,
+				A08552542E890646004633CA /* ViewData */,
 				A0854FF72E612380004633CA /* Models */,
 				A08550002E6123E2004633CA /* Protocols */,
 			);
@@ -1013,9 +1058,7 @@
 			isa = PBXGroup;
 			children = (
 				A03AC82B2E8F9FDC00AAEE87 /* DELETE */,
-				A03AC8392E8FA39500AAEE87 /* CoreDataEntities */,
 				A03AC82F2E8FA03700AAEE87 /* Entities */,
-				A03AC82E2E8FA01800AAEE87 /* DTO */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1184,8 +1227,7 @@
 		A08550482E612C25004633CA /* UserDefaults */ = {
 			isa = PBXGroup;
 			children = (
-				A08552092E86216D004633CA /* DebugImportStorage.swift */,
-				A085520B2E862BE2004633CA /* ChecksumStorage.swift */,
+				A03AC86A2E912E7A00AAEE87 /* Import */,
 			);
 			path = UserDefaults;
 			sourceTree = "<group>";
@@ -1667,6 +1709,7 @@
 		A085516F2E81F043004633CA /* Factories */ = {
 			isa = PBXGroup;
 			children = (
+				A03AC8562E90067F00AAEE87 /* RepositoryFactory.swift */,
 				A08551702E81F06E004633CA /* ViewModelFactory.swift */,
 				A08551822E820888004633CA /* CoordinatorFactory.swift */,
 			);
@@ -1707,16 +1750,17 @@
 			children = (
 				A085517F2E820734004633CA /* CoordinatorBuildingProtocol.swift */,
 				A085516D2E81F010004633CA /* ViewModelBuildingProtocol.swift */,
+				A03AC8532E90065400AAEE87 /* RepositoryFactoryProtocol.swift */,
 			);
 			path = Factories;
 			sourceTree = "<group>";
 		};
-		A08551A02E833782004633CA /* AvatarStorage */ = {
+		A08551A02E833782004633CA /* FileManager */ = {
 			isa = PBXGroup;
 			children = (
 				A08551A32E8337DB004633CA /* AvatarStorageService.swift */,
 			);
-			path = AvatarStorage;
+			path = FileManager;
 			sourceTree = "<group>";
 		};
 		A08551A52E833828004633CA /* EditProfile */ = {
@@ -2232,6 +2276,7 @@
 				A03AC8062E8DE5B400AAEE87 /* Config.swift in Sources */,
 				A08550082E61243C004633CA /* CartServiceProtocol.swift in Sources */,
 				A08550BC2E789B8F004633CA /* AddressSearchService.swift in Sources */,
+				A03AC8542E90065400AAEE87 /* RepositoryFactoryProtocol.swift in Sources */,
 				A085526C2E8A20B9004633CA /* ContactRowCell.swift in Sources */,
 				A08550122E61256B004633CA /* AppCoordinator.swift in Sources */,
 				A08551952E822223004633CA /* ProfileGuestCoordinatingProtocol.swift in Sources */,
@@ -2246,6 +2291,7 @@
 				A08552532E89062E004633CA /* ProductViewData.swift in Sources */,
 				A0854FEF2E612272004633CA /* CartService.swift in Sources */,
 				A03AC8402E8FA77500AAEE87 /* ProfileFRCPublisher.swift in Sources */,
+				A03AC8602E91169300AAEE87 /* ProfileDTO+FirebaseMapper.swift in Sources */,
 				A03AC8092E8DE7E000AAEE87 /* String+ext.swift in Sources */,
 				A0854FFF2E6123D0004633CA /* Address.swift in Sources */,
 				A085517E2E8204A1004633CA /* MapPickerCoordinatingProtocol.swift in Sources */,
@@ -2253,7 +2299,6 @@
 				A08550282E612945004633CA /* ProductDetailsViewModel.swift in Sources */,
 				A08550322E612A46004633CA /* CartViewController.swift in Sources */,
 				A08550892E718F03004633CA /* CheckoutCell.swift in Sources */,
-				A03AC8382E8FA25000AAEE87 /* Profile+CDMapper.swift in Sources */,
 				A08550DE2E79D1CD004633CA /* ProfileGuestCoordinator.swift in Sources */,
 				A08550212E61264B004633CA /* CatalogViewModel.swift in Sources */,
 				A085508B2E71B14A004633CA /* PickupAddressCell.swift in Sources */,
@@ -2267,6 +2312,7 @@
 				A03AC8342E8FA1CE00AAEE87 /* LocalStore.swift in Sources */,
 				A085509C2E74817F004633CA /* MapPickerCoordinator.swift in Sources */,
 				A08551222E7D9415004633CA /* AuthField.swift in Sources */,
+				A03AC8692E9128A800AAEE87 /* CoreDataLocalStore.swift in Sources */,
 				A085519D2E822A01004633CA /* AppCoordinatingProtocol.swift in Sources */,
 				A08551282E7D952F004633CA /* SignUpViewModelProtocol.swift in Sources */,
 				A085523D2E889381004633CA /* BlurredIconBackground.swift in Sources */,
@@ -2310,7 +2356,6 @@
 				A08552292E87469F004633CA /* DebugImportServicingProtocol.swift in Sources */,
 				A085518F2E821AEF004633CA /* ContactUsCoordinatingProtocol.swift in Sources */,
 				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
-				A03AC8432E8FA7E400AAEE87 /* LocalStoreCoreData.swift in Sources */,
 				A08551392E80789D004633CA /* SignInViewModel.swift in Sources */,
 				A08551992E822525004633CA /* OrdersCoordinatingProtocol.swift in Sources */,
 				A08551352E807837004633CA /* SignInViewModelProtocol.swift in Sources */,
@@ -2338,6 +2383,7 @@
 				A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */,
 				A085512C2E7D99F7004633CA /* SignUpViewController.swift in Sources */,
 				A08552462E88B43E004633CA /* UIView+ext.swift in Sources */,
+				A03AC8572E90067F00AAEE87 /* RepositoryFactory.swift in Sources */,
 				A08551682E81C9BD004633CA /* ProductDetailsViewModelProtocol.swift in Sources */,
 				A03AC84D2E8FACA100AAEE87 /* DefaultProfileRepository.swift in Sources */,
 				A08550BA2E789476004633CA /* AddressFormatter.swift in Sources */,
@@ -2358,9 +2404,10 @@
 				A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */,
 				A08550FC2E7AD229004633CA /* ProfileUserCoordinator.swift in Sources */,
 				A08550A02E748A11004633CA /* OrderSuccessViewController.swift in Sources */,
+				A03AC8642E911F4700AAEE87 /* CDProfile+CoreDataMapper.swift in Sources */,
 				A085512E2E7DE2B1004633CA /* UIButton+ext.swift in Sources */,
 				A085522F2E875EBF004633CA /* DebugImportCoordinator.swift in Sources */,
-				A03AC8472E8FAA4F00AAEE87 /* AppPersistent.swift in Sources */,
+				A03AC8472E8FAA4F00AAEE87 /* CoreDataStack.swift in Sources */,
 				A08551E32E838493004633CA /* BaseEditFieldViewModelProtocol.swift in Sources */,
 				A085511D2E7D931C004633CA /* FormValidatingProtocol.swift in Sources */,
 				A03AC8102E8E277800AAEE87 /* AuthSessionStoringProtocol.swift in Sources */,
@@ -2425,6 +2472,7 @@
 				A085512A2E7D95EF004633CA /* SignUpViewModel.swift in Sources */,
 				A08550FE2E7AD552004633CA /* ProfileUserViewModelProtocol.swift in Sources */,
 				A08551D22E837C01004633CA /* EditPhoneViewModelProtocol.swift in Sources */,
+				A03AC8662E911F8B00AAEE87 /* CDProfile+MatchingHelper.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

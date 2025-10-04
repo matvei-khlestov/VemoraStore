@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Combine
 
 final class ProfileUserViewController: UIViewController {
     
@@ -82,6 +83,10 @@ final class ProfileUserViewController: UIViewController {
     // MARK: - ViewModel
     
     private let viewModel: ProfileUserViewModelProtocol
+    
+    // MARK: - Props
+    
+    private var bag = Set<AnyCancellable>()
     
     // MARK: - UI
     
@@ -185,7 +190,7 @@ final class ProfileUserViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         setupActions()
-        applyUser()
+        bindViewModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -244,8 +249,6 @@ private extension ProfileUserViewController {
     }
     
     func applyUser() {
-        nameLabel.text  = viewModel.userName
-        emailLabel.text = viewModel.userEmail
         
         if let data = viewModel.loadAvatarData(),
            let image = UIImage(data: data) {
@@ -259,6 +262,20 @@ private extension ProfileUserViewController {
             avatarView.clipsToBounds = false
             avatarView.layer.cornerRadius = 0
         }
+    }
+    
+    private func bindViewModel() {
+        viewModel.userNamePublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.nameLabel.text = $0 }
+            .store(in: &bag)
+
+        viewModel.userEmailPublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in self?.emailLabel.text = $0 }
+            .store(in: &bag)
     }
 }
 

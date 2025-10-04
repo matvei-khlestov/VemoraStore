@@ -5,18 +5,20 @@
 //  Created by Matvei Khlestov on 15.09.2025.
 //
 
-// Core/Location/AddressSearchService.swift
 import Foundation
 import MapKit
 
 final class AddressSearchService: NSObject, AddressSearchServiceProtocol {
+    
     private let completer = MKLocalSearchCompleter()
     private(set) var region: MKCoordinateRegion?
     
     // MARK: - Outputs
+    
     var onResultsChanged: (([MKLocalSearchCompletion]) -> Void)?
     
     // MARK: - State
+    
     private(set) var completions: [MKLocalSearchCompletion] = []
     
     override init() {
@@ -60,6 +62,7 @@ final class AddressSearchService: NSObject, AddressSearchServiceProtocol {
 }
 
 // MARK: - MKLocalSearchCompleterDelegate
+
 extension AddressSearchService: MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
         completions = completer.results

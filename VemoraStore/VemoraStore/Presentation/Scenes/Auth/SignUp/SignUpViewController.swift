@@ -160,6 +160,9 @@ final class SignUpViewController: UIViewController {
         wire()
         bind()
         setupKeyboardDismissRecognizer()
+        nameField.textField.text = "John"
+        emailField.textField.text = "john@example.com"
+        passwordField.textField.text = "123456jddj!Nhhhh"
     }
 }
 
