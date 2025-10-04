@@ -174,7 +174,8 @@ extension Container {
             ProfileUserCoordinator(
                 navigation: navigation,
                 viewModelFactory: self.viewModelFactory(),
-                coordinatorFactory: self.coordinatorFactory()
+                coordinatorFactory: self.coordinatorFactory(),
+                authService: self.authService()
             )
         }
     }
@@ -186,7 +187,8 @@ extension Container {
             EditProfileCoordinator(
                 navigation: navigation,
                 viewModelFactory: self.viewModelFactory(),
-                coordinatorFactory: self.coordinatorFactory()
+                coordinatorFactory: self.coordinatorFactory(),
+                authService: self.authService()
             )
         }
     }
@@ -197,7 +199,8 @@ extension Container {
         self { navigation in
             EditNameCoordinator(
                 navigation: navigation,
-                viewModelFactory: self.viewModelFactory()
+                viewModelFactory: self.viewModelFactory(),
+                authService: self.authService()
             )
         }
     }
@@ -208,7 +211,8 @@ extension Container {
         self { navigation in
             EditEmailCoordinator(
                 navigation: navigation,
-                viewModelFactory: self.viewModelFactory()
+                viewModelFactory: self.viewModelFactory(),
+                authService: self.authService()
             )
         }
     }
@@ -220,7 +224,8 @@ extension Container {
             EditPhoneCoordinator(
                 navigation: navigation,
                 viewModelFactory: self.viewModelFactory(),
-                phoneFormatter: self.phoneFormatter()
+                phoneFormatter: self.phoneFormatter(),
+                authService: self.authService()
             )
         }
     }

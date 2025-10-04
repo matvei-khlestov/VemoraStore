@@ -54,24 +54,24 @@ final class ViewModelFactory: ViewModelBuildingProtocol {
     
     // MARK: - Profile
     
-    func makeProfileUserViewModel() -> ProfileUserViewModelProtocol {
-        container.profileUserViewModel()
+    func makeProfileUserViewModel(uid: String) -> ProfileUserViewModelProtocol {
+        container.profileUserViewModel(uid)
     }
     
-    func makeEditProfileViewModel() -> EditProfileViewModelProtocol {
-        container.editProfileViewModel()
+    func makeEditProfileViewModel(userId: String) -> EditProfileViewModelProtocol {
+        container.editProfileViewModel(userId)
     }
     
-    func makeEditNameViewModel() -> EditNameViewModelProtocol {
-        container.editNameViewModel()
+    func makeEditNameViewModel(uid: String) -> EditNameViewModelProtocol {
+        container.editNameViewModel(uid)
     }
     
-    func makeEditEmailViewModel() -> EditEmailViewModelProtocol {
-        container.editEmailViewModel()
+    func makeEditEmailViewModel(userId: String) -> EditEmailViewModelProtocol {
+        container.editEmailViewModel(userId)
     }
     
-    func makeEditPhoneViewModel() -> EditPhoneViewModelProtocol {
-        container.editPhoneViewModel()
+    func makeEditPhoneViewModel(userId: String) -> EditPhoneViewModelProtocol {
+        container.editPhoneViewModel(userId)
     }
     
     // MARK: - Checkout

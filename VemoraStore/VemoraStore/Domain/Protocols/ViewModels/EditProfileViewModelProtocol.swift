@@ -9,11 +9,20 @@ import Foundation
 import Combine
 
 protocol EditProfileViewModelProtocol {
-    var avatarDataPublisher: AnyPublisher<Data?, Never> { get }
-    var name: String { get }
+    // Текущие значения (для первичного заполнения ячеек)
+    var name:  String { get }
     var email: String { get }
     var phone: String { get }
 
+    // Реактивные обновления (чтобы ячейки обновлялись без перезапуска)
+    var namePublisher:  AnyPublisher<String, Never>  { get }
+    var emailPublisher: AnyPublisher<String, Never>  { get }
+    var phonePublisher: AnyPublisher<String, Never>  { get }
+
+    // Аватар
+    var avatarDataPublisher: AnyPublisher<Data?, Never> { get }
+
     func load()
+    
     func saveAvatarData(_ data: Data) async throws
 }

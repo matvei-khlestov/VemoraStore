@@ -39,7 +39,7 @@ final class EditProfileViewController: UIViewController {
             static let cornerRadius: CGFloat = 56
         }
         enum Table {
-            static let rowHeight: CGFloat = 60
+            static let rowHeight: CGFloat = 65
             static let separatorInsets: UIEdgeInsets = .init(
                 top: 0,
                 left: 16,
@@ -267,6 +267,38 @@ private extension EditProfileViewController {
                 ?? UIImage(systemName: Symbols.avatarPlaceholder)
             }
             .store(in: &bag)
+        
+        bindRowPublisher(
+            viewModel.namePublisher,
+            for: .name
+        )
+        bindRowPublisher(
+            viewModel.emailPublisher,
+            for: .email
+        )
+        bindRowPublisher(
+            viewModel.phonePublisher,
+            for: .phone
+        )
+    }
+    
+    func bindRowPublisher(
+        _ publisher: AnyPublisher<String, Never>,
+        for row: EditProfileRow
+    ) {
+        publisher
+            .removeDuplicates()
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.reloadRow(row)
+            }
+            .store(in: &bag)
+    }
+    
+    func reloadRow(_ row: EditProfileRow) {
+        let indexPath = IndexPath(row: row.rawValue, section: 0)
+        guard tableView.indexPathsForVisibleRows?.contains(indexPath) == true else { return }
+        tableView.reloadRows(at: [indexPath], with: .none)
     }
 }
 

@@ -23,23 +23,26 @@ final class ProfileUserCoordinator: ProfileUserCoordinatingProtocol {
     
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
+    private let authService: AuthServiceProtocol
     
     // MARK: - Init
     
     init(
         navigation: UINavigationController,
         viewModelFactory: ViewModelBuildingProtocol,
-        coordinatorFactory: CoordinatorBuildingProtocol
+        coordinatorFactory: CoordinatorBuildingProtocol,
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
         self.coordinatorFactory = coordinatorFactory
+        self.authService = authService
     }
     
     // MARK: - Start
     
     func start() {
-        let viewModel = viewModelFactory.makeProfileUserViewModel()
+        let viewModel = viewModelFactory.makeProfileUserViewModel(uid: authService.currentUserId ?? "")
         let vc = ProfileUserViewController(viewModel: viewModel)
         
         // Роутинг по ячейкам

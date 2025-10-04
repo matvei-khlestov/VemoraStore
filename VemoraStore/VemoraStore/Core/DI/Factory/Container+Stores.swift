@@ -11,12 +11,12 @@ import CoreData
 extension Container {
 
     var persistentContainer: Factory<NSPersistentContainer> {
-        self { AppPersistent.shared }.singleton
+        self { CoreDataStack.shared.container }.singleton
     }
 
     var localStore: Factory<LocalStore> {
         self {
-            LocalStoreCoreData(container: self.persistentContainer())
+            CoreDataLocalStore(container: self.persistentContainer())
         }.singleton
     }
 }

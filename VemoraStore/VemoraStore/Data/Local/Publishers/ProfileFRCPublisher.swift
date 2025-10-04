@@ -9,8 +9,17 @@ import CoreData
 import Combine
 
 final class ProfileFRCPublisher: NSObject, NSFetchedResultsControllerDelegate {
+    
+    // MARK: - Output
+    
     private let subject = CurrentValueSubject<UserProfile?, Never>(nil)
+    func publisher() -> AnyPublisher<UserProfile?, Never> { subject.eraseToAnyPublisher() }
+    
+    // MARK: - FRC
+    
     private let frc: NSFetchedResultsController<CDProfile>
+    
+    // MARK: - Init
     
     init(context: NSManagedObjectContext, userId: String) {
         let req: NSFetchRequest<CDProfile> = CDProfile.fetchRequest()
@@ -24,15 +33,30 @@ final class ProfileFRCPublisher: NSObject, NSFetchedResultsControllerDelegate {
             sectionNameKeyPath: nil,
             cacheName: nil
         )
+        
         super.init()
+        
         frc.delegate = self
-        try? frc.performFetch()
-        subject.send(UserProfile(cd: frc.fetchedObjects?.first))
+        
+        // Если вдруг сюда попадёт не main context, всё равно выполним на его очереди
+        context.perform { [weak self] in
+            guard let self else { return }
+            do {
+                try self.frc.performFetch()
+                self.subject.send(UserProfile(cd: self.frc.fetchedObjects?.first))
+            } catch {
+                // В проде лучше пробросить логгер
+                self.subject.send(nil)
+            }
+        }
     }
     
-    func publisher() -> AnyPublisher<UserProfile?, Never> {
-        subject.eraseToAnyPublisher()
+    deinit {
+        // Чистим делегата
+        frc.delegate = nil
     }
+    
+    // MARK: - NSFetchedResultsControllerDelegate
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         let objects = controller.fetchedObjects as? [CDProfile]

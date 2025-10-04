@@ -101,7 +101,6 @@ class BaseEditFieldViewController: UIViewController {
         wire()
         bind()
         setupKeyboardDismissRecognizer()
-        populateField()
     }
 }
 
@@ -148,7 +147,7 @@ private extension BaseEditFieldViewController {
         field.textField.onReturn(self, action: #selector(submitFromKeyboard))
     }
     
-    func bind() {
+    private func bind() {
         viewModel.error
             .receive(on: RunLoop.main)
             .sink { [weak self] in
@@ -163,20 +162,37 @@ private extension BaseEditFieldViewController {
                 self?.submitButton.setNeedsUpdateConfiguration()
             }
             .store(in: &bag)
-    }
-}
-
-// MARK: - Populate
-
-private extension BaseEditFieldViewController {
-    func populateField() {
-        switch fieldKind {
-        case .phone:
-            let seed = viewModel.currentValue
-            field.setPhoneE164(seed)
-        default:
-            field.textField.text = viewModel.currentValue
+        
+        if let nameVM = viewModel as? EditNameViewModelProtocol {
+            bindField(nameVM.namePublisher) { [weak self] value in
+                self?.field.textField.text = value
+            }
         }
+        
+        if let emailVM = viewModel as? EditEmailViewModelProtocol {
+            bindField(emailVM.emailPublisher) { [weak self] value in
+                self?.field.textField.text = value
+            }
+        }
+        
+        if let phoneVM = viewModel as? EditPhoneViewModelProtocol {
+            bindField(phoneVM.phonePublisher) { [weak self] value in
+                self?.field.setPhoneE164(value)
+            }
+        }
+    }
+    
+    /// Универсальная привязка значения к полю, если поле не в фокусе
+    private func bindField(_ publisher: AnyPublisher<String, Never>,
+                           update: @escaping (String) -> Void) {
+        publisher
+            .removeDuplicates()
+            .receive(on: RunLoop.main)
+            .sink { [weak self] value in
+                guard let self, self.field.textField.isFirstResponder == false else { return }
+                update(value)
+            }
+            .store(in: &bag)
     }
 }
 

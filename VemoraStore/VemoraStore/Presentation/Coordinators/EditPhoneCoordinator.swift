@@ -16,6 +16,7 @@ final class EditPhoneCoordinator: EditPhoneCoordinatingProtocol {
     var childCoordinators: [Coordinator] = []
     
     private let viewModelFactory: ViewModelBuildingProtocol
+    private let authService: AuthServiceProtocol
     
     var onFinish: (() -> Void)?
     
@@ -26,17 +27,19 @@ final class EditPhoneCoordinator: EditPhoneCoordinatingProtocol {
     init(
         navigation: UINavigationController,
         viewModelFactory: ViewModelBuildingProtocol,
-        phoneFormatter: PhoneFormattingProtocol
+        phoneFormatter: PhoneFormattingProtocol,
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
         self.phoneFormatter = phoneFormatter
+        self.authService = authService
     }
     
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeEditPhoneViewModel()
+        let vm = viewModelFactory.makeEditPhoneViewModel(userId: authService.currentUserId ?? "")
         let vc = EditPhoneViewController(
             viewModel: vm,
             phoneFormatter: phoneFormatter

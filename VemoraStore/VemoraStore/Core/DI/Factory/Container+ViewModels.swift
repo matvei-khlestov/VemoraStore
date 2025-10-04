@@ -13,16 +13,14 @@ extension Container {
     // MARK: - Auth
     
     var signUpViewModel: Factory<SignUpViewModelProtocol> {
-            self {
-                let auth = self.authService()
-                let repo = self.profileRepository(auth.currentUserId ?? "")
-                return SignUpViewModel(
-                    auth: auth,
-                    profileRepo: repo,
-                    validator: self.formValidator()
-                )
-            }
+        self {
+            SignUpViewModel(
+                auth: self.authService(),
+                repos: self.repositoryProvider(),
+                validator: self.formValidator()
+            )
         }
+    }
     
     var signInViewModel: Factory<SignInViewModelProtocol> {
         self {
@@ -79,42 +77,53 @@ extension Container {
     
     // MARK: - Profile
     
-    var profileUserViewModel: Factory<ProfileUserViewModelProtocol> {
-        self {
+    var profileUserViewModel: ParameterFactory<String, ProfileUserViewModelProtocol> {
+        self { uid in
             ProfileUserViewModel(
                 auth: self.authService(),
-                avatarStorage: self.avatarStorageService()
+                avatarStorage: self.avatarStorageService(),
+                repos: self.repositoryProvider(),
+                userId: uid
             )
-        }.singleton
+        }
     }
     
-    var editProfileViewModel: Factory<EditProfileViewModelProtocol> {
-        self { EditProfileViewModel(avatarStorage: self.avatarStorageService()) }
+    var editProfileViewModel: ParameterFactory<String, EditProfileViewModelProtocol> {
+        self { userId in
+            EditProfileViewModel(
+                avatarStorage: self.avatarStorageService(),
+                repos: self.repositoryProvider(),
+                userId: userId
+            )
+        }
     }
     
-    var editNameViewModel: Factory<EditNameViewModelProtocol> {
-        self {
+    var editNameViewModel: ParameterFactory<String, EditNameViewModelProtocol> {
+        self { uid in
             EditNameViewModel(
-                profile: self.profileService(),
+                repos: self.repositoryProvider(),
+                userId: uid,
                 validator: self.formValidator()
             )
         }
     }
     
-    var editEmailViewModel: Factory<EditEmailViewModelProtocol> {
-        self {
+    var editEmailViewModel: ParameterFactory<String, EditEmailViewModelProtocol> {
+        self { userId in
             EditEmailViewModel(
-                profile: self.profileService(),
-                validator: self.formValidator()
+                repos: self.repositoryProvider(),
+                validator: self.formValidator(),
+                userId: userId,
             )
         }
     }
     
-    var editPhoneViewModel: Factory<EditPhoneViewModelProtocol> {
-        self {
+    var editPhoneViewModel: ParameterFactory<String, EditPhoneViewModelProtocol> {
+        self { userId in
             EditPhoneViewModel(
-                profile: self.profileService(),
-                validator: self.formValidator()
+                repos: self.repositoryProvider(),
+                validator: self.formValidator(),
+                userId: userId
             )
         }
     }

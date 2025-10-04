@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 protocol ProfileCollectingProtocol: AnyObject {
     func ensureInitialUserProfile(uid: String, name: String, email: String) async throws
@@ -13,4 +14,6 @@ protocol ProfileCollectingProtocol: AnyObject {
     func updateName(uid: String, name: String) async throws
     func updateEmail(uid: String, email: String) async throws
     func updatePhone(uid: String, phone: String) async throws
+    
+    func listenProfile(uid: String) -> AnyPublisher<ProfileDTO?, Never>
 }
