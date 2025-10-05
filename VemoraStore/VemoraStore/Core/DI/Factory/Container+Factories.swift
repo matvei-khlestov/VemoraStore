@@ -20,7 +20,7 @@ extension Container {
         self { CoordinatorFactory(container: self) }.singleton
     }
     
-    var repositoryProvider: Factory<RepositoryFactoryProtocol> {
+    var repositoryFactory: Factory<RepositoryFactoryProtocol> {
         self { RepositoryFactory(container: self) }.singleton
     }
 }

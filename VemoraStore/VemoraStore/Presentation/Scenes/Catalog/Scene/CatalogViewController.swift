@@ -59,7 +59,7 @@ final class CatalogViewController: UIViewController {
         static let categoryInterGroupSpacing: CGFloat = 12
         
         // Products
-        static let productsRowSpacing: CGFloat = 6
+        static let productsRowSpacing: CGFloat = 1
         static let productsInsets = NSDirectionalEdgeInsets(
             top: 8,
             leading: 8,
@@ -109,6 +109,7 @@ final class CatalogViewController: UIViewController {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
