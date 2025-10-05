@@ -16,7 +16,7 @@ extension Container {
         self {
             SignUpViewModel(
                 auth: self.authService(),
-                repos: self.repositoryProvider(),
+                repos: self.repositoryFactory(),
                 validator: self.formValidator()
             )
         }
@@ -82,7 +82,7 @@ extension Container {
             ProfileUserViewModel(
                 auth: self.authService(),
                 avatarStorage: self.avatarStorageService(),
-                repos: self.repositoryProvider(),
+                repos: self.repositoryFactory(),
                 userId: uid
             )
         }
@@ -92,7 +92,7 @@ extension Container {
         self { userId in
             EditProfileViewModel(
                 avatarStorage: self.avatarStorageService(),
-                repos: self.repositoryProvider(),
+                repos: self.repositoryFactory(),
                 userId: userId
             )
         }
@@ -101,7 +101,7 @@ extension Container {
     var editNameViewModel: ParameterFactory<String, EditNameViewModelProtocol> {
         self { uid in
             EditNameViewModel(
-                repos: self.repositoryProvider(),
+                repos: self.repositoryFactory(),
                 userId: uid,
                 validator: self.formValidator()
             )
@@ -111,7 +111,7 @@ extension Container {
     var editEmailViewModel: ParameterFactory<String, EditEmailViewModelProtocol> {
         self { userId in
             EditEmailViewModel(
-                repos: self.repositoryProvider(),
+                repos: self.repositoryFactory(),
                 validator: self.formValidator(),
                 userId: userId,
             )
@@ -121,7 +121,7 @@ extension Container {
     var editPhoneViewModel: ParameterFactory<String, EditPhoneViewModelProtocol> {
         self { userId in
             EditPhoneViewModel(
-                repos: self.repositoryProvider(),
+                repos: self.repositoryFactory(),
                 validator: self.formValidator(),
                 userId: userId
             )
