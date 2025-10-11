@@ -12,7 +12,7 @@ protocol ProductDetailsViewModelProtocol: AnyObject {
     var title: String { get }
     var description: String { get }
     var priceText: String { get }
-    var imageURL: URL? { get }
+    var imageURL: String? { get }
     var isFavorite: Bool { get }
     
     // MARK: - Actions

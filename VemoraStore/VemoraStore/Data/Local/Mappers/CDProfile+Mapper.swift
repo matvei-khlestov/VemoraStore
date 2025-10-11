@@ -1,8 +1,8 @@
 //
-//  CDProfile+CoreDataMapper.swift
+//  CDProfile+Mapper.swift
 //  VemoraStore
 //
-//  Created by Matvei Khlestov on 04.10.2025.
+//  Created by Matvei Khlestov on 06.10.2025.
 //
 
 import CoreData
@@ -14,6 +14,14 @@ extension CDProfile {
         email = dto.email
         phone = dto.phone
         updatedAt = dto.updatedAt
+    }
+    
+    func matches(_ dto: ProfileDTO) -> Bool {
+        (userId ?? "") == dto.userId &&
+        (name ?? "") == dto.name   &&
+        (email ?? "") == dto.email  &&
+        (phone ?? "") == dto.phone  &&
+        (updatedAt ?? .distantPast) == dto.updatedAt
     }
 }
 

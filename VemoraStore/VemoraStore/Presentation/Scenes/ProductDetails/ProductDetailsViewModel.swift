@@ -9,13 +9,13 @@ import Foundation
 
 final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     
-    private let product: ProductTest
+    private let product: Product
     private let favoritesService: FavoritesServiceProtocol
     private let cartService: CartServiceProtocol
     
     // MARK: - Init
     init(
-        product: ProductTest,
+        product: Product,
         favoritesService: FavoritesServiceProtocol,
         cartService: CartServiceProtocol
     ) {
@@ -39,7 +39,7 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     }
     
     /// Картинка товара (для контроллера, если подключишь загрузку изображений)
-    var imageURL: URL? { product.image }
+    var imageURL: String? { product.imageURL }
     
     /// Текущее состояние избранного
     var isFavorite: Bool { favoritesService.isFavorite(product.id) }

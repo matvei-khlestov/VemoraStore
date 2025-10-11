@@ -12,7 +12,7 @@ final class FavoritesViewController: UIViewController {
     
     // MARK: - Public Callbacks
     
-    var onSelectProduct: ((ProductTest) -> Void)?
+    var onSelectProduct: ((Product) -> Void)?
     
     // MARK: - Dependencies
     
@@ -73,7 +73,7 @@ final class FavoritesViewController: UIViewController {
     
     // MARK: - State
     
-    private var items: [ProductTest] = [] { didSet { updateEmptyState() } }
+    private var items: [Product] = [] { didSet { updateEmptyState() } }
     private var bag = Set<AnyCancellable>()
     /// Чтобы не делать reloadData во время анимированных апдейтов строк
     private var isPerformingRowUpdate = false

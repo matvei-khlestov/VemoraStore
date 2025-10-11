@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct Category: Codable {
+struct Category: Codable, Equatable {
     let id: String
     let name: String
     let imageURL: String
     let brandIds: [String]
     let isActive: Bool
-    let createdAt: String?
-    let updatedAt: String?
+    let createdAt: String
+    let updatedAt: String
 }

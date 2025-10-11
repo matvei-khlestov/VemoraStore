@@ -21,7 +21,7 @@ enum OrderStatus: String {
 // MARK: - Позиция заказа
 struct OrderItem {
     /// Товар (из каталога)
-    let product: ProductTest
+    let product: Product
     /// Количество единиц товара
     let quantity: Int
 }

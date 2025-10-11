@@ -8,8 +8,8 @@
 import Foundation
 
 /// Элемент корзины
-struct CartItem: Identifiable, Equatable {
+struct CartItem: Identifiable {
     let id: String
-    let product: ProductTest
+    let product: Product
     var quantity: Int
 }

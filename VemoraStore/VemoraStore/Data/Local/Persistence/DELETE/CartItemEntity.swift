@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct CartItemEntity: Identifiable, Equatable {
+struct CartItemEntity: Identifiable {
     let id: String
-    let product: ProductTest
+    let product: Product
     var quantity: Int
     
     var totalPrice: Double {

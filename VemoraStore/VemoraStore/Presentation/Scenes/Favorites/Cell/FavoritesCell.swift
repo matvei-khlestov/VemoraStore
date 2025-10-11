@@ -33,19 +33,22 @@ final class FavoritesCell: UITableViewCell {
                 top: 12, left: 16, bottom: 12, right: 16
             )
         }
+        
         enum Spacing {
             static let rightColumn: CGFloat = 8
             static let actionsRow: CGFloat = 8
             static let thumbToRightColumn: CGFloat = 12
         }
+        
         enum Sizes {
             static let thumbWidth: CGFloat = 108
             static let thumbHeight: CGFloat = 106
             static let thumbCornerRadius: CGFloat = 12
         }
+        
         enum Fonts {
             static let title: UIFont = .systemFont(ofSize: 16, weight: .semibold)
-            static let category: UIFont = .systemFont(ofSize: 12, weight: .regular)
+            static let brand: UIFont = .systemFont(ofSize: 13, weight: .regular)
             static let price: UIFont = .systemFont(ofSize: 18, weight: .bold)
         }
     }
@@ -70,9 +73,9 @@ final class FavoritesCell: UITableViewCell {
         )
     }()
     
-    private let categoryLabel: UILabel = {
+    private let brandLabel: UILabel = {
         FavoritesCell.makeLabel(
-            font: Metrics.Fonts.category,
+            font: Metrics.Fonts.brand,
             textColor: .secondaryLabel,
             numberOfLines: 1,
             compressionResistance: .required
@@ -133,7 +136,7 @@ final class FavoritesCell: UITableViewCell {
         super.prepareForReuse()
         thumbImageView.image = nil
         titleLabel.text = nil
-        categoryLabel.text = nil
+        brandLabel.text = nil
         priceLabel.text = nil
         setInCart(false, animated: false)
     }
@@ -153,7 +156,7 @@ private extension FavoritesCell {
         contentView.addSubviews(thumbImageView, rightStack)
         
         rightStack.addArrangedSubviews(
-            categoryLabel,
+            brandLabel,
             titleLabel,
             priceLabel,
             actionsRow
@@ -230,10 +233,10 @@ private extension FavoritesCell {
 // MARK: - Configure API
 
 extension FavoritesCell {
-    func configure(with product: ProductTest, isInCart: Bool = false) {
+    func configure(with product: Product, isInCart: Bool = false) {
         titleLabel.text = product.name
-        categoryLabel.text = product.categoryId
-        priceLabel.text = String(format: "$%.2f", product.price)
+        brandLabel.text = product.brandId
+        priceLabel.text = "\(product.price) ₽"
         
         // thumbImageView.kf.setImage(with: product.image)
         thumbImageView.image = UIImage(resource: .divan) // заглушка

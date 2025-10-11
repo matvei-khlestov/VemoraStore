@@ -13,9 +13,7 @@ final class EditProfileViewModel: EditProfileViewModelProtocol {
     // MARK: - Deps
     
     private let avatarStorage: AvatarStorageServiceProtocol
-    private let repos: RepositoryFactoryProtocol
     private let userId: String
-   
     private let profileRepository: ProfileRepository
     
     // MARK: - State
@@ -49,14 +47,13 @@ final class EditProfileViewModel: EditProfileViewModelProtocol {
     
     init(
         avatarStorage: AvatarStorageServiceProtocol,
-        repos: RepositoryFactoryProtocol,
+        profileRepository: ProfileRepository,
         userId: String
     ) {
         self.avatarStorage = avatarStorage
-        self.repos = repos
+        self.profileRepository = profileRepository
         self.userId = userId
-        self.profileRepository = repos.profileRepository(for: userId)
-        
+
         bindProfile()
     }
     

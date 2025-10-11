@@ -15,4 +15,8 @@ extension Container {
     var profileCollection: Factory<ProfileCollectingProtocol> {
         self { ProfileCollection() }.singleton
     }
+    
+    var catalogCollection: Factory<CatalogCollectingProtocol> {
+        self { CatalogCollections() }.singleton
+    }
 }

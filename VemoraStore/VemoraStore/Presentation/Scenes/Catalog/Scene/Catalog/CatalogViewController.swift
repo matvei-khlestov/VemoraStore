@@ -19,9 +19,11 @@ final class CatalogViewController: UIViewController {
     
     // MARK: - Callbacks
     
-    var onSelectProduct: ((ProductTest) -> Void)?
-    var onAddToCart: ((ProductTest) -> Void)?
-    var onToggleFavorite: ((ProductTest) -> Void)?
+    var onSelectProduct: ((Product) -> Void)?
+    var onAddToCart: ((Product) -> Void)?
+    var onToggleFavorite: ((Product) -> Void)?
+    var onFilterTap: ((FilterState) -> Void)?
+    var onSelectCategory: ((Category) -> Void)?
     
     // MARK: - Deps
     
@@ -51,20 +53,14 @@ final class CatalogViewController: UIViewController {
         static let categoryItemWidth: CGFloat = 88
         static let categoryItemHeight: CGFloat = 110
         static let categoryInsets = NSDirectionalEdgeInsets(
-            top: 12,
-            leading: 12,
-            bottom: 8,
-            trailing: 12
+            top: 12, leading: 12, bottom: 8, trailing: 12
         )
         static let categoryInterGroupSpacing: CGFloat = 12
         
         // Products
         static let productsRowSpacing: CGFloat = 1
         static let productsInsets = NSDirectionalEdgeInsets(
-            top: 8,
-            leading: 8,
-            bottom: 16,
-            trailing: 8
+            top: 8, leading: 8, bottom: 16, trailing: 8
         )
         static let productsHeaderHeight: CGFloat = 44
         static let productsEstimatedItemHeight: CGFloat = 325
@@ -82,7 +78,6 @@ final class CatalogViewController: UIViewController {
         view.showsVerticalScrollIndicator = false
         view.dataSource = self
         view.delegate = self
-        
         view.register([ProductCell.self, CategoryCell.self])
         view.register(
             CatalogSectionHeader.self,
@@ -136,7 +131,7 @@ final class CatalogViewController: UIViewController {
 
 private extension CatalogViewController {
     func setupAppearance() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGroupedBackground
     }
     
     func setupHierarchy() {
@@ -173,9 +168,12 @@ private extension CatalogViewController {
     
     func bindViewModel() {
         viewModel.categoriesPublisher
-            .combineLatest(viewModel.productsPublisher)
+            .combineLatest(
+                viewModel.productsPublisher,
+                viewModel.activeFiltersCountPublisher
+            )
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _, _ in
+            .sink { [weak self] _, _, _ in
                 self?.collectionView.reloadData()
             }
             .store(in: &bag)
@@ -197,11 +195,7 @@ private extension CatalogViewController {
     
     func makeLayout() -> UICollectionViewCompositionalLayout {
         let layout = UICollectionViewCompositionalLayout { [weak self] sectionIndex, env in
-            guard
-                let self,
-                let section = Section(rawValue: sectionIndex)
-            else { return nil }
-            
+            guard let self, let section = Section(rawValue: sectionIndex) else { return nil }
             switch section {
             case .categories:
                 return self.makeCategoriesSection()
@@ -213,20 +207,29 @@ private extension CatalogViewController {
         return layout
     }
     
-    // MARK: Sections
-    
     func makeCategoriesSection() -> NSCollectionLayoutSection {
         let itemSize = NSCollectionLayoutSize(
-            widthDimension: .absolute(CompositionLayout.categoryItemWidth),
-            heightDimension: .estimated(CompositionLayout.categoryItemHeight)
+            widthDimension: .absolute(
+                CompositionLayout.categoryItemWidth
+            ),
+            heightDimension: .estimated(
+                CompositionLayout.categoryItemHeight
+            )
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(
-            widthDimension: .estimated(CompositionLayout.categoryItemWidth),
-            heightDimension: .estimated(CompositionLayout.categoryItemHeight)
+            widthDimension: .estimated(
+                CompositionLayout.categoryItemWidth
+            ),
+            heightDimension: .estimated(
+                CompositionLayout.categoryItemHeight
+            )
         )
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems: [item])
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: groupSize,
+            subitems: [item]
+        )
         
         let section = NSCollectionLayoutSection(group: group)
         section.orthogonalScrollingBehavior = .continuous
@@ -239,6 +242,7 @@ private extension CatalogViewController {
     func makeProductsSection(
         environment env: NSCollectionLayoutEnvironment
     ) -> NSCollectionLayoutSection {
+        
         let containerWidth = env.container.effectiveContentSize.width
         let availableWidth = containerWidth - CompositionLayout.productsInsets.horizontal
         let columns = max(2, Int(availableWidth / CompositionLayout.minColumnWidth))
@@ -246,19 +250,25 @@ private extension CatalogViewController {
         
         let itemSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(fraction),
-            heightDimension: .estimated(CompositionLayout.productsEstimatedItemHeight)
+            heightDimension: .estimated(
+                CompositionLayout.productsEstimatedItemHeight
+            )
         )
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
         let groupSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .estimated(CompositionLayout.productsEstimatedGroupHeight)
+            heightDimension: .estimated(
+                CompositionLayout.productsEstimatedGroupHeight
+            )
         )
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: groupSize,
             subitems: Array(repeating: item, count: columns)
         )
-        group.interItemSpacing = .fixed(CompositionLayout.productsRowSpacing)
+        group.interItemSpacing = .fixed(
+            CompositionLayout.productsRowSpacing
+        )
         
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = CompositionLayout.productsInsets
@@ -268,7 +278,9 @@ private extension CatalogViewController {
         // Header
         let headerSize = NSCollectionLayoutSize(
             widthDimension: .fractionalWidth(1.0),
-            heightDimension: .absolute(CompositionLayout.productsHeaderHeight)
+            heightDimension: .absolute(
+                CompositionLayout.productsHeaderHeight
+            )
         )
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: headerSize,
@@ -285,8 +297,13 @@ private extension CatalogViewController {
 // MARK: - Helpers
 
 private extension NSDirectionalEdgeInsets {
-    var horizontal: CGFloat { leading + trailing }
-    var vertical: CGFloat { top + bottom }
+    var horizontal: CGFloat {
+        leading + trailing
+    }
+    
+    var vertical: CGFloat {
+        top + bottom
+    }
 }
 
 // MARK: - UICollectionViewDataSource
@@ -312,11 +329,8 @@ extension CatalogViewController: UICollectionViewDataSource {
         case .categories:
             let cell = collectionView.dequeueReusableCell(CategoryCell.self, for: indexPath)
             let category = viewModel.categories[indexPath.item]
-            cell.configure(
-                title: category.title,
-                count: category.count,
-                imageURL: category.imageURL
-            )
+            let count = viewModel.productCount(in: category.id)
+            cell.configure(category: category, count: count)
             return cell
             
         case .products:
@@ -338,6 +352,12 @@ extension CatalogViewController: UICollectionViewDataSource {
         let header: CatalogSectionHeader = collectionView.dequeueReusableSupplementaryView(
             CatalogSectionHeader.self, ofKind: kind, for: indexPath
         )
+        header.onFilterTap = { [weak self] in
+            guard let self else { return }
+            self.onFilterTap?(self.viewModel.currentState)
+        }
+        
+        header.setFilterCount(viewModel.activeFiltersCount)
         return header
     }
 }
@@ -345,9 +365,17 @@ extension CatalogViewController: UICollectionViewDataSource {
 // MARK: - UICollectionViewDelegate
 
 extension CatalogViewController: UICollectionViewDelegate {
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        guard Section(rawValue: indexPath.section) == .products else { return }
-        onSelectProduct?(viewModel.products[indexPath.item])
+    func collectionView(
+        _ collectionView: UICollectionView,
+        didSelectItemAt indexPath: IndexPath
+    ) {
+        guard let section = Section(rawValue: indexPath.section) else { return }
+        switch section {
+        case .categories:
+            onSelectCategory?(viewModel.categories[indexPath.item])
+        case .products:
+            onSelectProduct?(viewModel.products[indexPath.item])
+        }
     }
 }
 

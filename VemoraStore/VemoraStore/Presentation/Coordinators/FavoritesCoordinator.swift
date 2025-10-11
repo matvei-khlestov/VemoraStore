@@ -46,7 +46,7 @@ final class FavoritesCoordinator: FavoritesCoordinatingProtocol {
 
     // MARK: - Private
     
-    private func showProductDetails(for product: ProductTest) {
+    private func showProductDetails(for product: Product) {
         let details = coordinatorFactory.makeProductDetailsCoordinator(
             navigation: navigation,
             product: product

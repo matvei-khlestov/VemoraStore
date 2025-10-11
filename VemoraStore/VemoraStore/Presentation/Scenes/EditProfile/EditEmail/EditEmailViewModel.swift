@@ -12,7 +12,7 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
     
     // MARK: - Deps
     
-    private let repos: RepositoryFactoryProtocol
+    private let profileRepository: ProfileRepository
     private let userId: String
     private let validator: FormValidatingProtocol
     
@@ -27,14 +27,14 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
     // MARK: - Init
     
     init(
-        repos: RepositoryFactoryProtocol,
+        profileRepository: ProfileRepository,
         validator: FormValidatingProtocol,
-        userId: String,
+        userId: String
     ) {
-        self.repos = repos
+        self.profileRepository = profileRepository
         self.validator = validator
         self.userId = userId
-        
+
         bindProfile()
     }
     
@@ -85,9 +85,7 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
             )
         }
         
-        try await repos
-            .profileRepository(for: userId)
-            .updateEmail(uid: userId, email: email)
+        try await profileRepository.updateEmail(uid: userId, email: email)
         
         await MainActor.run {
             self.initialEmail = self.email
@@ -95,10 +93,8 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
     }
     
     private func bindProfile() {
-        let repo = repos.profileRepository(for: userId)
-        
         // подтягиваем e-mail из Firebase через репозиторий
-        repo.observeProfile()
+        profileRepository.observeProfile()
             .compactMap { $0 }
             .prefix(1) // только первый раз для начального значения
             .receive(on: DispatchQueue.main)

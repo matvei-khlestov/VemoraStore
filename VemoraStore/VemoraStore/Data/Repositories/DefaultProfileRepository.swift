@@ -13,7 +13,7 @@ final class DefaultProfileRepository: ProfileRepository {
     // MARK: - Deps
     
     private let remote: ProfileCollectingProtocol
-    private let local: LocalStore
+    private let local: ProfileLocalStore
     private let userId: String
     
     // MARK: - State
@@ -25,7 +25,7 @@ final class DefaultProfileRepository: ProfileRepository {
     
     init(
         remote: ProfileCollectingProtocol,
-        local: LocalStore,
+        local: ProfileLocalStore,
         userId: String
     ) {
         self.remote = remote

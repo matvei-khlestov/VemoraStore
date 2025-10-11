@@ -10,12 +10,12 @@ import Foundation
 
 protocol FavoritesViewModelProtocol: AnyObject {
     // Outputs
-    var favoriteProductsPublisher: AnyPublisher<[ProductTest], Never> { get }
+    var favoriteProductsPublisher: AnyPublisher<[Product], Never> { get }
     var inCartIdsPublisher: AnyPublisher<Set<String>, Never> { get }
     
     // Snapshot-доступ для dataSource
     var count: Int { get }
-    func product(at indexPath: IndexPath) -> ProductTest
+    func product(at indexPath: IndexPath) -> Product
     
     // Actions
     func isFavorite(_ id: String) -> Bool

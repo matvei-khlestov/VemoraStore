@@ -7,6 +7,7 @@
 
 
 import UIKit
+import Kingfisher
 
 protocol ProductCellDelegate: AnyObject {
     func productCellDidTapFavorite(_ cell: ProductCell)
@@ -36,12 +37,14 @@ final class ProductCell: UICollectionViewCell {
             static let image: CGFloat = 12
             static let favoriteBG: CGFloat = 16.5
         }
+        
         enum Shadow {
             static let color: CGColor = UIColor.black.withAlphaComponent(0.06).cgColor
             static let radius: CGFloat = 8
             static let opacity: Float = 1
             static let offset: CGSize = .init(width: 0, height: 4)
         }
+        
         enum Insets {
             static let cardHorizontal: CGFloat = 6
             static let cardVertical: CGFloat = 6
@@ -49,32 +52,37 @@ final class ProductCell: UICollectionViewCell {
             static let imageHorizontal: CGFloat = 12
             static let imageTop: CGFloat = 12
             
-            static let favoriteTop: CGFloat = 8
-            static let favoriteTrailing: CGFloat = 8
+            static let favoriteTop: CGFloat = 6
+            static let favoriteTrailing: CGFloat = 6
             
             static let labelsHorizontal: CGFloat = 16
             static let addToCartLeading: CGFloat = 12
             static let addToCartBottom: CGFloat = 16
         }
+        
         enum Spacing {
-            static let categoryToTitle: CGFloat = 6
             static let titleToPrice: CGFloat = 6
             static let imageToCategory: CGFloat = 10
         }
+        
         enum Sizes {
             static let favoriteBG: CGFloat = 33
         }
+        
         enum Fonts {
-            static let category: UIFont = .systemFont(ofSize: 12, weight: .regular)
-            static let price: UIFont = .systemFont(ofSize: 20, weight: .bold)
-            static let title: UIFont = .systemFont(ofSize: 14, weight: .semibold)
+            static let price: UIFont = .systemFont(ofSize: 18, weight: .bold)
+            static let title: UIFont = .systemFont(ofSize: 15, weight: .semibold)
+            static let brand: UIFont = .systemFont(ofSize: 13, weight: .regular)
         }
+        
         enum Colors {
-            static let imagePlaceholderBackground: UIColor = .black
+            static let imagePlaceholderBackground: UIColor = .white
         }
+        
         enum FavoriteButton {
             static let pointSize: CGFloat = 17
         }
+        
         enum Animations {
             static let highlightScaleDown: CGFloat = 0.98
             static let highlightDuration: TimeInterval = 0.12
@@ -85,7 +93,7 @@ final class ProductCell: UICollectionViewCell {
     
     private let cardView: UIView = {
         let view = UIView()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemGroupedBackground
         view.layer.cornerRadius = Metrics.Corners.card
         view.layer.masksToBounds = false
         view.layer.shadowColor = Metrics.Shadow.color
@@ -101,7 +109,6 @@ final class ProductCell: UICollectionViewCell {
         view.clipsToBounds = true
         view.layer.cornerRadius = Metrics.Corners.image
         view.backgroundColor = Metrics.Colors.imagePlaceholderBackground
-        view.image = UIImage(resource: .divan) // заглушка
         return view
     }()
     
@@ -112,25 +119,18 @@ final class ProductCell: UICollectionViewCell {
         return button
     }()
     
-    private let favoriteBG: BlurredIconBackground = {
-        let view = BlurredIconBackground(
-            cornerRadius: Metrics.Corners.favoriteBG
-        )
-        return view
-    }()
-    
-    private let categoryLabel: UILabel = {
-        let label = ProductCell.makeLabel(
-            font: Metrics.Fonts.category,
-            textColor: .secondaryLabel
-        )
-        return label
-    }()
-    
     private let priceLabel: UILabel = {
         let label =  ProductCell.makeLabel(
             font: Metrics.Fonts.price,
             textColor: .brightPurple
+        )
+        return label
+    }()
+    
+    private let brandLabel: UILabel = {
+        let label = ProductCell.makeLabel(
+            font: Metrics.Fonts.brand,
+            textColor: .secondaryLabel
         )
         return label
     }()
@@ -166,7 +166,7 @@ final class ProductCell: UICollectionViewCell {
         super.prepareForReuse()
         imageView.image = UIImage(resource: .divan)
         titleLabel.text = nil
-        categoryLabel.text = nil
+        brandLabel.text = nil
         priceLabel.text = nil
         setFavorite(false, animated: false)
         setInCart(false, animated: false)
@@ -196,15 +196,12 @@ private extension ProductCell {
         
         cardView.addSubviews(
             imageView,
-            favoriteBG,
-            categoryLabel,
+            favoriteButton,
+            brandLabel,
             titleLabel,
             priceLabel,
             addToCartButton
         )
-        
-        // favorite button into blurred background
-        favoriteBG.embed(favoriteButton)
     }
     
     func setupLayout() {
@@ -226,9 +223,9 @@ private extension ProductCell {
     func prepareForAutoLayout() {
         [cardView,
          imageView,
-         favoriteBG,
-         categoryLabel,
+         favoriteButton,
          priceLabel,
+         brandLabel,
          titleLabel,
          addToCartButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -274,58 +271,53 @@ private extension ProductCell {
                 equalTo: imageView.widthAnchor
             ),
             
-            favoriteBG.topAnchor.constraint(
+            favoriteButton.topAnchor.constraint(
                 equalTo: imageView.topAnchor,
                 constant: Metrics.Insets.favoriteTop
             ),
-            favoriteBG.trailingAnchor.constraint(
+            favoriteButton.trailingAnchor.constraint(
                 equalTo: imageView.trailingAnchor,
                 constant: -Metrics.Insets.favoriteTrailing
-            ),
-            favoriteBG.widthAnchor.constraint(
-                equalToConstant: Metrics.Sizes.favoriteBG
-            ),
-            favoriteBG.heightAnchor.constraint(
-                equalToConstant: Metrics.Sizes.favoriteBG
             )
         ])
     }
     
     func setupInfoSectionConstraints() {
         NSLayoutConstraint.activate([
-            categoryLabel.topAnchor.constraint(
+            brandLabel.topAnchor.constraint(
                 equalTo: imageView.bottomAnchor,
                 constant: Metrics.Spacing.imageToCategory
             ),
-            categoryLabel.leadingAnchor.constraint(
+            brandLabel.leadingAnchor.constraint(
                 equalTo: cardView.leadingAnchor,
                 constant: Metrics.Insets.labelsHorizontal
             ),
-            categoryLabel.trailingAnchor.constraint(
+            brandLabel.trailingAnchor.constraint(
                 equalTo: cardView.trailingAnchor,
                 constant: -Metrics.Insets.labelsHorizontal
             ),
             
             titleLabel.topAnchor.constraint(
-                equalTo: categoryLabel.bottomAnchor,
-                constant: Metrics.Spacing.categoryToTitle
+                equalTo: brandLabel.bottomAnchor,
+                constant: 4
             ),
             titleLabel.leadingAnchor.constraint(
-                equalTo: categoryLabel.leadingAnchor
+                equalTo: cardView.leadingAnchor,
+                constant: Metrics.Insets.labelsHorizontal
             ),
             titleLabel.trailingAnchor.constraint(
                 equalTo: cardView.trailingAnchor,
                 constant: -Metrics.Insets.labelsHorizontal
             ),
-            
+
             priceLabel.topAnchor.constraint(
                 equalTo: titleLabel.bottomAnchor,
                 constant: Metrics.Spacing.titleToPrice
             ),
             priceLabel.leadingAnchor.constraint(
-                equalTo: categoryLabel.leadingAnchor
+                equalTo: titleLabel.leadingAnchor
             ),
-            
+
             addToCartButton.leadingAnchor.constraint(
                 equalTo: cardView.leadingAnchor,
                 constant: Metrics.Insets.addToCartLeading
@@ -342,14 +334,15 @@ private extension ProductCell {
 
 extension ProductCell {
     func configure(
-        with product: ProductTest,
+        with product: Product,
         isFavorite: Bool = false,
         isInCart: Bool = false
     ) {
         titleLabel.text = product.name
-        categoryLabel.text = product.categoryId
-        priceLabel.text = String(format: "$%.2f", product.price)
-        // imageView.kf.setImage(with: product.image)
+        brandLabel.text = product.brandId
+        priceLabel.text = "\(product.price) ₽"
+        let url = URL(string: product.imageURL)
+        imageView.kf.setImage(with: url)
         
         setFavorite(isFavorite, animated: false)
         setInCart(isInCart, animated: false)

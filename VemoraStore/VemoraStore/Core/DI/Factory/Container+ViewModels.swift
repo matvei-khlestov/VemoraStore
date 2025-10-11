@@ -16,8 +16,10 @@ extension Container {
         self {
             SignUpViewModel(
                 auth: self.authService(),
-                repos: self.repositoryFactory(),
-                validator: self.formValidator()
+                validator: self.formValidator(),
+                makeProfileRepository: { uid in
+                    self.profileRepository(uid)
+                }
             )
         }
     }
@@ -43,15 +45,32 @@ extension Container {
     // MARK: - Catalog
     
     var catalogViewModel: Factory<CatalogViewModelProtocol> {
-        self { CatalogViewModel(productService: self.productService()) }.singleton
+        self {
+            CatalogViewModel(repository: self.catalogRepository())
+        }.singleton
+    }
+
+    var catalogFilterViewModel: Factory<CatalogFilterViewModelProtocol> {
+        self {
+            CatalogFilterViewModel(repository: self.catalogRepository())
+        }
     }
     
-    var productDetailsViewModel: ParameterFactory<ProductTest, ProductDetailsViewModelProtocol> {
+    var productDetailsViewModel: ParameterFactory<Product, ProductDetailsViewModelProtocol> {
         self { product in
             ProductDetailsViewModel(
                 product: product,
                 favoritesService: self.favoritesService(),
                 cartService: self.cartService()
+            )
+        }
+    }
+
+    var categoryProductsViewModel: ParameterFactory<String, CategoryProductsViewModelProtocol> {
+        self { categoryId in
+            CategoryProductsViewModel(
+                repository: self.catalogRepository(),
+                categoryId: categoryId
             )
         }
     }
@@ -82,7 +101,7 @@ extension Container {
             ProfileUserViewModel(
                 auth: self.authService(),
                 avatarStorage: self.avatarStorageService(),
-                repos: self.repositoryFactory(),
+                profileRepository: self.profileRepository(uid),
                 userId: uid
             )
         }
@@ -92,7 +111,7 @@ extension Container {
         self { userId in
             EditProfileViewModel(
                 avatarStorage: self.avatarStorageService(),
-                repos: self.repositoryFactory(),
+                profileRepository: self.profileRepository(userId),
                 userId: userId
             )
         }
@@ -101,7 +120,7 @@ extension Container {
     var editNameViewModel: ParameterFactory<String, EditNameViewModelProtocol> {
         self { uid in
             EditNameViewModel(
-                repos: self.repositoryFactory(),
+                profileRepository: self.profileRepository(uid),
                 userId: uid,
                 validator: self.formValidator()
             )
@@ -111,7 +130,7 @@ extension Container {
     var editEmailViewModel: ParameterFactory<String, EditEmailViewModelProtocol> {
         self { userId in
             EditEmailViewModel(
-                repos: self.repositoryFactory(),
+                profileRepository: self.profileRepository(userId),
                 validator: self.formValidator(),
                 userId: userId,
             )
@@ -121,7 +140,7 @@ extension Container {
     var editPhoneViewModel: ParameterFactory<String, EditPhoneViewModelProtocol> {
         self { userId in
             EditPhoneViewModel(
-                repos: self.repositoryFactory(),
+                profileRepository: self.profileRepository(userId),
                 validator: self.formValidator(),
                 userId: userId
             )

@@ -12,9 +12,18 @@ extension Container {
         self { uid in
             DefaultProfileRepository(
                 remote: self.profileCollection(),
-                local: self.localStore(),
+                local: self.profileLocalStore(),
                 userId: uid
             )
         }
+    }
+    
+    var catalogRepository: Factory<CatalogRepository> {
+        self {
+            DefaultCatalogRepository(
+                remote: self.catalogCollection(),
+                local: self.catalogLocalStore()
+            )
+        }.singleton
     }
 }

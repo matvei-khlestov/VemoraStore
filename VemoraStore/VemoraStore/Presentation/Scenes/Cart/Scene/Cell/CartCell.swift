@@ -53,7 +53,7 @@ final class CartCell: UITableViewCell {
         }
         enum Fonts {
             static let title: UIFont = .systemFont(ofSize: 16, weight: .semibold)
-            static let category: UIFont = .systemFont(ofSize: 12, weight: .regular)
+            static let brand: UIFont = .systemFont(ofSize: 13, weight: .regular)
             static let price: UIFont = .systemFont(ofSize: 18, weight: .bold)
             static let quantity: UIFont = .systemFont(ofSize: 15, weight: .semibold)
         }
@@ -97,9 +97,9 @@ final class CartCell: UITableViewCell {
         return label
     }()
     
-    private let categoryLabel: UILabel = {
+    private let brandLabel: UILabel = {
         let label =  CartCell.makeLabel(
-            font: Metrics.Fonts.category,
+            font: Metrics.Fonts.brand,
             textColor: .secondaryLabel,
             numberOfLines: 1,
             compressionResistance: .required
@@ -193,7 +193,7 @@ final class CartCell: UITableViewCell {
         super.prepareForReuse()
         thumbImageView.image = nil
         titleLabel.text = nil
-        categoryLabel.text = nil
+        brandLabel.text = nil
         priceLabel.text = nil
         setQuantity(1, notify: false)
     }
@@ -220,7 +220,7 @@ private extension CartCell {
         
         // Внутренняя иерархия
         rightStack.addArrangedSubviews(
-            categoryLabel,
+            brandLabel,
             titleLabel,
             priceLabel,
             actionsRow
@@ -246,7 +246,7 @@ private extension CartCell {
         
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
         priceLabel.setContentCompressionResistancePriority(.required, for: .vertical)
-        categoryLabel.setContentCompressionResistancePriority(.required, for: .vertical)
+        brandLabel.setContentCompressionResistancePriority(.required, for: .vertical)
     }
     
     func setupActions() {
@@ -352,10 +352,10 @@ private extension CartCell {
 // MARK: - Configure API
 
 extension CartCell {
-    func configure(with product: ProductTest, quantity: Int) {
+    func configure(with product: Product, quantity: Int) {
         titleLabel.text = product.name
-        categoryLabel.text = product.categoryId
-        priceLabel.text = String(format: "$%.2f", product.price)
+        brandLabel.text = product.brandId
+        priceLabel.text = "\(product.price) ₽"
         
         // thumbImageView.kf.setImage(with: product.image)
         thumbImageView.image = UIImage(resource: .divan) // заглушка

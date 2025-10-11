@@ -75,7 +75,7 @@ final class OrdersViewController: UIViewController {
 
 private extension OrdersViewController {
     func setupAppearance() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .systemGroupedBackground
     }
     
     func setupNavigationBar() {

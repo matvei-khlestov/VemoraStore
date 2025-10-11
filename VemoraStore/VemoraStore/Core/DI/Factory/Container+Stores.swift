@@ -9,14 +9,20 @@ import FactoryKit
 import CoreData
 
 extension Container {
-
+    
     var persistentContainer: Factory<NSPersistentContainer> {
         self { CoreDataStack.shared.container }.singleton
     }
-
-    var localStore: Factory<LocalStore> {
+    
+    var profileLocalStore: Factory<ProfileLocalStore> {
         self {
-            CoreDataLocalStore(container: self.persistentContainer())
+            CoreDataProfileStore(container: self.persistentContainer())
+        }.singleton
+    }
+    
+    var catalogLocalStore: Factory<CatalogLocalStore> {
+        self {
+            CoreDataCatalogStore(container: self.persistentContainer())
         }.singleton
     }
 }

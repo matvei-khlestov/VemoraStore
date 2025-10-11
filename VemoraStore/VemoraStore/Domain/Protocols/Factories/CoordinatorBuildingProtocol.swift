@@ -19,8 +19,23 @@ protocol CoordinatorBuildingProtocol {
     
     func makeProductDetailsCoordinator(
         navigation: UINavigationController,
-        product: ProductTest
+        product: Product
     ) -> ProductDetailsCoordinatingProtocol
+
+    // MARK: - Category Products
+
+    func makeCategoryProductsCoordinator(
+        navigation: UINavigationController,
+        categoryId: String,
+        categoryTitle: String
+    ) -> CategoryProductsCoordinatingProtocol
+
+    // MARK: - Catalog Filter
+    
+    func makeCatalogFilterCoordinator(
+        navigation: UINavigationController,
+        initialState: FilterState
+    ) -> CatalogFilterCoordinatingProtocol
     
     // MARK: - Map Picker
     

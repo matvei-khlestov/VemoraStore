@@ -18,17 +18,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="qdz-xL-Dbg">
-                                <rect key="frame" x="43.333333333333343" y="266.66666666666669" width="306.66666666666663" height="319.00000000000006"/>
+                                <rect key="frame" x="43.333333333333343" y="291.66666666666669" width="306.66666666666663" height="269.00000000000006"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="vemora" translatesAutoresizingMaskIntoConstraints="NO" id="8eF-4A-8u5">
-                                        <rect key="frame" x="28.333333333333343" y="0.0" width="250.00000000000003" height="250"/>
+                                        <rect key="frame" x="53.333333333333343" y="0.0" width="200" height="200"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="250" id="bmQ-fr-utr"/>
-                                            <constraint firstAttribute="width" constant="250" id="eiT-Id-61U"/>
+                                            <constraint firstAttribute="height" constant="200" id="bmQ-fr-utr"/>
+                                            <constraint firstAttribute="width" constant="200" id="eiT-Id-61U"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Ваш магазин мебели и уюта" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="grS-M2-muM">
-                                        <rect key="frame" x="0.0" y="285.99999999999994" width="306.66666666666669" height="33"/>
+                                        <rect key="frame" x="0.0" y="235.99999999999994" width="306.66666666666669" height="33"/>
                                         <fontDescription key="fontDescription" name="KohinoorGujarati-Bold" family="Kohinoor Gujarati" pointSize="22"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>

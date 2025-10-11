@@ -42,7 +42,7 @@ final class OrderItemCell: UITableViewCell {
         
         enum Fonts {
             static let title: UIFont    = .systemFont(ofSize: 16, weight: .semibold)
-            static let category: UIFont = .systemFont(ofSize: 12, weight: .regular)
+            static let brand: UIFont = .systemFont(ofSize: 12, weight: .regular)
             static let price: UIFont    = .systemFont(ofSize: 18, weight: .bold)
             static let qty: UIFont      = .systemFont(ofSize: 15, weight: .medium)
             static let meta: UIFont     = .systemFont(ofSize: 13, weight: .regular)
@@ -93,9 +93,9 @@ final class OrderItemCell: UITableViewCell {
         )
     }()
     
-    private let categoryLabel: UILabel = {
+    private let brandLabel: UILabel = {
         Factory.makeLabel(
-            font: Metrics.Fonts.category,
+            font: Metrics.Fonts.brand,
             color: Colors.category
         )
     }()
@@ -191,7 +191,7 @@ final class OrderItemCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         thumbImageView.image = nil
-        [titleLabel, categoryLabel, priceLabel, quantityLabel,
+        [titleLabel, brandLabel, priceLabel, quantityLabel,
          addressLabel, dateLabel, paymentLabel].forEach {
             $0.text = nil
         }
@@ -209,7 +209,7 @@ private extension OrderItemCell {
         contentView.directionalLayoutMargins = Metrics.Insets.content
         
         titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .vertical)
-        [categoryLabel, priceLabel].forEach {
+        [brandLabel, priceLabel].forEach {
             $0.setContentCompressionResistancePriority(.required, for: .vertical)
         }
     }
@@ -217,7 +217,7 @@ private extension OrderItemCell {
     func setupHierarchy() {
         // Правая колонка
         rightStack.addArrangedSubviews(
-            categoryLabel,
+            brandLabel,
             titleLabel,
             priceLabel,
             quantityLabel
@@ -337,8 +337,8 @@ extension OrderItemCell {
     func configure(item: OrderItem, order: OrderEntity) {
         // product
         titleLabel.text = item.product.name
-        categoryLabel.text = item.product.categoryId
-        priceLabel.text = String(format: "$%.2f", item.product.price)
+        brandLabel.text = item.product.brandId
+        priceLabel.text = "\(item.product.price) ₽"
         quantityLabel.text = Texts.quantity(item.quantity)
         thumbImageView.image = UIImage(resource: .divan) // заглушка
         
