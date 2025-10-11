@@ -600,14 +600,19 @@ extension CheckoutViewController: UITableViewDataSource {
             
         case .checkout:
             let cell: CheckoutCell = tableView.dequeueReusableCell(for: indexPath)
-            let product = ProductTest(
+            let product = Product(
                 id: "mock_\(indexPath.row)",
                 name: "Vemora Oslo Sofa 3-Seater",
                 description: "Mock item for checkout preview",
-                price: 940,
-                image: URL(string: "https://picsum.photos/seed/checkout\(indexPath.row)/400/300")!,
+                nameLower: "vemora oslo sofa 3-seater",
                 categoryId: "sofas",
-                brendId: "vemora"
+                brandId: "vemora",
+                price: 940,
+                imageURL: "https://picsum.photos/seed/checkout\(indexPath.row)/400/300",
+                isActive: true,
+                createdAt: ISO8601DateFormatter().string(from: Date()),
+                updatedAt: ISO8601DateFormatter().string(from: Date()),
+                keywords: ["mock", "checkout", "диван", "sofa", "vemora"]
             )
             cell.configure(with: product, quantity: indexPath.row + 1)
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1

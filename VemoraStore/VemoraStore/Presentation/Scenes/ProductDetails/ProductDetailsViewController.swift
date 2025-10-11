@@ -36,14 +36,14 @@ final class ProductDetailsViewController: UIViewController {
         }
         enum Sizes {
             static let likeButton: CGFloat = 36
-            static let favoriteSymbolPointSize: CGFloat = 18
+            static let favoriteSymbolPointSize: CGFloat = 20
             static let cartSymbolPointSize: CGFloat = 30
         }
         enum Corners {
             static let image: CGFloat = 12
         }
         enum Layout {
-            static let imageAspect: CGFloat = 3.0 / 4.0
+            static let imageAspect: CGFloat = 3.0 / 3.0
         }
     }
     
@@ -83,26 +83,19 @@ final class ProductDetailsViewController: UIViewController {
         FavoriteButton(pointSize: Metrics.Sizes.favoriteSymbolPointSize)
     }()
     
-    private lazy var imageView: UIImageView = {
+    private lazy var productImageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
         view.backgroundColor = .secondarySystemBackground
         view.layer.cornerRadius = Metrics.Corners.image
         view.clipsToBounds = true
-        view.image = UIImage(resource: .divan)
         return view
     }()
     
     private lazy var imageContainer: UIView = {
         let view = UIView()
-        view.addSubviews(imageView, likeBG)
+        view.addSubviews(productImageView, favoriteButton)
         return view
-    }()
-    
-    private lazy var likeBG: BlurredIconBackground = {
-        let bg = BlurredIconBackground(cornerRadius: Metrics.Sizes.likeButton / 2)
-        bg.embed(favoriteButton)
-        return bg
     }()
     
     private lazy var titleLabel: UILabel = {
@@ -176,7 +169,7 @@ private extension ProductDetailsViewController {
     }
     
     func setupAppearance() {
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .tertiarySystemGroupedBackground
     }
     
     func setupHierarchy() {
@@ -204,8 +197,8 @@ private extension ProductDetailsViewController {
         [scrollView,
          contentStack,
          imageContainer,
-         imageView,
-         likeBG,
+         productImageView,
+         favoriteButton,
          controlsRow,
          addToCartButton].forEach {
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -214,36 +207,30 @@ private extension ProductDetailsViewController {
     
     func setupImageSectionConstraints() {
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(
+            productImageView.topAnchor.constraint(
                 equalTo: imageContainer.topAnchor
             ),
-            imageView.leadingAnchor.constraint(
+            productImageView.leadingAnchor.constraint(
                 equalTo: imageContainer.leadingAnchor
             ),
-            imageView.trailingAnchor.constraint(
+            productImageView.trailingAnchor.constraint(
                 equalTo: imageContainer.trailingAnchor
             ),
-            imageView.bottomAnchor.constraint(
+            productImageView.bottomAnchor.constraint(
                 equalTo: imageContainer.bottomAnchor
             ),
-            imageView.heightAnchor.constraint(
-                equalTo: imageView.widthAnchor,
+            productImageView.heightAnchor.constraint(
+                equalTo: productImageView.widthAnchor,
                 multiplier: Metrics.Layout.imageAspect
             ),
             
-            likeBG.topAnchor.constraint(
+            favoriteButton.topAnchor.constraint(
                 equalTo: imageContainer.topAnchor,
                 constant: Metrics.Spacing.likePadding
             ),
-            likeBG.trailingAnchor.constraint(
+            favoriteButton.trailingAnchor.constraint(
                 equalTo: imageContainer.trailingAnchor,
                 constant: -Metrics.Spacing.likePadding
-            ),
-            likeBG.widthAnchor.constraint(
-                equalToConstant: Metrics.Sizes.likeButton
-            ),
-            likeBG.heightAnchor.constraint(
-                equalToConstant: Metrics.Sizes.likeButton
             )
         ])
     }
@@ -307,6 +294,8 @@ private extension ProductDetailsViewController {
 
 private extension ProductDetailsViewController {
     func configure() {
+        let url = URL(string: viewModel.imageURL ?? "")
+        productImageView.kf.setImage(with: url)
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         priceLabel.text = viewModel.priceText

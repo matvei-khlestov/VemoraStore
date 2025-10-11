@@ -14,7 +14,7 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     
-    private let product: ProductTest
+    private let product: Product
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
     
@@ -22,7 +22,7 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     
     init(
         navigation: UINavigationController,
-        product: ProductTest,
+        product: Product,
         viewModelFactory: ViewModelBuildingProtocol,
         coordinatorFactory: CoordinatorBuildingProtocol
     ) {

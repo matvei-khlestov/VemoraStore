@@ -36,8 +36,16 @@ final class ViewModelFactory: ViewModelBuildingProtocol {
         container.catalogViewModel()
     }
     
-    func makeProductDetailsViewModel(product: ProductTest) -> ProductDetailsViewModelProtocol {
+    func makeCatalogFilterViewModel() -> CatalogFilterViewModelProtocol {
+        container.catalogFilterViewModel()
+    }
+    
+    func makeProductDetailsViewModel(product: Product) -> ProductDetailsViewModelProtocol {
         container.productDetailsViewModel(product)
+    }
+
+    func makeCategoryProductsViewModel(categoryId: String) -> CategoryProductsViewModelProtocol {
+        container.categoryProductsViewModel(categoryId)
     }
     
     // MARK: - Favorites

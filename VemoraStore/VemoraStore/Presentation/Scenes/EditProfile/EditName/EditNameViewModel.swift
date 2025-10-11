@@ -12,9 +12,9 @@ final class EditNameViewModel: EditNameViewModelProtocol {
     
     // MARK: - Deps
     
-    private let repos: RepositoryFactoryProtocol
     private let userId: String
     private let validator: FormValidatingProtocol
+    private let profileRepository: ProfileRepository
     
     // MARK: - State
     
@@ -27,14 +27,14 @@ final class EditNameViewModel: EditNameViewModelProtocol {
     // MARK: - Init
     
     init(
-        repos: RepositoryFactoryProtocol,
+        profileRepository: ProfileRepository,
         userId: String,
         validator: FormValidatingProtocol
     ) {
-        self.repos = repos
+        self.profileRepository = profileRepository
         self.userId = userId
         self.validator = validator
-        
+
         bindProfile()
     }
     
@@ -86,9 +86,7 @@ final class EditNameViewModel: EditNameViewModelProtocol {
             )
         }
         
-        try await repos
-            .profileRepository(for: userId)
-            .updateName(uid: userId, name: name)
+        try await profileRepository.updateName(uid: userId, name: name)
         
         await MainActor.run {
             self.initialName = self.name
@@ -96,9 +94,7 @@ final class EditNameViewModel: EditNameViewModelProtocol {
     }
     
     private func bindProfile() {
-        let repo = repos.profileRepository(for: userId)
-        
-        repo.observeProfile()
+        profileRepository.observeProfile()
             .compactMap { $0 }
             .prefix(1)
             .receive(on: DispatchQueue.main)

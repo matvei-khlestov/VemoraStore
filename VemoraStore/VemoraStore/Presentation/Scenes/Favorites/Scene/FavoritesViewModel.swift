@@ -12,7 +12,7 @@ import FactoryKit
 final class FavoritesViewModel: FavoritesViewModelProtocol {
     
     // MARK: - Publishers (protocol conformance)
-    var favoriteProductsPublisher: AnyPublisher<[ProductTest], Never> {
+    var favoriteProductsPublisher: AnyPublisher<[Product], Never> {
         $favoriteProducts.eraseToAnyPublisher()
     }
 
@@ -25,7 +25,7 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     private let productService: ProductServiceProtocol
     
     // MARK: - State (Outputs for Controller)
-    @Published private(set) var favoriteProducts: [ProductTest] = []
+    @Published private(set) var favoriteProducts: [Product] = []
     /// Локальная корзина для отражения состояния кнопок в UI (мок).
     @Published private(set) var inCartIds: Set<String> = []
     
@@ -73,7 +73,7 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     /// Кол-во элементов в таблице
     var count: Int { favoriteProducts.count }
     
-    func product(at indexPath: IndexPath) -> ProductTest { favoriteProducts[indexPath.row] }
+    func product(at indexPath: IndexPath) -> Product { favoriteProducts[indexPath.row] }
     
     func isFavorite(_ id: String) -> Bool { favoritesService.isFavorite(id) }
     
@@ -112,33 +112,48 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
 
 // MARK: - MockData
 private enum MockData {
-    static let products: [ProductTest] = [
-        ProductTest(
+    static let products: [Product] = [
+        Product(
             id: "p_sofa_oslo",
             name: "Vemora Oslo Sofa 3-Seater",
             description: "Compact 3-seater sofa with soft fabric upholstery and wooden legs.",
-            price: 45999,
-            image: URL(string: "https://picsum.photos/seed/oslo-sofa/800/600")!,
+            nameLower: "vemora oslo sofa 3-seater",
             categoryId: "sofas",
-            brendId: "vemora"
+            brandId: "vemora",
+            price: 45999,
+            imageURL: "https://picsum.photos/seed/oslo-sofa/800/600",
+            isActive: true,
+            createdAt: ISO8601DateFormatter().string(from: Date()),
+            updatedAt: ISO8601DateFormatter().string(from: Date()),
+            keywords: ["sofa", "oslo", "vemora", "диван", "мебель"]
         ),
-        ProductTest(
+        Product(
             id: "p_table_nordic",
             name: "Nordic Oak Coffee Table",
             description: "Minimal coffee table made of solid oak with rounded corners.",
-            price: 12999,
-            image: URL(string: "https://picsum.photos/seed/nordic-table/800/600")!,
+            nameLower: "nordic oak coffee table",
             categoryId: "coffee_tables",
-            brendId: "vemora"
+            brandId: "vemora",
+            price: 12999,
+            imageURL: "https://picsum.photos/seed/nordic-table/800/600",
+            isActive: true,
+            createdAt: ISO8601DateFormatter().string(from: Date()),
+            updatedAt: ISO8601DateFormatter().string(from: Date()),
+            keywords: ["table", "nordic", "oak", "coffee", "vemora", "стол"]
         ),
-        ProductTest(
+        Product(
             id: "p_chair_luna",
             name: "Luna Accent Chair",
             description: "Ergonomic accent chair with textured upholstery and metal frame.",
-            price: 9999,
-            image: URL(string: "https://picsum.photos/seed/luna-chair/800/600")!,
+            nameLower: "luna accent chair",
             categoryId: "chairs",
-            brendId: "vemora"
-        ),
+            brandId: "vemora",
+            price: 9999,
+            imageURL: "https://picsum.photos/seed/luna-chair/800/600",
+            isActive: true,
+            createdAt: ISO8601DateFormatter().string(from: Date()),
+            updatedAt: ISO8601DateFormatter().string(from: Date()),
+            keywords: ["chair", "luna", "accent", "vemora", "кресло"]
+        )
     ]
 }

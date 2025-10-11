@@ -13,7 +13,7 @@ final class CartViewController: UIViewController {
     // MARK: - Public Callbacks
     
     var onCheckout: (() -> Void)?
-    var onSelectProduct: ((ProductTest) -> Void)?
+    var onSelectProduct: ((Product) -> Void)?
     
     // MARK: - Dependencies
     

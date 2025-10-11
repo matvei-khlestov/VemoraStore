@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 final class CategoryCell: UICollectionViewCell {
     
@@ -80,10 +81,11 @@ final class CategoryCell: UICollectionViewCell {
     
     // MARK: - Configure API
     
-    func configure(title: String, count: Int, imageURL: URL?) {
-        titleLabel.text = title
+    func configure(category: Category, count: Int) {
+        titleLabel.text = category.name
         subtitleLabel.text = "\(count) Products"
-        // circleImageView.kf.setImage(with: imageURL)
+        let url = URL(string: category.imageURL)
+        circleImageView.kf.setImage(with: url)
     }
 }
 

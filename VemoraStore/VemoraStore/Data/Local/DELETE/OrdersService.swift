@@ -12,23 +12,34 @@ import Foundation
 final class OrdersService: OrdersServiceProtocol {
     func fetchOrders() -> [OrderEntity] {
         // Моки для примера
-        let p1 = ProductTest(
+        let p1 = Product(
             id: "sofa_1",
             name: "Vemora Oslo Sofa 3-Seater",
-            description: "…",
-            price: 940,
-            image: URL(string:"https://picsum.photos/seed/oslo/400/300")!,
+            description: "Элегантный трёхместный диван с мягкой обивкой и прочным каркасом. Подходит для гостиной или кабинета.",
+            nameLower: "vemora oslo sofa 3-seater",
             categoryId: "sofas",
-            brendId: "vemora"
+            brandId: "vemora",
+            price: 940,
+            imageURL: "https://picsum.photos/seed/oslo/400/300",
+            isActive: true,
+            createdAt: ISO8601DateFormatter().string(from: Date()),
+            updatedAt: ISO8601DateFormatter().string(from: Date()),
+            keywords: ["диван", "oslo", "vemora", "гостиная", "трехместный"]
         )
-        let p2 = ProductTest(
+
+        let p2 = Product(
             id: "chair_2",
             name: "Vemora Luton Chair",
-            description: "…",
-            price: 210,
-            image: URL(string:"https://picsum.photos/seed/luton/400/300")!,
+            description: "Удобный стул в скандинавском стиле, выполнен из натурального дерева и ткани. Отлично подойдёт для кухни или офиса.",
+            nameLower: "vemora luton chair",
             categoryId: "chairs",
-            brendId: "vemora"
+            brandId: "vemora",
+            price: 210,
+            imageURL: "https://picsum.photos/seed/luton/400/300",
+            isActive: true,
+            createdAt: ISO8601DateFormatter().string(from: Date()),
+            updatedAt: ISO8601DateFormatter().string(from: Date()),
+            keywords: ["стул", "luton", "vemora", "кухня", "офис", "мебель"]
         )
         
         return [

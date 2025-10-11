@@ -12,7 +12,7 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     
     // MARK: - Deps
     
-    private let repos: RepositoryFactoryProtocol
+    private let profileRepository: ProfileRepository
     private let validator: FormValidatingProtocol
     private let userId: String
     
@@ -27,11 +27,11 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     // MARK: - Init
     
     init(
-        repos: RepositoryFactoryProtocol,
+        profileRepository: ProfileRepository,
         validator: FormValidatingProtocol,
         userId: String
     ) {
-        self.repos = repos
+        self.profileRepository = profileRepository
         self.validator = validator
         self.userId = userId
         
@@ -83,9 +83,7 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
             )
         }
         
-        try await repos
-            .profileRepository(for: userId)
-            .updatePhone(uid: userId, phone: phone)
+        try await profileRepository.updatePhone(uid: userId, phone: phone)
         
         await MainActor.run {
             self.initialPhone = self.phone
@@ -93,10 +91,9 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     }
     
     private func bindProfile() {
-        let repo = repos.profileRepository(for: userId)
         
         // подтягиваем phone из Firebase через репозиторий
-        repo.observeProfile()
+        profileRepository.observeProfile()
             .compactMap { $0 }
             .prefix(1) // только первый раз для начального значения
             .receive(on: DispatchQueue.main)

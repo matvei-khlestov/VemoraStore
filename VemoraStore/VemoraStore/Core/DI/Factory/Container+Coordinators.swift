@@ -25,13 +25,39 @@ extension Container {
     
     // MARK: - Product Details
     
-    var productDetailsCoordinator: ParameterFactory<(UINavigationController, ProductTest), ProductDetailsCoordinatingProtocol> {
+    var productDetailsCoordinator: ParameterFactory<(UINavigationController, Product), ProductDetailsCoordinatingProtocol> {
         self { navigation, product in
             ProductDetailsCoordinator(
                 navigation: navigation,
                 product: product,
                 viewModelFactory: self.viewModelFactory(),
                 coordinatorFactory: self.coordinatorFactory()
+            )
+        }
+    }
+
+    // MARK: - Category Products
+
+    var categoryProductsCoordinator: ParameterFactory<(UINavigationController, String, String), CategoryProductsCoordinatingProtocol> {
+        self { navigation, categoryId, categoryTitle in
+            CategoryProductsCoordinator(
+                navigation: navigation,
+                viewModelFactory: self.viewModelFactory(),
+                coordinatorFactory: self.coordinatorFactory(),
+                categoryId: categoryId,
+                categoryTitle: categoryTitle
+            )
+        }
+    }
+
+    // MARK: - Catalog Filter
+
+    var catalogFilterCoordinator: ParameterFactory<(UINavigationController, FilterState), CatalogFilterCoordinatingProtocol> {
+        self { navigation, initialState in
+            CatalogFilterCoordinator(
+                navigation: navigation,
+                initialState: initialState,
+                viewModelFactory: self.viewModelFactory()
             )
         }
     }

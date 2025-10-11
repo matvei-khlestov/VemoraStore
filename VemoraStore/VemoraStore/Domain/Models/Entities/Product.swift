@@ -17,7 +17,7 @@ struct Product: Codable {
     let price: Double
     let imageURL: String
     let isActive: Bool
-    let createdAt: String?
-    let updatedAt: String?
+    let createdAt: String
+    let updatedAt: String
     let keywords: [String]
 }

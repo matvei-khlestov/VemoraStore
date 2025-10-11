@@ -252,7 +252,7 @@ private extension CheckoutCell {
 // MARK: - Configure API
 
 extension CheckoutCell {
-    func configure(with product: ProductTest, quantity: Int) {
+    func configure(with product: Product, quantity: Int) {
         titleLabel.text = product.name
         categoryLabel.text = product.categoryId
         priceLabel.text = String(format: "$%.2f", product.price)

@@ -5,21 +5,27 @@
 //  Created by Matvei Khlestov on 22.09.2025.
 //
 
-import Foundation
 import Combine
 
 protocol CatalogViewModelProtocol: AnyObject {
-    // Ввод из UI
+    // Inputs
     var query: String { get set }
-    
-    // Текущие значения для data source
-    var categories: [(title: String, count: Int, imageURL: URL?)] { get }
-    var products: [ProductTest] { get }
-    
-    // Паблишеры для биндингов
-    var categoriesPublisher: AnyPublisher<[(title: String, count: Int, imageURL: URL?)], Never> { get }
-    var productsPublisher: AnyPublisher<[ProductTest], Never> { get }
-    
-    // Действия
     func reload()
+
+    // Outputs
+    var categories: [Category] { get }
+    var products: [Product] { get }
+    var categoriesPublisher: AnyPublisher<[Category], Never> { get }
+    var productsPublisher: AnyPublisher<[Product], Never> { get }
+
+    // Filter state
+    var currentState: FilterState { get }
+    func applyFilters(_ state: FilterState)
+
+    // Счётчик активных фильтров
+    var activeFiltersCount: Int { get }
+    var activeFiltersCountPublisher: AnyPublisher<Int, Never> { get }
+
+    // Helpers
+    func productCount(in categoryId: String) -> Int
 }

@@ -18,7 +18,9 @@ protocol ViewModelBuildingProtocol {
     // MARK: - Catalog
     
     func makeCatalogViewModel() -> CatalogViewModelProtocol
-    func makeProductDetailsViewModel(product: ProductTest) -> ProductDetailsViewModelProtocol
+    func makeCatalogFilterViewModel() -> CatalogFilterViewModelProtocol
+    func makeProductDetailsViewModel(product: Product) -> ProductDetailsViewModelProtocol
+    func makeCategoryProductsViewModel(categoryId: String) -> CategoryProductsViewModelProtocol
     
     // MARK: - Favorites
     

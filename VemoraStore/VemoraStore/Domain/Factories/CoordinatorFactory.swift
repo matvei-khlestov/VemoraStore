@@ -24,8 +24,27 @@ final class CoordinatorFactory: CoordinatorBuildingProtocol {
     
     // MARK: - Product Details
     
-    func makeProductDetailsCoordinator(navigation: UINavigationController, product: ProductTest) -> ProductDetailsCoordinatingProtocol {
+    func makeProductDetailsCoordinator(navigation: UINavigationController, product: Product) -> ProductDetailsCoordinatingProtocol {
         container.productDetailsCoordinator((navigation, product))
+    }
+    
+    // MARK: - Category Products
+
+    func makeCategoryProductsCoordinator(
+        navigation: UINavigationController,
+        categoryId: String,
+        categoryTitle: String
+    ) -> CategoryProductsCoordinatingProtocol {
+        container.categoryProductsCoordinator((navigation, categoryId, categoryTitle))
+    }
+    
+    // MARK: - Catalog Filter
+    
+    func makeCatalogFilterCoordinator(
+        navigation: UINavigationController,
+        initialState: FilterState
+    ) -> CatalogFilterCoordinatingProtocol {
+        container.catalogFilterCoordinator((navigation, initialState))
     }
     
     // MARK: - Checkout
