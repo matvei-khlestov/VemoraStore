@@ -26,4 +26,15 @@ extension Container {
             )
         }.singleton
     }
+    
+    var cartRepository: ParameterFactory<String, CartRepository> {
+        self { uid in
+            DefaultCartRepository(
+                remote: self.cartCollection(),
+                local: self.cartLocalStore(),
+                catalog: self.catalogLocalStore(),
+                userId: uid
+            )
+        }
+    }
 }

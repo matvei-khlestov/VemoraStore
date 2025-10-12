@@ -25,6 +25,8 @@ protocol CatalogRepository: AnyObject {
         minPrice: Decimal?,
         maxPrice: Decimal?
     ) -> AnyPublisher<[Product], Never>
+    
+    func observeProduct(id: String) -> AnyPublisher<Product?, Never>
 
     // MARK: - Refresh (одноразовая подтяжка снапшота с сервера → локально)
     

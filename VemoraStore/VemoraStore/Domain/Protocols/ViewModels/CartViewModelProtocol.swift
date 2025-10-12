@@ -30,6 +30,6 @@ protocol CartViewModelProtocol {
     func removeItem(at index: Int)
     func removeItem(with productId: String)
     
-    // Mocks
-    func loadMocks()
+    // Clear all
+    func clearCart()
 }

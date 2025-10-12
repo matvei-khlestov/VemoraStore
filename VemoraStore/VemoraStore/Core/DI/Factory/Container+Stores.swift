@@ -25,4 +25,10 @@ extension Container {
             CoreDataCatalogStore(container: self.persistentContainer())
         }.singleton
     }
+    
+    var cartLocalStore: Factory<CartLocalStore> {
+        self {
+            CoreDataCartStore(container: self.persistentContainer())
+        }.singleton
+    }
 }

@@ -19,4 +19,8 @@ extension Container {
     var catalogCollection: Factory<CatalogCollectingProtocol> {
         self { CatalogCollections() }.singleton
     }
+    
+    var cartCollection: Factory<CartCollectingProtocol> {
+        self { CartCollection() }.singleton
+    }
 }

@@ -12,7 +12,7 @@ final class FavoritesViewController: UIViewController {
     
     // MARK: - Public Callbacks
     
-    var onSelectProduct: ((Product) -> Void)?
+    var onSelectProduct: ((String) -> Void)?
     
     // MARK: - Dependencies
     
@@ -28,7 +28,7 @@ final class FavoritesViewController: UIViewController {
         }
         enum Spacing { }
         enum Fonts {
-            static let emptyState: UIFont = .systemFont(ofSize: 15, weight: .regular)
+            static let emptyState: UIFont = .systemFont(ofSize: 16, weight: .regular)
         }
         enum Table {
             static let rowHeightEstimate: CGFloat = 112
@@ -252,7 +252,8 @@ extension FavoritesViewController: UITableViewDataSource {
 extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        onSelectProduct?(items[indexPath.row])
+        let productId = items[indexPath.row].id
+        onSelectProduct?(productId)
     }
     
     func tableView(

@@ -26,6 +26,11 @@ protocol CatalogViewModelProtocol: AnyObject {
     var activeFiltersCount: Int { get }
     var activeFiltersCountPublisher: AnyPublisher<Int, Never> { get }
 
+    // Cart
+    var inCartIdsPublisher: AnyPublisher<Set<String>, Never> { get }
+    func addToCart(productId: String)
+    func removeFromCart(productId: String)
+
     // Helpers
     func productCount(in categoryId: String) -> Int
 }

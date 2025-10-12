@@ -20,8 +20,7 @@ final class CatalogViewController: UIViewController {
     // MARK: - Callbacks
     
     var onSelectProduct: ((Product) -> Void)?
-    var onAddToCart: ((Product) -> Void)?
-    var onToggleFavorite: ((Product) -> Void)?
+    var onToggleFavorite: ((Product) -> Void)?//удалить
     var onFilterTap: ((FilterState) -> Void)?
     var onSelectCategory: ((Category) -> Void)?
     
@@ -97,6 +96,7 @@ final class CatalogViewController: UIViewController {
     // MARK: - State
     
     private var bag = Set<AnyCancellable>()
+    private var inCartIds = Set<String>()
     
     // MARK: - Init
     
@@ -175,6 +175,15 @@ private extension CatalogViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _, _, _ in
                 self?.collectionView.reloadData()
+            }
+            .store(in: &bag)
+
+        // ❗️Без перезагрузок — просто храним текущее множество, чтобы задать initial state в cell
+        viewModel.inCartIdsPublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] ids in
+                self?.inCartIds = ids
             }
             .store(in: &bag)
     }
@@ -336,8 +345,10 @@ extension CatalogViewController: UICollectionViewDataSource {
         case .products:
             let cell = collectionView.dequeueReusableCell(ProductCell.self, for: indexPath)
             let product = viewModel.products[indexPath.item]
-            cell.configure(with: product, isFavorite: false)
+            let isInCart = inCartIds.contains(product.id)
+            cell.configure(with: product, isFavorite: false, isInCart: isInCart)
             cell.delegate = self
+            cell.bindCartState(cartIdsPublisher: viewModel.inCartIdsPublisher)
             return cell
         }
     }
@@ -390,15 +401,20 @@ extension CatalogViewController: UISearchResultsUpdating {
 // MARK: - ProductCellDelegate
 
 extension CatalogViewController: ProductCellDelegate {
+    func productCell(_ cell: ProductCell, didToggleCart toInCart: Bool) {
+        guard let indexPath = collectionView.indexPath(for: cell),
+              Section(rawValue: indexPath.section) == .products else { return }
+        let product = viewModel.products[indexPath.item]
+        if toInCart {
+            viewModel.addToCart(productId: product.id)
+        } else {
+            viewModel.removeFromCart(productId: product.id)
+        }
+    }
+
     func productCellDidTapFavorite(_ cell: ProductCell) {
         guard let indexPath = collectionView.indexPath(for: cell),
               Section(rawValue: indexPath.section) == .products else { return }
         onToggleFavorite?(viewModel.products[indexPath.item])
-    }
-    
-    func productCellDidTapAddToCart(_ cell: ProductCell) {
-        guard let indexPath = collectionView.indexPath(for: cell),
-              Section(rawValue: indexPath.section) == .products else { return }
-        onAddToCart?(viewModel.products[indexPath.item])
     }
 }

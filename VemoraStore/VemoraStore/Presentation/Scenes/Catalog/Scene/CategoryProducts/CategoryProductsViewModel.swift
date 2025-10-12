@@ -21,24 +21,34 @@ final class CategoryProductsViewModel: CategoryProductsViewModelProtocol {
         $products.eraseToAnyPublisher()
     }
 
+    var inCartIdsPublisher: AnyPublisher<Set<String>, Never> {
+        $inCartIds.eraseToAnyPublisher()
+    }
+
     // MARK: - Deps
     
     private let repo: CatalogRepository
+    private let cart: CartRepository
     private let categoryId: String
 
     // MARK: - State
     
     private var bag = Set<AnyCancellable>()
     private var realtimeStarted = false
+    @Published private var inCartIds = Set<String>()
 
     // MARK: - Init
     
-    init(repository: CatalogRepository, categoryId: String) {
+    init(
+        repository: CatalogRepository,
+        cartRepository: CartRepository,
+        categoryId: String
+    ) {
         self.repo = repository
+        self.cart = cartRepository
         self.categoryId = categoryId
         bind()
     }
-
 
     // MARK: - Public
     
@@ -55,12 +65,21 @@ final class CategoryProductsViewModel: CategoryProductsViewModelProtocol {
             realtimeStarted = true
         }
     }
+
+    func addToCart(productId: String) {
+        Task { try? await cart.add(productId: productId, by: 1) }
+    }
+
+    func removeFromCart(productId: String) {
+        Task { try? await cart.remove(productId: productId) }
+    }
 }
 
 // MARK: - Bindings
 
 private extension CategoryProductsViewModel {
     func bind() {
+        // продукты категории с поиском
         $query
             .removeDuplicates()
             .debounce(for: .milliseconds(250), scheduler: DispatchQueue.main)
@@ -74,6 +93,12 @@ private extension CategoryProductsViewModel {
             .switchToLatest()
             .receive(on: DispatchQueue.main)
             .assign(to: &$products)
+
+        // корзина -> множество id в корзине
+        cart.observeItems()
+            .map { Set($0.map(\.productId)) }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$inCartIds)
     }
 }
 

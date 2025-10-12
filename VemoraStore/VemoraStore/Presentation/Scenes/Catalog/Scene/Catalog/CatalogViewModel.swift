@@ -32,9 +32,14 @@ final class CatalogViewModel: CatalogViewModelProtocol {
         $activeFiltersCount.eraseToAnyPublisher()
     }
     
+    var inCartIdsPublisher: AnyPublisher<Set<String>, Never> {
+        $inCartIds.eraseToAnyPublisher()
+    }
+    
     // MARK: - Deps
     
     private let repo: CatalogRepository
+    private let cart: CartRepository
     
     // MARK: - State
     
@@ -47,11 +52,16 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     var currentState: FilterState { filterState }
     
     private var productsCancellable: AnyCancellable?
+    @Published private var inCartIds = Set<String>()
     
     // MARK: - Init
     
-    init(repository: CatalogRepository) {
+    init(
+        repository: CatalogRepository,
+        cartRepository: CartRepository
+    ) {
         self.repo = repository
+        self.cart = cartRepository
         bind()
         refreshProducts()
     }
@@ -82,6 +92,14 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     func productCount(in categoryId: String) -> Int {
         countsByCategory[categoryId] ?? 0
     }
+    
+    func addToCart(productId: String) {
+        Task { try? await cart.add(productId: productId, by: 1) }
+    }
+    
+    func removeFromCart(productId: String) {
+        Task { try? await cart.remove(productId: productId) }
+    }
 }
 
 // MARK: - Bindings + helpers
@@ -99,6 +117,11 @@ private extension CatalogViewModel {
                 self?.refreshProducts()
             }
             .store(in: &bag)
+        
+        cart.observeItems()
+            .map { Set($0.map(\.productId)) }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$inCartIds)
     }
     
     func refreshProducts() {
@@ -139,5 +162,3 @@ private extension CatalogViewModel {
         (filterState.maxPrice == nil ? 0 : 1)
     }
 }
-
-
