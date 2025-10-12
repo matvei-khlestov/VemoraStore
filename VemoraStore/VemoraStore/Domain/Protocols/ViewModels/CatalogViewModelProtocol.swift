@@ -31,6 +31,12 @@ protocol CatalogViewModelProtocol: AnyObject {
     func addToCart(productId: String)
     func removeFromCart(productId: String)
 
+    // Favorites
+    var favoriteIdsPublisher: AnyPublisher<Set<String>, Never> { get }
+    func addToFavorites(productId: String)
+    func removeFromFavorites(productId: String)
+    func toggleFavorite(productId: String)
+
     // Helpers
     func productCount(in categoryId: String) -> Int
 }

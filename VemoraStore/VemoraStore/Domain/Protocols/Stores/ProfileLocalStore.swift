@@ -10,4 +10,5 @@ import Combine
 protocol ProfileLocalStore: AnyObject {
     func observeProfile(userId: String) -> AnyPublisher<UserProfile?, Never>
     func upsertProfile(_ dto: ProfileDTO)
+    func clear(userId: String)      
 }

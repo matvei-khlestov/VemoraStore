@@ -27,7 +27,6 @@ protocol CartViewModelProtocol {
     func decreaseQuantity(for productId: String)
     
     // Remove
-    func removeItem(at index: Int)
     func removeItem(with productId: String)
     
     // Clear all

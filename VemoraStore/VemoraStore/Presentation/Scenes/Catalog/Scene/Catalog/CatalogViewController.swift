@@ -20,7 +20,6 @@ final class CatalogViewController: UIViewController {
     // MARK: - Callbacks
     
     var onSelectProduct: ((Product) -> Void)?
-    var onToggleFavorite: ((Product) -> Void)?//удалить
     var onFilterTap: ((FilterState) -> Void)?
     var onSelectCategory: ((Category) -> Void)?
     
@@ -97,6 +96,7 @@ final class CatalogViewController: UIViewController {
     
     private var bag = Set<AnyCancellable>()
     private var inCartIds = Set<String>()
+    private var favoriteIds = Set<String>()
     
     // MARK: - Init
     
@@ -177,13 +177,20 @@ private extension CatalogViewController {
                 self?.collectionView.reloadData()
             }
             .store(in: &bag)
-
-        // ❗️Без перезагрузок — просто храним текущее множество, чтобы задать initial state в cell
+        
         viewModel.inCartIdsPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] ids in
                 self?.inCartIds = ids
+            }
+            .store(in: &bag)
+        
+        viewModel.favoriteIdsPublisher
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] ids in
+                self?.favoriteIds = ids
             }
             .store(in: &bag)
     }
@@ -345,10 +352,14 @@ extension CatalogViewController: UICollectionViewDataSource {
         case .products:
             let cell = collectionView.dequeueReusableCell(ProductCell.self, for: indexPath)
             let product = viewModel.products[indexPath.item]
+            
             let isInCart = inCartIds.contains(product.id)
-            cell.configure(with: product, isFavorite: false, isInCart: isInCart)
+            let isFavorite = favoriteIds.contains(product.id)
+            
+            cell.configure(with: product, isFavorite: isFavorite, isInCart: isInCart)
             cell.delegate = self
             cell.bindCartState(cartIdsPublisher: viewModel.inCartIdsPublisher)
+            cell.bindFavoriteState(favoriteIdsPublisher: viewModel.favoriteIdsPublisher)
             return cell
         }
     }
@@ -411,10 +422,12 @@ extension CatalogViewController: ProductCellDelegate {
             viewModel.removeFromCart(productId: product.id)
         }
     }
-
+    
     func productCellDidTapFavorite(_ cell: ProductCell) {
         guard let indexPath = collectionView.indexPath(for: cell),
               Section(rawValue: indexPath.section) == .products else { return }
-        onToggleFavorite?(viewModel.products[indexPath.item])
+        let product = viewModel.products[indexPath.item]
+        viewModel.toggleFavorite(productId: product.id)
     }
 }
+

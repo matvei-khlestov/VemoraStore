@@ -8,24 +8,18 @@
 import Combine
 import Foundation
 
-protocol FavoritesViewModelProtocol: AnyObject {
+protocol FavoritesViewModelProtocol {
     // Outputs
-    var favoriteProductsPublisher: AnyPublisher<[Product], Never> { get }
+    var favoriteItemsPublisher: AnyPublisher<[FavoriteItem], Never> { get }
     var inCartIdsPublisher: AnyPublisher<Set<String>, Never> { get }
     
-    // Snapshot-доступ для dataSource
+    // Queries
     var count: Int { get }
-    func product(at indexPath: IndexPath) -> Product
+    func item(at indexPath: IndexPath) -> FavoriteItem
+    func isInCart(_ productId: String) -> Bool
     
-    // Actions
-    func isFavorite(_ id: String) -> Bool
-    func toggleFavorite(id: String)
-    
-    func isInCart(_ id: String) -> Bool
-    func toggleCart(for id: String)
-    
-    func removeItem(at index: Int)
-    
-    // Временный мок (можно убрать, когда будут реальные сервисы)
-    func loadMocks()
+    // Commands
+    func toggleCart(for productId: String)
+    func removeItem(with productId: String)
+    func clearFavorites()
 }

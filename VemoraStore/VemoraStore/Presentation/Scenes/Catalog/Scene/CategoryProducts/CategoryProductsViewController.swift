@@ -72,6 +72,7 @@ final class CategoryProductsViewController: UIViewController {
     
     private var bag = Set<AnyCancellable>()
     private var inCartIds = Set<String>()
+    private var favoriteIds = Set<String>()
     
     // MARK: - Init
     
@@ -164,6 +165,11 @@ private extension CategoryProductsViewController {
                 self.inCartIds = ids
             }
             .store(in: &bag)
+        
+        viewModel.favoriteIdsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] ids in self?.favoriteIds = ids }
+            .store(in: &bag)
     }
 }
 
@@ -219,9 +225,11 @@ extension CategoryProductsViewController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(ProductCell.self, for: indexPath)
         let product = viewModel.products[indexPath.item]
         let isInCart = inCartIds.contains(product.id)
-        cell.configure(with: product, isFavorite: false, isInCart: isInCart)
+        let isFavorite = favoriteIds.contains(product.id)
+        cell.configure(with: product, isFavorite: isFavorite, isInCart: isInCart)
         cell.delegate = self
         cell.bindCartState(cartIdsPublisher: viewModel.inCartIdsPublisher)
+        cell.bindFavoriteState(favoriteIdsPublisher: viewModel.favoriteIdsPublisher)
         return cell
     }
 }
@@ -257,7 +265,8 @@ extension CategoryProductsViewController: ProductCellDelegate {
 
     func productCellDidTapFavorite(_ cell: ProductCell) {
         guard let idx = collectionView.indexPath(for: cell) else { return }
-        onToggleFavorite?(viewModel.products[idx.item])
+        let product = viewModel.products[idx.item]
+        viewModel.toggleFavorite(productId: product.id)
     }
 }
 

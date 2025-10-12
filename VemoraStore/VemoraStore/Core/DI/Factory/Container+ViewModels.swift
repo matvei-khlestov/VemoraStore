@@ -46,36 +46,40 @@ extension Container {
     
     var catalogViewModel: Factory<CatalogViewModelProtocol> {
         self {
-            CatalogViewModel(
+            let uid = self.authService().currentUserId ?? ""
+            return CatalogViewModel(
                 repository: self.catalogRepository(),
-                cartRepository: self.cartRepository(self.authService().currentUserId ?? ""))
-        }.singleton
+                cartRepository: self.cartRepository(uid),
+                favoritesRepository: self.favoritesRepository(uid)
+            )
+        }
     }
-
+    
     var catalogFilterViewModel: Factory<CatalogFilterViewModelProtocol> {
         self {
             CatalogFilterViewModel(repository: self.catalogRepository())
         }
     }
     
-var productDetailsViewModel: ParameterFactory<String, ProductDetailsViewModelProtocol> {
-    self { productId in
-        ProductDetailsViewModel(
-            productId: productId,
-            favoritesService: self.favoritesService(),
-            cartRepository: self.cartRepository(self.authService().currentUserId ?? ""),
-            catalogRepository: self.catalogRepository(),
-        )
+    var productDetailsViewModel: ParameterFactory<String, ProductDetailsViewModelProtocol> {
+        self { productId in
+            let uid = self.authService().currentUserId ?? ""
+            return ProductDetailsViewModel(
+                productId: productId,
+                favoritesRepository: self.favoritesRepository(uid),
+                cartRepository: self.cartRepository(uid),
+                catalogRepository: self.catalogRepository()
+            )
+        }
     }
-}
-
+    
     var categoryProductsViewModel: ParameterFactory<String, CategoryProductsViewModelProtocol> {
         self { categoryId in
-            CategoryProductsViewModel(
+            let uid = self.authService().currentUserId ?? ""
+            return CategoryProductsViewModel(
                 repository: self.catalogRepository(),
-                cartRepository: self.cartRepository(
-                    self.authService().currentUserId ?? ""
-                ),
+                cartRepository: self.cartRepository(uid),
+                favoritesRepository: self.favoritesRepository(uid),
                 categoryId: categoryId
             )
         }
@@ -85,19 +89,21 @@ var productDetailsViewModel: ParameterFactory<String, ProductDetailsViewModelPro
     
     var favoritesViewModel: Factory<FavoritesViewModelProtocol> {
         self {
-            FavoritesViewModel(
-                favoritesService: self.favoritesService(),
-                productService: self.productService()
+            let uid = self.authService().currentUserId ?? ""
+            return FavoritesViewModel(
+                favoritesRepository: self.favoritesRepository(uid),
+                cartRepository: self.cartRepository(uid)
             )
-        }.singleton
+        }
     }
     
     // MARK: - Cart
     
     var cartViewModel: Factory<CartViewModelProtocol> {
         self {
-            CartViewModel(cartRepository: self.cartRepository(self.authService().currentUserId ?? ""))
-        }.singleton
+            let uid = self.authService().currentUserId ?? ""
+            return CartViewModel(cartRepository: self.cartRepository(uid))
+        }
     }
     
     // MARK: - Profile

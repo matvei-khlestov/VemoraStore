@@ -37,4 +37,15 @@ extension Container {
             )
         }
     }
+    
+    var favoritesRepository: ParameterFactory<String, FavoritesRepository> {
+        self { uid in
+            DefaultFavoritesRepository(
+                remote: self.favoritesCollection(),
+                local: self.favoritesLocalStore(),
+                catalog: self.catalogLocalStore(),
+                userId: uid
+            )
+        }
+    }
 }

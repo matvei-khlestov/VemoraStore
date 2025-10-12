@@ -206,6 +206,15 @@ private extension ProductDetailsViewController {
                 self?.addToCartButton.setInCart(inCart, animated: true)
             }
             .store(in: &bag)
+        
+        viewModel.isFavoritePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isFav in
+                guard let self else { return }
+                self.isFavorite = isFav
+                self.favoriteButton.setFavorite(isFav, animated: true)
+            }
+            .store(in: &bag)
     }
 }
 
@@ -330,9 +339,7 @@ private extension ProductDetailsViewController {
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         priceLabel.text = viewModel.priceText
-        // обновим избранное
-        isFavorite = viewModel.isFavorite
-        favoriteButton.setFavorite(isFavorite, animated: true)
+        // избранное обновится через isFavoritePublisher
     }
 }
 
@@ -350,16 +357,14 @@ private extension ProductDetailsViewController {
         } else {
             viewModel.addToCart()
         }
-        // Кнопка обновится из isInCartPublisher
+        
         addToCartButton.pulse()
     }
     
     @objc func favoriteTapped() {
-        viewModel.toggleFavorite()
-        isFavorite = viewModel.isFavorite
-        favoriteButton.setFavorite(isFavorite, animated: true)
-        favoriteButton.pulse()
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        viewModel.toggleFavorite()   
+        favoriteButton.pulse()
     }
 }
 

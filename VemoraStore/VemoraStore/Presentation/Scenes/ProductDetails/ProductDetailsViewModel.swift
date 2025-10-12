@@ -10,24 +10,28 @@ import Combine
 
 final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     
+    // Deps
     private let productId: String
-    private let favoritesService: FavoritesServiceProtocol
+    private let favoritesRepository: FavoritesRepository
     private let cartRepository: CartRepository
     private let catalogRepository: CatalogRepository
+    
     private var cancellables = Set<AnyCancellable>()
     
+    // State
     @Published private var product: Product?
-    @Published private var isInCart: Bool = false   // состояние «в корзине»
+    @Published private var isInCart: Bool = false
+    @Published private var favoriteState: Bool = false
     
     // MARK: - Init
     init(
         productId: String,
-        favoritesService: FavoritesServiceProtocol,
+        favoritesRepository: FavoritesRepository,
         cartRepository: CartRepository,
         catalogRepository: CatalogRepository
     ) {
         self.productId = productId
-        self.favoritesService = favoritesService
+        self.favoritesRepository = favoritesRepository
         self.cartRepository = cartRepository
         self.catalogRepository = catalogRepository
         
@@ -39,15 +43,22 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
             }
             .store(in: &cancellables)
         
-        // Корзина: наблюдаем, находится ли этот товар в корзине
+        // Корзина
         cartRepository.observeItems()
             .map { items in items.contains(where: { $0.productId == productId && $0.quantity > 0 }) }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .assign(to: &self.$isInCart)
+        
+        // Избранное (реактивно из репозитория)
+        favoritesRepository.observeIds()
+            .map { ids in ids.contains(productId) }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .assign(to: &self.$favoriteState)
     }
     
-    // MARK: - Outputs (для UI)
+    // MARK: - Outputs
     var title: String { product?.name ?? "Загрузка..." }
     var description: String { product?.description ?? "" }
     
@@ -58,7 +69,7 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     
     var imageURL: String? { product?.imageURL }
     
-    var isFavorite: Bool { favoritesService.isFavorite(productId) }
+    var isFavorite: Bool { favoriteState }
     
     var productPublisher: AnyPublisher<Product?, Never> {
         $product.eraseToAnyPublisher()
@@ -68,13 +79,26 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
         $isInCart.eraseToAnyPublisher()
     }
     
-    var currentIsInCart: Bool { isInCart }
-    
-    // MARK: - Actions
-    func toggleFavorite() {
-        favoritesService.toggle(productId: productId)
+    var isFavoritePublisher: AnyPublisher<Bool, Never> {
+        $favoriteState.eraseToAnyPublisher()
     }
     
+    var currentIsInCart: Bool { isInCart }
+    
+    // MARK: - Favorites actions
+    func toggleFavorite() {
+        Task { try? await favoritesRepository.toggle(productId: productId) }
+    }
+    
+    func addToFavorites() {
+        Task { try? await favoritesRepository.add(productId: productId) }
+    }
+    
+    func removeFromFavorites() {
+        Task { try? await favoritesRepository.remove(productId: productId) }
+    }
+    
+    // MARK: - Cart actions
     func addToCart() {
         Task { try? await cartRepository.add(productId: productId, by: 1) }
     }
