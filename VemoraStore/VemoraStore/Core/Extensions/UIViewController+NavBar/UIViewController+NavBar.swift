@@ -8,9 +8,9 @@
 import UIKit
 
 extension UIViewController {
+    
     // MARK: - Public API
     
-
     func setupNavigationBar(
         title: String = "",
         largeTitleDisplayMode: UINavigationItem.LargeTitleDisplayMode = .always,
@@ -52,12 +52,11 @@ extension UIViewController {
             prefersLargeTitles: prefersLargeTitles
         )
         applyLeftBackButton(tintColor: tintColor, action: leftAction)
-        applyRightTextButton(title: rightTitle, action: rightAction, tintColor: tintColor)
+        applyRightTextButton(title: rightTitle, action: rightAction)
     }
 
     func setupNavigationBarWithRightItem(
         title: String = "",
-        tintColor: UIColor = .brightPurple,
         rightTitle: String? = nil,
         rightAction: Selector? = nil,
         largeTitleDisplayMode: UINavigationItem.LargeTitleDisplayMode = .always,
@@ -69,7 +68,7 @@ extension UIViewController {
             prefersLargeTitles: prefersLargeTitles
         )
         navigationItem.leftBarButtonItem = nil
-        applyRightTextButton(title: rightTitle, action: rightAction, tintColor: tintColor)
+        applyRightTextButton(title: rightTitle, action: rightAction)
     }
 }
 
@@ -84,21 +83,24 @@ private extension UIViewController {
         )
     }
 
-    func applyRightTextButton(title: String?, action: Selector?, tintColor: UIColor) {
+    func applyRightTextButton(title: String?, action: Selector?) {
         guard let title, let action else {
             navigationItem.rightBarButtonItem = nil
             return
         }
-        let button = UIBarButtonItem(
-            title: title,
-            style: .plain,
-            target: self,
-            action: action
-        )
-        button.setTitleTextAttributes([
-            .font: UIFont.systemFont(ofSize: 17, weight: .medium),
-            .foregroundColor: tintColor
-        ], for: .normal)
-        navigationItem.rightBarButtonItem = button
+
+        if title.lowercased().contains("очистить") {
+            navigationItem.rightBarButtonItem = .brandedClear(
+                title: title,
+                target: self,
+                action: action
+            )
+        } else {
+            navigationItem.rightBarButtonItem = .brandedText(
+                title: title,
+                target: self,
+                action: action
+            )
+        }
     }
 }

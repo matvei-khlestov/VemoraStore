@@ -126,12 +126,8 @@ final class CartViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNavigationBarWithRightItem(
-            title: Texts.navigationTitle,
-            largeTitleDisplayMode: .always,
-            prefersLargeTitles: true
-        )
-        updateClearButtonState()
+        setupNavigationBar(title: Texts.navigationTitle)
+        updateClearButtonState()        
     }
 }
 
@@ -259,16 +255,13 @@ private extension CartViewController {
     }
     
     func updateClearButtonState() {
-        navigationItem.rightBarButtonItem = items.isEmpty ? nil : UIBarButtonItem(
+        navigationItem.rightBarButtonItem = items.isEmpty
+        ? nil
+        : .brandedClear(
             title: Texts.clearButtonTitle,
-            style: .plain,
             target: self,
             action: #selector(clearCartTapped)
         )
-        navigationItem.rightBarButtonItem?.setTitleTextAttributes([
-            .font: UIFont.systemFont(ofSize: 17, weight: .medium),
-            .foregroundColor: UIColor.brightPurple
-        ], for: .normal)
     }
 }
 

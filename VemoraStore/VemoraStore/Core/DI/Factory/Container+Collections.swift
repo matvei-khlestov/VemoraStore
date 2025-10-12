@@ -23,4 +23,8 @@ extension Container {
     var cartCollection: Factory<CartCollectingProtocol> {
         self { CartCollection() }.singleton
     }
+    
+    var favoritesCollection: Factory<FavoritesCollectingProtocol> {
+        self { FavoritesCollection() }.singleton
+    }
 }

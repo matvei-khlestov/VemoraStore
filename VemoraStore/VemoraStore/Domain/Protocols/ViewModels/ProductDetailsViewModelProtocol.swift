@@ -20,10 +20,14 @@ protocol ProductDetailsViewModelProtocol: AnyObject {
     var currentIsInCart: Bool { get }
     var productPublisher: AnyPublisher<Product?, Never> { get }
     var isInCartPublisher: AnyPublisher<Bool, Never> { get }
+    var isFavoritePublisher: AnyPublisher<Bool, Never> { get }
     
     // MARK: - Actions
     
     func toggleFavorite()
+    func addToFavorites()
+    func removeFromFavorites()
+    
     func addToCart()
     func addToCart(quantity: Int)
     func updateQuantity(_ quantity: Int)

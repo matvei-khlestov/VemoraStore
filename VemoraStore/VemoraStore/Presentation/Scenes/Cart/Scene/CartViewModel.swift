@@ -70,13 +70,6 @@ final class CartViewModel: CartViewModelProtocol {
         Task { try? await repo.setQuantity(productId: productId, quantity: newQty) }
     }
     
-    func removeItem(at index: Int) {
-        guard cartItems.indices.contains(index) else { return }
-        let removed = cartItems[index]
-        Task { try? await repo.remove(productId: removed.productId) }
-        cartItems.remove(at: index) // оптимистично
-    }
-    
     func removeItem(with productId: String) {
         Task { try? await repo.remove(productId: productId) }
         if let idx = cartItems.firstIndex(where: { $0.productId == productId }) {

@@ -31,4 +31,10 @@ extension Container {
             CoreDataCartStore(container: self.persistentContainer())
         }.singleton
     }
+    
+    var favoritesLocalStore: Factory<FavoritesLocalStore> {
+        self {
+            CoreDataFavoritesStore(container: self.persistentContainer())
+        }.singleton
+    }
 }

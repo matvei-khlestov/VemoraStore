@@ -36,10 +36,15 @@ final class CatalogViewModel: CatalogViewModelProtocol {
         $inCartIds.eraseToAnyPublisher()
     }
     
+    var favoriteIdsPublisher: AnyPublisher<Set<String>, Never> {
+        $favoriteIds.eraseToAnyPublisher()
+    }
+    
     // MARK: - Deps
     
     private let repo: CatalogRepository
     private let cart: CartRepository
+    private let favorites: FavoritesRepository
     
     // MARK: - State
     
@@ -53,15 +58,18 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     
     private var productsCancellable: AnyCancellable?
     @Published private var inCartIds = Set<String>()
+    @Published private var favoriteIds = Set<String>()
     
     // MARK: - Init
     
     init(
         repository: CatalogRepository,
-        cartRepository: CartRepository
+        cartRepository: CartRepository,
+        favoritesRepository: FavoritesRepository
     ) {
         self.repo = repository
         self.cart = cartRepository
+        self.favorites = favoritesRepository
         bind()
         refreshProducts()
     }
@@ -100,6 +108,18 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     func removeFromCart(productId: String) {
         Task { try? await cart.remove(productId: productId) }
     }
+    
+    func addToFavorites(productId: String) {
+        Task { try? await favorites.add(productId: productId) }
+    }
+
+    func removeFromFavorites(productId: String) {
+        Task { try? await favorites.remove(productId: productId) }
+    }
+
+    func toggleFavorite(productId: String) {
+        Task { try? await favorites.toggle(productId: productId) }
+    }
 }
 
 // MARK: - Bindings + helpers
@@ -122,6 +142,11 @@ private extension CatalogViewModel {
             .map { Set($0.map(\.productId)) }
             .receive(on: DispatchQueue.main)
             .assign(to: &$inCartIds)
+        
+        favorites.observeItems()
+            .map { Set($0.map(\.productId)) }
+            .receive(on: DispatchQueue.main)
+            .assign(to: &$favoriteIds)
     }
     
     func refreshProducts() {

@@ -11,15 +11,12 @@ import Combine
 final class FavoritesViewController: UIViewController {
     
     // MARK: - Public Callbacks
-    
     var onSelectProduct: ((String) -> Void)?
     
     // MARK: - Dependencies
-    
     private let viewModel: FavoritesViewModelProtocol
     
     // MARK: - Metrics
-    
     private enum Metrics {
         enum Insets {
             static let horizontal: CGFloat = 16
@@ -39,15 +36,14 @@ final class FavoritesViewController: UIViewController {
     }
     
     // MARK: - Texts
-    
     private enum Texts {
         static let navigationTitle = "Избранное"
         static let emptyState = "Пока нет избранных товаров"
         static let swipeDelete = "Удалить"
+        static let clearButtonTitle = "Очистить"              // 👈 ДОБАВЛЕНО
     }
     
     // MARK: - UI
-    
     private lazy var tableView: UITableView = {
         let view = UITableView(frame: .zero, style: .plain)
         view.backgroundColor = .white
@@ -72,14 +68,12 @@ final class FavoritesViewController: UIViewController {
     }()
     
     // MARK: - State
-    
-    private var items: [Product] = [] { didSet { updateEmptyState() } }
+    private var items: [FavoriteItem] = [] { didSet { updateEmptyState() } }
     private var bag = Set<AnyCancellable>()
     /// Чтобы не делать reloadData во время анимированных апдейтов строк
     private var isPerformingRowUpdate = false
     
     // MARK: - Initialization
-    
     init(viewModel: FavoritesViewModelProtocol) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -89,7 +83,6 @@ final class FavoritesViewController: UIViewController {
     }
     
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAppearance()
@@ -102,11 +95,11 @@ final class FavoritesViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavigationBar(title: Texts.navigationTitle)
+        updateClearButtonState()                             
     }
 }
 
 // MARK: - Setup
-
 private extension FavoritesViewController {
     func setupAppearance() {
         view.backgroundColor = .systemBackground
@@ -126,13 +119,30 @@ private extension FavoritesViewController {
     }
     
     func bindViewModel() {
-        viewModel.favoriteProductsPublisher
+        // Избранные элементы
+        viewModel.favoriteItemsPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] products in
+            .sink { [weak self] items in
                 guard let self else { return }
-                self.items = products
+                self.items = items
                 if !self.isPerformingRowUpdate {
                     self.tableView.reloadData()
+                }
+                self.updateClearButtonState()
+            }
+            .store(in: &bag)
+        
+        // Корзина: обновляем видимые ячейки при изменении состояния
+        viewModel.inCartIdsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                guard let self else { return }
+                for cell in self.tableView.visibleCells {
+                    guard let cell = cell as? FavoritesCell,
+                          let indexPath = self.tableView.indexPath(for: cell),
+                          self.items.indices.contains(indexPath.row) else { continue }
+                    let item = self.items[indexPath.row]
+                    cell.setInCart(self.viewModel.isInCart(item.productId), animated: true)
                 }
             }
             .store(in: &bag)
@@ -140,7 +150,6 @@ private extension FavoritesViewController {
 }
 
 // MARK: - Layout
-
 private extension FavoritesViewController {
     func prepareForAutoLayout() {
         [tableView, emptyLabel].forEach {
@@ -169,12 +178,8 @@ private extension FavoritesViewController {
     
     func setupEmptyStateConstraints() {
         NSLayoutConstraint.activate([
-            emptyLabel.centerXAnchor.constraint(
-                equalTo: view.centerXAnchor
-            ),
-            emptyLabel.centerYAnchor.constraint(
-                equalTo: view.centerYAnchor
-            ),
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             emptyLabel.leadingAnchor.constraint(
                 greaterThanOrEqualTo: view.leadingAnchor,
                 constant: Metrics.EmptyState.horizontalPadding
@@ -188,11 +193,9 @@ private extension FavoritesViewController {
 }
 
 // MARK: - Data Loading
-
 private extension FavoritesViewController {
     func reload() {
-        // Пока используем моки. Когда появится API — заменим на реальную загрузку.
-        viewModel.loadMocks()
+        // никаких моков — состояние приходит из VM
         updateEmptyState()
     }
     
@@ -200,17 +203,34 @@ private extension FavoritesViewController {
         emptyLabel.isHidden = !items.isEmpty
         tableView.isHidden = items.isEmpty
     }
+    
+    func updateClearButtonState() {
+        navigationItem.rightBarButtonItem = items.isEmpty
+        ? nil
+        : .brandedClear(
+            title: Texts.clearButtonTitle,
+            target: self,
+            action: #selector(clearFavoritesTapped)
+        )
+    }
+    
+    @objc func clearFavoritesTapped() {
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        let alert = UIAlertController.makeConfirmation(.clearFavorites) { [weak self] in
+            self?.viewModel.clearFavorites()
+        }
+        present(alert, animated: true, completion: nil)
+    }
 }
 
 // MARK: - Row Mutations
-
 private extension FavoritesViewController {
     /// Единая точка удаления строки — синхронизация с VM и анимированный апдейт
     func deleteRow(at indexPath: IndexPath) {
         guard items.indices.contains(indexPath.row) else { return }
         
-        // 1) Обновим локальный snapshot
-        _ = items.remove(at: indexPath.row)
+        // 1) Локально обновим snapshot
+        let removed = items.remove(at: indexPath.row)
         
         // 2) Анимированно удалим строку
         isPerformingRowUpdate = true
@@ -220,15 +240,15 @@ private extension FavoritesViewController {
             guard let self else { return }
             self.isPerformingRowUpdate = false
             self.updateEmptyState()
+            self.updateClearButtonState()
         })
         
-        // 3) Попросим VM удалить тот же элемент по индексу
-        viewModel.removeItem(at: indexPath.row)
+        // 3) Сообщим VM удалить по productId
+        viewModel.removeItem(with: removed.productId)
     }
 }
 
 // MARK: - UITableViewDataSource
-
 extension FavoritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView,
                    numberOfRowsInSection section: Int) -> Int {
@@ -240,19 +260,18 @@ extension FavoritesViewController: UITableViewDataSource {
         cellForRowAt indexPath: IndexPath
     ) -> UITableViewCell {
         let cell: FavoritesCell = tableView.dequeueReusableCell(for: indexPath)
-        let product = items[indexPath.row]
-        cell.configure(with: product, isInCart: viewModel.isInCart(product.id))
+        let item = items[indexPath.row]
+        cell.configure(with: item, isInCart: viewModel.isInCart(item.productId))
         cell.delegate = self
         return cell
     }
 }
 
 // MARK: - UITableViewDelegate
-
 extension FavoritesViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let productId = items[indexPath.row].id
+        let productId = items[indexPath.row].productId
         onSelectProduct?(productId)
     }
     
@@ -273,17 +292,17 @@ extension FavoritesViewController: UITableViewDelegate {
 }
 
 // MARK: - FavoritesCellDelegate
-
 extension FavoritesViewController: FavoritesCellDelegate {
     func favoritesCellDidTapCart(_ cell: FavoritesCell) {
-        guard let indexPath = tableView.indexPath(for: cell) else { return }
-        let product = items[indexPath.row]
+        guard let indexPath = tableView.indexPath(for: cell),
+              items.indices.contains(indexPath.row) else { return }
+        let item = items[indexPath.row]
         
         // Бизнес-логика через VM
-        viewModel.toggleCart(for: product.id)
+        viewModel.toggleCart(for: item.productId)
         
         // Обновим иконку у той же ячейки без перезагрузки строки
-        let newState = viewModel.isInCart(product.id)
+        let newState = viewModel.isInCart(item.productId)
         cell.setInCart(newState, animated: false)
     }
 }

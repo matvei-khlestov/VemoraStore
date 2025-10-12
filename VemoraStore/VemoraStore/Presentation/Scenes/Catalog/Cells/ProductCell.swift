@@ -357,16 +357,27 @@ extension ProductCell {
     /// Подписка ячейки на состояние корзины: кнопка обновится автоматически при изменении.
     func bindCartState(cartIdsPublisher: AnyPublisher<Set<String>, Never>) {
         guard let productId = productId else { return }
-
-        // Сбросить прошлые подписки (важно для reuse)
-        bag.removeAll()
-
+        
         cartIdsPublisher
             .map { $0.contains(productId) }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] inCart in
                 self?.setInCart(inCart, animated: true)
+            }
+            .store(in: &bag)
+    }
+
+    // Подписка ячейки на состояние избранного: сердечко обновится автоматически при изменении.
+    func bindFavoriteState(favoriteIdsPublisher: AnyPublisher<Set<String>, Never>) {
+        guard let productId = productId else { return }
+        
+        favoriteIdsPublisher
+            .map { $0.contains(productId) }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] isFav in
+                self?.setFavorite(isFav, animated: true)
             }
             .store(in: &bag)
     }
@@ -394,7 +405,7 @@ private extension ProductCell {
     
     @objc func addToCartTapped() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        let next = !isInCart          // хотим стать в корзине/выйти из неё
+        let next = !isInCart         
         setInCart(next, animated: true)
         addToCartButton.pulse()
         delegate?.productCell(self, didToggleCart: next)
