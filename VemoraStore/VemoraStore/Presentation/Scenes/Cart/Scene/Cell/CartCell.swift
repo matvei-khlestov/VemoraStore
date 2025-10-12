@@ -7,6 +7,7 @@
 
 
 import UIKit
+import Kingfisher
 
 protocol CartCellDelegate: AnyObject {
     /// Вызывается при изменении количества (после каждого тапа −/+)
@@ -352,15 +353,14 @@ private extension CartCell {
 // MARK: - Configure API
 
 extension CartCell {
-    func configure(with product: Product, quantity: Int) {
-        titleLabel.text = product.name
-        brandLabel.text = product.brandId
-        priceLabel.text = "\(product.price) ₽"
+    func configure(with item: CartItem) {
+        titleLabel.text = item.title
+        brandLabel.text = item.brandName
+        priceLabel.text = "\(item.lineTotal) ₽"
         
-        // thumbImageView.kf.setImage(with: product.image)
-        thumbImageView.image = UIImage(resource: .divan) // заглушка
-        
-        setQuantity(quantity, notify: false)
+        let url = URL(string: item.imageURL ?? "")
+        thumbImageView.kf.setImage(with: url)
+        setQuantity(item.quantity, notify: false)
     }
     
     func setQuantity(_ value: Int, notify: Bool = true) {

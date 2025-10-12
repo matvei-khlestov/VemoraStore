@@ -19,7 +19,7 @@ protocol CoordinatorBuildingProtocol {
     
     func makeProductDetailsCoordinator(
         navigation: UINavigationController,
-        product: Product
+        productId: String
     ) -> ProductDetailsCoordinatingProtocol
 
     // MARK: - Category Products

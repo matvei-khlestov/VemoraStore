@@ -5,6 +5,7 @@
 //  Created by Matvei Khlestov on 06.10.2025.
 //
 
+import Foundation
 import CoreData
 import Combine
 
@@ -111,6 +112,19 @@ final class CoreDataCatalogStore: BaseCoreDataStore, CatalogLocalStore {
                 }
             )
             .eraseToAnyPublisher()
+    }
+
+    /// Live stream for a single product by id. Built on top of the generic products stream.
+    func observeProduct(id: String) -> AnyPublisher<Product?, Never> {
+        observeProducts(
+            query: nil,
+            categoryIds: nil,
+            brandIds: nil,
+            minPrice: nil,
+            maxPrice: nil
+        )
+        .map { products in products.first(where: { $0.id == id }) }
+        .eraseToAnyPublisher()
     }
     
     // MARK: - Observe (legacy)
@@ -256,6 +270,33 @@ final class CoreDataCatalogStore: BaseCoreDataStore, CatalogLocalStore {
                 print("❌ CoreDataCatalogStore: upsertBrands error: \(error)")
             }
         }
+    }
+}
+
+// MARK: - Meta (CatalogLocalStore)
+
+extension CoreDataCatalogStore {
+    /// O(1) fetch по id из viewContext. Потокобезопасно через `performAndWait`.
+    public func meta(for productId: String) -> ProductMeta? {
+        var result: ProductMeta?
+        viewContext.performAndWait {
+            let req: NSFetchRequest<CDProduct> = CDProduct.fetchRequest()
+            req.predicate = NSPredicate(format: "id == %@", productId)
+            req.fetchLimit = 1
+
+            guard
+                let cd = try? viewContext.fetch(req).first,
+                let name = cd.name
+            else {
+                result = nil
+                return
+            }
+
+            let brandName = cd.brandId ?? ""
+            let url = cd.imageURL.flatMap(URL.init(string:))
+            result = ProductMeta(brandName: brandName, title: name, price: cd.price, imageURL: url)
+        }
+        return result
     }
 }
 

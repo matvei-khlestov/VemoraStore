@@ -46,7 +46,9 @@ extension Container {
     
     var catalogViewModel: Factory<CatalogViewModelProtocol> {
         self {
-            CatalogViewModel(repository: self.catalogRepository())
+            CatalogViewModel(
+                repository: self.catalogRepository(),
+                cartRepository: self.cartRepository(self.authService().currentUserId ?? ""))
         }.singleton
     }
 
@@ -56,20 +58,24 @@ extension Container {
         }
     }
     
-    var productDetailsViewModel: ParameterFactory<Product, ProductDetailsViewModelProtocol> {
-        self { product in
-            ProductDetailsViewModel(
-                product: product,
-                favoritesService: self.favoritesService(),
-                cartService: self.cartService()
-            )
-        }
+var productDetailsViewModel: ParameterFactory<String, ProductDetailsViewModelProtocol> {
+    self { productId in
+        ProductDetailsViewModel(
+            productId: productId,
+            favoritesService: self.favoritesService(),
+            cartRepository: self.cartRepository(self.authService().currentUserId ?? ""),
+            catalogRepository: self.catalogRepository(),
+        )
     }
+}
 
     var categoryProductsViewModel: ParameterFactory<String, CategoryProductsViewModelProtocol> {
         self { categoryId in
             CategoryProductsViewModel(
                 repository: self.catalogRepository(),
+                cartRepository: self.cartRepository(
+                    self.authService().currentUserId ?? ""
+                ),
                 categoryId: categoryId
             )
         }
@@ -90,7 +96,7 @@ extension Container {
     
     var cartViewModel: Factory<CartViewModelProtocol> {
         self {
-            CartViewModel(cartService: self.cartService())
+            CartViewModel(cartRepository: self.cartRepository(self.authService().currentUserId ?? ""))
         }.singleton
     }
     

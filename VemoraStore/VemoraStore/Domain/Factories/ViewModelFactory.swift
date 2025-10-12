@@ -40,8 +40,8 @@ final class ViewModelFactory: ViewModelBuildingProtocol {
         container.catalogFilterViewModel()
     }
     
-    func makeProductDetailsViewModel(product: Product) -> ProductDetailsViewModelProtocol {
-        container.productDetailsViewModel(product)
+    func makeProductDetailsViewModel(productId: String) -> ProductDetailsViewModelProtocol {
+        container.productDetailsViewModel(productId)
     }
 
     func makeCategoryProductsViewModel(categoryId: String) -> CategoryProductsViewModelProtocol {

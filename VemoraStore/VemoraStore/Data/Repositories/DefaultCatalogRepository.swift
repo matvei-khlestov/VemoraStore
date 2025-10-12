@@ -45,6 +45,11 @@ final class DefaultCatalogRepository: CatalogRepository {
     func observeBrands() -> AnyPublisher<[Brand], Never> {
         local.observeBrands()
     }
+
+    // Observe single product by id
+    func observeProduct(id: String) -> AnyPublisher<Product?, Never> {
+        local.observeProduct(id: id)
+    }
     
     /// Универсальный наблюдатель с множественными фильтрами + удержание FRC
     func observeProducts(

@@ -43,8 +43,8 @@ final class CartCoordinator: CartCoordinatingProtocol {
             self?.showCheckout()
         }
         
-        vc.onSelectProduct = { [weak self] product in
-            self?.showProductDetails(for: product)
+        vc.onSelectProductId = { [weak self] productId in
+            self?.showProductDetails(for: productId)
         }
         
         navigation.setViewControllers([vc], animated: false)
@@ -69,10 +69,10 @@ final class CartCoordinator: CartCoordinatingProtocol {
         checkout.start()
     }
     
-    private func showProductDetails(for product: Product) {
+    private func showProductDetails(for productId: String) {
         let details = coordinatorFactory.makeProductDetailsCoordinator(
             navigation: navigation,
-            product: product
+            productId: productId
         )
         add(details)
         details.start()

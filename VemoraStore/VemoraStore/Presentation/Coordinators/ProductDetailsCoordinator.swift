@@ -14,7 +14,7 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     let navigation: UINavigationController
     var childCoordinators: [Coordinator] = []
     
-    private let product: Product
+    private let productId: String
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
     
@@ -22,12 +22,12 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     
     init(
         navigation: UINavigationController,
-        product: Product,
+        productId: String,
         viewModelFactory: ViewModelBuildingProtocol,
         coordinatorFactory: CoordinatorBuildingProtocol
     ) {
         self.navigation = navigation
-        self.product = product
+        self.productId = productId
         self.viewModelFactory = viewModelFactory
         self.coordinatorFactory = coordinatorFactory
     }
@@ -35,7 +35,7 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeProductDetailsViewModel(product: product)
+        let vm = viewModelFactory.makeProductDetailsViewModel(productId: productId)
         let vc = ProductDetailsViewController(viewModel: vm)
     
         vc.onBack = { [weak self] in

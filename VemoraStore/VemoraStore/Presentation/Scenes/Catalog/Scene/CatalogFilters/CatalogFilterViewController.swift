@@ -241,19 +241,15 @@ private extension CatalogFilterViewController {
     }
     
     func setupNavigation() {
-        setupNavigationBarWithNavLeftItem(
+        setupNavigationBarWithNavItems(
             title: Texts.navigationTitle,
-            action: #selector(backTapped),
-            largeTitleDisplayMode: .never
+            tintColor: .brightPurple,
+            leftAction: #selector(backTapped),
+            rightTitle: Texts.reset,
+            rightAction: #selector(resetTapped),
+            largeTitleDisplayMode: .never,
+            prefersLargeTitles: false
         )
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: Texts.reset,
-            style: .plain,
-            target: self,
-            action: #selector(resetTapped)
-        )
-        navigationItem.rightBarButtonItem?.tintColor = .brightPurple
     }
     
     func setupBottomBar() {

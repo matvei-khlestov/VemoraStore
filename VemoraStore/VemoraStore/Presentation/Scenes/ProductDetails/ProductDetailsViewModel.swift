@@ -6,70 +6,89 @@
 //
 
 import Foundation
+import Combine
 
 final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     
-    private let product: Product
+    private let productId: String
     private let favoritesService: FavoritesServiceProtocol
-    private let cartService: CartServiceProtocol
+    private let cartRepository: CartRepository
+    private let catalogRepository: CatalogRepository
+    private var cancellables = Set<AnyCancellable>()
+    
+    @Published private var product: Product?
+    @Published private var isInCart: Bool = false   // состояние «в корзине»
     
     // MARK: - Init
     init(
-        product: Product,
+        productId: String,
         favoritesService: FavoritesServiceProtocol,
-        cartService: CartServiceProtocol
+        cartRepository: CartRepository,
+        catalogRepository: CatalogRepository
     ) {
-        self.product = product
+        self.productId = productId
         self.favoritesService = favoritesService
-        self.cartService = cartService
+        self.cartRepository = cartRepository
+        self.catalogRepository = catalogRepository
+        
+        // Продукт
+        catalogRepository.observeProduct(id: productId)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] product in
+                self?.product = product
+            }
+            .store(in: &cancellables)
+        
+        // Корзина: наблюдаем, находится ли этот товар в корзине
+        cartRepository.observeItems()
+            .map { items in items.contains(where: { $0.productId == productId && $0.quantity > 0 }) }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .assign(to: &self.$isInCart)
     }
     
     // MARK: - Outputs (для UI)
-    var title: String { product.name }
-    var description: String { product.description }
+    var title: String { product?.name ?? "Загрузка..." }
+    var description: String { product?.description ?? "" }
     
-    /// Готовая строка цены
     var priceText: String {
-        // Если понадобится более красивое форматирование:
-        // let f = NumberFormatter()
-        // f.numberStyle = .currency
-        // f.locale = Locale(identifier: "ru_RU")
-        // return f.string(from: product.price as NSNumber) ?? "\(product.price) ₽"
-        return "\(product.price) ₽"
+        guard let price = product?.price else { return "" }
+        return "\(price) ₽"
     }
     
-    /// Картинка товара (для контроллера, если подключишь загрузку изображений)
-    var imageURL: String? { product.imageURL }
+    var imageURL: String? { product?.imageURL }
     
-    /// Текущее состояние избранного
-    var isFavorite: Bool { favoritesService.isFavorite(product.id) }
+    var isFavorite: Bool { favoritesService.isFavorite(productId) }
+    
+    var productPublisher: AnyPublisher<Product?, Never> {
+        $product.eraseToAnyPublisher()
+    }
+    
+    var isInCartPublisher: AnyPublisher<Bool, Never> {
+        $isInCart.eraseToAnyPublisher()
+    }
+    
+    var currentIsInCart: Bool { isInCart }
     
     // MARK: - Actions
-    /// Переключить избранное
     func toggleFavorite() {
-        favoritesService.toggle(productId: product.id)
+        favoritesService.toggle(productId: productId)
     }
     
-    /// Добавить в корзину (кнопка «Добавить в корзину»)
     func addToCart() {
-        cartService.add(product: product, quantity: 1)
+        Task { try? await cartRepository.add(productId: productId, by: 1) }
     }
     
-    /// Добавить в корзину сразу с количеством (используется, если вызовешь из контроллера с qty)
-    /// Зависит от реализации CartService. Пока — добавляем товар qty раз.
     func addToCart(quantity: Int) {
         guard quantity > 0 else { return }
-        for _ in 0..<quantity {
-            cartService.add(product: product, quantity: 1)
-        }
+        Task { try? await cartRepository.add(productId: productId, by: quantity) }
     }
     
-    /// Обновить количество товара в корзине до конкретного значения.
-    /// Оставлено как хук под будущую реализацию CartService (setQuantity/remove).
-    /// Сейчас — заглушка, чтобы контроллер мог вызывать метод без ошибок компиляции.
     func updateQuantity(_ quantity: Int) {
-        // TODO: когда появится API в CartService:
-        // if quantity <= 0 { cartService.remove(productId: product.id) }
-        // else { cartService.set(productId: product.id, quantity: quantity) }
+        Task { try? await cartRepository.setQuantity(productId: productId, quantity: quantity) }
+    }
+    
+    func removeFromCart() {
+        Task { try? await cartRepository.remove(productId: productId) }
     }
 }

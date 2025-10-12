@@ -24,12 +24,12 @@ extension Container {
     }
     
     // MARK: - Product Details
-    
-    var productDetailsCoordinator: ParameterFactory<(UINavigationController, Product), ProductDetailsCoordinatingProtocol> {
-        self { navigation, product in
+
+    var productDetailsCoordinator: ParameterFactory<(UINavigationController, String), ProductDetailsCoordinatingProtocol> {
+        self { navigation, productId in
             ProductDetailsCoordinator(
                 navigation: navigation,
-                product: product,
+                productId: productId,
                 viewModelFactory: self.viewModelFactory(),
                 coordinatorFactory: self.coordinatorFactory()
             )

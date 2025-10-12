@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Combine
+import Kingfisher
 
 final class ProductDetailsViewController: UIViewController {
     
@@ -50,7 +52,7 @@ final class ProductDetailsViewController: UIViewController {
     // MARK: - State
     
     private var isFavorite = false
-    private var isInCart = false
+    private var bag = Set<AnyCancellable>()
     
     // MARK: - UI
     
@@ -148,7 +150,8 @@ final class ProductDetailsViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         setupActions()
-        configure()
+        bindViewModel()
+        configureInitial()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -187,6 +190,22 @@ private extension ProductDetailsViewController {
     func setupActions() {
         addToCartButton.onTap(self, action: #selector(addToCartTapped))
         favoriteButton.onTap(self, action: #selector(favoriteTapped))
+    }
+    
+    func bindViewModel() {
+        viewModel.productPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.renderFromViewModel()
+            }
+            .store(in: &bag)
+        
+        viewModel.isInCartPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] inCart in
+                self?.addToCartButton.setInCart(inCart, animated: true)
+            }
+            .store(in: &bag)
     }
 }
 
@@ -293,12 +312,27 @@ private extension ProductDetailsViewController {
 // MARK: - Configure
 
 private extension ProductDetailsViewController {
-    func configure() {
+    func configureInitial() {
         let url = URL(string: viewModel.imageURL ?? "")
         productImageView.kf.setImage(with: url)
         titleLabel.text = viewModel.title
         descriptionLabel.text = viewModel.description
         priceLabel.text = viewModel.priceText
+        // начальное состояние избранного
+        isFavorite = viewModel.isFavorite
+        favoriteButton.setFavorite(isFavorite, animated: false)
+        addToCartButton.setInCart(viewModel.currentIsInCart, animated: false)
+    }
+    
+    func renderFromViewModel() {
+        let url = URL(string: viewModel.imageURL ?? "")
+        productImageView.kf.setImage(with: url)
+        titleLabel.text = viewModel.title
+        descriptionLabel.text = viewModel.description
+        priceLabel.text = viewModel.priceText
+        // обновим избранное
+        isFavorite = viewModel.isFavorite
+        favoriteButton.setFavorite(isFavorite, animated: true)
     }
 }
 
@@ -310,14 +344,19 @@ private extension ProductDetailsViewController {
     }
     
     @objc func addToCartTapped() {
-        isInCart.toggle()
-        addToCartButton.setInCart(isInCart, animated: true)
-        addToCartButton.pulse()
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        if viewModel.currentIsInCart {
+            viewModel.removeFromCart()
+        } else {
+            viewModel.addToCart()
+        }
+        // Кнопка обновится из isInCartPublisher
+        addToCartButton.pulse()
     }
     
     @objc func favoriteTapped() {
-        isFavorite.toggle()
+        viewModel.toggleFavorite()
+        isFavorite = viewModel.isFavorite
         favoriteButton.setFavorite(isFavorite, animated: true)
         favoriteButton.pulse()
         UIImpactFeedbackGenerator(style: .light).impactOccurred()

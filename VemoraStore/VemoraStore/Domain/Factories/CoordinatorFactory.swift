@@ -24,8 +24,8 @@ final class CoordinatorFactory: CoordinatorBuildingProtocol {
     
     // MARK: - Product Details
     
-    func makeProductDetailsCoordinator(navigation: UINavigationController, product: Product) -> ProductDetailsCoordinatingProtocol {
-        container.productDetailsCoordinator((navigation, product))
+    func makeProductDetailsCoordinator(navigation: UINavigationController, productId: String) -> ProductDetailsCoordinatingProtocol {
+        container.productDetailsCoordinator((navigation, productId))
     }
     
     // MARK: - Category Products

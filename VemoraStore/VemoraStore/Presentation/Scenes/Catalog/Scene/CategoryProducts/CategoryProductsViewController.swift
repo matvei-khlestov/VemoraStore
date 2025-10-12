@@ -10,10 +10,9 @@ import Combine
 
 final class CategoryProductsViewController: UIViewController {
     
-    // MARK: - Callbacks
+    // MARK: - Callbacks (navigation-only)
     
     var onSelectProduct: ((Product) -> Void)?
-    var onAddToCart: ((Product) -> Void)?
     var onToggleFavorite: ((Product) -> Void)?
     var onBack: (() -> Void)?
     
@@ -72,6 +71,7 @@ final class CategoryProductsViewController: UIViewController {
     // MARK: - State
     
     private var bag = Set<AnyCancellable>()
+    private var inCartIds = Set<String>()
     
     // MARK: - Init
     
@@ -152,7 +152,17 @@ private extension CategoryProductsViewController {
     func bindViewModel() {
         viewModel.productsPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in self?.collectionView.reloadData() }
+            .sink { [weak self] _ in
+                self?.collectionView.reloadData()
+            }
+            .store(in: &bag)
+
+        viewModel.inCartIdsPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] ids in
+                guard let self else { return }
+                self.inCartIds = ids
+            }
             .store(in: &bag)
     }
 }
@@ -208,8 +218,10 @@ extension CategoryProductsViewController: UICollectionViewDataSource {
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(ProductCell.self, for: indexPath)
         let product = viewModel.products[indexPath.item]
-        cell.configure(with: product, isFavorite: false)
+        let isInCart = inCartIds.contains(product.id)
+        cell.configure(with: product, isFavorite: false, isInCart: isInCart)
         cell.delegate = self
+        cell.bindCartState(cartIdsPublisher: viewModel.inCartIdsPublisher)
         return cell
     }
 }
@@ -233,14 +245,19 @@ extension CategoryProductsViewController: UISearchResultsUpdating {
 // MARK: - ProductCellDelegate
 
 extension CategoryProductsViewController: ProductCellDelegate {
+    func productCell(_ cell: ProductCell, didToggleCart toInCart: Bool) {
+        guard let idx = collectionView.indexPath(for: cell) else { return }
+        let product = viewModel.products[idx.item]
+        if toInCart {
+            viewModel.addToCart(productId: product.id)
+        } else {
+            viewModel.removeFromCart(productId: product.id)
+        }
+    }
+
     func productCellDidTapFavorite(_ cell: ProductCell) {
         guard let idx = collectionView.indexPath(for: cell) else { return }
         onToggleFavorite?(viewModel.products[idx.item])
-    }
-    
-    func productCellDidTapAddToCart(_ cell: ProductCell) {
-        guard let idx = collectionView.indexPath(for: cell) else { return }
-        onAddToCart?(viewModel.products[idx.item])
     }
 }
 

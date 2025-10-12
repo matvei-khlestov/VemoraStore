@@ -13,7 +13,7 @@ final class CartViewController: UIViewController {
     // MARK: - Public Callbacks
     
     var onCheckout: (() -> Void)?
-    var onSelectProduct: ((Product) -> Void)?
+    var onSelectProductId: ((String) -> Void)?
     
     // MARK: - Dependencies
     
@@ -46,7 +46,7 @@ final class CartViewController: UIViewController {
         }
         
         enum Fonts {
-            static let emptyState: UIFont = .systemFont(ofSize: 15, weight: .regular)
+            static let emptyState: UIFont = .systemFont(ofSize: 16, weight: .regular)
         }
     }
     
@@ -56,6 +56,7 @@ final class CartViewController: UIViewController {
         static let navigationTitle = "Корзина"
         static let emptyState = "Ваша корзина пуста"
         static let checkoutButtonTitle = "Оформить заказ"
+        static let clearButtonTitle = "Очистить"
         static let deleteAction = "Удалить"
     }
     
@@ -95,9 +96,7 @@ final class CartViewController: UIViewController {
     // MARK: - State
     
     private var items: [CartItem] = [] {
-        didSet {
-            updateEmptyState()
-        }
+        didSet { updateEmptyState() }
     }
     private var bag = Set<AnyCancellable>()
     /// Чтобы не делать reloadData во время анимированных апдейтов строк
@@ -122,12 +121,17 @@ final class CartViewController: UIViewController {
         setupLayout()
         setupActions()
         bindViewModel()
-        reload()
+        updateEmptyState()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        setupNavigationBar(title: Texts.navigationTitle)
+        setupNavigationBarWithRightItem(
+            title: Texts.navigationTitle,
+            largeTitleDisplayMode: .always,
+            prefersLargeTitles: true
+        )
+        updateClearButtonState()
     }
 }
 
@@ -168,6 +172,7 @@ private extension CartViewController {
                 if !self.isPerformingRowUpdate {
                     self.tableView.reloadData()
                 }
+                self.updateClearButtonState() // 👈 добавляем
             }
             .store(in: &bag)
     }
@@ -212,12 +217,8 @@ private extension CartViewController {
     
     func setupEmptyStateConstraints() {
         NSLayoutConstraint.activate([
-            emptyLabel.centerXAnchor.constraint(
-                equalTo: view.centerXAnchor
-            ),
-            emptyLabel.centerYAnchor.constraint(
-                equalTo: view.centerYAnchor
-            ),
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             emptyLabel.leadingAnchor.constraint(
                 greaterThanOrEqualTo: view.leadingAnchor,
                 constant: Metrics.Insets.emptyStateHorizontal
@@ -247,20 +248,27 @@ private extension CartViewController {
     }
 }
 
-// MARK: - Data Loading
+// MARK: - Empty state
 
 private extension CartViewController {
-    func reload() {
-        // Пока моки; замените на загрузку из сервиса корзины
-        viewModel.loadMocks()
-        updateEmptyState()
-    }
-    
     func updateEmptyState() {
         let isEmpty = items.isEmpty
         emptyLabel.isHidden = !isEmpty
         tableView.isHidden = isEmpty
         checkoutButton.isHidden = isEmpty
+    }
+    
+    func updateClearButtonState() {
+        navigationItem.rightBarButtonItem = items.isEmpty ? nil : UIBarButtonItem(
+            title: Texts.clearButtonTitle,
+            style: .plain,
+            target: self,
+            action: #selector(clearCartTapped)
+        )
+        navigationItem.rightBarButtonItem?.setTitleTextAttributes([
+            .font: UIFont.systemFont(ofSize: 17, weight: .medium),
+            .foregroundColor: UIColor.brightPurple
+        ], for: .normal)
     }
 }
 
@@ -284,8 +292,8 @@ private extension CartViewController {
             self.updateEmptyState()
         })
         
-        // 3) Сообщим VM удалить по id (надёжнее, чем по индексу)
-        viewModel.removeItem(with: removed.id)
+        // 3) Сообщим VM удалить по productId (надёжнее, чем по индексу)
+        viewModel.removeItem(with: removed.productId)
     }
 }
 
@@ -295,6 +303,14 @@ private extension CartViewController {
     @objc func checkoutTapped() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
         onCheckout?()
+    }
+    
+    @objc func clearCartTapped() {
+        UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        let alert = UIAlertController.makeConfirmation(.clearCart) { [weak self] in
+            self?.viewModel.clearCart()
+        }
+        present(alert, animated: true, completion: nil)
     }
 }
 
@@ -308,7 +324,7 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartCell = tableView.dequeueReusableCell(for: indexPath)
         let item = items[indexPath.row]
-        cell.configure(with: item.product, quantity: item.quantity)
+        cell.configure(with: item)
         cell.delegate = self
         return cell
     }
@@ -319,7 +335,9 @@ extension CartViewController: UITableViewDataSource {
 extension CartViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        onSelectProduct?(items[indexPath.row].product)
+        
+        let productId = items[indexPath.row].productId
+        onSelectProductId?(productId)
     }
     
     func tableView(
@@ -344,7 +362,7 @@ extension CartViewController: CartCellDelegate {
     func cartCell(_ cell: CartCell, didChangeQuantity newValue: Int) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
         let item = items[indexPath.row]
-        viewModel.setQuantity(for: item.id, quantity: newValue)
+        viewModel.setQuantity(for: item.productId, quantity: newValue)
         items[indexPath.row].quantity = max(1, newValue)
     }
 }

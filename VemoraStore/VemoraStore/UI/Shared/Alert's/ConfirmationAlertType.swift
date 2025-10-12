@@ -10,6 +10,7 @@ import UIKit
 enum ConfirmationAlertType {
     case logout
     case deleteAccount
+    case clearCart
     
     var title: String {
         switch self {
@@ -17,6 +18,8 @@ enum ConfirmationAlertType {
             return "Выйти из аккаунта?"
         case .deleteAccount: 
             return "Удалить аккаунт?"
+        case .clearCart:
+            return "Вы уверены, что хотите очистить корзину?"
         }
     }
     
@@ -25,6 +28,8 @@ enum ConfirmationAlertType {
         case .logout:
             return "Вы сможете войти снова в любой момент."
         case .deleteAccount:
+            return "Это действие необратимо. Все данные будут удалены."
+        case .clearCart:
             return "Это действие необратимо. Все данные будут удалены."
         }
     }
@@ -35,6 +40,8 @@ enum ConfirmationAlertType {
             return "Выйти"
         case .deleteAccount: 
             return "Удалить аккаунт"
+        case .clearCart:
+            return "Очистить корзину"
         }
     }
     

@@ -40,30 +40,28 @@ final class CatalogCoordinator: CatalogCoordinatingProtocol {
     func start() {
         let vm = viewModelFactory.makeCatalogViewModel()
         self.catalogVM = vm
-        
         let vc = CatalogViewController(viewModel: vm)
-        
+
+        // Навигация
+        vc.onSelectProduct = { [weak self] product in
+            self?.showProductDetails(for: product.id)
+        }
         vc.onSelectCategory = { [weak self] category in
             self?.showCategoryProducts(for: category)
         }
-        
-        vc.onSelectProduct = { [weak self] product in
-            self?.showProductDetails(for: product)
+        vc.onFilterTap = { [weak self] state in
+            self?.showFilter(initialState: state)
         }
-        
-        vc.onFilterTap = { [weak self] currentState in
-            self?.showFilter(initialState: currentState)
-        }
-        
+
         navigation.setViewControllers([vc], animated: false)
     }
     
     // MARK: - Private
     
-    private func showProductDetails(for product: Product) {
+    private func showProductDetails(for productId: String) {
         let detailsCoordinator = coordinatorFactory.makeProductDetailsCoordinator(
             navigation: navigation,
-            product: product
+            productId: productId
         )
         add(detailsCoordinator)
         detailsCoordinator.start()
@@ -100,4 +98,3 @@ final class CatalogCoordinator: CatalogCoordinatingProtocol {
         filterCoordinator.start()
     }
 }
-

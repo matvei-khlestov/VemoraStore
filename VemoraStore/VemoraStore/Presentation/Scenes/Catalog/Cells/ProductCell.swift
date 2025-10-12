@@ -8,10 +8,11 @@
 
 import UIKit
 import Kingfisher
+import Combine
 
 protocol ProductCellDelegate: AnyObject {
+    func productCell(_ cell: ProductCell, didToggleCart toInCart: Bool)
     func productCellDidTapFavorite(_ cell: ProductCell)
-    func productCellDidTapAddToCart(_ cell: ProductCell)
 }
 
 final class ProductCell: UICollectionViewCell {
@@ -28,6 +29,8 @@ final class ProductCell: UICollectionViewCell {
     
     private var isFavorite = false
     private var isInCart = false
+    private var bag = Set<AnyCancellable>()
+    private var productId: String?
     
     // MARK: - Metrics
     
@@ -164,6 +167,8 @@ final class ProductCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        bag.removeAll()
+        productId = nil
         imageView.image = UIImage(resource: .divan)
         titleLabel.text = nil
         brandLabel.text = nil
@@ -338,6 +343,7 @@ extension ProductCell {
         isFavorite: Bool = false,
         isInCart: Bool = false
     ) {
+        self.productId = product.id
         titleLabel.text = product.name
         brandLabel.text = product.brandId
         priceLabel.text = "\(product.price) ₽"
@@ -346,6 +352,23 @@ extension ProductCell {
         
         setFavorite(isFavorite, animated: false)
         setInCart(isInCart, animated: false)
+    }
+
+    /// Подписка ячейки на состояние корзины: кнопка обновится автоматически при изменении.
+    func bindCartState(cartIdsPublisher: AnyPublisher<Set<String>, Never>) {
+        guard let productId = productId else { return }
+
+        // Сбросить прошлые подписки (важно для reuse)
+        bag.removeAll()
+
+        cartIdsPublisher
+            .map { $0.contains(productId) }
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] inCart in
+                self?.setInCart(inCart, animated: true)
+            }
+            .store(in: &bag)
     }
     
     func setFavorite(_ value: Bool, animated: Bool = true) {
@@ -371,9 +394,10 @@ private extension ProductCell {
     
     @objc func addToCartTapped() {
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
-        setInCart(!isInCart, animated: true)
+        let next = !isInCart          // хотим стать в корзине/выйти из неё
+        setInCart(next, animated: true)
         addToCartButton.pulse()
-        delegate?.productCellDidTapAddToCart(self)
+        delegate?.productCell(self, didToggleCart: next)
     }
 }
 

@@ -12,6 +12,10 @@ final class CartService: CartServiceProtocol {
     
     // MARK: - Singleton
     static let shared = CartService()
+    /// Current user scope for in-memory items (used to build CartItem)
+    private var userId: String = "local"
+    /// Configure the service with an actual user id
+    func configure(userId: String) { self.userId = userId }
     private init() {}
     
     // MARK: - Private
@@ -27,35 +31,62 @@ final class CartService: CartServiceProtocol {
     }
     
     func add(product: Product, quantity: Int = 1) {
-        if let idx = items.firstIndex(where: { $0.id == product.id }) {
-            items[idx].quantity += quantity
+        let qty = max(1, quantity)
+        if let idx = items.firstIndex(where: { $0.productId == product.id }) {
+            items[idx].quantity += qty
+            items[idx].updatedAt = Date()
         } else {
-            items.append(CartItem(id: product.id, product: product, quantity: max(1, quantity)))
+            items.append(
+                CartItem(
+                    userId: userId,
+                    productId: product.id,
+                    brandName: product.brandId, // if you have a brand name resolver, map here
+                    title: product.name,
+                    price: product.price,
+                    imageURL: product.imageURL,
+                    quantity: qty,
+                    updatedAt: Date()
+                )
+            )
         }
     }
     
     func setQuantity(productId: String, quantity: Int) {
-        guard let idx = items.firstIndex(where: { $0.id == productId }) else { return }
+        guard let idx = items.firstIndex(where: { $0.productId == productId }) else { return }
         items[idx].quantity = max(1, quantity)
+        items[idx].updatedAt = Date()
     }
     
     func increase(productId: String) {
-        guard let idx = items.firstIndex(where: { $0.id == productId }) else { return }
+        guard let idx = items.firstIndex(where: { $0.productId == productId }) else { return }
         items[idx].quantity += 1
+        items[idx].updatedAt = Date()
     }
     
     func decrease(productId: String) {
-        guard let idx = items.firstIndex(where: { $0.id == productId }) else { return }
+        guard let idx = items.firstIndex(where: { $0.productId == productId }) else { return }
         items[idx].quantity = max(1, items[idx].quantity - 1)
+        items[idx].updatedAt = Date()
     }
     
     func remove(productId: String) {
-        items.removeAll { $0.id == productId }
+        items.removeAll { $0.productId == productId }
     }
     
     func loadMocks() {
         let mocks = MockData.products
-        items = mocks.map { CartItem(id: $0.id, product: $0, quantity: 1) }
+        items = mocks.map {
+            CartItem(
+                userId: userId,
+                productId: $0.id,
+                brandName: $0.brandId,
+                title: $0.name,
+                price: $0.price,
+                imageURL: $0.imageURL,
+                quantity: 1,
+                updatedAt: Date()
+            )
+        }
     }
 }
 
