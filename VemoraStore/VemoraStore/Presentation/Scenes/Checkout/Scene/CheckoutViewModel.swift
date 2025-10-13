@@ -119,15 +119,6 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
                 self?.receiverPhoneDisplay = $0
             }
             .store(in: &bag)
-
-        // Пример автозагрузки телефона из профиля, если нужно:
-        /*
-        authService.currentUserPhonePublisher
-            .first()
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.receiverPhoneE164 = $0 }
-            .store(in: &bag)
-        */
     }
 
     // MARK: - Actions
