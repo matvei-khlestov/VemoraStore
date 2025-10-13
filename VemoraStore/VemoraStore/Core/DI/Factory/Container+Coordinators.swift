@@ -275,7 +275,8 @@ extension Container {
             AppCoordinator(
                 navigation: navigation,
                 authService: self.authService(),
-                coordinatorFactory: self.coordinatorFactory()
+                coordinatorFactory: self.coordinatorFactory(),
+                sessionManager: self.sessionManager()
             )
         }
     }

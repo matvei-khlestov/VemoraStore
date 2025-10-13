@@ -16,25 +16,26 @@ final class AppCoordinator: AppCoordinatingProtocol {
     
     private let authService: AuthServiceProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
+    private let sessionManager: SessionManaging
     
     // MARK: - Init
     
     init(
         navigation: UINavigationController,
         authService: AuthServiceProtocol,
-        coordinatorFactory: CoordinatorBuildingProtocol
+        coordinatorFactory: CoordinatorBuildingProtocol,
+        sessionManager: SessionManaging
     ) {
         self.navigation = navigation
         self.authService = authService
         self.coordinatorFactory = coordinatorFactory
+        self.sessionManager = sessionManager
     }
     
     // MARK: - Start
     
     func start() {
-        
-//                showDebugImport()
-//                showMain()
+        sessionManager.start()    
         if authService.currentUserId != nil {
             showMain()
         } else {

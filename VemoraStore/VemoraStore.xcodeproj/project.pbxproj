@@ -348,6 +348,9 @@
 		A0F612B02E9C2A5700EC0459 /* DefaultFavoritesRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F612AF2E9C2A5700EC0459 /* DefaultFavoritesRepository.swift */; };
 		A0F612B32E9C38B000EC0459 /* CDFavoriteItem+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F612B12E9C38B000EC0459 /* CDFavoriteItem+CoreDataClass.swift */; };
 		A0F612B42E9C38B000EC0459 /* CDFavoriteItem+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F612B22E9C38B000EC0459 /* CDFavoriteItem+CoreDataProperties.swift */; };
+		A0F612B92E9D869000EC0459 /* SessionManaging.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F612B82E9D869000EC0459 /* SessionManaging.swift */; };
+		A0F612BC2E9D872600EC0459 /* SessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F612BB2E9D872600EC0459 /* SessionManager.swift */; };
+		A0F612BE2E9D879F00EC0459 /* Container+Managers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F612BD2E9D879F00EC0459 /* Container+Managers.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -707,6 +710,9 @@
 		A0F612AF2E9C2A5700EC0459 /* DefaultFavoritesRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFavoritesRepository.swift; sourceTree = "<group>"; };
 		A0F612B12E9C38B000EC0459 /* CDFavoriteItem+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDFavoriteItem+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A0F612B22E9C38B000EC0459 /* CDFavoriteItem+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDFavoriteItem+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A0F612B82E9D869000EC0459 /* SessionManaging.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManaging.swift; sourceTree = "<group>"; };
+		A0F612BB2E9D872600EC0459 /* SessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionManager.swift; sourceTree = "<group>"; };
+		A0F612BD2E9D879F00EC0459 /* Container+Managers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Managers.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -839,6 +845,7 @@
 		A03AC8212E8E38ED00AAEE87 /* Remote */ = {
 			isa = PBXGroup;
 			children = (
+				A0F612BA2E9D86C700EC0459 /* Managers */,
 				A03AC85A2E9114F700AAEE87 /* DTO */,
 				A03AC85B2E91151300AAEE87 /* Mappers */,
 				A03AC85C2E91152700AAEE87 /* Services */,
@@ -1279,6 +1286,7 @@
 		A08550002E6123E2004633CA /* Protocols */ = {
 			isa = PBXGroup;
 			children = (
+				A0F612B72E9D867700EC0459 /* Managers */,
 				A03AC8482E8FAC1800AAEE87 /* Repositories */,
 				A03AC8322E8FA1B300AAEE87 /* Stores */,
 				A03AC81E2E8E386D00AAEE87 /* Collections */,
@@ -1467,6 +1475,7 @@
 				A03AC8292E8E3F4E00AAEE87 /* Container+Collections.swift */,
 				A03AC8442E8FAA0300AAEE87 /* Container+Stores.swift */,
 				A03AC84E2E8FAF2A00AAEE87 /* Container+Repositories.swift */,
+				A0F612BD2E9D879F00EC0459 /* Container+Managers.swift */,
 			);
 			path = Factory;
 			sourceTree = "<group>";
@@ -2271,6 +2280,22 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		A0F612B72E9D867700EC0459 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				A0F612B82E9D869000EC0459 /* SessionManaging.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		A0F612BA2E9D86C700EC0459 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				A0F612BB2E9D872600EC0459 /* SessionManager.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -2481,6 +2506,7 @@
 				A08551512E81824C004633CA /* ConfirmationAlertType.swift in Sources */,
 				A0F612722E9ACBD200EC0459 /* CartItemDTO.swift in Sources */,
 				A08551BB2E8367BC004633CA /* EditNameViewModelProtocol.swift in Sources */,
+				A0F612BE2E9D879F00EC0459 /* Container+Managers.swift in Sources */,
 				A0F612A82E9C28F600EC0459 /* CoreDataFavoritesStore.swift in Sources */,
 				A08550A82E781CDE004633CA /* DeliveryDetailsSheetViewController.swift in Sources */,
 				A08550102E61255A004633CA /* Coordinator.swift in Sources */,
@@ -2539,6 +2565,7 @@
 				A085517E2E8204A1004633CA /* MapPickerCoordinatingProtocol.swift in Sources */,
 				A0854FC52E611307004633CA /* SceneDelegate.swift in Sources */,
 				A08550282E612945004633CA /* ProductDetailsViewModel.swift in Sources */,
+				A0F612BC2E9D872600EC0459 /* SessionManager.swift in Sources */,
 				A08550322E612A46004633CA /* CartViewController.swift in Sources */,
 				A08550892E718F03004633CA /* CheckoutCell.swift in Sources */,
 				A08550DE2E79D1CD004633CA /* ProfileGuestCoordinator.swift in Sources */,
@@ -2677,6 +2704,7 @@
 				A03AC8102E8E277800AAEE87 /* AuthSessionStoringProtocol.swift in Sources */,
 				A085509A2E747BBC004633CA /* UIBarButtonItem+ext.swift in Sources */,
 				A03AC8832E93D4A100AAEE87 /* CDProfile+Mapper.swift in Sources */,
+				A0F612B92E9D869000EC0459 /* SessionManaging.swift in Sources */,
 				A0F612AE2E9C2A2D00EC0459 /* FavoritesRepository.swift in Sources */,
 				A03AC84F2E8FAF2A00AAEE87 /* Container+Repositories.swift in Sources */,
 				A08552062E860C0E004633CA /* DebugImportViewModel.swift in Sources */,

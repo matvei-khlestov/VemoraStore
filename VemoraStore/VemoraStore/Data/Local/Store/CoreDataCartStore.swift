@@ -122,6 +122,7 @@ final class CoreDataCartStore: BaseCoreDataStore, CartLocalStore {
                 objs.forEach { self.bg.delete($0) }
                 guard self.bg.hasChanges else { return }
                 try self.bg.save()
+                print("🧹 CoreDataCartStore: cleared profile for uid=\(userId)")
             } catch {
                 print("❌ CoreDataCartStore.clear error: \(error)")
             }
