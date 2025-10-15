@@ -13,6 +13,7 @@ extension Container {
         self {
             SessionManager(
                 auth: self.authService(),
+                notifier: self.localNotificationService(),
                 container: self,
                 cartLocal: self.cartLocalStore(),
                 favoritesLocal: self.favoritesLocalStore(),

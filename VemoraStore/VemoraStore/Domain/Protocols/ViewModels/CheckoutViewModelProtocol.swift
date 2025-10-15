@@ -33,7 +33,7 @@ protocol CheckoutViewModelProtocol: AnyObject {
     func updateDeliveryAddress(_ fullAddress: String)
     func updateReceiverPhone(_ e164: String?)
     func updateOrderComment(_ text: String?)
-    func placeOrder(completion: @escaping (Result<Void, Error>) -> Void)
+    func placeOrder() async throws
     func formattedTotalPrice(from items: [CartItem]) -> String
     func formattedPrice(_ price: Double) -> String
     func clearCart() async

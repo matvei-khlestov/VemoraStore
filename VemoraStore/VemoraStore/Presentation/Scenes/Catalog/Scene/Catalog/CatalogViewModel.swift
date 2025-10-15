@@ -55,7 +55,9 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     
     private var filterState = FilterState()
     
-    var currentState: FilterState { filterState }
+    var currentState: FilterState {
+        filterState
+    }
     
     private var productsCancellable: AnyCancellable?
     @Published private var inCartIds = Set<String>()
@@ -105,23 +107,33 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     }
     
     func addToCart(productId: String) {
-        Task { try? await cart.add(productId: productId, by: 1) }
+        Task {
+            try? await cart.add(productId: productId, by: 1)
+        }
     }
     
     func removeFromCart(productId: String) {
-        Task { try? await cart.remove(productId: productId) }
+        Task {
+            try? await cart.remove(productId: productId)
+        }
     }
     
     func addToFavorites(productId: String) {
-        Task { try? await favorites.add(productId: productId) }
+        Task {
+            try? await favorites.add(productId: productId)
+        }
     }
 
     func removeFromFavorites(productId: String) {
-        Task { try? await favorites.remove(productId: productId) }
+        Task {
+            try? await favorites.remove(productId: productId)
+        }
     }
 
     func toggleFavorite(productId: String) {
-        Task { try? await favorites.toggle(productId: productId) }
+        Task {
+            try? await favorites.toggle(productId: productId)
+        }
     }
     
     func formattedPrice(_ price: Double) -> String {

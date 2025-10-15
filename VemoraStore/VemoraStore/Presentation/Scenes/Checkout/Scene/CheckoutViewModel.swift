@@ -16,6 +16,7 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
     private let ordersRepository: OrdersRepository
     private let phoneFormatter: PhoneFormattingProtocol
     private let priceFormatter: PriceFormattingProtocol
+    private let notifier: LocalNotifyingProtocol
     private var storage: CheckoutStoringProtocol
     private let currentUserId: String
     
@@ -90,15 +91,17 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
         priceFormatter: PriceFormattingProtocol,
         snapshotItems: [CartItem],
         storage: CheckoutStoringProtocol,
-        currentUserId: String
+        currentUserId: String,
+        notifier: LocalNotifyingProtocol
     ) {
         self.cartRepository = cartRepository
         self.ordersRepository = ordersRepository
         self.phoneFormatter = phoneFormatter
         self.priceFormatter = priceFormatter
-        self.items = snapshotItems            // ⚡ мгновенный рендер из снапшота
+        self.items = snapshotItems
         self.storage = storage
         self.currentUserId = currentUserId
+        self.notifier = notifier
         
         switch storage.savedDeliveryMethod {
         case .pickup:   self.deliveryMethod = .pickup
@@ -107,15 +110,14 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
         
         self.deliveryAddressString = storage.savedDeliveryAddressString
         self.receiverPhoneE164 = storage.savedReceiverPhoneE164
-
-        // ✅ ВАЖНО: начинаем слушать живую корзину
+        
         cartRepository.observeItems()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] items in
-                self?.items = items              // экран автоматически обновится
+                self?.items = items
             }
             .store(in: &bag)
-
+        
         bind()
     }
     
@@ -161,44 +163,26 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
         deliveryMethod = method
     }
     
-    func placeOrder(completion: @escaping (Result<Void, Error>) -> Void) {
-        guard !items.isEmpty else {
-            completion(.failure(NSError(domain: "Checkout", code: 1,
-                                        userInfo: [NSLocalizedDescriptionKey: "Корзина пуста"])))
-            return
-        }
-        
-        if deliveryMethod == .delivery {
-            let hasAddress = ((deliveryAddressString ?? "").isEmpty == false)
-            let hasPhone   = ((receiverPhoneE164 ?? "").isEmpty == false)
-            guard hasAddress && hasPhone else {
-                completion(.failure(NSError(domain: "Checkout", code: 2,
-                                            userInfo: [NSLocalizedDescriptionKey: "Укажите адрес и телефон"])))
-                return
-            }
-        }
-        
+    func placeOrder() async throws {
+        try validateBeforePlacing()
+
         isPlacing = true
-        Task {
-            do {
-                _ = try await ordersRepository.createOrderFromCheckout(
-                    userId: currentUserId,
-                    items: items,
-                    deliveryMethod: deliveryMethod,
-                    addressString: deliveryAddressString,
-                    phoneE164: receiverPhoneE164,
-                    comment: orderCommentText
-                )
-                await MainActor.run {
-                    self.isPlacing = false
-                    completion(.success(()))
-                }
-            } catch {
-                await MainActor.run {
-                    self.isPlacing = false
-                    completion(.failure(error))
-                }
-            }
+        defer {
+            isPlacing = false
+        }
+
+        do {
+            _ = try await ordersRepository.createOrderFromCheckout(
+                userId: currentUserId,
+                items: items,
+                deliveryMethod: deliveryMethod,
+                addressString: deliveryAddressString,
+                phoneE164: receiverPhoneE164,
+                comment: orderCommentText
+            )
+            schedulePostOrderNotification()
+        } catch {
+            throw AppError.map(error)
         }
     }
     
@@ -226,8 +210,55 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
         let totalPrice = items.reduce(0.0) { $0 + $1.lineTotal }
         return formattedPrice(totalPrice)
     }
-
+    
     func formattedPrice(_ price: Double) -> String {
         priceFormatter.format(price: price)
+    }
+}
+
+private extension CheckoutViewModel {
+    // MARK: - Helpers
+    
+    /// Валидация данных перед оформлением заказа.
+    /// - Returns: `AppError`, если есть проблемы, иначе `nil`.
+    private func validateBeforePlacing() throws {
+        if items.isEmpty {
+            throw AppError.emptyCart
+        }
+
+        if deliveryMethod == .delivery {
+            let hasAddress = !(deliveryAddressString ?? "").isEmpty
+            let hasPhone   = !(receiverPhoneE164 ?? "").isEmpty
+            guard hasAddress && hasPhone else {
+                throw AppError.missingRequiredFields
+            }
+        }
+    }
+    
+    /// Планирует локальное уведомление в зависимости от способа получения.
+    private func schedulePostOrderNotification() {
+        // если ты ещё не внедрил `notifier` в VM — просто убери этот метод/вызов
+        switch deliveryMethod {
+        case .pickup:
+            _ = notifier.schedule(
+                after: 1,
+                id: NotificationTemplate.Checkout.Pickup.id,
+                title: NotificationTemplate.Checkout.Pickup.title,
+                body: NotificationTemplate.Checkout.Pickup.body,
+                categoryId: NotificationTemplate.Checkout.Pickup.categoryId,
+                userInfo: NotificationTemplate.Checkout.Pickup.userInfo,
+                unique: true
+            )
+        case .delivery:
+            _ = notifier.schedule(
+                after: 1,
+                id: NotificationTemplate.Checkout.Delivery.id,
+                title: NotificationTemplate.Checkout.Delivery.title,
+                body: NotificationTemplate.Checkout.Delivery.body,
+                categoryId: NotificationTemplate.Checkout.Delivery.categoryId,
+                userInfo: NotificationTemplate.Checkout.Delivery.userInfo,
+                unique: true
+            )
+        }
     }
 }

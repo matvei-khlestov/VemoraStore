@@ -96,7 +96,8 @@ extension Container {
             FavoritesViewModel(
                 favoritesRepository: self.favoritesRepository(userId),
                 cartRepository: self.cartRepository(userId),
-                priceFormatter: self.priceFormatter()
+                priceFormatter: self.priceFormatter(),
+                notifier: self.localNotificationService()
             )
         }
     }
@@ -107,7 +108,8 @@ extension Container {
         self { userId in
             CartViewModel(
                 cartRepository: self.cartRepository(userId),
-                priceFormatter: self.priceFormatter()
+                priceFormatter: self.priceFormatter(),
+                notifier: self.localNotificationService()
             )
         }
     }
@@ -179,7 +181,8 @@ extension Container {
                 priceFormatter: self.priceFormatter(),
                 snapshotItems: snapshotItems,
                 storage: self.checkoutStorage(),
-                currentUserId: userId
+                currentUserId: userId,
+                notifier: self.localNotificationService()
             )
         }
     }

@@ -51,6 +51,12 @@ extension Container {
         self { CLGeocodingService() }
     }
     
+    // MARK: - Notifications
+    
+    var localNotificationService: Factory<LocalNotifyingProtocol> {
+        self { LocalNotificationService.shared }.singleton
+    }
+    
     // MARK: - Debug
     
 #if DEBUG

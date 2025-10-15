@@ -30,12 +30,13 @@ final class AppCoordinator: AppCoordinatingProtocol {
         self.authService = authService
         self.coordinatorFactory = coordinatorFactory
         self.sessionManager = sessionManager
+        
+        sessionManager.start()
     }
     
     // MARK: - Start
     
     func start() {
-        sessionManager.start()    
         if authService.currentUserId != nil {
             showMain()
         } else {

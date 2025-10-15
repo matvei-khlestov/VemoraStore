@@ -13,7 +13,7 @@ extension ProfileDTO {
         let name  = data["name"]  as? String ?? ""
         let email = data["email"] as? String ?? ""
         let phone = data["phone"] as? String ?? ""
-        let ts    = (data["updatedAt"] as? Timestamp)?.dateValue() ?? Date()
+        let ts = (data["updatedAt"] as? Timestamp)?.dateValue() ?? Date()
         return .init(userId: uid, name: name, email: email, phone: phone, updatedAt: ts)
     }
 }
