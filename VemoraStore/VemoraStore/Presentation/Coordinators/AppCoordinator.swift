@@ -92,6 +92,7 @@ final class AppCoordinator: AppCoordinatingProtocol {
         main.onOrderSuccess = { [weak self, weak main] in
             guard let self else { return }
             if let main { self.remove(main) }
+            
             self.showOrderSuccess()
         }
         main.start()

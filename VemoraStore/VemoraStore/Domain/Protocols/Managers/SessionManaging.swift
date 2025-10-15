@@ -14,4 +14,7 @@ protocol SessionManaging {
     
     /// Форсирует немедленную проверку состояния сессии.
     func refreshNow()
+    
+    /// Текущий снимок корзины (для одноразовой передачи на экран оформления заказа).
+    var cartItemsSnapshot: [CartItem] { get }
 }

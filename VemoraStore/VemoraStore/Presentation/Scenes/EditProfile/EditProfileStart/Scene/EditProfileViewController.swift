@@ -142,7 +142,11 @@ final class EditProfileViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         bind()
-        viewModel.load()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        viewModel.loadAvatarData()
     }
     
     override func viewDidLayoutSubviews() {

@@ -9,57 +9,55 @@ import Foundation
 import Combine
 
 final class CheckoutViewModel: CheckoutViewModelProtocol {
-
-    // MARK: - Services
     
-    private let cartService: CartServiceProtocol
-    private let authService: AuthServiceProtocol
+    // MARK: - Deps
+    
+    private let cartRepository: CartRepository
+    private let ordersRepository: OrdersRepository
     private let phoneFormatter: PhoneFormattingProtocol
-
+    private let priceFormatter: PriceFormattingProtocol
+    private var storage: CheckoutStoringProtocol
+    private let currentUserId: String
+    
     // MARK: - State
     
     @Published private(set) var items: [CartItem] = []
     @Published var address: Address? = nil
     @Published private(set) var deliveryAddressString: String? = nil
-    @Published var note: String = ""
     @Published private(set) var isPlacing: Bool = false
-    @Published private(set) var placeError: String? = nil
-
-    // Телефон получателя: храним E.164 + считаем display
     @Published private(set) var receiverPhoneE164: String? = nil
     @Published private(set) var receiverPhoneDisplay: String? = nil
-
-    // Комментарий к заказу
     @Published private(set) var orderCommentText: String? = nil
-
-    // Способ получения заказа
+    
     enum DeliveryMethod { case pickup, delivery }
     @Published var deliveryMethod: DeliveryMethod = .pickup
-
-    // MARK: - Publishers (protocol)
+    
+    // MARK: - Publishers
+    
     var deliveryMethodPublisher: AnyPublisher<DeliveryMethod, Never> {
         $deliveryMethod.eraseToAnyPublisher()
     }
-
+    
     var deliveryAddressStringPublisher: AnyPublisher<String?, Never> {
         $deliveryAddressString.eraseToAnyPublisher()
+        
     }
-
-    /// E.164
-    var receiverPhonePublisher: AnyPublisher<String?, Never> {
-        $receiverPhoneE164.eraseToAnyPublisher()
-    }
-
-    /// Отформатированный для UI
+    
     var receiverPhoneDisplayPublisher: AnyPublisher<String?, Never> {
         $receiverPhoneDisplay.eraseToAnyPublisher()
     }
-
+    
     var orderCommentPublisher: AnyPublisher<String?, Never> {
         $orderCommentText.eraseToAnyPublisher()
     }
-
-    // MARK: - Outputs
+    
+    var itemsPublisher: AnyPublisher<[CartItem], Never> {
+        $items.eraseToAnyPublisher()
+    }
+    
+    var itemsSnapshot: [CartItem] {
+        items
+    }
     
     var isPlaceOrderEnabled: AnyPublisher<Bool, Never> {
         Publishers.CombineLatest4(
@@ -72,92 +70,164 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
             let (addrModel, addrString) = pair
             let hasDeliveryAddress = (addrModel != nil) || ((addrString ?? "").isEmpty == false)
             let hasPhone = (phone ?? "").isEmpty == false
-
             switch method {
-            case .pickup:
-                // самовывоз → телефон обязателен, адрес не нужен
-                return hasItems && hasPhone
-            case .delivery:
-                // доставка → нужен и адрес, и телефон
-                return hasItems && hasDeliveryAddress && hasPhone
+            case .pickup:   return hasItems
+            case .delivery: return hasItems && hasDeliveryAddress && hasPhone
             }
         }
         .removeDuplicates()
         .eraseToAnyPublisher()
     }
-
+    
     private var bag = Set<AnyCancellable>()
-
+    
     // MARK: - Init
+    
     init(
-        cart: CartServiceProtocol,
-        auth: AuthServiceProtocol,
-        phoneFormatter: PhoneFormattingProtocol
+        cartRepository: CartRepository,
+        ordersRepository: OrdersRepository,
+        phoneFormatter: PhoneFormattingProtocol,
+        priceFormatter: PriceFormattingProtocol,
+        snapshotItems: [CartItem],
+        storage: CheckoutStoringProtocol,
+        currentUserId: String
     ) {
-        self.cartService = cart
-        self.authService = auth
+        self.cartRepository = cartRepository
+        self.ordersRepository = ordersRepository
         self.phoneFormatter = phoneFormatter
+        self.priceFormatter = priceFormatter
+        self.items = snapshotItems            // ⚡ мгновенный рендер из снапшота
+        self.storage = storage
+        self.currentUserId = currentUserId
+        
+        switch storage.savedDeliveryMethod {
+        case .pickup:   self.deliveryMethod = .pickup
+        case .delivery: self.deliveryMethod = .delivery
+        }
+        
+        self.deliveryAddressString = storage.savedDeliveryAddressString
+        self.receiverPhoneE164 = storage.savedReceiverPhoneE164
+
+        // ✅ ВАЖНО: начинаем слушать живую корзину
+        cartRepository.observeItems()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] items in
+                self?.items = items              // экран автоматически обновится
+            }
+            .store(in: &bag)
+
         bind()
     }
-
-    // MARK: - Private
+    
+    // MARK: - Binding
     
     private func bind() {
-        cartService.itemsPublisher
+        $receiverPhoneE164
+            .removeDuplicates()
+            .map { [phoneFormatter] e164 in phoneFormatter.displayFromE164(e164) }
+            .removeDuplicates()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.items = $0 }
+            .sink { [weak self] in self?.receiverPhoneDisplay = $0 }
+            .store(in: &bag)
+        
+        $deliveryMethod
+            .removeDuplicates {
+                ($0 == .pickup && $1 == .pickup) || ($0 == .delivery && $1 == .delivery)
+            }
+            .sink { [weak self] method in
+                guard let self else { return }
+                self.storage.savedDeliveryMethod = (method == .pickup) ? .pickup : .delivery
+            }
+            .store(in: &bag)
+        
+        $deliveryAddressString
+            .removeDuplicates()
+            .sink { [weak self] value in
+                self?.storage.savedDeliveryAddressString = value
+            }
             .store(in: &bag)
         
         $receiverPhoneE164
             .removeDuplicates()
-            .map { [phoneFormatter] e164 in
-                phoneFormatter.displayFromE164(e164)
-            }
-            .removeDuplicates()                 
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
-                self?.receiverPhoneDisplay = $0
+            .sink { [weak self] value in
+                self?.storage.savedReceiverPhoneE164 = value
             }
             .store(in: &bag)
     }
-
-    // MARK: - Actions
-
+    
+    // MARK: - Intents
+    
     func setDeliveryMethod(_ method: DeliveryMethod) {
         deliveryMethod = method
     }
-
-    func placeOrder() {
-        guard !items.isEmpty else { return }
+    
+    func placeOrder(completion: @escaping (Result<Void, Error>) -> Void) {
+        guard !items.isEmpty else {
+            completion(.failure(NSError(domain: "Checkout", code: 1,
+                                        userInfo: [NSLocalizedDescriptionKey: "Корзина пуста"])))
+            return
+        }
+        
+        if deliveryMethod == .delivery {
+            let hasAddress = ((deliveryAddressString ?? "").isEmpty == false)
+            let hasPhone   = ((receiverPhoneE164 ?? "").isEmpty == false)
+            guard hasAddress && hasPhone else {
+                completion(.failure(NSError(domain: "Checkout", code: 2,
+                                            userInfo: [NSLocalizedDescriptionKey: "Укажите адрес и телефон"])))
+                return
+            }
+        }
+        
         isPlacing = true
-        placeError = nil
-
         Task {
-            try? await Task.sleep(nanoseconds: 600_000_000)
-            await MainActor.run { [weak self] in
-                self?.isPlacing = false
-                // self?.cartService.clear()
+            do {
+                _ = try await ordersRepository.createOrderFromCheckout(
+                    userId: currentUserId,
+                    items: items,
+                    deliveryMethod: deliveryMethod,
+                    addressString: deliveryAddressString,
+                    phoneE164: receiverPhoneE164,
+                    comment: orderCommentText
+                )
+                await MainActor.run {
+                    self.isPlacing = false
+                    completion(.success(()))
+                }
+            } catch {
+                await MainActor.run {
+                    self.isPlacing = false
+                    completion(.failure(error))
+                }
             }
         }
     }
     
-    func loadMocks() {
-        cartService.loadMocks()
+    func clearCart() async {
+        try? await cartRepository.clear()
     }
-
+    
     func updateDeliveryAddress(_ fullAddress: String) {
         deliveryAddressString = fullAddress
-        if deliveryMethod != .delivery {
-            deliveryMethod = .delivery
-        }
+        storage.savedDeliveryAddressString = fullAddress
+        if deliveryMethod != .delivery { deliveryMethod = .delivery }
     }
-
-    // Обновляем E.164; display обновится автоматически через bind()
+    
     func updateReceiverPhone(_ e164: String?) {
-        receiverPhoneE164 = (e164?.isEmpty == true) ? nil : e164
+        let value = (e164?.isEmpty == true) ? nil : e164
+        receiverPhoneE164 = value
+        storage.savedReceiverPhoneE164 = value
     }
-
+    
     func updateOrderComment(_ text: String?) {
         orderCommentText = (text?.isEmpty == true) ? nil : text
+    }
+    
+    func formattedTotalPrice(from items: [CartItem]) -> String {
+        let totalPrice = items.reduce(0.0) { $0 + $1.lineTotal }
+        return formattedPrice(totalPrice)
+    }
+
+    func formattedPrice(_ price: Double) -> String {
+        priceFormatter.format(price: price)
     }
 }

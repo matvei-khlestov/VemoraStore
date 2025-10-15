@@ -15,6 +15,7 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     private let favoritesRepository: FavoritesRepository
     private let cartRepository: CartRepository
     private let catalogRepository: CatalogRepository
+    private let priceFormatter: PriceFormattingProtocol
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -24,16 +25,19 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     @Published private var favoriteState: Bool = false
     
     // MARK: - Init
+    
     init(
         productId: String,
         favoritesRepository: FavoritesRepository,
         cartRepository: CartRepository,
-        catalogRepository: CatalogRepository
+        catalogRepository: CatalogRepository,
+        priceFormatter: PriceFormattingProtocol,
     ) {
         self.productId = productId
         self.favoritesRepository = favoritesRepository
         self.cartRepository = cartRepository
         self.catalogRepository = catalogRepository
+        self.priceFormatter = priceFormatter
         
         // Продукт
         catalogRepository.observeProduct(id: productId)
@@ -45,7 +49,9 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
         
         // Корзина
         cartRepository.observeItems()
-            .map { items in items.contains(where: { $0.productId == productId && $0.quantity > 0 }) }
+            .map { items in items.contains(where: {
+                $0.productId == productId && $0.quantity > 0
+            }) }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
             .assign(to: &self.$isInCart)
@@ -59,17 +65,26 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     }
     
     // MARK: - Outputs
-    var title: String { product?.name ?? "Загрузка..." }
-    var description: String { product?.description ?? "" }
+    
+    var title: String {
+        product?.name ?? "Загрузка..."
+    }
+    var description: String {
+        product?.description ?? ""
+    }
     
     var priceText: String {
         guard let price = product?.price else { return "" }
-        return "\(price) ₽"
+        return formattedPrice(price)
     }
     
-    var imageURL: String? { product?.imageURL }
+    var imageURL: String? {
+        product?.imageURL
+    }
     
-    var isFavorite: Bool { favoriteState }
+    var isFavorite: Bool {
+        favoriteState
+    }
     
     var productPublisher: AnyPublisher<Product?, Never> {
         $product.eraseToAnyPublisher()
@@ -83,36 +98,60 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
         $favoriteState.eraseToAnyPublisher()
     }
     
-    var currentIsInCart: Bool { isInCart }
+    var currentIsInCart: Bool {
+        isInCart
+    }
     
     // MARK: - Favorites actions
+    
     func toggleFavorite() {
-        Task { try? await favoritesRepository.toggle(productId: productId) }
+        Task {
+            try? await favoritesRepository.toggle(productId: productId)
+        }
     }
     
     func addToFavorites() {
-        Task { try? await favoritesRepository.add(productId: productId) }
+        Task {
+            try? await favoritesRepository.add(productId: productId)
+        }
     }
     
     func removeFromFavorites() {
-        Task { try? await favoritesRepository.remove(productId: productId) }
+        Task {
+            try? await favoritesRepository.remove(productId: productId)
+        }
     }
     
     // MARK: - Cart actions
+    
     func addToCart() {
-        Task { try? await cartRepository.add(productId: productId, by: 1) }
+        Task {
+            try? await cartRepository.add(productId: productId, by: 1)
+        }
     }
     
     func addToCart(quantity: Int) {
         guard quantity > 0 else { return }
-        Task { try? await cartRepository.add(productId: productId, by: quantity) }
+        Task {
+            try? await cartRepository.add(productId: productId, by: quantity)
+        }
     }
     
     func updateQuantity(_ quantity: Int) {
-        Task { try? await cartRepository.setQuantity(productId: productId, quantity: quantity) }
+        Task {
+            try? await cartRepository.setQuantity(productId: productId, quantity: quantity)
+        }
     }
     
     func removeFromCart() {
-        Task { try? await cartRepository.remove(productId: productId) }
+        Task {
+            try? await cartRepository.remove(productId: productId)
+        }
+    }
+    
+    // MARK: - Price
+    
+    private func formattedPrice(_ price: Double) -> String {
+        priceFormatter.format(price: price)
     }
 }

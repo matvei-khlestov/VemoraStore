@@ -7,6 +7,7 @@
 
 
 import UIKit
+import Kingfisher
 
 final class CheckoutCell: UITableViewCell {
     
@@ -252,13 +253,21 @@ private extension CheckoutCell {
 // MARK: - Configure API
 
 extension CheckoutCell {
-    func configure(with product: Product, quantity: Int) {
-        titleLabel.text = product.name
-        categoryLabel.text = product.categoryId
-        priceLabel.text = String(format: "$%.2f", product.price)
-        quantityLabel.text = "x\(quantity)"
-        // thumbImageView.kf.setImage(with: product.image)
-        thumbImageView.image = UIImage(resource: .divan) // заглушка
+    func configure(with item: CartItem, priceText: String) {
+        titleLabel.text = item.title
+        categoryLabel.text = item.brandName
+        priceLabel.text = priceText
+        quantityLabel.text = "x\(item.quantity)"
+        
+        if let urlString = item.imageURL, let url = URL(string: urlString) {
+            thumbImageView.kf.setImage(
+                with: url,
+                options: [.transition(.fade(0.2)),
+                          .cacheOriginalImage]
+            )
+        } else {
+            thumbImageView.image = UIImage(resource: .divan)
+        }
     }
 }
 

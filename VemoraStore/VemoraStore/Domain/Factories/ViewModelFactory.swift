@@ -32,32 +32,32 @@ final class ViewModelFactory: ViewModelBuildingProtocol {
     
     // MARK: - Catalog
     
-    func makeCatalogViewModel() -> CatalogViewModelProtocol {
-        container.catalogViewModel()
+    func makeCatalogViewModel(userId: String) -> CatalogViewModelProtocol {
+        container.catalogViewModel(userId)
     }
     
     func makeCatalogFilterViewModel() -> CatalogFilterViewModelProtocol {
         container.catalogFilterViewModel()
     }
     
-    func makeProductDetailsViewModel(productId: String) -> ProductDetailsViewModelProtocol {
-        container.productDetailsViewModel(productId)
+    func makeProductDetailsViewModel(productId: String, userId: String) -> ProductDetailsViewModelProtocol {
+        container.productDetailsViewModel((productId, userId))
     }
 
-    func makeCategoryProductsViewModel(categoryId: String) -> CategoryProductsViewModelProtocol {
-        container.categoryProductsViewModel(categoryId)
+    func makeCategoryProductsViewModel(categoryId: String, userId: String) -> CategoryProductsViewModelProtocol {
+        container.categoryProductsViewModel((categoryId, userId))
     }
     
     // MARK: - Favorites
     
-    func makeFavoritesViewModel() -> FavoritesViewModelProtocol {
-        container.favoritesViewModel()
+    func makeFavoritesViewModel(userId: String) -> FavoritesViewModelProtocol {
+        container.favoritesViewModel(userId)
     }
     
     // MARK: - Cart
     
-    func makeCartViewModel() -> CartViewModelProtocol {
-        container.cartViewModel()
+    func makeCartViewModel(userId: String) -> CartViewModelProtocol {
+        container.cartViewModel(userId)
     }
     
     // MARK: - Profile
@@ -84,14 +84,17 @@ final class ViewModelFactory: ViewModelBuildingProtocol {
     
     // MARK: - Checkout
     
-    func makeCheckoutViewModel() -> CheckoutViewModelProtocol {
-        container.checkoutViewModel()
+    func makeCheckoutViewModel(
+        userId: String,
+        snapshotItems: [CartItem]
+    ) -> CheckoutViewModelProtocol {
+        container.checkoutViewModel((userId, snapshotItems))
     }
     
     // MARK: - Orders
     
-    func makeOrdersViewModel() -> OrdersViewModelProtocol {
-        container.ordersViewModel()
+    func makeOrdersViewModel(userId: String) -> OrdersViewModelProtocol {
+        container.ordersViewModel(userId)
     }
     
     // MARK: - Address / Delivery

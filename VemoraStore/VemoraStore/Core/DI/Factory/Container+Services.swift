@@ -29,36 +29,16 @@ extension Container {
         self { KeychainService() }.singleton
     }
     
-    // MARK: - Catalog
-    
-    var productService: Factory<ProductServiceProtocol> {
-        self { FirestoreProductService() }.singleton
-    }
-    
-    var favoritesService: Factory<FavoritesServiceProtocol> {
-        self { FavoritesService.shared }.singleton
-    }
-    
     // MARK: - Profile
-    
-    var profileService: Factory<ProfileServiceProtocol> {
-        self { FirebaseProfileService() }.singleton
-    }
     
     var avatarStorageService: Factory<AvatarStorageServiceProtocol> {
         self { AvatarStorageService() }.singleton
     }
+
+    // MARK: - Checkout
     
-    // MARK: - Cart
-    
-    var cartService: Factory<CartServiceProtocol> {
-        self { CartService.shared }.singleton
-    }
-    
-    // MARK: - Notifications
-    
-    var notificationService: Factory<NotificationServiceProtocol> {
-        self { FirebaseNotificationService() }.singleton
+    var checkoutStorage: Factory<CheckoutStoringProtocol> {
+        self { CheckoutStorage.shared }.singleton
     }
     
     // MARK: - Maps
@@ -69,12 +49,6 @@ extension Container {
     
     var geocodingService: Factory<GeocodingServiceProtocol> {
         self { CLGeocodingService() }
-    }
-    
-    // MARK: - Orders
-    
-    var ordersService: Factory<OrdersServiceProtocol> {
-        self { OrdersService() }
     }
     
     // MARK: - Debug

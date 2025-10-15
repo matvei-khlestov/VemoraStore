@@ -21,6 +21,7 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     // MARK: - Deps
     private let favorites: FavoritesRepository
     private let cart: CartRepository
+    private let priceFormatter: PriceFormattingProtocol
     
     // MARK: - State
     @Published private(set) var favoriteItems: [FavoriteItem] = []
@@ -31,10 +32,12 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     // MARK: - Init
     init(
         favoritesRepository: FavoritesRepository,
-        cartRepository: CartRepository
+        cartRepository: CartRepository,
+        priceFormatter: PriceFormattingProtocol
     ) {
         self.favorites = favoritesRepository
         self.cart = cartRepository
+        self.priceFormatter = priceFormatter
         bind()
     }
     
@@ -86,5 +89,9 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     func clearFavorites() {
         Task { try? await favorites.clear() }
         favoriteItems.removeAll()            
+    }
+    
+    func formattedPrice(_ price: Double) -> String {
+        priceFormatter.format(price: price)
     }
 }

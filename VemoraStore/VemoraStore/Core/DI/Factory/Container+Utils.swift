@@ -24,4 +24,8 @@ extension Container {
     var phoneFormatter: Factory<PhoneFormattingProtocol> {
         self { PhoneFormatter() }
     }
+    
+    var priceFormatter: Factory<PriceFormattingProtocol> {
+        self { PriceFormatter() }
+    }
 }

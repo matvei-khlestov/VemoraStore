@@ -48,4 +48,14 @@ extension Container {
             )
         }
     }
+    
+    var ordersRepository: ParameterFactory<String, OrdersRepository> {
+        self { uid in
+            DefaultOrdersRepository(
+                remote: self.ordersCollection(),
+                local: self.ordersLocalStore(),
+                userId: uid
+            )
+        }
+    }
 }

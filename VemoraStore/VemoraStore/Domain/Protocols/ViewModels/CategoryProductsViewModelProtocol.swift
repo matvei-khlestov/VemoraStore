@@ -24,5 +24,6 @@ protocol CategoryProductsViewModelProtocol: AnyObject {
     func addToFavorites(productId: String)
     func removeFromFavorites(productId: String)
     func toggleFavorite(productId: String)
+    func formattedPrice(_ price: Double) -> String 
     func reload()
 }

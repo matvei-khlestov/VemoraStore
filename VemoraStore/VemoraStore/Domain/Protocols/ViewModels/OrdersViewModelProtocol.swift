@@ -6,11 +6,13 @@
 //
 
 import Foundation
+import Combine
 
 protocol OrdersViewModelProtocol: AnyObject {
-    var orders: [OrderEntity] { get }
+    var ordersPublisher: AnyPublisher<[OrderEntity], Never> { get }
     var sectionsCount: Int { get }
     func rows(in section: Int) -> Int
     func order(at section: Int) -> OrderEntity?
     func item(at indexPath: IndexPath) -> OrderItem?
+    func formattedPrice(_ price: Double) -> String
 }

@@ -16,7 +16,10 @@ extension Container {
                 container: self,
                 cartLocal: self.cartLocalStore(),
                 favoritesLocal: self.favoritesLocalStore(),
-                profileLocal: self.profileLocalStore()
+                profileLocal: self.profileLocalStore(),
+                ordersLocal: self.ordersLocalStore(),
+                cartRepositoryProvider: { uid in self.cartRepository(uid) },
+                checkoutStorage: self.checkoutStorage()
             )
         }.singleton
     }

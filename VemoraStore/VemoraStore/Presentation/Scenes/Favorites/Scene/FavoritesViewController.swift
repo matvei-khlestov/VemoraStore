@@ -261,7 +261,8 @@ extension FavoritesViewController: UITableViewDataSource {
     ) -> UITableViewCell {
         let cell: FavoritesCell = tableView.dequeueReusableCell(for: indexPath)
         let item = items[indexPath.row]
-        cell.configure(with: item, isInCart: viewModel.isInCart(item.productId))
+        let priceText = viewModel.formattedPrice(item.price)
+        cell.configure(with: item, isInCart: viewModel.isInCart(item.productId), priceText: priceText)
         cell.delegate = self
         return cell
     }

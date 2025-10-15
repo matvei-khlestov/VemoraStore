@@ -13,10 +13,14 @@ extension Container {
     // MARK: - Factory
     
     var viewModelFactory: Factory<ViewModelBuildingProtocol> {
-        self { ViewModelFactory(container: self) }.singleton
+        self {
+            ViewModelFactory(container: self)
+        }.singleton
     }
     
     var coordinatorFactory: Factory<CoordinatorBuildingProtocol> {
-        self { CoordinatorFactory(container: self) }.singleton
+        self {
+            CoordinatorFactory(container: self) 
+        }.singleton
     }
 }

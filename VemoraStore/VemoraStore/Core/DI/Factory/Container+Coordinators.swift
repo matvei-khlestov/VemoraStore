@@ -18,7 +18,8 @@ extension Container {
             CatalogCoordinator(
                 navigation: navigation,
                 viewModelFactory: self.viewModelFactory(),
-                coordinatorFactory: self.coordinatorFactory()
+                coordinatorFactory: self.coordinatorFactory(),
+                authService: self.authService()
             )
         }
     }
@@ -31,19 +32,22 @@ extension Container {
                 navigation: navigation,
                 productId: productId,
                 viewModelFactory: self.viewModelFactory(),
-                coordinatorFactory: self.coordinatorFactory()
+                coordinatorFactory: self.coordinatorFactory(),
+                authService: self.authService()
             )
         }
     }
 
     // MARK: - Category Products
 
-    var categoryProductsCoordinator: ParameterFactory<(UINavigationController, String, String), CategoryProductsCoordinatingProtocol> {
+    var categoryProductsCoordinator: ParameterFactory<(UINavigationController, String, String),
+                                                      CategoryProductsCoordinatingProtocol> {
         self { navigation, categoryId, categoryTitle in
             CategoryProductsCoordinator(
                 navigation: navigation,
                 viewModelFactory: self.viewModelFactory(),
                 coordinatorFactory: self.coordinatorFactory(),
+                authService: self.authService(),
                 categoryId: categoryId,
                 categoryTitle: categoryTitle
             )
@@ -82,7 +86,9 @@ extension Container {
                 navigation: navigation,
                 viewModelFactory: self.viewModelFactory(),
                 coordinatorFactory: self.coordinatorFactory(),
-                phoneFormatter: self.phoneFormatter()
+                phoneFormatter: self.phoneFormatter(),
+                sessionManager: self.sessionManager(),
+                authService: self.authService()
             )
         }
     }
@@ -105,7 +111,8 @@ extension Container {
             FavoritesCoordinator(
                 navigation: navigation,
                 viewModelFactory: self.viewModelFactory(),
-                coordinatorFactory: self.coordinatorFactory()
+                coordinatorFactory: self.coordinatorFactory(),
+                authService: self.authService()
             )
         }
     }
@@ -117,7 +124,8 @@ extension Container {
             CartCoordinator(
                 navigation: navigation,
                 viewModelFactory: self.viewModelFactory(),
-                coordinatorFactory: self.coordinatorFactory()
+                coordinatorFactory: self.coordinatorFactory(),
+                authService: self.authService()
             )
         }
     }
@@ -128,7 +136,8 @@ extension Container {
         self { navigation in
             OrdersCoordinator(
                 navigation: navigation,
-                viewModelFactory: self.viewModelFactory()
+                viewModelFactory: self.viewModelFactory(),
+                authService: self.authService()
             )
         }
     }

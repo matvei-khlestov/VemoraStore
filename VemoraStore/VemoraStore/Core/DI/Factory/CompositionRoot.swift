@@ -11,4 +11,8 @@ enum CompositionRoot {
     static func makeCoordinatorFactory() -> CoordinatorBuildingProtocol {
         CoordinatorFactory(container: Container.shared)
     }
+    
+    static func makeAuthService() -> AuthServiceProtocol {
+        Container.shared.authService()
+    }
 }

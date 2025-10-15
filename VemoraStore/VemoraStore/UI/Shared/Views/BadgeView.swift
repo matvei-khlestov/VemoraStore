@@ -13,7 +13,7 @@ final class BadgeView: UIView {
     
     private enum Metrics {
         enum Insets {
-            static let vertical: CGFloat = 4
+            static let vertical: CGFloat = 6
             static let horizontal: CGFloat = 10
         }
         enum Sizes {

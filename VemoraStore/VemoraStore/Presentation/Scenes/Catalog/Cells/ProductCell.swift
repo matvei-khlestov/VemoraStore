@@ -169,10 +169,10 @@ final class ProductCell: UICollectionViewCell {
         super.prepareForReuse()
         bag.removeAll()
         productId = nil
-        imageView.image = UIImage(resource: .divan)
         titleLabel.text = nil
         brandLabel.text = nil
         priceLabel.text = nil
+        brandLabel.text = nil
         setFavorite(false, animated: false)
         setInCart(false, animated: false)
     }
@@ -341,15 +341,16 @@ extension ProductCell {
     func configure(
         with product: Product,
         isFavorite: Bool = false,
-        isInCart: Bool = false
+        isInCart: Bool = false,
+        priceText: String
     ) {
         self.productId = product.id
         titleLabel.text = product.name
         brandLabel.text = product.brandId
-        priceLabel.text = "\(product.price) ₽"
-        let url = URL(string: product.imageURL)
-        imageView.kf.setImage(with: url)
-        
+        priceLabel.text = priceText
+
+        imageView.loadImage(from: product.imageURL)
+
         setFavorite(isFavorite, animated: false)
         setInCart(isInCart, animated: false)
     }

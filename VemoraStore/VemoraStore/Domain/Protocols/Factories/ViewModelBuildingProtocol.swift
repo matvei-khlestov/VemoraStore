@@ -17,18 +17,18 @@ protocol ViewModelBuildingProtocol {
     
     // MARK: - Catalog
     
-    func makeCatalogViewModel() -> CatalogViewModelProtocol
+    func makeCatalogViewModel(userId: String) -> CatalogViewModelProtocol
     func makeCatalogFilterViewModel() -> CatalogFilterViewModelProtocol
-    func makeProductDetailsViewModel(productId: String) -> ProductDetailsViewModelProtocol
-    func makeCategoryProductsViewModel(categoryId: String) -> CategoryProductsViewModelProtocol
+    func makeProductDetailsViewModel(productId: String, userId: String) -> ProductDetailsViewModelProtocol
+    func makeCategoryProductsViewModel(categoryId: String, userId: String) -> CategoryProductsViewModelProtocol
     
     // MARK: - Favorites
     
-    func makeFavoritesViewModel() -> FavoritesViewModelProtocol
+    func makeFavoritesViewModel(userId: String) -> FavoritesViewModelProtocol
     
     // MARK: - Cart
     
-    func makeCartViewModel() -> CartViewModelProtocol
+    func makeCartViewModel(userId: String) -> CartViewModelProtocol
     
     // MARK: - Profile
     
@@ -40,11 +40,14 @@ protocol ViewModelBuildingProtocol {
     
     // MARK: - Checkout
     
-    func makeCheckoutViewModel() -> CheckoutViewModelProtocol
+    func makeCheckoutViewModel(
+        userId: String,
+        snapshotItems: [CartItem]
+    ) -> CheckoutViewModelProtocol
     
     // MARK: - Orders
     
-    func makeOrdersViewModel() -> OrdersViewModelProtocol
+    func makeOrdersViewModel(userId: String) -> OrdersViewModelProtocol
     
     // MARK: - Delivery
     

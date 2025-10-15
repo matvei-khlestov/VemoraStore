@@ -14,6 +14,7 @@ protocol CartLocalStore: AnyObject {
     func upsert(userId: String, dto: CartDTO, accumulate: Bool)
     func setQuantity(userId: String, productId: String, quantity: Int)
     func remove(userId: String, productId: String)
+    func snapshot(userId: String) -> [CartItem]?
     func clear(userId: String)
 }
 

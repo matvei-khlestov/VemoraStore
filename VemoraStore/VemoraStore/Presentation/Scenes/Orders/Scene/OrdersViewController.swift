@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import Combine
 
 final class OrdersViewController: UIViewController {
     
+    private var bag = Set<AnyCancellable>()
     // MARK: - Callbacks
     
     var onBack: (() -> Void)?
@@ -68,6 +70,21 @@ final class OrdersViewController: UIViewController {
         setupNavigationBar()
         setupHierarchy()
         setupLayout()
+        bindViewModel()
+    }
+}
+
+
+// MARK: - Bindings
+
+private extension OrdersViewController {
+    func bindViewModel() {
+        viewModel.ordersPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.tableView.reloadData()
+            }
+            .store(in: &bag)
     }
 }
 
@@ -137,7 +154,7 @@ extension OrdersViewController: UITableViewDataSource {
         titleForHeaderInSection section: Int
     ) -> String? {
         guard let order = viewModel.order(at: section) else { return nil }
-        return "\(Texts.sectionHeaderPrefix) \(order.id)"
+        return "\(Texts.sectionHeaderPrefix) \(Self.maskedOrderId(order.id))"
     }
     
     func tableView(
@@ -148,7 +165,8 @@ extension OrdersViewController: UITableViewDataSource {
         
         if let order = viewModel.order(at: indexPath.section),
            let item = viewModel.item(at: indexPath) {
-            cell.configure(item: item, order: order)
+            let priceText = viewModel.formattedPrice(item.lineTotal)
+            cell.configure(item: item, order: order, priceText: priceText)
             let isLast = indexPath.row == viewModel.rows(in: indexPath.section) - 1
             cell.showsSeparator = !isLast
         }
@@ -171,5 +189,25 @@ extension OrdersViewController: UITableViewDelegate {
         heightForFooterInSection section: Int
     ) -> CGFloat {
         Metrics.Table.footerHeight
+    }
+}
+
+// MARK: - Helpers
+
+private extension OrdersViewController {
+    /// Return a compact, brandy masked order id for display.
+    /// Example: "VMR-1A2B…9F0E" (first 4 / last 4, uppercase, dashes removed)
+    static func maskedOrderId(_ id: String) -> String {
+        // normalize: remove dashes and uppercase
+        let raw = id.replacingOccurrences(of: "-", with: "").uppercased()
+        // ensure we have enough characters — fallback to original id if not
+        guard raw.count > 8 else { return id }
+        
+        // take first 4 and last 4
+        let head = raw.prefix(4)
+        let tail = raw.suffix(4)
+        
+        // format with a branded prefix
+        return "VMR-\(head)…\(tail)"
     }
 }

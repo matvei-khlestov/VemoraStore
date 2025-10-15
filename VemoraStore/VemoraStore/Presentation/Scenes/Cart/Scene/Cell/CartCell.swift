@@ -353,10 +353,10 @@ private extension CartCell {
 // MARK: - Configure API
 
 extension CartCell {
-    func configure(with item: CartItem) {
+    func configure(with item: CartItem, priceText: String) {
         titleLabel.text = item.title
         brandLabel.text = item.brandName
-        priceLabel.text = "\(item.lineTotal) ₽"
+        priceLabel.text = priceText
         
         let url = URL(string: item.imageURL ?? "")
         thumbImageView.kf.setImage(with: url)
@@ -399,7 +399,10 @@ private extension CartCell {
         label.font = font
         label.textColor = textColor
         label.numberOfLines = numberOfLines
-        label.setContentCompressionResistancePriority(compressionResistance, for: .vertical)
+        label.setContentCompressionResistancePriority(
+            compressionResistance,
+            for: .vertical
+        )
         return label
     }
     

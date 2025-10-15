@@ -22,7 +22,7 @@ protocol EditProfileViewModelProtocol {
     // Аватар
     var avatarDataPublisher: AnyPublisher<Data?, Never> { get }
 
-    func load()
+    func loadAvatarData()
     
     func saveAvatarData(_ data: Data) async throws
 }
