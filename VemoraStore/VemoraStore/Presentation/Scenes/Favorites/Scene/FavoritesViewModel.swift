@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UserNotifications
 
 final class FavoritesViewModel: FavoritesViewModelProtocol {
     
@@ -22,6 +23,7 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     private let favorites: FavoritesRepository
     private let cart: CartRepository
     private let priceFormatter: PriceFormattingProtocol
+    private let notifier: LocalNotifyingProtocol
     
     // MARK: - State
     @Published private(set) var favoriteItems: [FavoriteItem] = []
@@ -33,11 +35,13 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     init(
         favoritesRepository: FavoritesRepository,
         cartRepository: CartRepository,
-        priceFormatter: PriceFormattingProtocol
+        priceFormatter: PriceFormattingProtocol,
+        notifier: LocalNotifyingProtocol
     ) {
         self.favorites = favoritesRepository
         self.cart = cartRepository
         self.priceFormatter = priceFormatter
+        self.notifier = notifier
         bind()
     }
     
@@ -52,6 +56,16 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
             .map { Set($0.map(\.productId)) }
             .receive(on: DispatchQueue.main)
             .assign(to: &$inCartIds)
+        
+        Publishers.CombineLatest($favoriteItems, $inCartIds)
+            .removeDuplicates { lhs, rhs in
+                lhs.0.map(\.productId) == rhs.0.map(\.productId) && lhs.1 == rhs.1
+            }
+            .debounce(for: .seconds(0.2), scheduler: DispatchQueue.main)
+            .sink { [weak self] favs, inCart in
+                self?.updateFavoritesReminder(favorites: favs, inCartIds: inCart)
+            }
+            .store(in: &bag)
     }
     
     // MARK: - Public API
@@ -93,5 +107,45 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     
     func formattedPrice(_ price: Double) -> String {
         priceFormatter.format(price: price)
+    }
+
+    // MARK: - Local Notifications
+
+    private func updateFavoritesReminder(favorites: [FavoriteItem], inCartIds: Set<String>) {
+        let hasFavorites = !favorites.isEmpty
+        let anyFavInCart = favorites.contains { inCartIds.contains($0.productId) }
+
+        if hasFavorites && !anyFavInCart {
+            #if DEBUG
+            _ = notifier.schedule(
+                after: 10,                                 // ⬅️ Через 10 сек для теста
+                id: NotificationTemplate.Favorites.id,
+                title: NotificationTemplate.Favorites.title,
+                body: NotificationTemplate.Favorites.body,
+                categoryId: NotificationTemplate.Favorites.categoryId,
+                userInfo: NotificationTemplate.Favorites.userInfo,
+                unique: true
+            )
+            #else
+            let now = Date()
+            let target = Calendar.current.date(byAdding: .day, value: 1, to: now) ?? now.addingTimeInterval(24*60*60)
+            var comps = Calendar.current.dateComponents([.year, .month, .day], from: target)
+            comps.hour = 10
+            comps.minute = 0
+            let date = Calendar.current.date(from: comps) ?? now.addingTimeInterval(24*60*60)
+
+            _ = notifier.schedule(
+                id: NotificationTemplate.Favorites.id,
+                title: NotificationTemplate.Favorites.title,
+                body: NotificationTemplate.Favorites.body,
+                at: date,
+                categoryId: NotificationTemplate.Favorites.categoryId,
+                userInfo: NotificationTemplate.Favorites.userInfo,
+                unique: true
+            )
+            #endif
+        } else {
+            notifier.cancel(ids: [NotificationTemplate.Favorites.id])
+        }
     }
 }

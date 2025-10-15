@@ -129,6 +129,11 @@ final class CartViewController: UIViewController {
         setupNavigationBar(title: Texts.navigationTitle)
         updateClearButtonState()        
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        viewModel.scheduleCartReminderForLeavingScreen()
+    }
 }
 
 // MARK: - Setup

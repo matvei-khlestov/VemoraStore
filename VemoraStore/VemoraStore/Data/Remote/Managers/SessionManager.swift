@@ -18,6 +18,7 @@ final class SessionManager: SessionManaging {
     // MARK: - Deps
     
     private let auth: AuthServiceProtocol
+    private let notifier: LocalNotifyingProtocol
     private let cartRepositoryProvider: (String) -> CartRepository
     private var cartRepoCancellable: AnyCancellable?
     private let container: Container
@@ -39,6 +40,7 @@ final class SessionManager: SessionManaging {
     
     init(
         auth: AuthServiceProtocol,
+        notifier: LocalNotifyingProtocol,
         container: Container,
         cartLocal: CartLocalStore,
         favoritesLocal: FavoritesLocalStore,
@@ -48,6 +50,7 @@ final class SessionManager: SessionManaging {
         checkoutStorage: CheckoutStoringProtocol
     ) {
         self.auth = auth
+        self.notifier = notifier
         self.container = container
         self.cartLocal = cartLocal
         self.favoritesLocal = favoritesLocal
@@ -60,6 +63,13 @@ final class SessionManager: SessionManaging {
     // MARK: - Public
     
     func start() {
+        // 1) Разрешения и категории — один раз при старте
+        notifier.requestAuthorization(options: [.alert, .badge, .sound], completion: nil)
+        notifier.registerCategories([
+            LocalNotificationFactory.favoritesCategory(),
+            LocalNotificationFactory.cartCategory(),
+            LocalNotificationFactory.checkoutCategory()
+        ])
         // Следим за авторизацией; UID берём из auth.currentUserId.
         auth.isAuthorizedPublisher
             .removeDuplicates()
@@ -120,5 +130,6 @@ private extension SessionManager {
         profileLocal.clear(userId: uid)
         ordersLocal.clear(userId: uid)
         checkoutStorage.reset()
+        notifier.cancelAll()
     }
 }

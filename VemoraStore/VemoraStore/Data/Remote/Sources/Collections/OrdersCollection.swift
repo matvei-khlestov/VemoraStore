@@ -74,7 +74,7 @@ final class OrdersCollection: OrdersCollectingProtocol {
             .order(by: "createdAt", descending: true)
         
         let reg = q.addSnapshotListener { [weak self] snapshot, error in
-            guard let self else { return }
+            guard self != nil else { return }
             if let docs = snapshot?.documents {
                 let dtos = docs.map { OrderDTO.fromFirebase(id: $0.documentID, uid: uid, data: $0.data()) }
                 subj.send(dtos)

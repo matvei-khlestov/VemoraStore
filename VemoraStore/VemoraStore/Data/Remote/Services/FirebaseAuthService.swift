@@ -129,14 +129,22 @@ private extension FirebaseAuthService {
 
         var errorDescription: String? {
             switch self {
-            case .invalidCredentials:   return "Неверный email или пароль."
-            case .userDisabled:         return "Учётная запись отключена."
-            case .emailAlreadyInUse:    return "Email уже используется."
-            case .weakPassword:         return "Слишком простой пароль."
-            case .tooManyRequests:      return "Слишком много попыток. Попробуйте позже."
-            case .network:              return "Проблема с сетью."
-            case .requiresRecentLogin:  return "Для удаления аккаунта нужно войти заново."
-            case .unknown:              return "Неизвестная ошибка."
+            case .invalidCredentials:  
+                return "Неверный email или пароль."
+            case .userDisabled:
+                return "Учётная запись отключена."
+            case .emailAlreadyInUse:
+                return "Email уже используется."
+            case .weakPassword:
+                return "Слишком простой пароль."
+            case .tooManyRequests:
+                return "Слишком много попыток. Попробуйте позже."
+            case .network:
+                return "Проблема с сетью."
+            case .requiresRecentLogin:
+                return "Для удаления аккаунта нужно войти заново."
+            case .unknown:
+                return "Неизвестная ошибка."
             }
         }
     }

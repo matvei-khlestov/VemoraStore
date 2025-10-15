@@ -14,6 +14,7 @@ final class CartViewModel: CartViewModelProtocol {
     
     private let repo: CartRepository
     private let priceFormatter: PriceFormattingProtocol
+    private let notifier: LocalNotifyingProtocol
     
     // MARK: - State
     
@@ -29,19 +30,32 @@ final class CartViewModel: CartViewModelProtocol {
     /// Передаём сюда реализацию `DefaultCartRepository`
     init(
         cartRepository: CartRepository,
-        priceFormatter: PriceFormattingProtocol
+        priceFormatter: PriceFormattingProtocol,
+        notifier: LocalNotifyingProtocol
     ) {
         self.repo = cartRepository
         self.priceFormatter = priceFormatter
+        self.notifier = notifier
         bind()
     }
     
     private func bind() {
-        // Реальные данные: CoreData ←(sync)— Firestore
         repo.observeItems()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] items in
                 self?.cartItems = items
+            }
+            .store(in: &cancellables)
+        $cartItems
+            .map { items in items.reduce(0) {
+                $0 + $1.quantity
+            } }
+            .removeDuplicates()
+            .sink { [weak self] total in
+                guard let self else { return }
+                if total == 0 {
+                    self.cancelCartReminder()
+                }
             }
             .store(in: &cancellables)
     }
@@ -70,49 +84,94 @@ final class CartViewModel: CartViewModelProtocol {
     
     func setQuantity(for productId: String, quantity: Int) {
         let newQty = max(1, quantity)
-        Task { try? await repo.setQuantity(productId: productId, quantity: newQty) }
-        // оптимистичное обновление до прихода снапшота
-        if let idx = cartItems.firstIndex(where: { $0.productId == productId }) {
+        Task {
+            try? await repo.setQuantity(
+                productId: productId,
+                quantity: newQty
+            )
+        }
+        
+        if let idx = cartItems.firstIndex(where: {
+            $0.productId == productId
+        }) {
             cartItems[idx].quantity = newQty
         }
     }
     
     func increaseQuantity(for productId: String) {
-        let current = cartItems.first(where: { $0.productId == productId })?.quantity ?? 0
-        Task { try? await repo.setQuantity(productId: productId, quantity: current + 1) }
+        let current = cartItems.first(where: {
+            $0.productId == productId
+        })?.quantity ?? 0
+        Task { try? await repo.setQuantity(
+            productId: productId,
+            quantity: current + 1)
+        }
     }
     
     func decreaseQuantity(for productId: String) {
-        let current = cartItems.first(where: { $0.productId == productId })?.quantity ?? 0
+        let current = cartItems.first(where: {
+            $0.productId == productId
+        })?.quantity ?? 0
+        
         let newQty = max(1, current - 1)
-        Task { try? await repo.setQuantity(productId: productId, quantity: newQty) }
+        Task {
+            try? await repo.setQuantity(
+                productId: productId,
+                quantity: newQty
+            )
+        }
     }
     
     func removeItem(with productId: String) {
         Task { try? await repo.remove(productId: productId) }
-        if let idx = cartItems.firstIndex(where: { $0.productId == productId }) {
-            cartItems.remove(at: idx) // оптимистично
+        if let idx = cartItems.firstIndex(where: {
+            $0.productId == productId
+        }) {
+            cartItems.remove(at: idx)
         }
+    }
+    
+    // MARK: - Local Notifications
+
+    func scheduleCartReminderForLeavingScreen() {
+        guard totalItems > 0 else {
+            cancelCartReminder()
+            return
+        }
+    #if DEBUG
+        _ = notifier.schedule(
+            after: 10,
+            id: NotificationTemplate.Cart.id,
+            title: NotificationTemplate.Cart.title,
+            body: NotificationTemplate.Cart.body,
+            categoryId: NotificationTemplate.Cart.categoryId,
+            userInfo: NotificationTemplate.Cart.userInfo,
+            unique: true
+        )
+    #else
+        _ = notifier.schedule(
+            after: 2 * 60 * 60,
+            id: NotificationTemplate.Cart.id,
+            title: NotificationTemplate.Cart.title,
+            body: NotificationTemplate.Cart.body,
+            categoryId: NotificationTemplate.Cart.categoryId,
+            userInfo: NotificationTemplate.Cart.userInfo,
+            unique: true
+        )
+    #endif
+    }
+    
+   private func cancelCartReminder() {
+        notifier.cancel(ids: [NotificationTemplate.Cart.id])
     }
     
     // MARK: - Checkout Actions
 
-    func placeOrder(completion: @escaping (Result<Void, Error>) -> Void) {
-        guard !cartItems.isEmpty else {
-            completion(.failure(NSError(domain: "Checkout", code: 1, userInfo: [NSLocalizedDescriptionKey: "Корзина пуста"])))
-            return
-        }
-
-        Task {
-            try? await Task.sleep(nanoseconds: 600_000_000)
-            await MainActor.run {
-                completion(.success(()))
-            }
-        }
-    }
-
     func clearCart() {
-        Task { try? await repo.clear() }
+        Task {
+            try? await repo.clear()
+        }
+        cancelCartReminder()
         cartItems.removeAll()
     }
     

@@ -581,15 +581,16 @@ private extension CheckoutViewController {
     
     @objc func placeTapped() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        viewModel.placeOrder { [weak self] result in
-            DispatchQueue.main.async {
-                guard let self else { return }
-                switch result {
-                case .success:
-                    self.teardownBindings()
-                    self.onFinished?()
-                    Task { await self.viewModel.clearCart() }
-                case .failure(let error):
+
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await self.viewModel.placeOrder()
+                self.teardownBindings()
+                self.onFinished?()
+                await self.viewModel.clearCart()
+            } catch {
+                await MainActor.run {
                     self.present(UIAlertController.makeError(error), animated: true)
                 }
             }

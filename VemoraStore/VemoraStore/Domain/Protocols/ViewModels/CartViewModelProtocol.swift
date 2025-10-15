@@ -34,4 +34,7 @@ protocol CartViewModelProtocol {
     
     // Price
     func formattedPrice(_ price: Double) -> String
+    
+    // Notification
+    func scheduleCartReminderForLeavingScreen()
 }

@@ -26,19 +26,26 @@ final class SignInViewModel: SignInViewModelProtocol {
         self.auth = auth
         self.validator = validator
 
-        // live validation
         $email
-            .map { [validator] in validator.validate($0, for: .email).message }
+            .map {
+                [validator] in validator.validate($0, for: .email).message
+            }
             .assign(to: &$_emailError)
 
         $password
-            .map { [validator] in validator.validate($0, for: .password).message }
+            .map {
+                [validator] in validator.validate($0, for: .password).message
+            }
             .assign(to: &$_passwordError)
     }
 
-    // Outputs
-    var emailError: AnyPublisher<String?, Never> { $_emailError.eraseToAnyPublisher() }
-    var passwordError: AnyPublisher<String?, Never> { $_passwordError.eraseToAnyPublisher() }
+    var emailError: AnyPublisher<String?, Never> {
+        $_emailError.eraseToAnyPublisher()
+    }
+    
+    var passwordError: AnyPublisher<String?, Never> {
+        $_passwordError.eraseToAnyPublisher()
+    }
 
     var isSubmitEnabled: AnyPublisher<Bool, Never> {
         let isEmailValid = $_emailError.map { $0 == nil }
@@ -48,18 +55,12 @@ final class SignInViewModel: SignInViewModelProtocol {
             .eraseToAnyPublisher()
     }
 
-    // Inputs
     func setEmail(_ value: String) { email = value }
     func setPassword(_ value: String) { password = value }
 
-    // Actions
     func signIn() async throws {
         guard validator.validate(email, for: .email).isValid,
-              validator.validate(password, for: .password).isValid
-        else {
-            throw NSError(domain: "SignIn", code: 1,
-                          userInfo: [NSLocalizedDescriptionKey: "Проверьте корректность данных"])
-        }
+              validator.validate(password, for: .password).isValid else { return }
         try await auth.signIn(email: email, password: password)
     }
 }
