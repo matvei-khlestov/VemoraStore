@@ -10,28 +10,23 @@ import Combine
 
 final class CheckoutViewController: UIViewController {
     
-    // MARK: - Callbacks
+    private var isInitialAppear = true
     
+    // MARK: - Callbacks
     var onPickOnMap: (() -> Void)?
     var onFinished:  (() -> Void)?
     var onBack:      (() -> Void)?
     
     // MARK: - Deps
-    
     private let viewModel: CheckoutViewModelProtocol
-    
     private let makePhoneSheetVM: (String?) -> PhoneInputSheetViewModelProtocol
     private let makeCommentSheetVM: (String?) -> CommentInputSheetViewModelProtocol
-    
     private let phoneFormatter: PhoneFormattingProtocol
     
     // MARK: - Metrics
-    
     private enum Metrics {
         enum Insets {
             static let horizontal: CGFloat = 16
-            static let verticalTop: CGFloat = 0
-            static let verticalBottom: CGFloat = 0
             
             static let bottomContainer: UIEdgeInsets = .init(
                 top: 12,
@@ -50,9 +45,10 @@ final class CheckoutViewController: UIViewController {
             static let topBarTop: CGFloat = 12
             static let topBarBottom: CGFloat = 8
             static let tableTop: CGFloat = 8
-            static let sectionHeader: CGFloat = 12
+            static let sectionHeader: CGFloat = 10
             static let summaryRows: CGFloat = 12
             static let orderButtonStack: CGFloat = 10
+            static let sectionSpacing: CGFloat = 8
         }
         enum Sizes {
             static let orderButtonHeight: CGFloat = 52
@@ -69,7 +65,6 @@ final class CheckoutViewController: UIViewController {
     }
     
     // MARK: - Texts
-    
     private enum Texts {
         static let navTitle = "Оформление заказа"
         static let segmentPickup = "Самовывоз"
@@ -97,13 +92,11 @@ final class CheckoutViewController: UIViewController {
     }
     
     // MARK: - Symbols
-    
     private enum Symbols {
         static let orderIcon = "shippingbox"
     }
     
     // MARK: - UI
-    
     private lazy var topBar: UIView = {
         let v = UIView()
         return v
@@ -138,6 +131,8 @@ final class CheckoutViewController: UIViewController {
         if #available(iOS 15.0, *) {
             tv.sectionHeaderTopPadding = 0
         }
+        tv.estimatedSectionHeaderHeight = 0
+        tv.estimatedSectionFooterHeight = 0
         return tv
     }()
     
@@ -200,7 +195,6 @@ final class CheckoutViewController: UIViewController {
         return label
     }()
     
-    
     private lazy var orderButton: UIButton = {
         let b = UIButton(type: .system)
         b.backgroundColor = .systemOrange
@@ -255,14 +249,24 @@ final class CheckoutViewController: UIViewController {
     }()
     
     // MARK: - State
-    
     private var bag = Set<AnyCancellable>()
-    private var isPickup: Bool {
-        deliveryControl.selectedSegmentIndex == 0
+    private var isPickup: Bool { deliveryControl.selectedSegmentIndex == 0 }
+    
+    /// Локальный снапшот корзины для отображения в секции `.checkout`
+    private var items: [CartItem] = []
+    
+    private func teardownBindings() {
+        bag.removeAll() // отменит все подписки
+        tableView.dataSource = nil
+        tableView.delegate = nil
+    }
+    
+    deinit {
+        // на всякий случай
+        bag.removeAll()
     }
     
     // MARK: - Sections
-    
     private enum Section: Int, CaseIterable {
         case pickupAddress
         case checkout
@@ -271,13 +275,11 @@ final class CheckoutViewController: UIViewController {
     }
     
     // MARK: - Init
-    
     init(
         viewModel: CheckoutViewModelProtocol,
         makePhoneSheetVM: @escaping (String?) -> PhoneInputSheetViewModelProtocol,
         makeCommentSheetVM: @escaping (String?) -> CommentInputSheetViewModelProtocol,
         phoneFormatter: PhoneFormattingProtocol
-        
     ) {
         self.viewModel = viewModel
         self.makePhoneSheetVM = makePhoneSheetVM
@@ -285,13 +287,11 @@ final class CheckoutViewController: UIViewController {
         self.phoneFormatter = phoneFormatter
         super.init(nibName: nil, bundle: nil)
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Lifecycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupAppearance()
@@ -300,6 +300,23 @@ final class CheckoutViewController: UIViewController {
         setupLayout()
         setupActions()
         setupBindViewModel()
+        
+        self.items = viewModel.itemsSnapshot
+        self.tableView.reloadSections(
+            IndexSet(integer: Section.checkout.rawValue),
+            initialNoAnim: true
+        )
+        self.updateTotals()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateTotals()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        isInitialAppear = false
     }
 }
 
@@ -341,9 +358,7 @@ private extension CheckoutViewController {
             orderButton
         )
         
-        orderButton.addSubviews(
-            orderButtonContentStack
-        )
+        orderButton.addSubviews(orderButtonContentStack)
         orderButtonContentStack.addArrangedSubviews(
             orderIconView,
             orderTitleLabel,
@@ -371,6 +386,7 @@ private extension CheckoutViewController {
         bindReceiverPhone()
         bindOrderComment()
         bindPlaceOrderEnabled()
+        bindItems()
     }
 }
 
@@ -388,7 +404,7 @@ private extension CheckoutViewController {
                 }
                 self.tableView.reloadSections(
                     IndexSet(integer: Section.pickupAddress.rawValue),
-                    with: .automatic
+                    initialNoAnim: self.isInitialAppear
                 )
             }
             .store(in: &bag)
@@ -430,6 +446,22 @@ private extension CheckoutViewController {
             }
             .store(in: &bag)
     }
+    
+    func bindItems() {
+        viewModel.itemsPublisher
+            .receive(on: RunLoop.main)
+            .sink { [weak self] items in
+                guard let self else { return }
+                self.items = items
+                self.tableView.reloadSections(
+                    IndexSet(integer: Section.checkout.rawValue),
+                    initialNoAnim: self.isInitialAppear
+                )
+                self.updateTotals()
+            }
+            .store(in: &bag)
+    }
+    
 }
 
 // MARK: - Layout
@@ -467,13 +499,19 @@ private extension CheckoutViewController {
             
             // сам topBar
             topBar.topAnchor.constraint(
+                
                 equalTo: view.safeAreaLayoutGuide.topAnchor
+                
             ),
             topBar.leadingAnchor.constraint(
+                
                 equalTo: view.safeAreaLayoutGuide.leadingAnchor
+                
             ),
             topBar.trailingAnchor.constraint(
+                
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor
+                
             )
         ])
     }
@@ -491,7 +529,8 @@ private extension CheckoutViewController {
                 equalTo: view.safeAreaLayoutGuide.trailingAnchor
             ),
             tableView.bottomAnchor.constraint(
-                equalTo: bottomContainer.topAnchor
+                equalTo: bottomContainer.topAnchor,
+                constant: -Metrics.Spacing.sectionSpacing
             )
         ])
     }
@@ -542,7 +581,19 @@ private extension CheckoutViewController {
     
     @objc func placeTapped() {
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
-        onFinished?()
+        viewModel.placeOrder { [weak self] result in
+            DispatchQueue.main.async {
+                guard let self else { return }
+                switch result {
+                case .success:
+                    self.teardownBindings()
+                    self.onFinished?()
+                    Task { await self.viewModel.clearCart() }
+                case .failure(let error):
+                    self.present(UIAlertController.makeError(error), animated: true)
+                }
+            }
+        }
     }
     
     @objc func backTapped() {
@@ -561,7 +612,7 @@ extension CheckoutViewController: UITableViewDataSource {
         case .pickupAddress:
             return isPickup ? 1 : 3
         case .checkout:
-            return 2
+            return items.count
         case .deliveryInfo, .payment:
             return 1
         }
@@ -600,21 +651,9 @@ extension CheckoutViewController: UITableViewDataSource {
             
         case .checkout:
             let cell: CheckoutCell = tableView.dequeueReusableCell(for: indexPath)
-            let product = Product(
-                id: "mock_\(indexPath.row)",
-                name: "Vemora Oslo Sofa 3-Seater",
-                description: "Mock item for checkout preview",
-                nameLower: "vemora oslo sofa 3-seater",
-                categoryId: "sofas",
-                brandId: "vemora",
-                price: 940,
-                imageURL: "https://picsum.photos/seed/checkout\(indexPath.row)/400/300",
-                isActive: true,
-                createdAt: ISO8601DateFormatter().string(from: Date()),
-                updatedAt: ISO8601DateFormatter().string(from: Date()),
-                keywords: ["mock", "checkout", "диван", "sofa", "vemora"]
-            )
-            cell.configure(with: product, quantity: indexPath.row + 1)
+            let item = items[indexPath.row]
+            let priceText = viewModel.formattedPrice(item.lineTotal)
+            cell.configure(with: item, priceText: priceText)
             let isLastRow = indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1
             cell.showsSeparator = !isLastRow
             return cell
@@ -631,23 +670,6 @@ extension CheckoutViewController: UITableViewDataSource {
             return cell
         }
     }
-    
-    func tableView(_ tableView: UITableView,
-                   heightForHeaderInSection section: Int) -> CGFloat {
-        Metrics.Spacing.sectionHeader
-    }
-    func tableView(_ tableView: UITableView,
-                   viewForHeaderInSection section: Int) -> UIView? {
-        UIView(frame: .zero)
-    }
-    func tableView(_ tableView: UITableView,
-                   heightForFooterInSection section: Int) -> CGFloat {
-        .leastNormalMagnitude
-    }
-    func tableView(_ tableView: UITableView,
-                   viewForFooterInSection section: Int) -> UIView? {
-        UIView(frame: .zero)
-    }
 }
 
 // MARK: - UITableViewDelegate
@@ -656,13 +678,28 @@ extension CheckoutViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         guard let section = Section(rawValue: indexPath.section) else { return }
-        
         switch section {
         case .pickupAddress:
             handlePickupAddressSelection(at: indexPath)
         default:
             break
         }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        Metrics.Spacing.sectionSpacing
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        UIView(frame: .zero)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        Metrics.Spacing.sectionSpacing
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        UIView(frame: .zero)
     }
 }
 
@@ -688,7 +725,6 @@ private extension CheckoutViewController {
             viewModel: vm,
             phoneFormatter: phoneFormatter
         )
-
         sheet.onSavePhone = { [weak self] phone in
             guard let self else { return }
             self.viewModel.updateReceiverPhone(phone)
@@ -699,12 +735,10 @@ private extension CheckoutViewController {
     func presentCommentInputSheet(at indexPath: IndexPath) {
         let vm = makeCommentSheetVM(viewModel.orderCommentText)
         let sheet = CommentInputSheetViewController(viewModel: vm)
-
         sheet.onSaveComment = { [weak self] comment in
             guard let self else { return }
             self.viewModel.updateOrderComment(comment)
         }
-
         present(sheet, animated: true)
     }
 }
@@ -725,12 +759,10 @@ private extension CheckoutViewController {
         font: UIFont,
         textColor: UIColor = .label,
         alignment: NSTextAlignment = .natural,
-        hugging: (priority: UILayoutPriority,
-                  axis: NSLayoutConstraint.Axis)? = nil
+        hugging: (priority: UILayoutPriority, axis: NSLayoutConstraint.Axis)? = nil
     ) -> UILabel {
         let label = UILabel()
         label.text = text
-        
         label.font = font
         label.textColor = textColor
         label.textAlignment = alignment
@@ -738,6 +770,13 @@ private extension CheckoutViewController {
             label.setContentHuggingPriority(hugging.priority, for: hugging.axis)
         }
         return label
+    }
+    
+    /// Пересчёт суммы на экране (по локальному snapshot `items`)
+    func updateTotals() {
+        let formatted = viewModel.formattedTotalPrice(from: items)
+        totalValueLabel.text = formatted
+        orderAmountLabel.text = formatted
     }
 }
 
@@ -749,17 +788,14 @@ private extension CheckoutViewController {
         configure visibleCell: (Cell) -> Void
     ) {
         guard !isPickup else { return }
-        
         let section = Section.pickupAddress.rawValue
         let indexPath = IndexPath(row: row, section: section)
         
         if let cell: Cell = tableView.visibleCell(at: indexPath) {
             visibleCell(cell)
-            tableView.beginUpdates()
-            tableView.endUpdates()
         } else if tableView.numberOfSections > section,
                   tableView.numberOfRows(inSection: section) > row {
-            tableView.reloadRows(at: [indexPath], with: .automatic)
+            tableView.reloadRows(at: [indexPath], initialNoAnim: isInitialAppear)
         }
     }
     
@@ -784,6 +820,32 @@ private extension CheckoutViewController {
                 comment: viewModel.orderCommentText,
                 placeholder: Texts.commentPlaceholder
             )
+        }
+    }
+}
+
+private extension UITableView {
+    func reloadSections(_ sections: IndexSet, initialNoAnim: Bool) {
+        guard window != nil else { return }
+        if initialNoAnim {
+            UIView.performWithoutAnimation {
+                self.reloadSections(sections, with: .none)
+                self.layoutIfNeeded()
+            }
+        } else {
+            self.reloadSections(sections, with: .automatic)
+        }
+    }
+    
+    func reloadRows(at indexPaths: [IndexPath], initialNoAnim: Bool) {
+        guard !indexPaths.isEmpty, window != nil else { return }
+        if initialNoAnim {
+            UIView.performWithoutAnimation {
+                self.reloadRows(at: indexPaths, with: .none)
+                self.layoutIfNeeded()
+            }
+        } else {
+            self.reloadRows(at: indexPaths, with: .automatic)
         }
     }
 }

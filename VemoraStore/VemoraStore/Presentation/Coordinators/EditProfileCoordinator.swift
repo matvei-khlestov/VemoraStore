@@ -38,7 +38,9 @@ final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeEditProfileViewModel(userId: authService.currentUserId!)
+        let vm = viewModelFactory.makeEditProfileViewModel(
+            userId: authService.currentUserId ?? ""
+        )
         let vc = EditProfileViewController(viewModel: vm)
         vc.hidesBottomBarWhenPushed = true
         
@@ -64,7 +66,9 @@ final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
     // MARK: - Private
     
     private func showEditName() {
-        let editName = coordinatorFactory.makeEditNameCoordinator(navigation: navigation)
+        let editName = coordinatorFactory.makeEditNameCoordinator(
+            navigation: navigation
+        )
         add(editName)
         
         editName.onFinish = { [weak self, weak editName] in
@@ -76,7 +80,9 @@ final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
     }
     
     private func showEditEmail() {
-        let editEmail = coordinatorFactory.makeEditEmailCoordinator(navigation: navigation)
+        let editEmail = coordinatorFactory.makeEditEmailCoordinator(
+            navigation: navigation
+        )
         add(editEmail)
 
         editEmail.onFinish = { [weak self, weak editEmail] in

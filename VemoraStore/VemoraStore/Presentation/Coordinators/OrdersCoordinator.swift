@@ -21,21 +21,25 @@ final class OrdersCoordinator: OrdersCoordinatingProtocol {
     // MARK: - Deps
     
     private let viewModelFactory: ViewModelBuildingProtocol
+    private let authService: AuthServiceProtocol
     
     // MARK: - Init
     
     init(
         navigation: UINavigationController,
-        viewModelFactory: ViewModelBuildingProtocol
+        viewModelFactory: ViewModelBuildingProtocol,
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
+        self.authService = authService
     }
     
     // MARK: - Start
     
     func start() {
-        let viewModel = viewModelFactory.makeOrdersViewModel()
+        let userId = authService.currentUserId ?? ""
+        let viewModel = viewModelFactory.makeOrdersViewModel(userId: userId)
         let vc = OrdersViewController(viewModel: viewModel)
         vc.hidesBottomBarWhenPushed = true
         

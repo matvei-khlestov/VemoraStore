@@ -22,4 +22,5 @@ protocol FavoritesViewModelProtocol {
     func toggleCart(for productId: String)
     func removeItem(with productId: String)
     func clearFavorites()
+    func formattedPrice(_ price: Double) -> String
 }

@@ -18,23 +18,27 @@ final class FavoritesCoordinator: FavoritesCoordinatingProtocol {
     
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
+    private let authService: AuthServiceProtocol
 
     // MARK: - Init
     
     init(
         navigation: UINavigationController,
         viewModelFactory: ViewModelBuildingProtocol,
-        coordinatorFactory: CoordinatorBuildingProtocol
+        coordinatorFactory: CoordinatorBuildingProtocol,
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
         self.coordinatorFactory = coordinatorFactory
+        self.authService = authService
     }
 
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeFavoritesViewModel()
+        let userId = authService.currentUserId ?? ""
+        let vm = viewModelFactory.makeFavoritesViewModel(userId: userId)
         let vc = FavoritesViewController(viewModel: vm)
 
         vc.onSelectProduct = { [weak self] product in

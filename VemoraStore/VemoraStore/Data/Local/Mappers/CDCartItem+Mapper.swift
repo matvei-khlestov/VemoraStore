@@ -51,3 +51,18 @@ extension CartItem {
         )
     }
 }
+
+extension CDCartItem {
+    func toCartItem() -> CartItem {
+        CartItem(
+            userId: userId ?? "",
+            productId: productId ?? "",
+            brandName: brandName ?? "",
+            title: title ?? "",
+            price: price,                         // Double в Core Data
+            imageURL: imageURL,                   // String? ок
+            quantity: Int(quantity),              // Int32 -> Int
+            updatedAt: updatedAt ?? Date()
+        )
+    }
+}

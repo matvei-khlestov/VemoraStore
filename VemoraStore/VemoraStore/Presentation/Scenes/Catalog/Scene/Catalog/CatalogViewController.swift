@@ -355,8 +355,8 @@ extension CatalogViewController: UICollectionViewDataSource {
             
             let isInCart = inCartIds.contains(product.id)
             let isFavorite = favoriteIds.contains(product.id)
-            
-            cell.configure(with: product, isFavorite: isFavorite, isInCart: isInCart)
+            let priceText = viewModel.formattedPrice(product.price)
+            cell.configure(with: product, isFavorite: isFavorite, isInCart: isInCart, priceText: priceText)
             cell.delegate = self
             cell.bindCartState(cartIdsPublisher: viewModel.inCartIdsPublisher)
             cell.bindFavoriteState(favoriteIdsPublisher: viewModel.favoriteIdsPublisher)

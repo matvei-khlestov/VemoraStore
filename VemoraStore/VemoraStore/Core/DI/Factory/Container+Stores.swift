@@ -11,7 +11,9 @@ import CoreData
 extension Container {
     
     var persistentContainer: Factory<NSPersistentContainer> {
-        self { CoreDataStack.shared.container }.singleton
+        self {
+            CoreDataStack.shared.container
+        }.singleton
     }
     
     var profileLocalStore: Factory<ProfileLocalStore> {
@@ -35,6 +37,12 @@ extension Container {
     var favoritesLocalStore: Factory<FavoritesLocalStore> {
         self {
             CoreDataFavoritesStore(container: self.persistentContainer())
+        }.singleton
+    }
+    
+    var ordersLocalStore: Factory<OrdersLocalStore> {
+        self {
+            CoreDataOrdersStore(container: self.persistentContainer())
         }.singleton
     }
 }

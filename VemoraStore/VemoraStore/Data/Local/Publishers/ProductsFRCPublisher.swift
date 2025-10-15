@@ -153,8 +153,9 @@ private extension ProductsFRCPublisher {
         
         req.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         req.sortDescriptors = [
-            NSSortDescriptor(key: "updatedAt", ascending: false),
-            NSSortDescriptor(key: "nameLower",  ascending: true)
+            NSSortDescriptor(key: "id", ascending: false),
+            NSSortDescriptor(key: "categoryId", ascending: false),
+            NSSortDescriptor(key: "brandId", ascending: false)
         ]
         return req
     }

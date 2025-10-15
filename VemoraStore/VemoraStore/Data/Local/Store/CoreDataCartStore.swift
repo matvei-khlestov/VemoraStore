@@ -23,6 +23,27 @@ final class CoreDataCartStore: BaseCoreDataStore, CartLocalStore {
         return s.publisher()
     }
 
+    func snapshot(userId: String) -> [CartItem]? {
+        var result: [CartItem]?
+        let context = viewContext
+
+        context.performAndWait {
+            do {
+                let req: NSFetchRequest<CDCartItem> = CDCartItem.fetchRequest()
+                req.predicate = NSPredicate(format: "userId == %@", userId)
+                req.sortDescriptors = [
+                    NSSortDescriptor(key: "updatedAt", ascending: false)
+                ]
+                let entities = try context.fetch(req)
+                result = entities.map { $0.toCartItem() }
+            } catch {
+                print("❌ CoreDataCartStore.snapshot error: \(error)")
+                result = nil
+            }
+        }
+        return result
+    }
+
     func replaceAll(userId: String, with dtos: [CartDTO]) {
         bg.perform {
             do {

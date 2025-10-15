@@ -31,4 +31,7 @@ protocol CartViewModelProtocol {
     
     // Clear all
     func clearCart()
+    
+    // Price
+    func formattedPrice(_ price: Double) -> String
 }

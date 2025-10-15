@@ -22,6 +22,8 @@ final class CheckoutCoordinator: CheckoutCoordinatingProtocol {
     private let coordinatorFactory: CoordinatorBuildingProtocol
     
     private let phoneFormatter: PhoneFormattingProtocol
+    private let sessionManager: SessionManaging
+    private let authService: AuthServiceProtocol
     
     // MARK: - Init
     
@@ -29,18 +31,27 @@ final class CheckoutCoordinator: CheckoutCoordinatingProtocol {
         navigation: UINavigationController,
         viewModelFactory: ViewModelBuildingProtocol,
         coordinatorFactory: CoordinatorBuildingProtocol,
-        phoneFormatter: PhoneFormattingProtocol
+        phoneFormatter: PhoneFormattingProtocol,
+        sessionManager: SessionManaging,
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
         self.coordinatorFactory = coordinatorFactory
         self.phoneFormatter = phoneFormatter
+        self.sessionManager = sessionManager
+        self.authService = authService
     }
     
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeCheckoutViewModel()
+        let cartSnapshot = sessionManager.cartItemsSnapshot
+        let userId = authService.currentUserId ?? ""
+        let vm = viewModelFactory.makeCheckoutViewModel(
+            userId: userId,
+            snapshotItems: cartSnapshot
+        )
         let vc = CheckoutViewController(
             viewModel: vm,
             makePhoneSheetVM: { initialPhone in

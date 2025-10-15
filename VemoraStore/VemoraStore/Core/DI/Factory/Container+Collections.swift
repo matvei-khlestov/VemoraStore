@@ -13,18 +13,32 @@ extension Container {
     // MARK: - Profile Remote (Firestore)
     
     var profileCollection: Factory<ProfileCollectingProtocol> {
-        self { ProfileCollection() }.singleton
+        self {
+            ProfileCollection()
+        }.singleton
     }
     
     var catalogCollection: Factory<CatalogCollectingProtocol> {
-        self { CatalogCollections() }.singleton
+        self {
+            CatalogCollections()
+        }.singleton
     }
     
     var cartCollection: Factory<CartCollectingProtocol> {
-        self { CartCollection() }.singleton
+        self {
+            CartCollection()
+        }.singleton
     }
     
     var favoritesCollection: Factory<FavoritesCollectingProtocol> {
-        self { FavoritesCollection() }.singleton
+        self {
+            FavoritesCollection()
+        }.singleton
+    }
+    
+    var ordersCollection: Factory<OrdersCollectingProtocol> {
+        self {
+            OrdersCollection()
+        }.singleton
     }
 }

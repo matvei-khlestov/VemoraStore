@@ -45,7 +45,7 @@ final class OrderItemCell: UITableViewCell {
             static let brand: UIFont = .systemFont(ofSize: 12, weight: .regular)
             static let price: UIFont    = .systemFont(ofSize: 18, weight: .bold)
             static let qty: UIFont      = .systemFont(ofSize: 15, weight: .medium)
-            static let meta: UIFont     = .systemFont(ofSize: 13, weight: .regular)
+            static let meta: UIFont     = .systemFont(ofSize: 14, weight: .regular)
         }
         
         enum Separator {
@@ -141,7 +141,8 @@ final class OrderItemCell: UITableViewCell {
     private let dateLabel: UILabel = {
         Factory.makeLabel(
             font: Metrics.Fonts.meta,
-            color: Colors.meta
+            color: Colors.meta,
+            numberOfLines: 0
         )
     }()
     
@@ -334,27 +335,35 @@ private extension OrderItemCell {
 // MARK: - Configure API
 
 extension OrderItemCell {
-    func configure(item: OrderItem, order: OrderEntity) {
-        // product
+    func configure(
+        item: OrderItem,
+        order: OrderEntity,
+        priceText: String
+    ) {
+        
         titleLabel.text = item.product.name
         brandLabel.text = item.product.brandId
-        priceLabel.text = "\(item.product.price) ₽"
+        priceLabel.text = priceText
         quantityLabel.text = Texts.quantity(item.quantity)
-        thumbImageView.image = UIImage(resource: .divan) // заглушка
         
-        // meta
+        thumbImageView.loadImage(from: item.product.imageURL)
+        
         addressLabel.text = Texts.addressPrefix + order.receiveAddress
         dateLabel.text = Texts.datePrefix + order.createdAt.description
         paymentLabel.text = Texts.paymentPrefix + order.paymentMethod
         
-        // badge
         let color: UIColor = {
             switch order.status {
-            case .assembling: return .systemOrange
-            case .ready:      return .systemBlue
-            case .delivering: return .systemTeal
-            case .delivered:  return .systemGreen
-            case .cancelled:  return .systemRed
+            case .assembling:
+                return .systemOrange
+            case .ready:
+                return .systemBlue
+            case .delivering:
+                return .systemTeal
+            case .delivered:
+                return .systemGreen
+            case .cancelled:
+                return .systemRed
             }
         }()
         statusBadge.configure(text: order.status.badgeText, color: color)

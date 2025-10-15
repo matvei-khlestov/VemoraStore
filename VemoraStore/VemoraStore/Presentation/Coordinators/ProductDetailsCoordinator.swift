@@ -17,6 +17,7 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     private let productId: String
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
+    private let authService: AuthServiceProtocol
     
     // MARK: - Init
     
@@ -24,18 +25,24 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
         navigation: UINavigationController,
         productId: String,
         viewModelFactory: ViewModelBuildingProtocol,
-        coordinatorFactory: CoordinatorBuildingProtocol
+        coordinatorFactory: CoordinatorBuildingProtocol,
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.productId = productId
         self.viewModelFactory = viewModelFactory
         self.coordinatorFactory = coordinatorFactory
+        self.authService = authService
     }
     
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeProductDetailsViewModel(productId: productId)
+        let userId = authService.currentUserId ?? ""
+        let vm = viewModelFactory.makeProductDetailsViewModel(
+            productId: productId,
+            userId: userId
+        )
         let vc = ProductDetailsViewController(viewModel: vm)
     
         vc.onBack = { [weak self] in

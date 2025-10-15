@@ -78,7 +78,16 @@ final class DefaultCartRepository: CartRepository {
     func setQuantity(productId: String, quantity: Int) async throws {
         guard let meta = catalog.meta(for: productId) else {
             // Если нет метаданных, всё равно сможем обнулить/удалить
-            let dto = CartDTO(userId: userId, productId: productId, brandName: "", title: "", price: .zero, imageURL: nil, quantity: quantity, updatedAt: Date())
+            let dto = CartDTO(
+                userId: userId,
+                productId: productId,
+                brandName: "",
+                title: "",
+                price: .zero,
+                imageURL: nil,
+                quantity: quantity,
+                updatedAt: Date()
+            )
             try await remote.setQuantity(uid: userId, dto: dto, quantity: quantity)
             return
         }

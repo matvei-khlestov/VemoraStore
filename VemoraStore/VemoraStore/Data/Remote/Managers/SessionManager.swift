@@ -14,22 +14,27 @@ import FactoryKit
 /// - при смене uid чистит локальные user-scoped сторы
 /// - даёт хук для сброса потенциальных user-scoped singleton'ов в контейнере
 final class SessionManager: SessionManaging {
-
+    
     // MARK: - Deps
     
     private let auth: AuthServiceProtocol
+    private let cartRepositoryProvider: (String) -> CartRepository
+    private var cartRepoCancellable: AnyCancellable?
     private let container: Container
-
+    private let checkoutStorage: CheckoutStoringProtocol
+    
     // Локальные сторы, которые завязаны на userId (можно расширять списком).
     private let cartLocal: CartLocalStore
     private let favoritesLocal: FavoritesLocalStore
     private let profileLocal: ProfileLocalStore
-
+    private let ordersLocal: OrdersLocalStore
+    
     // MARK: - State
     
     private var bag = Set<AnyCancellable>()
     private var lastUID: String?
-
+    private(set) var cartItemsSnapshot: [CartItem] = []
+    
     // MARK: - Init
     
     init(
@@ -37,15 +42,21 @@ final class SessionManager: SessionManaging {
         container: Container,
         cartLocal: CartLocalStore,
         favoritesLocal: FavoritesLocalStore,
-        profileLocal: ProfileLocalStore
+        profileLocal: ProfileLocalStore,
+        ordersLocal: OrdersLocalStore,
+        cartRepositoryProvider: @escaping (String) -> CartRepository,
+        checkoutStorage: CheckoutStoringProtocol
     ) {
         self.auth = auth
         self.container = container
         self.cartLocal = cartLocal
         self.favoritesLocal = favoritesLocal
         self.profileLocal = profileLocal
+        self.ordersLocal = ordersLocal
+        self.cartRepositoryProvider = cartRepositoryProvider
+        self.checkoutStorage = checkoutStorage
     }
-
+    
     // MARK: - Public
     
     func start() {
@@ -56,11 +67,11 @@ final class SessionManager: SessionManaging {
                 self?.handleAuthStateChanged()
             }
             .store(in: &bag)
-
+        
         // Подстрахуемся и дернём сразу.
         handleAuthStateChanged()
     }
-
+    
     // Можно звать явно при logout/login, если хочется мгновенно применить.
     func refreshNow() {
         handleAuthStateChanged()
@@ -70,25 +81,44 @@ final class SessionManager: SessionManaging {
 // MARK: - Private
 
 private extension SessionManager {
-    func handleAuthStateChanged() {
-        let current = auth.currentUserId
+    private func handleAuthStateChanged() {
+        let current = auth.currentUserId ?? ""
         guard current != lastUID else { return }
-
+        
         let prev = lastUID
         lastUID = current
-
-        // Если был пользователь — подчистим его локальные данные (cart/favorites/profile).
-        if let prevUID = prev, !prevUID.isEmpty {
-            clearLocalUserScopedData(for: prevUID)
+        
+        if let prev, !prev.isEmpty {
+            clearLocalUserScopedData(for: prev)
         }
-
-        // На смену сессии сбрасываем потенциальные user-scoped singleton'ы (пока noop).
         container.resetUserScopedSingletons()
+        
+        // отменим старую подписку
+        cartRepoCancellable?.cancel()
+        
+        if !current.isEmpty {
+            if let preload = cartLocal.snapshot(userId: current) {
+                cartItemsSnapshot = preload
+            } else {
+                cartItemsSnapshot = []
+            }
+            
+            let repo = cartRepositoryProvider(current)
+            cartRepoCancellable = repo.observeItems()
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] items in
+                    self?.cartItemsSnapshot = items
+                }
+        } else {
+            cartItemsSnapshot = []
+        }
     }
-
+    
     func clearLocalUserScopedData(for uid: String) {
         cartLocal.clear(userId: uid)
         favoritesLocal.clear(userId: uid)
         profileLocal.clear(userId: uid)
+        ordersLocal.clear(userId: uid)
+        checkoutStorage.reset()
     }
 }

@@ -45,6 +45,7 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     private let repo: CatalogRepository
     private let cart: CartRepository
     private let favorites: FavoritesRepository
+    private let priceFormatter: PriceFormattingProtocol
     
     // MARK: - State
     
@@ -65,11 +66,13 @@ final class CatalogViewModel: CatalogViewModelProtocol {
     init(
         repository: CatalogRepository,
         cartRepository: CartRepository,
-        favoritesRepository: FavoritesRepository
+        favoritesRepository: FavoritesRepository,
+        priceFormatter: PriceFormattingProtocol
     ) {
         self.repo = repository
         self.cart = cartRepository
         self.favorites = favoritesRepository
+        self.priceFormatter = priceFormatter
         bind()
         refreshProducts()
     }
@@ -119,6 +122,10 @@ final class CatalogViewModel: CatalogViewModelProtocol {
 
     func toggleFavorite(productId: String) {
         Task { try? await favorites.toggle(productId: productId) }
+    }
+    
+    func formattedPrice(_ price: Double) -> String {
+        priceFormatter.format(price: price)
     }
 }
 

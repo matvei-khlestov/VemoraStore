@@ -44,42 +44,46 @@ extension Container {
     
     // MARK: - Catalog
     
-    var catalogViewModel: Factory<CatalogViewModelProtocol> {
-        self {
-            let uid = self.authService().currentUserId ?? ""
-            return CatalogViewModel(
+    var catalogViewModel: ParameterFactory<String, CatalogViewModelProtocol> {
+        self { userId in
+            CatalogViewModel(
                 repository: self.catalogRepository(),
-                cartRepository: self.cartRepository(uid),
-                favoritesRepository: self.favoritesRepository(uid)
+                cartRepository: self.cartRepository(userId),
+                favoritesRepository: self.favoritesRepository(userId),
+                priceFormatter: self.priceFormatter()
             )
         }
     }
     
     var catalogFilterViewModel: Factory<CatalogFilterViewModelProtocol> {
         self {
-            CatalogFilterViewModel(repository: self.catalogRepository())
-        }
-    }
-    
-    var productDetailsViewModel: ParameterFactory<String, ProductDetailsViewModelProtocol> {
-        self { productId in
-            let uid = self.authService().currentUserId ?? ""
-            return ProductDetailsViewModel(
-                productId: productId,
-                favoritesRepository: self.favoritesRepository(uid),
-                cartRepository: self.cartRepository(uid),
-                catalogRepository: self.catalogRepository()
+            CatalogFilterViewModel(
+                repository: self.catalogRepository()
             )
         }
     }
     
-    var categoryProductsViewModel: ParameterFactory<String, CategoryProductsViewModelProtocol> {
-        self { categoryId in
-            let uid = self.authService().currentUserId ?? ""
-            return CategoryProductsViewModel(
+    var productDetailsViewModel: ParameterFactory<(String, String),
+                                                    ProductDetailsViewModelProtocol> {
+        self { (productId, userId) in
+            ProductDetailsViewModel(
+                productId: productId,
+                favoritesRepository: self.favoritesRepository(userId),
+                cartRepository: self.cartRepository(userId),
+                catalogRepository: self.catalogRepository(),
+                priceFormatter: self.priceFormatter()
+            )
+        }
+    }
+    
+    var categoryProductsViewModel: ParameterFactory<(String, String),
+                                                    CategoryProductsViewModelProtocol> {
+        self { (categoryId, userId) in
+            CategoryProductsViewModel(
                 repository: self.catalogRepository(),
-                cartRepository: self.cartRepository(uid),
-                favoritesRepository: self.favoritesRepository(uid),
+                cartRepository: self.cartRepository(userId),
+                favoritesRepository: self.favoritesRepository(userId),
+                priceFormatter: self.priceFormatter(),
                 categoryId: categoryId
             )
         }
@@ -87,22 +91,24 @@ extension Container {
     
     // MARK: - Favorites
     
-    var favoritesViewModel: Factory<FavoritesViewModelProtocol> {
-        self {
-            let uid = self.authService().currentUserId ?? ""
-            return FavoritesViewModel(
-                favoritesRepository: self.favoritesRepository(uid),
-                cartRepository: self.cartRepository(uid)
+    var favoritesViewModel: ParameterFactory<String, FavoritesViewModelProtocol> {
+        self { userId in
+            FavoritesViewModel(
+                favoritesRepository: self.favoritesRepository(userId),
+                cartRepository: self.cartRepository(userId),
+                priceFormatter: self.priceFormatter()
             )
         }
     }
     
     // MARK: - Cart
     
-    var cartViewModel: Factory<CartViewModelProtocol> {
-        self {
-            let uid = self.authService().currentUserId ?? ""
-            return CartViewModel(cartRepository: self.cartRepository(uid))
+    var cartViewModel: ParameterFactory<String, CartViewModelProtocol> {
+        self { userId in
+            CartViewModel(
+                cartRepository: self.cartRepository(userId),
+                priceFormatter: self.priceFormatter()
+            )
         }
     }
     
@@ -124,7 +130,8 @@ extension Container {
             EditProfileViewModel(
                 avatarStorage: self.avatarStorageService(),
                 profileRepository: self.profileRepository(userId),
-                userId: userId
+                userId: userId,
+                checkoutStorage: self.checkoutStorage()
             )
         }
     }
@@ -154,28 +161,37 @@ extension Container {
             EditPhoneViewModel(
                 profileRepository: self.profileRepository(userId),
                 validator: self.formValidator(),
-                userId: userId
+                userId: userId,
+                checkoutStorage: self.checkoutStorage()
             )
         }
     }
     
     // MARK: - Checkout
     
-    var checkoutViewModel: Factory<CheckoutViewModelProtocol> {
-        self {
+    var checkoutViewModel: ParameterFactory<(String, [CartItem]),
+                                            CheckoutViewModelProtocol> {
+        self { (userId, snapshotItems) in
             CheckoutViewModel(
-                cart: self.cartService(),
-                auth: self.authService(),
-                phoneFormatter: self.phoneFormatter()
+                cartRepository: self.cartRepository(userId),
+                ordersRepository: self.ordersRepository(userId),
+                phoneFormatter: self.phoneFormatter(),
+                priceFormatter: self.priceFormatter(),
+                snapshotItems: snapshotItems,
+                storage: self.checkoutStorage(),
+                currentUserId: userId
             )
         }
     }
     
     // MARK: - Orders
     
-    var ordersViewModel: Factory<OrdersViewModelProtocol> {
-        self {
-            OrdersViewModel(service: self.ordersService())
+    var ordersViewModel: ParameterFactory<String, OrdersViewModelProtocol> {
+        self { userId in
+            OrdersViewModel(
+                repository: self.ordersRepository(userId),
+                priceFormatter: self.priceFormatter()
+            )
         }
     }
     

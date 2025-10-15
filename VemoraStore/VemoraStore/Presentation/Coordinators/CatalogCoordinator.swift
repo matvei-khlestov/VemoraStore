@@ -18,6 +18,7 @@ final class CatalogCoordinator: CatalogCoordinatingProtocol {
     
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
+    private let authService: AuthServiceProtocol
     
     // MARK: - State
     
@@ -28,17 +29,20 @@ final class CatalogCoordinator: CatalogCoordinatingProtocol {
     init(
         navigation: UINavigationController,
         viewModelFactory: ViewModelBuildingProtocol,
-        coordinatorFactory: CoordinatorBuildingProtocol
+        coordinatorFactory: CoordinatorBuildingProtocol,
+        authService: AuthServiceProtocol
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
         self.coordinatorFactory = coordinatorFactory
+        self.authService = authService
     }
     
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeCatalogViewModel()
+        let userId = authService.currentUserId ?? ""
+        let vm = viewModelFactory.makeCatalogViewModel(userId: userId)
         self.catalogVM = vm
         let vc = CatalogViewController(viewModel: vm)
 

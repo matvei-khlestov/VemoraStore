@@ -34,11 +34,11 @@ final class OrderSuccessCoordinator: OrderSuccessCoordinatingProtocol {
     // MARK: - Start
     
     func start() {
-        let vc = OrderSuccessViewController()
-        vc.hidesBottomBarWhenPushed = true
-        vc.onViewCatalog = { [weak self] in
-            self?.onOpenCatalog?()
+        DispatchQueue.main.async {
+            let vc = OrderSuccessViewController()
+            vc.hidesBottomBarWhenPushed = true
+            vc.onViewCatalog = { [weak self] in self?.onOpenCatalog?() }
+            self.navigation.pushViewController(vc, animated: true)
         }
-        navigation.pushViewController(vc, animated: true)
     }
 }

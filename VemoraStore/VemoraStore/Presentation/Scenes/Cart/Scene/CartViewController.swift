@@ -317,7 +317,8 @@ extension CartViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell: CartCell = tableView.dequeueReusableCell(for: indexPath)
         let item = items[indexPath.row]
-        cell.configure(with: item)
+        let priceText = viewModel.formattedPrice(item.lineTotal)
+        cell.configure(with: item, priceText: priceText)
         cell.delegate = self
         return cell
     }

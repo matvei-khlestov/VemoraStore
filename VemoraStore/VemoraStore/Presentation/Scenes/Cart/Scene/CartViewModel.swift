@@ -9,10 +9,14 @@ import Foundation
 import Combine
 
 final class CartViewModel: CartViewModelProtocol {
+    
     // MARK: - Deps
+    
     private let repo: CartRepository
+    private let priceFormatter: PriceFormattingProtocol
     
     // MARK: - State
+    
     @Published private(set) var cartItems: [CartItem] = []
     var cartItemsPublisher: AnyPublisher<[CartItem], Never> {
         $cartItems.eraseToAnyPublisher()
@@ -21,9 +25,14 @@ final class CartViewModel: CartViewModelProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: - Init
+    
     /// Передаём сюда реализацию `DefaultCartRepository`
-    init(cartRepository: CartRepository) {
+    init(
+        cartRepository: CartRepository,
+        priceFormatter: PriceFormattingProtocol
+    ) {
         self.repo = cartRepository
+        self.priceFormatter = priceFormatter
         bind()
     }
     
@@ -38,16 +47,25 @@ final class CartViewModel: CartViewModelProtocol {
     }
     
     // MARK: - Public API
-    var count: Int { cartItems.count }
     
-    func item(at indexPath: IndexPath) -> CartItem { cartItems[indexPath.row] }
+    var count: Int {
+        cartItems.count
+    }
+    
+    func item(at indexPath: IndexPath) -> CartItem {
+        cartItems[indexPath.row]
+    }
     
     var totalItems: Int {
-        cartItems.reduce(0) { $0 + $1.quantity }
+        cartItems.reduce(0) {
+            $0 + $1.quantity
+        }
     }
     
     var totalPrice: Double {
-        cartItems.reduce(0) { $0 + $1.lineTotal }
+        cartItems.reduce(0) {
+            $0 + $1.lineTotal
+        }
     }
     
     func setQuantity(for productId: String, quantity: Int) {
@@ -77,8 +95,28 @@ final class CartViewModel: CartViewModelProtocol {
         }
     }
     
+    // MARK: - Checkout Actions
+
+    func placeOrder(completion: @escaping (Result<Void, Error>) -> Void) {
+        guard !cartItems.isEmpty else {
+            completion(.failure(NSError(domain: "Checkout", code: 1, userInfo: [NSLocalizedDescriptionKey: "Корзина пуста"])))
+            return
+        }
+
+        Task {
+            try? await Task.sleep(nanoseconds: 600_000_000)
+            await MainActor.run {
+                completion(.success(()))
+            }
+        }
+    }
+
     func clearCart() {
         Task { try? await repo.clear() }
         cartItems.removeAll()
+    }
+    
+    func formattedPrice(_ price: Double) -> String {
+        priceFormatter.format(price: price)
     }
 }

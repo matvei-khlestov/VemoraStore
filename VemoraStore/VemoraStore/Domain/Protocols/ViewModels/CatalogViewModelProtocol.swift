@@ -39,4 +39,7 @@ protocol CatalogViewModelProtocol: AnyObject {
 
     // Helpers
     func productCount(in categoryId: String) -> Int
+    
+    // Formatter
+    func formattedPrice(_ price: Double) -> String
 }

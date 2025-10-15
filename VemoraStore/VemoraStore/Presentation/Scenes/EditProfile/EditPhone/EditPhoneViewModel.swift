@@ -15,6 +15,7 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     private let profileRepository: ProfileRepository
     private let validator: FormValidatingProtocol
     private let userId: String
+    private var checkoutStorage: CheckoutStoringProtocol
     
     // MARK: - State
     
@@ -29,11 +30,13 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     init(
         profileRepository: ProfileRepository,
         validator: FormValidatingProtocol,
-        userId: String
+        userId: String,
+        checkoutStorage: CheckoutStoringProtocol
     ) {
         self.profileRepository = profileRepository
         self.validator = validator
         self.userId = userId
+        self.checkoutStorage = checkoutStorage
         
         bindProfile()
     }
@@ -84,6 +87,7 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
         }
         
         try await profileRepository.updatePhone(uid: userId, phone: phone)
+        checkoutStorage.savedReceiverPhoneE164 = phone
         
         await MainActor.run {
             self.initialPhone = self.phone
@@ -101,6 +105,7 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
                 guard let self else { return }
                 self.initialPhone = profile.phone
                 self.phone = profile.phone
+                self.checkoutStorage.savedReceiverPhoneE164 = profile.phone
             }
             .store(in: &bag)
         

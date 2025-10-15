@@ -233,16 +233,17 @@ private extension FavoritesCell {
 // MARK: - Configure API
 
 extension FavoritesCell {
-    func configure(with item: FavoriteItem, isInCart: Bool = false) {
+    func configure(
+        with item: FavoriteItem,
+        isInCart: Bool = false,
+        priceText: String
+    ) {
             titleLabel.text = item.title
             brandLabel.text = item.brandName
-            priceLabel.text = "\(item.price) ₽"
+            priceLabel.text = priceText
 
-            if let urlString = item.imageURL, let url = URL(string: urlString) {
-                thumbImageView.kf.setImage(with: url)
-            } else {
-                thumbImageView.image = UIImage(resource: .divan)
-            }
+            thumbImageView.loadImage(from: item.imageURL)
+            
             setInCart(isInCart, animated: false)
         }
     

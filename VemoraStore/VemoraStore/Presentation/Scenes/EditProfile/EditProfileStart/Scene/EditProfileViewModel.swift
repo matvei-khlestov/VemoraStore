@@ -15,6 +15,7 @@ final class EditProfileViewModel: EditProfileViewModelProtocol {
     private let avatarStorage: AvatarStorageServiceProtocol
     private let userId: String
     private let profileRepository: ProfileRepository
+    private var checkoutStorage: CheckoutStoringProtocol
     
     // MARK: - State
     
@@ -48,18 +49,20 @@ final class EditProfileViewModel: EditProfileViewModelProtocol {
     init(
         avatarStorage: AvatarStorageServiceProtocol,
         profileRepository: ProfileRepository,
-        userId: String
+        userId: String,
+        checkoutStorage: CheckoutStoringProtocol
     ) {
         self.avatarStorage = avatarStorage
         self.profileRepository = profileRepository
         self.userId = userId
-
+        self.checkoutStorage = checkoutStorage
+        
         bindProfile()
     }
     
     // MARK: - Intents
     
-    func load() {
+    func loadAvatarData() {
         avatarData = avatarStorage.loadAvatarData()
     }
     
@@ -80,6 +83,9 @@ final class EditProfileViewModel: EditProfileViewModelProtocol {
                 self.name  = profile?.name  ?? "—"
                 self.email = profile?.email ?? "—"
                 self.phone = profile?.phone ?? "—"
+                if let phone = profile?.phone, !phone.isEmpty, phone != "—" {
+                    self.checkoutStorage.savedReceiverPhoneE164 = phone
+                }
             }
             .store(in: &bag)
     }

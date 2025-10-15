@@ -18,6 +18,7 @@ final class CategoryProductsCoordinator: CategoryProductsCoordinatingProtocol {
     
     private let viewModelFactory: ViewModelBuildingProtocol
     private let coordinatorFactory: CoordinatorBuildingProtocol
+    private let authService: AuthServiceProtocol
     
     // MARK: - Input
     
@@ -30,12 +31,14 @@ final class CategoryProductsCoordinator: CategoryProductsCoordinatingProtocol {
         navigation: UINavigationController,
         viewModelFactory: ViewModelBuildingProtocol,
         coordinatorFactory: CoordinatorBuildingProtocol,
+        authService: AuthServiceProtocol,
         categoryId: String,
         categoryTitle: String
     ) {
         self.navigation = navigation
         self.viewModelFactory = viewModelFactory
         self.coordinatorFactory = coordinatorFactory
+        self.authService = authService
         self.categoryId = categoryId
         self.categoryTitle = categoryTitle
     }
@@ -43,7 +46,11 @@ final class CategoryProductsCoordinator: CategoryProductsCoordinatingProtocol {
     // MARK: - Start
     
     func start() {
-        let vm = viewModelFactory.makeCategoryProductsViewModel(categoryId: categoryId)
+        let userId = authService.currentUserId ?? ""
+        let vm = viewModelFactory.makeCategoryProductsViewModel(
+            categoryId: categoryId,
+            userId: userId
+        )
         let vc = CategoryProductsViewController(viewModel: vm)
         
         vc.title = categoryTitle
