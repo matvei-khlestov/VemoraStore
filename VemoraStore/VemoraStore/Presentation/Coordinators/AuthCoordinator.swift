@@ -8,6 +8,11 @@
 import UIKit
 import Combine
 
+/// Координатор модуля аутентификации.
+/// Отвечает за построение и навигацию между экранами входа, регистрации и восстановления пароля.
+/// Реализует переходы на политику конфиденциальности и отслеживает состояние авторизации через `AuthServiceProtocol`.
+/// Работает совместно с `ViewModelBuildingProtocol` и `CoordinatorBuildingProtocol` для создания зависимостей экранов.
+
 final class AuthCoordinator: AuthCoordinatingProtocol {
     
     // MARK: - Deps
@@ -54,7 +59,7 @@ final class AuthCoordinator: AuthCoordinatingProtocol {
         showAuthContainer()
     }
 
-    // MARK: - Flow
+    // MARK: - Show Flow
     
     private func showAuthContainer(start mode: AuthContainerViewController.Mode = .signIn) {
         guard !isShowingAuthContainer else { return }

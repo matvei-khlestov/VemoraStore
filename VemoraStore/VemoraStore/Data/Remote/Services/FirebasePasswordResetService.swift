@@ -8,7 +8,13 @@
 import Foundation
 import FirebaseAuth
 
+/// Реализация `PasswordResetServiceProtocol`
+///
+/// Отвечает за отправку писем для восстановления пароля с помощью Firebase Authentication.
+
 final class FirebasePasswordResetService: PasswordResetServiceProtocol {
+    
+    // MARK: - Public API
     
     func sendPasswordReset(email: String) async throws {
         do {

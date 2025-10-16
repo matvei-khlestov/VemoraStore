@@ -8,6 +8,10 @@
 import UIKit
 import Combine
 
+/// Экран регистрации пользователя.
+/// Отвечает за ввод и валидацию имени, e-mail и пароля, согласие с политикой конфиденциальности,
+/// взаимодействие с `SignUpViewModel` и переход к экрану входа.
+
 final class SignUpViewController: UIViewController {
     
     // MARK: - Callbacks

@@ -8,6 +8,10 @@
 import Foundation
 import Combine
 
+/// ViewModel для экрана восстановления пароля.
+/// Отвечает за валидацию e-mail и вызов сервиса `PasswordResetServiceProtocol`
+/// для отправки письма со ссылкой на сброс пароля.
+
 final class ResetPasswordViewModel: ResetPasswordViewModelProtocol {
     
     // MARK: - Dependencies
@@ -24,11 +28,13 @@ final class ResetPasswordViewModel: ResetPasswordViewModelProtocol {
     
     // MARK: - Init
     
-    init(service: PasswordResetServiceProtocol, validator: FormValidatingProtocol) {
+    init(
+        service: PasswordResetServiceProtocol,
+        validator: FormValidatingProtocol
+    ) {
         self.service = service
         self.validator = validator
         
-        // live-валидация email
         $email
             .map { [validator] in validator.validate($0, for: .email).message }
             .assign(to: &$_emailError)
@@ -57,14 +63,7 @@ final class ResetPasswordViewModel: ResetPasswordViewModelProtocol {
     // MARK: - Actions
     
     func resetPassword() async throws {
-        // финальная проверка на всякий
-        guard validator.validate(email, for: .email).isValid else {
-            throw NSError(
-                domain: "ResetPassword",
-                code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "Введите корректный e-mail"]
-            )
-        }
+        guard validator.validate(email, for: .email).isValid else { return }
         try await service.sendPasswordReset(email: email)
     }
 }

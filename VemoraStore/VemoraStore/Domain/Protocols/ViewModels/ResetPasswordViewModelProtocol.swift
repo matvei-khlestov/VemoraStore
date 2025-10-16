@@ -8,14 +8,26 @@
 import Foundation
 import Combine
 
+/// Протокол ViewModel для экрана восстановления пароля.
+///
+/// Отвечает за валидацию введённого e-mail, отображение ошибок и выполнение запроса на сброс пароля.
 protocol ResetPasswordViewModelProtocol: AnyObject {
-    // Inputs
+    
+    // MARK: - Inputs
+    
+    /// Устанавливает e-mail пользователя для восстановления пароля.
     func setEmail(_ value: String)
     
-    // Outputs
+    // MARK: - Outputs
+    
+    /// Ошибка валидации e-mail.
     var emailError: AnyPublisher<String?, Never> { get }
+    
+    /// Флаг, разрешающий активацию кнопки восстановления пароля.
     var isSubmitEnabled: AnyPublisher<Bool, Never> { get }
     
-    // Action
+    // MARK: - Actions
+    
+    /// Отправляет запрос на восстановление пароля по введённому e-mail.
     func resetPassword() async throws
 }

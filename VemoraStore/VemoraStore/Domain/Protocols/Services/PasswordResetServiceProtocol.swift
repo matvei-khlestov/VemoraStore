@@ -7,7 +7,10 @@
 
 import Foundation
 
+/// Протокол для сервиса восстановления пароля.
+///
+/// Отвечает за отправку писем с инструкцией для смены пароля.
 protocol PasswordResetServiceProtocol: AnyObject {
-    /// Отправляет письмо для смены пароля на указанный e-mail.
+    /// Отправляет письмо для восстановления пароля на указанный e-mail.
     func sendPasswordReset(email: String) async throws
 }
