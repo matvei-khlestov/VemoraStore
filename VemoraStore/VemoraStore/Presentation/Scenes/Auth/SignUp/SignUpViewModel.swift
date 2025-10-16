@@ -8,6 +8,10 @@
 import Foundation
 import Combine
 
+/// ViewModel экрана регистрации.
+/// Отвечает за валидацию данных, создание учётной записи через `AuthService`
+/// и инициализацию профиля пользователя в хранилище `ProfileRepository`.
+
 final class SignUpViewModel: SignUpViewModelProtocol {
     
     // MARK: - Deps

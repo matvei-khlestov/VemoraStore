@@ -8,6 +8,10 @@
 import UIKit
 import Combine
 
+/// Экран авторизации пользователя.
+/// Отвечает за ввод и валидацию e-mail и пароля, взаимодействие с `SignInViewModel`
+/// и навигацию к экрану регистрации или восстановления пароля.
+
 final class SignInViewController: UIViewController {
     
     // MARK: - Callbacks

@@ -8,12 +8,17 @@
 import Foundation
 import Combine
 
+/// ViewModel экрана входа. Отвечает за валидацию данных и вызов AuthService.
+
 final class SignInViewModel: SignInViewModelProtocol {
+
+    // MARK: - Dependencies
 
     private let auth: AuthServiceProtocol
     private let validator: FormValidatingProtocol
 
-    // State
+    // MARK: - State
+
     @Published private var email: String = ""
     @Published private var password: String = ""
 
@@ -22,7 +27,12 @@ final class SignInViewModel: SignInViewModelProtocol {
 
     private var bag = Set<AnyCancellable>()
 
-    init(auth: AuthServiceProtocol, validator: FormValidatingProtocol) {
+    // MARK: - Init
+
+    init(
+        auth: AuthServiceProtocol,
+        validator: FormValidatingProtocol
+    ) {
         self.auth = auth
         self.validator = validator
 
@@ -38,6 +48,8 @@ final class SignInViewModel: SignInViewModelProtocol {
             }
             .assign(to: &$_passwordError)
     }
+
+    // MARK: - Outputs
 
     var emailError: AnyPublisher<String?, Never> {
         $_emailError.eraseToAnyPublisher()
@@ -55,8 +67,12 @@ final class SignInViewModel: SignInViewModelProtocol {
             .eraseToAnyPublisher()
     }
 
+    // MARK: - Inputs
+
     func setEmail(_ value: String) { email = value }
     func setPassword(_ value: String) { password = value }
+
+    // MARK: - Actions
 
     func signIn() async throws {
         guard validator.validate(email, for: .email).isValid,

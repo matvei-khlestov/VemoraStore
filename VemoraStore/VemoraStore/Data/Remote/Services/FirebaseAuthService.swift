@@ -9,39 +9,50 @@ import Foundation
 import Combine
 import FirebaseAuth
 
+/// Реализация `AuthServiceProtocol` на базе FirebaseAuth: вход, регистрация и управление сессией.
+
 final class FirebaseAuthService: AuthServiceProtocol {
 
     // MARK: - Publishers
     
+    /// Внутренний subject со статусом авторизации.
     private let isAuthorizedSubject = CurrentValueSubject<Bool, Never>(false)
     
+    /// Паблишер, отражающий текущий статус авторизации (`true` — пользователь вошёл).
     var isAuthorizedPublisher: AnyPublisher<Bool, Never> {
         isAuthorizedSubject.eraseToAnyPublisher()
     }
 
     // MARK: - State
     
+    /// Текущий UID пользователя (если авторизован).
     private(set) var currentUserId: String? = nil
+    
+    /// Хэндл листенера FirebaseAuth.
     private var authListener: AuthStateDidChangeListenerHandle?
 
     // MARK: - Deps
     
+    /// Хранилище сессии (Keychain/UserDefaults и т.п.).
     private let session: AuthSessionStoringProtocol
 
     // MARK: - Init
     
+    /// Инициализация сервиса с внешним хранилищем сессии.
     init(session: AuthSessionStoringProtocol) {
         self.session = session
         setupAuthListener()
         syncInitialAuthState()
     }
 
+    /// Очистка слушателей при деинициализации.
     deinit {
         removeAuthListenerIfNeeded()
     }
 
     // MARK: - API
     
+    /// Вход по email и паролю.
     func signIn(email: String, password: String) async throws {
         do {
             let result = try await Auth.auth().signIn(withEmail: email, password: password)
@@ -51,6 +62,7 @@ final class FirebaseAuthService: AuthServiceProtocol {
         }
     }
 
+    /// Регистрация нового пользователя по email и паролю.
     func signUp(email: String, password: String) async throws {
         do {
             let result = try await Auth.auth().createUser(withEmail: email, password: password)
@@ -60,6 +72,7 @@ final class FirebaseAuthService: AuthServiceProtocol {
         }
     }
 
+    /// Выход из учётной записи.
     func signOut() async throws {
         do {
             try Auth.auth().signOut()
@@ -69,6 +82,7 @@ final class FirebaseAuthService: AuthServiceProtocol {
         }
     }
 
+    /// Удаление учётной записи.
     func deleteAccount() async throws {
         guard let user = Auth.auth().currentUser else { return }
         do {
@@ -83,12 +97,14 @@ final class FirebaseAuthService: AuthServiceProtocol {
 // MARK: - Private: Listener & State syncing
 
 private extension FirebaseAuthService {
+    /// Подписка на изменения состояния FirebaseAuth.
     func setupAuthListener() {
         authListener = Auth.auth().addStateDidChangeListener { [weak self] _, user in
             self?.applyAuthState(user)
         }
     }
 
+    /// Удаление listener, если он установлен.
     func removeAuthListenerIfNeeded() {
         if let h = authListener {
             Auth.auth().removeStateDidChangeListener(h)
@@ -96,11 +112,12 @@ private extension FirebaseAuthService {
         authListener = nil
     }
 
+    /// Синхронизация локального состояния с Firebase при старте.
     func syncInitialAuthState() {
         applyAuthState(Auth.auth().currentUser)
     }
 
-    /// Единая точка, где мы приводим локальное состояние к виду FirebaseAuth.
+    /// Применение нового состояния аутентификации (обновляет UID, паблишер и сессию).
     func applyAuthState(_ user: User?) {
         currentUserId = user?.uid
         let isAuth = (user != nil)
@@ -117,19 +134,29 @@ private extension FirebaseAuthService {
 // MARK: - Error mapping
 
 private extension FirebaseAuthService {
+    /// Доменные ошибки авторизации для пользовательских сообщений.
     enum AuthDomainError: LocalizedError {
+        /// Неверные учётные данные.
         case invalidCredentials
+        /// Учётная запись отключена.
         case userDisabled
+        /// Email уже используется.
         case emailAlreadyInUse
+        /// Слишком слабый пароль.
         case weakPassword
+        /// Слишком много попыток.
         case tooManyRequests
+        /// Проблемы с сетью.
         case network
+        /// Требуется повторный вход.
         case requiresRecentLogin
+        /// Неизвестная ошибка.
         case unknown
 
+        /// Локализованное описание ошибки.
         var errorDescription: String? {
             switch self {
-            case .invalidCredentials:  
+            case .invalidCredentials:
                 return "Неверный email или пароль."
             case .userDisabled:
                 return "Учётная запись отключена."
@@ -149,6 +176,7 @@ private extension FirebaseAuthService {
         }
     }
 
+    /// Преобразование ошибок FirebaseAuth в доменные ошибки.
     func mapFirebaseAuthError(_ error: Error) -> Error {
         let ns = error as NSError
         guard ns.domain == AuthErrorDomain,

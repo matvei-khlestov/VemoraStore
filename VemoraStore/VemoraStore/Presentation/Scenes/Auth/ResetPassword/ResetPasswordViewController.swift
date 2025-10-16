@@ -8,6 +8,11 @@
 import UIKit
 import Combine
 
+/// Экран восстановления пароля.
+/// Отображает форму для ввода e-mail и управляет состоянием кнопки отправки.
+/// Работает с `ResetPasswordViewModelProtocol`, который выполняет валидацию
+/// и инициирует отправку письма через `PasswordResetServiceProtocol`.
+
 final class ResetPasswordViewController: UIViewController {
     
     // MARK: - Callbacks

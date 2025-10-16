@@ -8,16 +8,34 @@
 import Foundation
 import Combine
 
+/// Протокол ViewModel для экрана входа в систему.
+///
+/// Отвечает за валидацию полей, управление состоянием кнопки входа и выполнение авторизации.
 protocol SignInViewModelProtocol: AnyObject {
-    // Inputs
+    
+    // MARK: - Inputs
+    
+    /// Устанавливает значение e-mail.
     func setEmail(_ value: String)
+    
+    /// Устанавливает значение пароля.
     func setPassword(_ value: String)
     
-    // Outputs
+    
+    // MARK: - Outputs
+    
+    /// Паблишер ошибки e-mail (nil, если поле валидно).
     var emailError: AnyPublisher<String?, Never> { get }
+    
+    /// Паблишер ошибки пароля (nil, если поле валидно).
     var passwordError: AnyPublisher<String?, Never> { get }
+    
+    /// Паблишер состояния кнопки входа (активна, если данные валидны).
     var isSubmitEnabled: AnyPublisher<Bool, Never> { get }
     
-    // Actions
+    
+    // MARK: - Actions
+    
+    /// Выполняет вход пользователя по e-mail и паролю.
     func signIn() async throws
 }
