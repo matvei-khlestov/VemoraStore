@@ -39,7 +39,6 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
         self.catalogRepository = catalogRepository
         self.priceFormatter = priceFormatter
         
-        // Продукт
         catalogRepository.observeProduct(id: productId)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] product in
@@ -47,7 +46,6 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
             }
             .store(in: &cancellables)
         
-        // Корзина
         cartRepository.observeItems()
             .map { items in items.contains(where: {
                 $0.productId == productId && $0.quantity > 0
@@ -56,7 +54,6 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
             .receive(on: DispatchQueue.main)
             .assign(to: &self.$isInCart)
         
-        // Избранное (реактивно из репозитория)
         favoritesRepository.observeIds()
             .map { ids in ids.contains(productId) }
             .removeDuplicates()

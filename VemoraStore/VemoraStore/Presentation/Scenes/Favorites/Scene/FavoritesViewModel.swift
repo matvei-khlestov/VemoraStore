@@ -12,6 +12,7 @@ import UserNotifications
 final class FavoritesViewModel: FavoritesViewModelProtocol {
     
     // MARK: - Publishers
+    
     var favoriteItemsPublisher: AnyPublisher<[FavoriteItem], Never> {
         $favoriteItems.eraseToAnyPublisher()
     }
@@ -20,18 +21,21 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     }
     
     // MARK: - Deps
+    
     private let favorites: FavoritesRepository
     private let cart: CartRepository
     private let priceFormatter: PriceFormattingProtocol
     private let notifier: LocalNotifyingProtocol
     
     // MARK: - State
+    
     @Published private(set) var favoriteItems: [FavoriteItem] = []
     @Published private(set) var inCartIds: Set<String> = []
     
     private var bag = Set<AnyCancellable>()
     
     // MARK: - Init
+    
     init(
         favoritesRepository: FavoritesRepository,
         cartRepository: CartRepository,
@@ -46,12 +50,10 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     }
     
     private func bind() {
-        // 1) Избранное → прямой список FavoriteItem
         favorites.observeItems()
             .receive(on: DispatchQueue.main)
             .assign(to: &$favoriteItems)
         
-        // 2) Корзина → множество id для кнопок «В корзину»
         cart.observeItems()
             .map { Set($0.map(\.productId)) }
             .receive(on: DispatchQueue.main)
@@ -81,20 +83,28 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     }
     
     func toggleFavorite(id: String) {
-        Task { try? await favorites.toggle(productId: id) }
+        Task {
+            try? await favorites.toggle(productId: id)
+        }
     }
     
     func toggleCart(for id: String) {
         if inCartIds.contains(id) {
-            Task { try? await cart.remove(productId: id) }
+            Task {
+                try? await cart.remove(productId: id)
+            }
         } else {
-            Task { try? await cart.add(productId: id, by: 1) }
+            Task {
+                try? await cart.add(productId: id, by: 1)
+            }
         }
     }
     
     func removeItem(with productId: String) {
         Task { try? await favorites.toggle(productId: productId) }
-        if let idx = favoriteItems.firstIndex(where: { $0.productId == productId }) {
+        if let idx = favoriteItems.firstIndex(where: {
+            $0.productId == productId
+        }) {
             favoriteItems.remove(at: idx)
         }
         inCartIds.remove(productId)
@@ -118,7 +128,7 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
         if hasFavorites && !anyFavInCart {
             #if DEBUG
             _ = notifier.schedule(
-                after: 10,                                 // ⬅️ Через 10 сек для теста
+                after: 10,
                 id: NotificationTemplate.Favorites.id,
                 title: NotificationTemplate.Favorites.title,
                 body: NotificationTemplate.Favorites.body,

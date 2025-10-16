@@ -142,6 +142,7 @@ final class EditProfileViewController: UIViewController {
         setupHierarchy()
         setupLayout()
         bind()
+        setupAccessibility()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -440,5 +441,21 @@ private extension NSItemProvider {
                 }
             }
         }
+    }
+}
+
+// MARK: - Accessibility
+
+private extension EditProfileViewController {
+    enum A11y {
+        static let avatar = "editProfile.avatar"
+        static let changePhotoButton = "editProfile.changePhoto"
+        static let table = "editProfile.table"
+    }
+    
+    func setupAccessibility() {
+        avatarImageView.accessibilityIdentifier = A11y.avatar
+        changePhotoButton.accessibilityIdentifier = A11y.changePhotoButton
+        tableView.accessibilityIdentifier = A11y.table
     }
 }

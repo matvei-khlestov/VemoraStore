@@ -126,10 +126,14 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
     private func bind() {
         $receiverPhoneE164
             .removeDuplicates()
-            .map { [phoneFormatter] e164 in phoneFormatter.displayFromE164(e164) }
+            .map {
+                [phoneFormatter] e164 in phoneFormatter.displayFromE164(e164)
+            }
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] in self?.receiverPhoneDisplay = $0 }
+            .sink {
+                [weak self] in self?.receiverPhoneDisplay = $0
+            }
             .store(in: &bag)
         
         $deliveryMethod
@@ -237,7 +241,6 @@ private extension CheckoutViewModel {
     
     /// Планирует локальное уведомление в зависимости от способа получения.
     private func schedulePostOrderNotification() {
-        // если ты ещё не внедрил `notifier` в VM — просто убери этот метод/вызов
         switch deliveryMethod {
         case .pickup:
             _ = notifier.schedule(

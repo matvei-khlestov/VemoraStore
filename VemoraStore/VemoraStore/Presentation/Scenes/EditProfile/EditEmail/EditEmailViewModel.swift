@@ -77,13 +77,7 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
     // MARK: - Actions
     
     func submit() async throws {
-        guard validator.validate(email, for: .email).isValid else {
-            throw NSError(
-                domain: "EditEmail",
-                code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "Проверьте корректность e-mail"]
-            )
-        }
+        guard validator.validate(email, for: .email).isValid else { return }
         
         try await profileRepository.updateEmail(uid: userId, email: email)
         
@@ -93,10 +87,9 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
     }
     
     private func bindProfile() {
-        // подтягиваем e-mail из Firebase через репозиторий
         profileRepository.observeProfile()
             .compactMap { $0 }
-            .prefix(1) // только первый раз для начального значения
+            .prefix(1)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] profile in
                 guard let self else { return }
@@ -107,7 +100,9 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
         
         $email
             .removeDuplicates()
-            .map { [validator] in validator.validate($0, for: .email).message }
+            .map {
+                [validator] in validator.validate($0, for: .email).message
+            }
             .assign(to: &$_emailError)
     }
 }

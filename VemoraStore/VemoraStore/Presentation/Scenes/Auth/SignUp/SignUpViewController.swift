@@ -160,9 +160,7 @@ final class SignUpViewController: UIViewController {
         wire()
         bind()
         setupKeyboardDismissRecognizer()
-        nameField.textField.text = "John"
-        emailField.textField.text = "john@example.com"
-        passwordField.textField.text = "123456jddj!Nhhhh"
+        setupAccessibility()
     }
 }
 
@@ -364,5 +362,30 @@ private extension SignUpViewController {
         )
         tap.cancelsTouchesInView = false
         view.addGestureRecognizer(tap)
+    }
+}
+
+// MARK: - Accessibility
+
+private extension SignUpViewController {
+    enum A11ySignUp {
+        static let nameField = "signup.name"
+        static let emailField = "signup.email"
+        static let passwordField = "signup.password"
+        static let agreeCheckbox = "signup.agree.checkbox"
+        static let agreeLink = "signup.agree.link"
+        static let submitButton = "signup.submit"
+        static let loginLink = "signup.login"
+    }
+    
+    func setupAccessibility() {
+        nameField.textField.accessibilityIdentifier = A11ySignUp.nameField
+        emailField.textField.accessibilityIdentifier = A11ySignUp.emailField
+        passwordField.textField.accessibilityIdentifier = A11ySignUp.passwordField
+        
+        agreeCheck.accessibilityIdentifier = A11ySignUp.agreeCheckbox
+        agreeButton.accessibilityIdentifier = A11ySignUp.agreeLink
+        submitButton.accessibilityIdentifier = A11ySignUp.submitButton
+        bottomNoteRow.button.accessibilityIdentifier = A11ySignUp.loginLink
     }
 }
