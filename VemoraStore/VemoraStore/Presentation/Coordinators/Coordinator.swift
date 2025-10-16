@@ -7,13 +7,39 @@
 
 import UIKit
 
+/// Базовый протокол для всех координаторов приложения.
+///
+/// `Coordinator` определяет контракт для навигации между экранами.
+/// Каждый координатор отвечает за конкретный модуль или флоу, управляя
+/// созданием и показом контроллеров, а также их дочерними координаторами.
+///
+/// ## Основные обязанности:
+/// - Управление навигационным стеком.
+/// - Создание и отображение экранов.
+/// - Управление жизненным циклом дочерних координаторов.
+///
+/// Таким образом, `Coordinator` позволяет избежать сильной связанности между
+/// экранами и централизует логику переходов.
+
 protocol Coordinator: AnyObject {
+    /// Главный навигационный контроллер, через который происходит показ экранов.
     var navigation: UINavigationController { get }
+    
+    /// Дочерние координаторы, ответственные за подмодули или вложенные флоу.
     var childCoordinators: [Coordinator] { get set }
+    
+    /// Точка входа координатора — метод, запускающий соответствующий флоу.
     func start()
 }
 
 extension Coordinator {
-    func add(_ child: Coordinator) { childCoordinators.append(child) }
-    func remove(_ child: Coordinator) { childCoordinators.removeAll { $0 === child } }
+    /// Добавляет дочерний координатор в список активных.
+    func add(_ child: Coordinator) {
+        childCoordinators.append(child)
+    }
+    
+    /// Удаляет дочерний координатор из списка активных.
+    func remove(_ child: Coordinator) {
+        childCoordinators.removeAll { $0 === child }
+    }
 }
