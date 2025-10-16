@@ -34,7 +34,7 @@ final class EditNameViewModel: EditNameViewModelProtocol {
         self.profileRepository = profileRepository
         self.userId = userId
         self.validator = validator
-
+        
         bindProfile()
     }
     
@@ -77,14 +77,7 @@ final class EditNameViewModel: EditNameViewModelProtocol {
     // MARK: - Actions
     
     func submit() async throws {
-        // финальная проверка перед отправкой
-        guard validator.validate(name, for: .name).isValid else {
-            throw NSError(
-                domain: "EditName",
-                code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "Проверьте корректность имени"]
-            )
-        }
+        guard validator.validate(name, for: .name).isValid else { return }
         
         try await profileRepository.updateName(uid: userId, name: name)
         

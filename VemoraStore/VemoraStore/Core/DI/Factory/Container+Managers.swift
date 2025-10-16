@@ -30,7 +30,7 @@ extension Container {
     /// Сейчас VM и репозитории создаются через ParameterFactory, поэтому — no-op.
     func resetUserScopedSingletons() {
         // 🔹 пока ничего не делаем
-        // если позже появятся user-scoped singletons, сбрасывай их здесь:
+        // если позже появятся user-scoped singletons:
         // clearSingleton(for: \.favoritesViewModel)
         // clearSingleton(for: \.cartViewModel)
     }

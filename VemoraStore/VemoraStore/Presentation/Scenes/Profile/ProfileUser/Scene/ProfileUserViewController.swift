@@ -191,6 +191,7 @@ final class ProfileUserViewController: UIViewController {
         setupLayout()
         setupActions()
         bindViewModel()
+        setupAccessibility()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -270,7 +271,7 @@ private extension ProfileUserViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in self?.nameLabel.text = $0 }
             .store(in: &bag)
-
+        
         viewModel.userEmailPublisher
             .removeDuplicates()
             .receive(on: DispatchQueue.main)
@@ -454,5 +455,26 @@ extension ProfileUserViewController: UITableViewDelegate {
         case .privacy:
             onPrivacyTap?()
         }
+    }
+}
+
+// MARK: - Accessibility
+
+private extension ProfileUserViewController {
+    enum A11y {
+        static let avatar = "profile.avatar"
+        static let name = "profile.name"
+        static let email = "profile.email"
+        static let table = "profile.table"
+        static let logoutButton = "profile.logout"
+        static let deleteButton = "profile.deleteAccount"
+    }
+    func setupAccessibility() {
+        avatarView.accessibilityIdentifier = A11y.avatar
+        nameLabel.accessibilityIdentifier = A11y.name
+        emailLabel.accessibilityIdentifier = A11y.email
+        tableView.accessibilityIdentifier = A11y.table
+        logoutButton.accessibilityIdentifier = A11y.logoutButton
+        deleteAccountButton.accessibilityIdentifier = A11y.deleteButton
     }
 }

@@ -23,4 +23,10 @@ extension Container {
             CoordinatorFactory(container: self) 
         }.singleton
     }
+    
+    var screenFactory: Factory<ScreenFactoryProtocol> {
+        self {
+            ScreenFactory(container: self)
+        }.singleton
+    }
 }

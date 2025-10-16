@@ -125,6 +125,7 @@ final class SignInViewController: UIViewController {
         wire()
         bind()
         setupKeyboardDismissRecognizer()
+        setupAccessibility()
     }
 }
 
@@ -149,7 +150,7 @@ private extension SignInViewController {
             submitButton,
             bottomNoteRow
         )
-
+        
         view.addSubviews(formStack)
     }
     
@@ -278,5 +279,23 @@ private extension SignInViewController {
     
     @objc func dismissKeyboard() {
         view.endEditing(true)
+    }
+}
+
+// MARK: - Accessibility
+
+private extension SignInViewController {
+    enum A11y {
+        static let emailField  = "signin.email"
+        static let passwordField = "signin.password"
+        static let submitButton  = "signin.submit"
+        static let forgotButton  = "signin.forgot"
+    }
+    
+    func setupAccessibility() {
+        emailField.textField.accessibilityIdentifier = A11y.emailField
+        passwordField.textField.accessibilityIdentifier = A11y.passwordField
+        submitButton.accessibilityIdentifier = A11y.submitButton
+        forgotButton.accessibilityIdentifier = A11y.forgotButton
     }
 }

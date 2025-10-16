@@ -101,6 +101,7 @@ class BaseEditFieldViewController: UIViewController {
         wire()
         bind()
         setupKeyboardDismissRecognizer()
+        setupAccessibility()
     }
 }
 
@@ -232,5 +233,37 @@ private extension BaseEditFieldViewController {
                 present(UIAlertController.makeError(error), animated: true)
             }
         }
+    }
+}
+
+// MARK: - Accessibility
+
+private extension BaseEditFieldViewController {
+    enum A11y {
+        // Префиксы по типу редактируемого поля
+        static let namePrefix  = "edit.name"
+        static let emailPrefix = "edit.email"
+        static let phonePrefix = "edit.phone"
+
+        // Суффиксы общих элементов
+        static let fieldSuffix  = "field"
+        static let submitSuffix = "submit"
+    }
+
+    func setupAccessibility() {
+        let prefix: String
+        switch fieldKind {
+        case .name:
+            prefix = A11y.namePrefix
+        case .email:
+            prefix = A11y.emailPrefix
+        case .phone:
+            prefix = A11y.phonePrefix
+        default:
+            prefix = "edit.generic"
+        }
+
+        field.textField.accessibilityIdentifier  = "\(prefix).\(A11y.fieldSuffix)"
+        submitButton.accessibilityIdentifier     = "\(prefix).\(A11y.submitSuffix)"
     }
 }

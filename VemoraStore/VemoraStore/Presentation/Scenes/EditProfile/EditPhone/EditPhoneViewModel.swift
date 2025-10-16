@@ -78,13 +78,7 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     // MARK: - Actions
     
     func submit() async throws {
-        guard validator.validate(phone, for: .phone).isValid else {
-            throw NSError(
-                domain: "EditPhone",
-                code: 1,
-                userInfo: [NSLocalizedDescriptionKey: "Проверьте корректность телефона"]
-            )
-        }
+        guard validator.validate(phone, for: .phone).isValid else { return }
         
         try await profileRepository.updatePhone(uid: userId, phone: phone)
         checkoutStorage.savedReceiverPhoneE164 = phone
@@ -95,11 +89,9 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     }
     
     private func bindProfile() {
-        
-        // подтягиваем phone из Firebase через репозиторий
         profileRepository.observeProfile()
             .compactMap { $0 }
-            .prefix(1) // только первый раз для начального значения
+            .prefix(1)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] profile in
                 guard let self else { return }
@@ -110,7 +102,6 @@ final class EditPhoneViewModel: EditPhoneViewModelProtocol {
             .store(in: &bag)
         
         $phone
-        
             .removeDuplicates()
             .map { [validator] in validator.validate($0, for: .phone).message }
             .assign(to: &$_phoneError)
