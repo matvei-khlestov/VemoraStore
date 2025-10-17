@@ -14,20 +14,31 @@
 
 import UIKit
 
+/// Ячейка таблицы, отображающая адрес доставки.
+///
+/// Содержит:
+/// - иконку доставки (`truck.box.fill`);
+/// - основной текст с адресом или плейсхолдером;
+/// - нижний разделитель.
+///
+/// Используется в экране оформления заказа (`CheckoutViewController`)
+/// для выбора или отображения текущего адреса доставки пользователя.
+/// При нажатии на ячейку открывается экран выбора адреса.
+
 final class DeliveryAddressCell: UITableViewCell {
     
     // MARK: - Reuse Id
+    
     static let reuseId = String(describing: DeliveryAddressCell.self)
     
     // MARK: - Metrics
+    
     private enum Metrics {
         enum Insets {
-            // Универсальные базовые отступы экрана (для совместимости стиля)
             static let horizontal: CGFloat = 0
             static let verticalTop: CGFloat = 0
             static let verticalBottom: CGFloat = 0
             
-            // Контентные отступы внутри строки
             static let content: NSDirectionalEdgeInsets = .init(
                 top: 15, leading: 16, bottom: 15, trailing: 16
             )
@@ -52,11 +63,13 @@ final class DeliveryAddressCell: UITableViewCell {
     }
     
     // MARK: - Texts
+    
     private enum Texts {
         static let addressPlaceholder = "Указать адрес доставки"
     }
     
     // MARK: - Symbols
+    
     private enum Symbols {
         static let delivery = "truck.box.fill"
     }
@@ -94,7 +107,6 @@ final class DeliveryAddressCell: UITableViewCell {
         return v
     }()
     
-    // Управление разделителем
     var showsSeparator: Bool = true {
         didSet { separatorView.isHidden = !showsSeparator }
     }

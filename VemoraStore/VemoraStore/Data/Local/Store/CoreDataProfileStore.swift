@@ -8,6 +8,20 @@
 import CoreData
 import Combine
 
+/// Локальное хранилище профиля пользователя на Core Data.
+///
+/// Отвечает за:
+/// - хранение и обновление данных профиля пользователя локально;
+/// - реактивное наблюдение за изменениями профиля через `ProfileFRCPublisher`;
+/// - очистку данных при смене пользователя или логауте.
+///
+/// Особенности реализации:
+/// - чтение/наблюдение выполняется на `viewContext`, запись — на фоновой `bg` очереди;
+/// - стримы профилей кешируются по `userId` в словаре `profileStreams`;
+/// - перед сохранением выполняется сравнение (`matches`) для предотвращения лишних операций;
+/// - `save()` вызывается только при наличии изменений (`hasChanges`);
+/// - при очистке удаляются все записи и соответствующий кеш стрима.
+
 final class CoreDataProfileStore: BaseCoreDataStore, ProfileLocalStore {
     
     // MARK: - Streams cache
@@ -32,7 +46,6 @@ final class CoreDataProfileStore: BaseCoreDataStore, ProfileLocalStore {
     }
     
     func upsertProfile(_ dto: ProfileDTO) {
-        // всё как раньше, но используем bg из базового класса
         bg.perform {
             do {
                 let req: NSFetchRequest<CDProfile> = CDProfile.fetchRequest()

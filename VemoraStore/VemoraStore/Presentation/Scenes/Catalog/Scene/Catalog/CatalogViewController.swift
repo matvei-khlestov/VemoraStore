@@ -8,6 +8,29 @@
 import UIKit
 import Combine
 
+/// Контроллер `CatalogViewController` для экрана каталога.
+///
+/// Отвечает за:
+/// - отображение категорий и списка товаров (`UICollectionView`, Compositional Layout);
+/// - поиск по каталогу через `UISearchController` (обновляет `viewModel.query`);
+/// - взаимодействие с `CatalogViewModelProtocol`
+///   (биндинг категорий/товаров/счётчика фильтров, форматирование цен);
+/// - показ секции категорий с горизонтальным скроллом;
+/// - показ секции товаров с динамическим числом колонок;
+/// - хедер секции товаров с кнопкой фильтров и счётчиком активных фильтров;
+/// - обработку действий пользователя:
+///   выбор товара/категории, добавление в корзину, переключение избранного;
+/// - делегаты `UICollectionViewDataSource`/`UICollectionViewDelegate`
+///   и `UISearchResultsUpdating`;
+/// - обработку событий ячейки `ProductCellDelegate`;
+/// - маршрутизацию результата через колбэки
+///   `onSelectProduct`, `onFilterTap`, `onSelectCategory`.
+///
+/// Контроллер не содержит бизнес-логики — она во ViewModel и репозиториях.
+/// Особенности: компоновка на Compositional Layout,
+/// подписка ячеек на паблишеры корзины/избранного,
+/// плавные обновления через Combine без лишних `reloadData`.
+
 final class CatalogViewController: UIViewController {
     
     // MARK: - Section

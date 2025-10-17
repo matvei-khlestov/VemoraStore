@@ -8,30 +8,49 @@
 import CoreData
 import Combine
 
+/// Класс `CategoriesFRCPublisher`
+///
+/// Реализует реактивное наблюдение за локальными данными категорий (`CDCategory`) в Core Data.
+///
+/// Основные задачи:
+/// - выполняет выборку категорий с учётом фильтрации и поискового запроса;
+/// - поддерживает обновление данных в реальном времени через `NSFetchedResultsController`;
+/// - предоставляет Combine-поток `AnyPublisher<[Category], Never>` для наблюдения за изменениями.
+///
+/// Используется в:
+/// - `CatalogLocalStore` — как источник реактивных обновлений для слоя репозитория.
+
 final class CategoriesFRCPublisher: NSObject, NSFetchedResultsControllerDelegate {
     
     // MARK: - Public API
     
+    /// Опции конфигурации выборки категорий.
     struct Options: Equatable {
+        /// Поисковый запрос для фильтрации по имени.
         var query: String? = nil
+        /// Флаг, определяющий, фильтровать ли только активные категории.
         var onlyActive: Bool = true
     }
     
+    /// Возвращает Combine-поток, публикующий массив категорий.
     func publisher() -> AnyPublisher<[Category], Never> {
         subject.eraseToAnyPublisher()
     }
     
     // MARK: - Output
     
+    /// Паблишер, публикующий актуальное состояние категорий.
     private let subject = CurrentValueSubject<[Category], Never>([])
     
     // MARK: - FRC
     
+    /// Контроллер выборки Core Data, отслеживающий изменения в сущностях `CDCategory`.
     private let frc: NSFetchedResultsController<CDCategory>
     
-    // MARK: - Designated init (inject FRC for tests)
+    // MARK: - Designated Init (for testing)
     
-    /// Позволяет инжектировать готовый FRC для юнит-тестов.
+    /// Инициализатор с инжектируемым FRC — используется для юнит-тестов.
+    /// - Parameter frc: Готовый `NSFetchedResultsController`, предоставленный тестовой средой.
     init(frc: NSFetchedResultsController<CDCategory>) {
         self.frc = frc
         super.init()
@@ -46,11 +65,12 @@ final class CategoriesFRCPublisher: NSObject, NSFetchedResultsControllerDelegate
         }
     }
     
-    // MARK: - Convenience init (prod)
+    // MARK: - Convenience Init (production)
     
+    /// Инициализация для продакшн-кода.
     /// - Parameters:
-    ///   - context: `viewContext` из NSPersistentContainer
-    ///   - options: фильтры и поиск
+    ///   - context: Контекст Core Data (`viewContext`).
+    ///   - options: Опции фильтрации и поиска.
     init(context: NSManagedObjectContext, options: Options = .init()) {
         let request = Self.makeFetchRequest(options: options)
         self.frc = NSFetchedResultsController(
@@ -64,7 +84,7 @@ final class CategoriesFRCPublisher: NSObject, NSFetchedResultsControllerDelegate
         performInitialFetch(on: context)
     }
     
-    /// Сохранённая форма старого init для обратной совместимости.
+    /// Устаревший инициализатор, сохранён для обратной совместимости.
     convenience init(
         context: NSManagedObjectContext,
         query: String? = nil,
@@ -78,10 +98,10 @@ final class CategoriesFRCPublisher: NSObject, NSFetchedResultsControllerDelegate
     
     // MARK: - Builders
     
+    /// Создаёт запрос выборки категорий на основе переданных опций.
     private static func makeFetchRequest(options: Options) -> NSFetchRequest<CDCategory> {
         let req: NSFetchRequest<CDCategory> = CDCategory.fetchRequest()
         
-        // Предикаты
         var predicates: [NSPredicate] = []
         if options.onlyActive {
             predicates.append(NSPredicate(format: "isActive == YES"))
@@ -93,10 +113,9 @@ final class CategoriesFRCPublisher: NSObject, NSFetchedResultsControllerDelegate
             req.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: predicates)
         }
         
-        // Сортировка: свежие сверху, потом по имени
         req.sortDescriptors = [
             NSSortDescriptor(key: "updatedAt", ascending: false),
-            NSSortDescriptor(key: "name",      ascending: true)
+            NSSortDescriptor(key: "name", ascending: true)
         ]
         
         return req
@@ -104,6 +123,7 @@ final class CategoriesFRCPublisher: NSObject, NSFetchedResultsControllerDelegate
     
     // MARK: - Fetch
     
+    /// Выполняет первичную выборку категорий и публикует результат.
     private func performInitialFetch(on context: NSManagedObjectContext) {
         context.perform { [weak self] in
             guard let self else { return }
@@ -120,6 +140,7 @@ final class CategoriesFRCPublisher: NSObject, NSFetchedResultsControllerDelegate
     
     // MARK: - NSFetchedResultsControllerDelegate
     
+    /// Делегатный метод, вызываемый при изменении содержимого `NSFetchedResultsController`.
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         let items = (controller.fetchedObjects as? [CDCategory])?.compactMap(Category.init(cd:)) ?? []
         subject.send(items)

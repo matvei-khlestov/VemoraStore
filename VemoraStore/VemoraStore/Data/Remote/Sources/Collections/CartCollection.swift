@@ -9,6 +9,22 @@ import Foundation
 import FirebaseFirestore
 import Combine
 
+/// Коллекция корзины пользователя в Firestore (`/users/{uid}/cart/{productId}`).
+///
+/// Отвечает за:
+/// - получение актуального состояния корзины пользователя (`fetchCart`);
+/// - изменение количества товаров или добавление с инкрементом (`setQuantity`, `addOrAccumulate`);
+/// - удаление конкретного товара или полной корзины (`remove`, `clear`);
+/// - реактивное наблюдение за изменениями корзины через Combine (`listenCart`).
+///
+/// Особенности реализации:
+/// - используется `async/await` для асинхронных Firestore операций;
+/// - обновления количества реализованы через `FieldValue.increment`, что предотвращает гонки данных;
+/// - очистка (`clear`) выполняется батчем (`WriteBatch`) для атомарного удаления всех документов;
+/// - поток `listenCart` основан на `PassthroughSubject`, а слушатель (`ListenerRegistration`) автоматически удаляется при отмене подписки;
+/// - структура коллекции: `users/{uid}/cart/{productId}`;
+/// - при `quantity <= 0` товар удаляется автоматически из корзины.
+
 final class CartCollection: CartCollectingProtocol {
     
     private let db = Firestore.firestore()

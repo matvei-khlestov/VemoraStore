@@ -8,22 +8,45 @@
 import UIKit
 import Combine
 
+/// Контроллер `CheckoutViewController` для экрана оформления заказа.
+///
+/// Отвечает за:
+/// - отображение состава заказа и итогов (динамические секции таблицы);
+/// - переключение способа получения (самовывоз/доставка) через `UISegmentedControl`;
+/// - ввод/редактирование адреса, телефона и комментария через шиты;
+/// - запуск оформления заказа и маршрутизацию результата (`onFinished`, `onBack`, `onPickOnMap`);
+/// - обновление сумм и доступности кнопки по данным ViewModel.
+///
+/// Взаимодействует с:
+/// - `CheckoutViewModelProtocol` — биндинг состояния (Combine), форматирование цен, валидация/плейс-ордер;
+/// - фабриками шитов: `PhoneInputSheetViewModelProtocol`, `CommentInputSheetViewModelProtocol`;
+/// - `PhoneFormattingProtocol` — форматирование телефона в UI.
+///
+/// Особенности:
+/// - аккуратные перезагрузки секций/строк без лишних анимаций на первом показе;
+/// - нижняя панель с итогами и кнопкой заказа, синхронизированная с локальным снапшотом корзины;
+/// - разделение ответственности: бизнес-логика и проверка данных — во ViewModel/сервисах,
+///   контроллер — только про UI.
+
 final class CheckoutViewController: UIViewController {
     
     private var isInitialAppear = true
     
     // MARK: - Callbacks
+    
     var onPickOnMap: (() -> Void)?
     var onFinished:  (() -> Void)?
     var onBack:      (() -> Void)?
     
     // MARK: - Deps
+    
     private let viewModel: CheckoutViewModelProtocol
     private let makePhoneSheetVM: (String?) -> PhoneInputSheetViewModelProtocol
     private let makeCommentSheetVM: (String?) -> CommentInputSheetViewModelProtocol
     private let phoneFormatter: PhoneFormattingProtocol
     
     // MARK: - Metrics
+    
     private enum Metrics {
         enum Insets {
             static let horizontal: CGFloat = 16
@@ -65,6 +88,7 @@ final class CheckoutViewController: UIViewController {
     }
     
     // MARK: - Texts
+    
     private enum Texts {
         static let navTitle = "Оформление заказа"
         static let segmentPickup = "Самовывоз"
@@ -92,11 +116,13 @@ final class CheckoutViewController: UIViewController {
     }
     
     // MARK: - Symbols
+    
     private enum Symbols {
         static let orderIcon = "shippingbox"
     }
     
     // MARK: - UI
+    
     private lazy var topBar: UIView = {
         let v = UIView()
         return v
@@ -249,6 +275,7 @@ final class CheckoutViewController: UIViewController {
     }()
     
     // MARK: - State
+    
     private var bag = Set<AnyCancellable>()
     private var isPickup: Bool { deliveryControl.selectedSegmentIndex == 0 }
     
@@ -267,6 +294,7 @@ final class CheckoutViewController: UIViewController {
     }
     
     // MARK: - Sections
+    
     private enum Section: Int, CaseIterable {
         case pickupAddress
         case checkout
@@ -275,6 +303,7 @@ final class CheckoutViewController: UIViewController {
     }
     
     // MARK: - Init
+    
     init(
         viewModel: CheckoutViewModelProtocol,
         makePhoneSheetVM: @escaping (String?) -> PhoneInputSheetViewModelProtocol,

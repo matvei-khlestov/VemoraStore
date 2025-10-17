@@ -7,12 +7,24 @@
 
 import UIKit
 
+/// Ячейка таблицы, используемая в экране оформления заказа (`CheckoutViewController`)
+/// для отображения или изменения номера телефона получателя.
+///
+/// Содержит:
+/// - иконку телефона (`phone.fill`);
+/// - текст с текущим номером телефона или плейсхолдер при его отсутствии;
+/// - нижний разделитель.
+///
+/// При нажатии на ячейку открывается экран изменения номера телефона.
+
 final class ChangePhoneCell: UITableViewCell {
     
     // MARK: - Reuse Id
+    
     static let reuseId = String(describing: ChangePhoneCell.self)
     
     // MARK: - Metrics
+    
     private enum Metrics {
         enum Insets {
             static let horizontal: CGFloat = 0
@@ -43,11 +55,13 @@ final class ChangePhoneCell: UITableViewCell {
     }
     
     // MARK: - Texts
+    
     private enum Texts {
         static let phonePlaceholder = "Указать номер телефона"
     }
     
     // MARK: - Symbols
+    
     private enum Symbols {
         static let phone = "phone.fill"
     }
@@ -85,7 +99,6 @@ final class ChangePhoneCell: UITableViewCell {
         return v
     }()
     
-    /// Показ/скрытие тонкой линии внизу
     var showsSeparator: Bool = true {
         didSet { separatorView.isHidden = !showsSeparator }
     }

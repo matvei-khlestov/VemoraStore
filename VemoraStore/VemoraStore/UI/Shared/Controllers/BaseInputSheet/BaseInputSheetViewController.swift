@@ -7,6 +7,33 @@
 
 import UIKit
 
+/// Базовый контроллер нижнего листа
+/// (`BaseInputSheetViewController`).
+///
+/// Отвечает за:
+/// - оформление листа (detents, углы, grabber);
+/// - заголовок, кнопку «Сохранить», крестик закрытия;
+/// - контейнер для произвольного контента;
+/// - колбэки `onSave` и `onClose`.
+///
+/// Публичное API:
+/// - `attachContentView(_:)` — вставить свой view в контейнер
+///   с пинами по краям.
+///
+/// UI:
+/// - `titleLabel`, `saveButton`, `closeButton`;
+/// - вертикальный `UIStackView`;
+/// - `contentContainer` для поля ввода/текста.
+///
+/// Поведение:
+/// - конфиг листа через `UISheetPresentationController`;
+/// - компактные констрейнты, без скролла внутри;
+/// - действия на кнопках пробрасываются наружу.
+///
+/// Замечания:
+/// - высота детента задаётся из `config`;
+/// - строки короче, без лишней длины.
+
 class BaseInputSheetViewController: UIViewController {
     
     // MARK: - Callbacks

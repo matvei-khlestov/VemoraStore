@@ -7,6 +7,18 @@
 
 import UIKit
 
+/// Координатор `ProductDetailsCoordinator` управляет сценарием отображения карточки товара.
+///
+/// Отвечает за:
+/// - инициализацию и показ `ProductDetailsViewController`;
+/// - передачу идентификатора товара и пользователя в `ProductDetailsViewModel`;
+/// - обработку навигации назад.
+///
+/// Особенности:
+/// - использует фабрики `ViewModelBuildingProtocol` и `CoordinatorBuildingProtocol` для создания зависимостей;
+/// - скрывает навигационную логику от слоя ViewModel;
+/// - реализует изолированный сценарий показа деталей товара в рамках архитектуры Coordinator.
+
 final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
     
     // MARK: - Properties

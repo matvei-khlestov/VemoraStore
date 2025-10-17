@@ -7,6 +7,24 @@
 
 import FirebaseFirestore
 
+/// Маппинг между `FavoriteDTO` и документами Firestore (`/users/{uid}/favorites/{productId}`).
+///
+/// Назначение:
+/// - преобразование данных Firestore в модель `FavoriteDTO` (`fromFirebase`);
+/// - сериализация модели `FavoriteDTO` обратно в словарь `[String: Any]` для записи в Firestore (`toFirebase`);
+/// - корректная обработка необязательных полей (`imageURL`);
+/// - безопасное восстановление данных с дефолтами.
+///
+/// Особенности реализации:
+/// - дата `updatedAt` восстанавливается из `Timestamp`, при отсутствии берётся `Date()`;
+/// - используется `FieldValue.serverTimestamp()` для автоматического обновления времени при записи;
+/// - обеспечивает совместимость типов (`Double`, `String`, `Timestamp`);
+/// - в `toFirebase()` не добавляет `nil`-значения, формируя минимальный и безопасный документ.
+///
+/// Используется в:
+/// - `FavoritesCollection` — для синхронизации локальных и удалённых избранных элементов;
+/// - `CoreDataFavoritesStore` через DTO для обновления локальной базы.
+
 extension FavoriteDTO {
     static func fromFirebase(uid: String, productId: String, data: [String: Any]) -> FavoriteDTO {
         let brandName = data["brandName"] as? String ?? ""

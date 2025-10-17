@@ -7,6 +7,19 @@
 
 import UIKit
 
+/// Координатор `EditPhoneCoordinator` управляет потоком изменения номера телефона пользователя.
+///
+/// Отвечает за:
+/// - создание и отображение экрана `EditPhoneViewController`;
+/// - инициализацию `EditPhoneViewModel` через `ViewModelBuildingProtocol`;
+/// - настройку форматирования номера через `PhoneFormattingProtocol`;
+/// - навигацию назад и завершение сценария (`onFinish`).
+///
+/// Особенности:
+/// - использует `AuthServiceProtocol` для получения `userId`;
+/// - управляет переходами в рамках `UINavigationController`;
+/// - скрывает нижний таббар при отображении экрана редактирования.
+
 final class EditPhoneCoordinator: EditPhoneCoordinatingProtocol {
     
     // MARK: - Deps

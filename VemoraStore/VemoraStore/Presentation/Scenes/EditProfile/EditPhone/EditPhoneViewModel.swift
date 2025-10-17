@@ -8,6 +8,18 @@
 import Foundation
 import Combine
 
+/// ViewModel `EditPhoneViewModel` для экрана редактирования номера телефона.
+///
+/// Основные задачи:
+/// - Валидация введённого номера с помощью `FormValidatingProtocol`;
+/// - Наблюдение и загрузка текущего профиля через `ProfileRepository`;
+/// - Сохранение номера телефона в профиле и `CheckoutStoringProtocol`;
+/// - Управление состоянием кнопки "Сохранить" на основе корректности и изменений.
+///
+/// Обеспечивает реактивное обновление интерфейса через Combine
+/// и синхронизирует актуальный номер телефона между профилем
+/// пользователя и данными checkout-модуля.
+
 final class EditPhoneViewModel: EditPhoneViewModelProtocol {
     
     // MARK: - Deps

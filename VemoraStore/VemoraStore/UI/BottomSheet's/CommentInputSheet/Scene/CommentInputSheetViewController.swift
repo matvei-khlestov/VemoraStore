@@ -8,6 +8,24 @@
 import UIKit
 import Combine
 
+/// Контроллер `CommentInputSheetViewController` для экрана ввода комментария.
+///
+/// Отвечает за:
+/// - отображение текстового поля для комментария (`FormTextView`);
+/// - валидацию комментария через `CommentInputSheetViewModelProtocol`;
+/// - сохранение результата через `onSaveComment`;
+/// - закрытие шита и визуальную обратную связь при ошибках.
+///
+/// Взаимодействует с:
+/// - `CommentInputSheetViewModelProtocol` — хранение и валидация комментария (Combine);
+/// - `FormTextView` — отображение текстового поля с ошибками;
+/// - базовым контроллером `BaseInputSheetViewController` — конфигурация шита и обработка кнопок.
+///
+/// Особенности:
+/// - реактивное обновление текста и ошибок (`commentPublisher`, `errorPublisher`);
+/// - анимация «shake» при попытке сохранить с ошибкой;
+/// - сохранение значения через колбэк `onSaveComment`.
+
 final class CommentInputSheetViewController: BaseInputSheetViewController {
     
     // MARK: - VM

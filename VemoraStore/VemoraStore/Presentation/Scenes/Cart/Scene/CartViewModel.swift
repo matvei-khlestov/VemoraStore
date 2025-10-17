@@ -8,6 +8,19 @@
 import Foundation
 import Combine
 
+/// ViewModel `CartViewModel` для экрана корзины.
+///
+/// Основные задачи:
+/// - Наблюдение за позициями корзины через `CartRepository` и публикация `cartItemsPublisher`;
+/// - Изменение количества/удаление товаров и полная очистка корзины;
+/// - Подсчёт агрегатов (`totalItems`, `totalPrice`);
+/// - Форматирование цен через `PriceFormattingProtocol`;
+/// - Планирование и отмена локального напоминания о «брошенной» корзине (`LocalNotifyingProtocol`).
+///
+/// Реактивность:
+/// - Обновления состояния доставляются на главный поток, подписки управляются через Combine;
+/// - Напоминание автоматически отменяется, когда корзина становится пустой.
+
 final class CartViewModel: CartViewModelProtocol {
     
     // MARK: - Deps

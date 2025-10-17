@@ -8,13 +8,35 @@
 import CoreData
 import Combine
 
+/// Класс `CartFRCPublisher`
+///
+/// Реализует реактивное наблюдение за локальными данными корзины (`CDCartItem`) в Core Data.
+/// Обеспечивает автоматическое обновление данных при любых изменениях в хранилище.
+///
+/// Основные задачи:
+/// - выполняет выборку товаров корзины по `userId`;
+/// - наблюдает за изменениями данных через `NSFetchedResultsController`;
+/// - публикует актуальные данные корзины как Combine-поток `AnyPublisher<[CartItem], Never>`.
+///
+/// Используется в:
+/// - `CartLocalStore` — как источник реактивных данных для слоя репозитория.
+
 final class CartFRCPublisher: NSObject, NSFetchedResultsControllerDelegate {
     
-    private let subject = CurrentValueSubject<[CartItem], Never>([])
-    func publisher() -> AnyPublisher<[CartItem], Never> { subject.eraseToAnyPublisher() }
+    // MARK: - Private Properties
     
+    /// Паблишер, предоставляющий актуальное состояние корзины.
+    private let subject = CurrentValueSubject<[CartItem], Never>([])
+    
+    /// Контроллер выборки Core Data, отслеживающий изменения корзины.
     private let frc: NSFetchedResultsController<CDCartItem>
     
+    // MARK: - Init
+    
+    /// Инициализация `CartFRCPublisher`.
+    /// - Parameters:
+    ///   - context: Контекст Core Data для выборки данных.
+    ///   - userId: Идентификатор пользователя, чья корзина отслеживается.
     init(context: NSManagedObjectContext, userId: String) {
         let req: NSFetchRequest<CDCartItem> = CDCartItem.fetchRequest()
         req.predicate = NSPredicate(format: "userId == %@", userId)
@@ -44,8 +66,22 @@ final class CartFRCPublisher: NSObject, NSFetchedResultsControllerDelegate {
         }
     }
     
-    deinit { frc.delegate = nil }
+    // MARK: - Deinit
     
+    deinit {
+        frc.delegate = nil
+    }
+    
+    // MARK: - Public API
+    
+    /// Возвращает Combine-паблишер, публикующий массив элементов корзины.
+    func publisher() -> AnyPublisher<[CartItem], Never> {
+        subject.eraseToAnyPublisher()
+    }
+    
+    // MARK: - NSFetchedResultsControllerDelegate
+    
+    /// Делегатный метод, вызываемый при изменении содержимого `NSFetchedResultsController`.
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         let objs = controller.fetchedObjects as? [CDCartItem] ?? []
         subject.send(objs.compactMap { CartItem(cd: $0) })

@@ -9,6 +9,17 @@
 import UIKit
 import Kingfisher
 
+/// Ячейка таблицы, используемая в экране оформления заказа (`CheckoutViewController`)
+/// для отображения товаров, добавленных в корзину.
+///
+/// Содержит:
+/// - изображение товара (с загрузкой через Kingfisher);
+/// - название, бренд, цену и количество;
+/// - нижний разделитель.
+///
+/// Используется для представления каждой позиции (`CartItem`) в заказе
+/// перед его оформлением.
+
 final class CheckoutCell: UITableViewCell {
     
     // MARK: - Reuse Id
@@ -19,12 +30,10 @@ final class CheckoutCell: UITableViewCell {
     
     private enum Metrics {
         enum Insets {
-            // Универсальные базовые отступы (на уровне экрана)
             static let horizontal: CGFloat = 0
             static let verticalTop: CGFloat = 0
             static let verticalBottom: CGFloat = 0
             
-            // Контентные отступы ячейки
             static let content: NSDirectionalEdgeInsets = .init(
                 top: 12, leading: 16, bottom: 12, trailing: 16
             )
@@ -99,7 +108,6 @@ final class CheckoutCell: UITableViewCell {
         return l
     }()
     
-    /// Вертикальный стек справа от изображения
     private let rightStack: UIStackView = {
         let v = UIStackView()
         v.axis = .vertical
@@ -108,14 +116,12 @@ final class CheckoutCell: UITableViewCell {
         return v
     }()
     
-    /// Нижний разделитель
     private let separatorView: UIView = {
         let v = UIView()
         v.backgroundColor = .separator
         return v
     }()
     
-    /// Контроль видимости разделителя
     var showsSeparator: Bool = true {
         didSet { separatorView.isHidden = !showsSeparator }
     }

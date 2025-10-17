@@ -9,14 +9,47 @@ import Foundation
 import CoreData
 import Combine
 
+/// Локальное хранилище каталога на Core Data.
+///
+/// Отвечает за:
+/// - реактивное наблюдение каталога через FRC-паблишеры:
+///   - товары (c фильтрами по поиску, категориям, брендам, ценам);
+///   - категории;
+///   - бренды;
+/// - предоставление live-потока по конкретному товару (`observeProduct(id:)`);
+/// - массовый апсерт DTO → Core Data для продуктов, категорий и брендов;
+/// - формирование «меты» товара (`meta(for:)`) с O(1) выборкой по `id`.
+///
+/// Особенности реализации:
+/// - чтение/наблюдение работает на `viewContext`, запись — на фоновой `bg` очереди;
+/// - два API наблюдения по товарам:
+///   - **NEW**: `observeProducts(query:categoryIds:brandIds:minPrice:maxPrice:)` — создаёт отдельный live-stream, ключуется `UUID`;
+///   - **legacy**: `observeProducts(query:categoryId:)` — стримы кешируются по составному ключу (поиск+категория);
+/// - стримы категорий/брендов лениво создаются и кешируются (один FRC на тип);
+/// - live-стримы по товарам автоматически удаляются из кеша по `handleEvents` (completion/cancel);
+/// - универсальный апсерт (`genericUpsert`) минимизирует лишние сохранения через сравнение `matches`, вызывает `save()` только при `hasChanges`;
+/// - перед сохранением продуктов синхронизируются флаги активности категории в товарах (`categoryIsActive`);
+/// - предусмотрены DI-хуки для тестов: фабрики стримов и провайдер `UUID`;
+/// - логирование в `#if DEBUG` помогает отслеживать создание/переиспользование стримов и апсерты.
+
 final class CoreDataCatalogStore: BaseCoreDataStore, CatalogLocalStore {
     
     // MARK: - Typealiases (DI)
     
     typealias UUIDProvider = () -> UUID
-    typealias ProductsStreamFactory = (_ context: NSManagedObjectContext, _ options: ProductsFRCPublisher.Options) -> ProductsFRCPublisher
-    typealias CategoriesStreamFactory = (_ context: NSManagedObjectContext) -> CategoriesFRCPublisher
-    typealias BrandsStreamFactory = (_ context: NSManagedObjectContext) -> BrandsFRCPublisher
+    
+    typealias ProductsStreamFactory = (
+        _ context: NSManagedObjectContext,
+        _ options: ProductsFRCPublisher.Options
+    ) -> ProductsFRCPublisher
+    
+    typealias CategoriesStreamFactory = (
+        _ context: NSManagedObjectContext
+    ) -> CategoriesFRCPublisher
+    
+    typealias BrandsStreamFactory = (
+        _ context: NSManagedObjectContext
+    ) -> BrandsFRCPublisher
     
     // MARK: - Stream keys (cache only for legacy API)
     
@@ -31,7 +64,6 @@ final class CoreDataCatalogStore: BaseCoreDataStore, CatalogLocalStore {
     private var categoriesStream: CategoriesFRCPublisher?
     private var brandsStream: BrandsFRCPublisher?
     
-    // Живые стримы для НОВОГО API (retention до отмены подписки)
     private var liveProductStreams: [UUID: ProductsFRCPublisher] = [:]
     
     // MARK: - DI (with defaults)

@@ -10,9 +10,21 @@ import UIKit
 import Kingfisher
 
 protocol CartCellDelegate: AnyObject {
-    /// Вызывается при изменении количества (после каждого тапа −/+)
     func cartCell(_ cell: CartCell, didChangeQuantity quantity: Int)
 }
+
+/// Ячейка `CartCell` для экрана корзины.
+///
+/// Основные задачи:
+/// - Отображает товар: изображение, бренд, название, цену;
+/// - Управляет количеством (− / +) c лёгким haptic-откликом;
+/// - Уведомляет об изменении количества через `CartCellDelegate`;
+/// - Загружает изображение по URL с помощью Kingfisher.
+///
+/// Особенности:
+/// - Минимальное количество — 1;
+/// - Аккуратная верстка на UIStackView и Auto Layout;
+/// - При переиспользовании сбрасывает контент и количество.
 
 final class CartCell: UITableViewCell {
     

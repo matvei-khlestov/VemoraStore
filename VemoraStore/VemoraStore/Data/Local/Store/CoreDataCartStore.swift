@@ -8,6 +8,20 @@
 import CoreData
 import Combine
 
+/// Локальное хранилище корзины на Core Data.
+///
+/// Отвечает за:
+/// - реактивное наблюдение позиций корзины пользователя (через NSFetchedResultsController);
+/// - чтение «снимка» корзины для одноразовой передачи в Checkout;
+/// - массовую замену содержимого корзины (sync из DTO);
+/// - upsert с возможностью аккумулирования количества;
+/// - изменение количества/удаление/полную очистку.
+///
+/// Особенности реализации:
+/// - чтение/наблюдение выполняется на `viewContext`, запись — на фоновой `bg` очереди;
+/// - FRC-паблишеры кешируются по `userId` в словаре `streams`;
+/// - `save()` вызывается только при наличии изменений (`hasChanges`).
+
 final class CoreDataCartStore: BaseCoreDataStore, CartLocalStore {
 
     private var streams: [String: CartFRCPublisher] = [:]

@@ -9,6 +9,59 @@ import Foundation
 import FactoryKit
 import UIKit
 
+/// Расширение `Container+Coordinators` — регистрация всех координаторов
+/// приложения в DI-контейнере.
+///
+/// Назначение:
+/// - Определяет фабрики для всех координаторов, управляющих навигацией между модулями;
+/// - Инкапсулирует создание координаторов через `ParameterFactory`,
+///   передавая зависимости (`navigation`, `viewModelFactory`, `authService` и др.);
+/// - Позволяет централизованно управлять навигацией приложения через `CoordinatorFactory`.
+///
+/// Особенности:
+/// - Каждый координатор зарегистрирован как `ParameterFactory`,
+///   что позволяет передавать параметры при создании (например, `productId`,
+///   `categoryId`, `FilterState`);
+/// - Используется `FactoryKit` для декларативного описания зависимостей;
+/// - Координаторы связаны между собой через `CoordinatorBuildingProtocol`,
+///   реализуя композицию навигации.
+///
+/// Основные группы координаторов:
+///
+/// **Каталог и товары**
+/// - `catalogCoordinator` — главный каталог товаров;
+/// - `categoryProductsCoordinator` — товары по категории;
+/// - `productDetailsCoordinator` — экран деталей товара;
+/// - `catalogFilterCoordinator` — фильтры каталога.
+///
+/// **Корзина и заказы**
+/// - `cartCoordinator` — управление корзиной;
+/// - `checkoutCoordinator` — оформление заказа;
+/// - `orderSuccessCoordinator` — успешное завершение заказа;
+/// - `ordersCoordinator` — список заказов.
+///
+/// **Профиль и настройки**
+/// - `profileUserCoordinator` / `profileGuestCoordinator` — профиль пользователя / гостя;
+/// - `editProfileCoordinator`, `editNameCoordinator`, `editEmailCoordinator`,
+///   `editPhoneCoordinator` — редактирование данных профиля;
+/// - `aboutCoordinator`, `privacyPolicyCoordinator`, `contactUsCoordinator` —
+///   информационные экраны.
+///
+/// **Авторизация**
+/// - `authCoordinator` — модуль аутентификации;
+/// - `resetPasswordCoordinator` — восстановление пароля.
+///
+/// **Главная навигация**
+/// - `mainCoordinator` — корневой таб-бар;
+/// - `appCoordinator` — стартовый координатор приложения (root flow).
+///
+/// Особенности режима Debug:
+/// - При `#if DEBUG` регистрируется `debugImportCoordinator` —
+///   координатор для импортов и отладки данных.
+///
+/// Расширение входит в модуль **Dependency Injection Layer (Coordinators)**
+/// и обеспечивает слой Presentation навигацией через единый DI-контейнер.
+
 extension Container {
     
     // MARK: - Catalog

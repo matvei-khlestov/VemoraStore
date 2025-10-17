@@ -7,6 +7,19 @@
 
 import UIKit
 
+/// Координатор `FavoritesCoordinator` управляет сценарием отображения экрана "Избранное".
+///
+/// Отвечает за:
+/// - инициализацию и показ `FavoritesViewController`;
+/// - обработку выбора товара и переход к экрану деталей (`ProductDetailsCoordinator`);
+/// - возможный переход к оформлению заказа (`CheckoutCoordinator`).
+///
+/// Особенности:
+/// - скрывает навигационную логику от слоя ViewModel;
+/// - использует фабрики `ViewModelBuildingProtocol` и `CoordinatorBuildingProtocol` для создания зависимостей;
+/// - обеспечивает корректное добавление и удаление дочерних координаторов;
+/// - следует принципам архитектуры Coordinator, сохраняя изоляцию бизнес-логики и навигации.
+
 final class FavoritesCoordinator: FavoritesCoordinatingProtocol {
 
     // MARK: - Routing

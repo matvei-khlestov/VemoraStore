@@ -7,6 +7,20 @@
 
 import UIKit
 
+/// Координатор `CheckoutCoordinator` управляет сценарием оформления заказа.
+///
+/// Отвечает за:
+/// - инициализацию `CheckoutViewModel` через `ViewModelBuildingProtocol`;
+/// - создание и показ экрана `CheckoutViewController`;
+/// - навигацию к выбору адреса на карте через `MapPickerCoordinator`;
+/// - обработку событий завершения оформления (`onOrderSuccess`) и возврата (`onFinish`).
+///
+/// Особенности:
+/// - использует зависимости: `PhoneFormattingProtocol`, `SessionManaging`, `AuthServiceProtocol`;
+/// - скрывает нижний таббар при переходе на экран оформления;
+/// - изолирует навигационную логику от бизнес-логики и UI-реализации;
+/// - обеспечивает передачу выбранного адреса обратно в `CheckoutViewModel`.
+
 final class CheckoutCoordinator: CheckoutCoordinatingProtocol {
     
     // MARK: - Properties

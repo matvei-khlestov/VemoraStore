@@ -8,6 +8,20 @@
 import Foundation
 import Combine
 
+/// ViewModel `DeliveryDetailsViewModel`
+///
+/// Основные задачи:
+/// - хранение и обновление деталей адреса доставки;
+/// - управление состоянием «Без квартиры»;
+/// - валидация квартиры при необходимости;
+/// - сбор финального форматированного адреса.
+///
+/// Взаимодействует с:
+/// - `DeliveryAddressFormattingProtocol` — форматирование базового адреса;
+/// - `DeliveryDetailsSheetViewController` — ввод полей и сохранение.
+///
+/// Используется для экрана редактирования деталей доставки.
+
 final class DeliveryDetailsViewModel: DeliveryDetailsViewModelProtocol {
     
     // MARK: - Deps

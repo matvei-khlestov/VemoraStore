@@ -9,6 +9,25 @@ import Foundation
 import Combine
 import UserNotifications
 
+/// ViewModel `FavoritesViewModel` для экрана избранного.
+///
+/// Основные задачи:
+/// - Наблюдение за списком избранных через `FavoritesRepository`;
+/// - Отслеживание товаров, добавленных в корзину (`CartRepository`);
+/// - Переключение состояния избранного и добавление/удаление товара из корзины;
+/// - Удаление позиции свайпом и очистка списка избранного;
+/// - Форматирование цен через `PriceFormattingProtocol`.
+///
+/// Локальные уведомления:
+/// - Планирует напоминание о возвращении к избранному,
+///   если список не пуст и товары не находятся в корзине;
+/// - Отменяет уведомление, когда избранное пусто или часть товаров уже в корзине.
+///
+/// Реактивность:
+/// - Все обновления доставляются на главный поток;
+/// - Подписки управляются через Combine;
+/// - Дедупликация и дебаунс снижают лишние обновления UI.
+
 final class FavoritesViewModel: FavoritesViewModelProtocol {
     
     // MARK: - Publishers
@@ -16,6 +35,7 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     var favoriteItemsPublisher: AnyPublisher<[FavoriteItem], Never> {
         $favoriteItems.eraseToAnyPublisher()
     }
+    
     var inCartIdsPublisher: AnyPublisher<Set<String>, Never> {
         $inCartIds.eraseToAnyPublisher()
     }

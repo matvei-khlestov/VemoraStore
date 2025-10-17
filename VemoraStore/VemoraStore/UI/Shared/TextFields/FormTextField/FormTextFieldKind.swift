@@ -12,18 +12,26 @@ enum FormTextFieldKind {
 
     var title: String {
         switch self {
-        case .name:     return "Имя"
-        case .email:    return "E-mail"
-        case .password: return "Пароль"
-        case .phone:    return "Телефон"
+        case .name:     
+            return "Имя"
+        case .email:
+            return "E-mail"
+        case .password:
+            return "Пароль"
+        case .phone:
+            return "Телефон"
         }
     }
     var placeholder: String {
         switch self {
-        case .name:     return "Введите имя"
-        case .email:    return "Введите e-mail"
-        case .password: return "Введите пароль"
-        case .phone:    return "+7 (___) ___-__-__"
+        case .name:     
+            return "Введите имя"
+        case .email:
+            return "Введите e-mail"
+        case .password:
+            return "Введите пароль"
+        case .phone:
+            return "+7 (___) ___-__-__"
         }
     }
 }

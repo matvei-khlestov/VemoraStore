@@ -8,6 +8,25 @@
 import UIKit
 import Combine
 
+/// Контроллер `PhoneInputSheetViewController`
+/// для экрана ввода номера получателя.
+///
+/// Основные задачи:
+/// - отображение и редактирование телефона через `FormTextField`;
+/// - реактивный биндинг с `PhoneInputSheetViewModelProtocol` (Combine);
+/// - отображение ошибок валидации в UI;
+/// - сохранение введённого номера при нажатии на кнопку.
+///
+/// Взаимодействует с:
+/// - `PhoneInputSheetViewModelProtocol` — хранение состояния и валидация телефона;
+/// - `PhoneFormattingProtocol` — форматирование номера в E.164 и человекочитаемом виде;
+/// - `BaseInputSheetViewController` — общий базовый UI для шитов.
+///
+/// Особенности:
+/// - при вводе номера автоматически применяется маска `+7`;
+/// - валидация выполняется при сохранении;
+/// - при ошибке шит остаётся открытым и поле “встряхивается”.
+
 final class PhoneInputSheetViewController: BaseInputSheetViewController {
     
     // MARK: - VM

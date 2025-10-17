@@ -7,6 +7,42 @@
 
 import UIKit
 
+/// Компонент `FormTextView`.
+///
+/// Отвечает за:
+/// - многострочное поле с заголовком и плейсхолдером;
+/// - показ ошибки под полем;
+/// - ограничение длины текста (`maxLength`);
+/// - фиксированную высоту контейнера (`fixedHeight`);
+/// - обратный вызов при изменении текста.
+///
+/// Структура UI:
+/// - `UILabel` — заголовок поля;
+/// - `UIView` — контейнер с рамкой и скруглением;
+/// - `UITextView` — ввод многострочного текста;
+/// - `UILabel` — плейсхолдер внутри контейнера;
+/// - `UILabel` — строка ошибки под контейнером;
+/// - `UIStackView` — вертикальная компоновка.
+///
+/// Поведение:
+/// - плейсхолдер скрывается при наличии текста;
+/// - ошибка показывается после первого взаимодействия,
+///   либо сразу при `force = true`;
+/// - рамка контейнера меняет цвет/толщину при ошибке;
+/// - поддерживается скролл внутри `UITextView`.
+///
+/// Публичный API:
+/// - `onTextChanged: (String) -> Void` — колбэк ввода;
+/// - `maxLength: Int?` — лимит символов;
+/// - `fixedHeight: CGFloat` — высота контейнера;
+/// - `text: String` — значение поля;
+/// - `title: String?` — заголовок;
+/// - `setText(_:)` — установить текст;
+/// - `showError(_:force:)` — показать/скрыть ошибку.
+///
+/// Использование:
+/// - комментарии к заказу на чекауте;
+
 final class FormTextView: UIView {
     
     // MARK: - Public Callbacks
@@ -20,7 +56,9 @@ final class FormTextView: UIView {
     
     /// Фиксированная высота контейнера (по умолчанию 120)
     var fixedHeight: CGFloat = Metrics.Sizes.fixedHeight {
-        didSet { fixedHeightConstraint?.constant = fixedHeight }
+        didSet {
+            fixedHeightConstraint?.constant = fixedHeight
+        }
     }
     
     var text: String {

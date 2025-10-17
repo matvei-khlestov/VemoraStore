@@ -8,6 +8,17 @@
 import Foundation
 import Combine
 
+/// ViewModel `PhoneInputSheetViewModel` для экрана ввода номера телефона.
+///
+/// Основные задачи:
+/// - Хранение и валидация введённого телефона через `FormValidatingProtocol`;
+/// - Публикация изменений телефона и ошибок валидации через Combine;
+/// - Автоматическое сброс состояния ошибки при корректном вводе.
+///
+/// Обеспечивает реактивные обновления состояния,
+/// используется во `PhoneInputSheetViewController`
+/// для биндинга поля ввода и отображения ошибок.
+
 final class PhoneInputSheetViewModel: PhoneInputSheetViewModelProtocol {
     
     // MARK: - Deps

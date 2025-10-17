@@ -7,6 +7,17 @@
 
 import UIKit
 
+/// Контроллер `EditEmailViewController` для экрана изменения адреса электронной почты.
+///
+/// Отвечает за:
+/// - отображение поля редактирования e-mail;
+/// - взаимодействие с `EditEmailViewModelProtocol` (валидация, сохранение изменений);
+/// - настройку заголовка навигации и конфигурацию базового контроллера редактирования.
+///
+/// Контроллер не содержит бизнес-логики — она реализована во ViewModel.
+/// Основан на `BaseEditFieldViewController`, что обеспечивает единый UX
+/// для редактирования различных пользовательских полей.
+
 final class EditEmailViewController: BaseEditFieldViewController {
     
     init(viewModel: EditEmailViewModelProtocol) {

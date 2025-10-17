@@ -8,6 +8,30 @@
 import Security
 import Foundation
 
+/// `KeychainService` — тонкая обёртка над Apple Keychain (Security.framework).
+///
+/// Назначение
+/// - Безопасное хранение чувствительных данных приложения (токены, идентификаторы, флаги).
+/// - Единый интерфейс записи/чтения/удаления значений по ключам `KeychainKey`.
+///
+/// Возможности
+/// - Запись: `set(_:for:)` для `String`, `Data`, `Int`, `Bool`.
+/// - Чтение: `get(_:)` (`String?`), `data(_:)` (`Data?`), `int(_:)` (`Int?`), `bool(_:)` (`Bool?`).
+/// - Удаление: `remove(_:)` (одного значения), `removeAll()` (всех значений сервиса).
+/// - Конфигурация: `service` (имя сервиса в кейчейне) и уровень доступности `kSecAttrAccessible*`.
+///
+/// Особенности реализации
+/// - Используется класс записей `kSecClassGenericPassword`, пространство имён ограничено `service`.
+/// - Запись реализована с upsert-поведением: при наличии записи — `SecItemUpdate`, иначе — `SecItemAdd`.
+/// - `remove`/`removeAll` возвращают `true`, если запись отсутствует (это не считается ошибкой).
+/// - Кодировки и преобразования:
+///   - `String` ↔︎ `Data` — UTF-8.
+///   - `Bool` сериализуется как `"1"`/`"0"` (также читаются `"true"/"false"` в любом регистре).
+///   - `Int` хранится как строка (`String`).
+/// - Потокобезопасность обеспечивается самим Keychain API; объект не хранит изменяемого состояния.
+/// - По умолчанию доступность: `kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly`
+///   (данные доступны после первого разблокирования устройства и **не** синкаются в iCloud).
+
 final class KeychainService: KeychainServiceProtocol {
     
     // MARK: - Config
@@ -83,7 +107,6 @@ final class KeychainService: KeychainServiceProtocol {
         return status == errSecSuccess || status == errSecItemNotFound
     }
     
-    /// Удаляет все элементы Keychain данного `service`.
     @discardableResult
     func removeAll() -> Bool {
         let query: [String: Any] = [

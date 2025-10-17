@@ -7,6 +7,19 @@
 
 import UIKit
 
+/// Координатор `MapPickerCoordinator` управляет сценарием выбора адреса на карте.
+///
+/// Отвечает за:
+/// - инициализацию `MapPickerViewModel` через `ViewModelBuildingProtocol`;
+/// - создание и показ `MapPickerViewController`;
+/// - обработку событий выбора полного адреса (`onFullAddressPicked`);
+/// - завершение сценария (`onFinish`) и возврат к предыдущему экрану.
+///
+/// Особенности:
+/// - передаёт фабрики для создания зависимых ViewModel (`AddressConfirmSheetViewModel`, `DeliveryDetailsViewModel`);
+/// - скрывает нижний таббар при переходе;
+/// - изолирует навигационную логику от View и ViewModel.
+
 final class MapPickerCoordinator: MapPickerCoordinatingProtocol {
     
     // MARK: - Callbacks

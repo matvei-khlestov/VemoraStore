@@ -7,6 +7,15 @@
 
 import UIKit
 
+/// Ячейка `EditProfileRowCell` отображает строку редактирования профиля пользователя.
+///
+/// Отвечает за:
+/// - отображение заголовка и текущего значения поля профиля;
+/// - отображение иконки поля с системным символом;
+/// - визуальное оформление строки по дизайн-гайду проекта.
+///
+/// Используется в `EditProfileViewController` для отображения списка редактируемых полей.
+
 final class EditProfileRowCell: UITableViewCell {
     
     static let reuseId = String(describing: EditProfileRowCell.self)

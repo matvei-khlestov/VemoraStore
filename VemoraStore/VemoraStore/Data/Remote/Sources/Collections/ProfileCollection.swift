@@ -9,6 +9,22 @@ import Foundation
 import FirebaseFirestore
 import Combine
 
+/// Коллекция профилей пользователей в Firestore (`/users/{uid}`).
+///
+/// Отвечает за:
+/// - создание или обновление профиля пользователя при первой авторизации (`ensureInitialUserProfile`);
+/// - получение профиля пользователя (однократно через `fetchProfile`);
+/// - обновление отдельных полей профиля (`updateName`, `updateEmail`, `updatePhone`);
+/// - реактивное наблюдение за изменениями профиля через Combine (`listenProfile`);
+/// - преобразование данных Firestore в `ProfileDTO` для синхронизации с локальным хранилищем.
+///
+/// Особенности реализации:
+/// - структура коллекции: `users/{uid}`;
+/// - операции записи выполняются с `merge: true` для безопасного частичного обновления;
+/// - все Firestore операции реализованы на `async/await` API;
+/// - слушатель (`addSnapshotListener`) автоматически удаляется при отмене Combine-подписки;
+/// - timestamp-поля (`createdAt`, `updatedAt`) обновляются через `FieldValue.serverTimestamp()`.
+
 final class ProfileCollection: ProfileCollectingProtocol {
     
     // MARK: - Deps

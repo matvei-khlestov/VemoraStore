@@ -8,6 +8,20 @@
 import Foundation
 import FactoryKit
 
+/// Класс `ViewModelFactory`
+///
+/// Реализует протокол `ViewModelBuildingProtocol` и отвечает за создание всех ViewModel в приложении.
+/// Использует механизм внедрения зависимостей через `FactoryKit.Container`, обеспечивая гибкость
+/// конфигурации и тестируемость.
+///
+/// Основные задачи:
+/// - создание экземпляров всех ViewModel модулей приложения;
+/// - централизованное управление зависимостями;
+/// - переиспользование общих зависимостей через DI-контейнер.
+///
+/// Используется координаторами и экранными фабриками (`CoordinatorFactory`, `ScreenFactory`)
+/// для инициализации ViewModel при сборке модулей.
+
 final class ViewModelFactory: ViewModelBuildingProtocol {
     
     private let container: Container

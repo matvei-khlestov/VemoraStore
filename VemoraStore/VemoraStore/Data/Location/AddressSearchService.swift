@@ -8,6 +8,20 @@
 import Foundation
 import MapKit
 
+/// Класс `AddressSearchService`
+///
+/// Реализует протокол `AddressSearchServiceProtocol` и отвечает за поиск адресов с помощью `MKLocalSearchCompleter` и `MKLocalSearch`.
+///
+/// Основные задачи:
+/// - формирование подсказок при вводе адреса (`MKLocalSearchCompleter`);
+/// - разрешение выбранной подсказки в координаты и `MKPlacemark`;
+/// - выполнение прямого текстового поиска (free text);
+/// - предоставление реактивных обновлений списка подсказок через коллбэк `onResultsChanged`.
+///
+/// Используется в:
+/// - `AddressConfirmSheetViewModel` — для обработки пользовательского ввода и выбора адреса доставки/самовывоза;
+/// - `MapPickerViewModel` — для поиска адресов при выборе точки на карте.
+
 final class AddressSearchService: NSObject, AddressSearchServiceProtocol {
     
     private let completer = MKLocalSearchCompleter()

@@ -7,7 +7,21 @@
 
 import CoreData
 
+import CoreData
+
+/// Расширение `CDProduct`, реализующее маппинг между Core Data и Domain слоями.
+///
+/// Отвечает за преобразование данных между `ProductDTO` (сетевой моделью)
+/// и `CDProduct` (локальной моделью Core Data), а также за построение
+/// доменной модели `Product` из Core Data сущности.
+///
+/// Используется в:
+/// - `CatalogLocalStore` и `CatalogRepository`
+/// для синхронизации каталога товаров между сервером и локальным хранилищем.
 extension CDProduct {
+    
+    /// Применяет данные из `ProductDTO` к Core Data сущности `CDProduct`.
+    /// - Parameter dto: DTO товара, полученный из API.
     func apply(dto: ProductDTO) {
         id         = dto.id
         name       = dto.name
@@ -21,12 +35,16 @@ extension CDProduct {
         createdAt  = dto.createdAt
         updatedAt  = dto.updatedAt
         keywords   = dto.keywords
-
-        // Опционально: индекс для поиска (имя + ключевые слова в нижнем регистре)
+        
+        // Индекс для полнотекстового поиска (имя + ключевые слова в нижнем регистре)
         keywordsIndex = ([dto.nameLower] + dto.keywords.map { $0.lowercased() })
             .joined(separator: " ")
     }
-
+    
+    /// Проверяет совпадение полей сущности с переданным DTO.
+    /// Используется для предотвращения избыточных обновлений.
+    /// - Parameter dto: DTO для сравнения.
+    /// - Returns: `true`, если все поля идентичны.
     func matches(_ dto: ProductDTO) -> Bool {
         (id ?? "") == dto.id &&
         (name ?? "") == dto.name &&
@@ -46,7 +64,15 @@ extension CDProduct {
     }
 }
 
+/// Расширение `Product`, предоставляющее инициализацию
+/// доменной модели на основе Core Data сущности `CDProduct`.
+///
+/// Выполняет безопасное извлечение данных и конвертацию дат
+/// в ISO 8601 формат для унификации представления в Domain-слое.
 extension Product {
+    
+    /// Инициализирует доменную модель `Product` из Core Data сущности `CDProduct`.
+    /// - Parameter cd: Core Data объект `CDProduct`.
     init?(cd: CDProduct?) {
         guard let cd,
               let id = cd.id,
@@ -59,7 +85,7 @@ extension Product {
               let createdAt = cd.createdAt,
               let updatedAt = cd.updatedAt
         else { return nil }
-
+        
         self.init(
             id: id,
             name: name,
@@ -79,6 +105,8 @@ extension Product {
 
 // MARK: - Private helpers
 
+/// Вспомогательный форматтер для приведения дат к ISO 8601 формату.
+/// Используется для сериализации временных меток в доменных моделях.
 private enum ISO8601 {
     static let shared: ISO8601DateFormatter = {
         let f = ISO8601DateFormatter()

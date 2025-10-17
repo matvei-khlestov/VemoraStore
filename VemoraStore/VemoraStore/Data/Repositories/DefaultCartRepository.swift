@@ -8,6 +8,35 @@
 import Foundation
 import Combine
 
+/// Класс `DefaultCartRepository` — реализация репозитория корзины.
+///
+/// Назначение:
+/// - объединяет работу локального (`CartLocalStore`) и удалённого (`CartCollectingProtocol`) источников данных;
+/// - синхронизирует состояние корзины между Firestore и Core Data;
+/// - предоставляет реактивные паблишеры для отслеживания содержимого корзины и её итоговых параметров.
+///
+/// Состав:
+/// - `remote`: Firestore-источник данных (загрузка, изменение, удаление товаров);
+/// - `local`: локальное Core Data-хранилище корзины;
+/// - `catalog`: источник метаданных о товарах для корректного отображения и апдейтов;
+/// - `userId`: идентификатор текущего пользователя;
+/// - `itemsSubject`: Combine-паблишер для актуального состояния корзины.
+///
+/// Основные функции:
+/// - `observeItems()` — возвращает поток товаров корзины пользователя в реальном времени;
+/// - `observeTotals()` — вычисляет суммарное количество и цену корзины;
+/// - `refresh(uid:)` — синхронизирует локальные данные с Firestore;
+/// - `add(productId:by:)` — добавляет товар в корзину или увеличивает количество;
+/// - `setQuantity(productId:quantity:)` — устанавливает конкретное количество товара;
+/// - `remove(productId:)` — удаляет товар из корзины;
+/// - `clear()` — очищает корзину пользователя.
+///
+/// Особенности реализации:
+/// - использует Combine-потоки для двусторонней синхронизации (локаль ↔ Firestore);
+/// - при изменениях в Firestore автоматически обновляет локальное хранилище;
+/// - обеспечивает реактивную модель данных без ручного обновления UI;
+/// - все операции записи выполняются асинхронно для повышения отзывчивости интерфейса.
+
 final class DefaultCartRepository: CartRepository {
 
     // MARK: - Deps
@@ -117,12 +146,10 @@ final class DefaultCartRepository: CartRepository {
 
 private extension DefaultCartRepository {
     func bindStreams() {
-        // Локальная корзина -> внешний паблишер
         local.observeItems(userId: userId)
             .subscribe(itemsSubject)
             .store(in: &bag)
 
-        // Ремоут → локаль (весь снэпшот)
         remote.listenCart(uid: userId)
             .sink { [weak self] dtos in
                 guard let self else { return }

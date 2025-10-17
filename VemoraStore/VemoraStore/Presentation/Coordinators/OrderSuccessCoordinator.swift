@@ -7,6 +7,19 @@
 
 import UIKit
 
+/// Координатор `OrderSuccessCoordinator` управляет сценарием отображения экрана успешного оформления заказа.
+///
+/// Отвечает за:
+/// - инициализацию и показ `OrderSuccessViewController`;
+/// - навигацию после завершения оформления заказа;
+/// - обработку событий перехода в каталог (`onOpenCatalog`);
+/// - завершение сценария (`onFinish`).
+///
+/// Особенности:
+/// - скрывает нижний таббар при отображении экрана успеха;
+/// - изолирует навигацию от UI и бизнес-логики;
+/// - использует `CoordinatorBuildingProtocol` для возможных переходов в другие модули.
+
 final class OrderSuccessCoordinator: OrderSuccessCoordinatingProtocol {
     
     // MARK: - Routing

@@ -7,12 +7,24 @@
 
 import CoreData
 
-/// Общая база для всех CoreData-* сто́ров (Profile, Catalog, Favorites, Cart и т.д.).
-/// Инкапсулирует:
-/// - единый контейнер
-/// - main/viewContext с корректной конфигурацией
-/// - background context с мерджем изменений в viewContext
-/// - управление observer’ом save-уведомлений
+/// Базовый класс для всех Core Data-хранилищ (Profile, Catalog, Favorites, Cart и т.д.).
+///
+/// Отвечает за:
+/// - инициализацию и конфигурацию общего `NSPersistentContainer`;
+/// - предоставление настроенных контекстов:
+///   - `viewContext` — для чтения и FRC-наблюдения;
+///   - `bg` — для фоновых операций записи/апдейта;
+/// - автоматическое объединение изменений `bg → viewContext` через `NotificationCenter`;
+/// - утилиты для безопасного выполнения и сохранения фоновых операций.
+///
+/// Особенности реализации:
+/// - `viewContext` и `bg` настраиваются с политикой `NSMergeByPropertyObjectTrumpMergePolicy`;
+/// - `viewContext` имеет `automaticallyMergesChangesFromParent = true` для синхронизации данных в UI;
+/// - `bg` не использует `undoManager` для снижения overhead;
+/// - при `save(bg)` происходит автоматический merge изменений в главный контекст;
+/// - предусмотрены вспомогательные методы `performInBackground` и `saveBackgroundIfNeeded`
+///   для упрощения работы в фоновых очередях без гонок и крашей.
+
 class BaseCoreDataStore {
     
     // MARK: - Deps

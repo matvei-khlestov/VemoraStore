@@ -9,6 +9,30 @@ import UIKit
 import MapKit
 import CoreLocation
 
+/// Контроллер `MapPickerViewController` для  экрана выбора адреса на карте.
+///
+/// Отвечает за:
+/// - отображение карты c фиксированным пином в центре;
+/// - управление камерой (зум, центрирование, «моё местоположение»);
+/// - делегирование бизнес-логики и геокодирования во
+///   `MapPickerViewModelProtocol`;
+/// - показ и обновление листа подтверждения адреса
+///   (`AddressConfirmSheetViewController`);
+/// - обработку событий `CLLocationManager` и `MKMapView`;
+/// - маршрутизацию результата через `onAddressComposed` и возврат `onBack`.
+///
+/// Зависимости:
+/// - `MapPickerViewModelProtocol` — логика и обратное геокодирование;
+/// - фабрики шитов: `AddressConfirmSheetViewModelProtocol`,
+///   `DeliveryDetailsViewModelProtocol`.
+///
+/// Особенности:
+/// - исключает лишние геокоды при программном перемещении карты
+///   (`isProgrammaticMove`) и во время редактирования шита
+///   (`isSheetEditing`);
+/// - небольшая задержка после анимации камеры для стабильного региона
+///   перед запросом адреса.
+
 final class MapPickerViewController: UIViewController {
     
     // MARK: - ViewModels
@@ -79,7 +103,6 @@ final class MapPickerViewController: UIViewController {
     
     private let mapView = MKMapView()
     
-    // три кнопки справа: гео, +, −
     private let locateButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName: Symbols.locationFill), for: .normal)
@@ -248,7 +271,6 @@ private extension MapPickerViewController {
     
     func setupMapAndPinConstraints() {
         NSLayoutConstraint.activate([
-            // карта
             mapView.topAnchor.constraint(
                 equalTo: view.topAnchor
             ),
@@ -262,7 +284,6 @@ private extension MapPickerViewController {
                 equalTo: view.bottomAnchor
             ),
             
-            // пин в центре
             centerPin.centerXAnchor.constraint(
                 equalTo: view.centerXAnchor
             ),
@@ -350,7 +371,6 @@ private extension MapPickerViewController {
                                         latitudinalMeters: meters,
                                         longitudinalMeters: meters)
         mapView.setRegion(region, animated: true)
-        // триггерим обратное геокодирование после завершения движения камеры
         DispatchQueue.main.asyncAfter(deadline: .now() + Metrics.Durations.cameraSettleDelay) { [weak self] in
             self?.isProgrammaticMove = false
             self?.reverseGeocodeCenterAndFillSheet()

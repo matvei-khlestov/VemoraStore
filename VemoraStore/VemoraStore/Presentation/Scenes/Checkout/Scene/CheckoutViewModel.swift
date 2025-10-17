@@ -8,6 +8,19 @@
 import Foundation
 import Combine
 
+/// ViewModel `CheckoutViewModel` для экрана оформления заказа.
+///
+/// Основные задачи:
+/// - Наблюдение за корзиной через `CartRepository`;
+/// - Создание заказа через `OrdersRepository`;
+/// - Форматирование телефона и цен (`PhoneFormattingProtocol`, `PriceFormattingProtocol`);
+/// - Валидация обязательных полей перед оформлением;
+/// - Планирование локальных уведомлений (`LocalNotifyingProtocol`);
+/// - Персистентность промежуточных данных в `CheckoutStoringProtocol`.
+///
+/// Обеспечивает реактивные обновления через Combine
+/// и очищает корзину после успешного размещения заказа.
+
 final class CheckoutViewModel: CheckoutViewModelProtocol {
     
     // MARK: - Deps

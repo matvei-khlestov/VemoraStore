@@ -8,6 +8,30 @@
 import Foundation
 import Combine
 
+/// ViewModel `CatalogViewModel` для экрана каталога.
+///
+/// Основные задачи:
+/// - Загружает категории и товары из `CatalogRepository`;
+/// - Ведёт поисковый запрос `query` с дебаунсом;
+/// - Применяет фильтры (категории, бренды, цены);
+/// - Обновляет счётчики товаров по категориям;
+/// - Форматирует цены через `PriceFormattingProtocol`;
+/// - Управляет добавлением/удалением из корзины и избранного.
+///
+/// Реактивность:
+/// - Паблишеры: `categoriesPublisher`, `productsPublisher`,
+///   `activeFiltersCountPublisher`, `inCartIdsPublisher`,
+///   `favoriteIdsPublisher`;
+/// - Все обновления доставляются на главный поток;
+/// - Реал-тайм синхронизация каталога при `reload()`.
+///
+/// Особенности:
+/// - Дедупликация и дебаунс поиска снижают лишние перерисовки;
+/// - Фильтры хранятся в `FilterState` и пересчитываются
+///   через `applyFilters(_:)`;
+/// - Подписки хранятся в `bag`, наблюдение товаров
+///   отменяется и пересоздаётся при каждом запросе.
+
 final class CatalogViewModel: CatalogViewModelProtocol {
     
     // MARK: - Inputs

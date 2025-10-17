@@ -7,6 +7,25 @@
 
 import FirebaseFirestore
 
+/// Маппинг между `OrderDTO` и документами Firestore (`/users/{uid}/orders/{orderId}`).
+///
+/// Отвечает за:
+/// - преобразование данных Firestore в модель `OrderDTO` (`fromFirebase`);
+/// - сериализацию `OrderDTO` обратно в словарь `[String: Any]` для записи в Firestore (`toFirebase`);
+/// - обработку вложенных позиций заказа (`items` → `[OrderItemDTO]`);
+/// - корректное использование `FieldValue.serverTimestamp()` для полей времени.
+///
+/// Особенности реализации:
+/// - гарантирует безопасные дефолты при отсутствии данных в документе Firestore;
+/// - даты (`createdAt`, `updatedAt`) восстанавливаются из `Timestamp`;
+/// - статус (`status`) маппится из строки в `OrderStatus`;
+/// - в `toFirebase()` автоматически добавляются серверные timestamps;
+/// - необязательные поля (`comment`, `phoneE164`, `imageURL`) добавляются только при наличии значений.
+///
+/// Используется в:
+/// - `OrdersCollection` (синхронизация между Firestore и Core Data);
+/// - `CoreDataOrdersStore` через DTO-уровень.
+
 extension OrderDTO {
     static func fromFirebase(id: String, uid: String, data: [String: Any]) -> OrderDTO {
         let created = (data["createdAt"] as? Timestamp)?.dateValue() ?? Date()
