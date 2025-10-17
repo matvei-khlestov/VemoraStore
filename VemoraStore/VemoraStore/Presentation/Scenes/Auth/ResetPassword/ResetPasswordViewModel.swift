@@ -8,9 +8,17 @@
 import Foundation
 import Combine
 
-/// ViewModel для экрана восстановления пароля.
-/// Отвечает за валидацию e-mail и вызов сервиса `PasswordResetServiceProtocol`
-/// для отправки письма со ссылкой на сброс пароля.
+/// ViewModel `ResetPasswordViewModel` для экрана восстановления пароля.
+///
+/// Отвечает за:
+/// - обработку и валидацию введённого e-mail;
+/// - управление состоянием кнопки отправки через Combine;
+/// - выполнение запроса на сброс пароля через `PasswordResetServiceProtocol`.
+///
+/// Особенности:
+/// - реактивно обновляет ошибки поля e-mail;
+/// - нормализует e-mail перед отправкой (обрезка пробелов, lowercase);
+/// - предотвращает выполнение запроса при невалидных данных.
 
 final class ResetPasswordViewModel: ResetPasswordViewModelProtocol {
     

@@ -9,6 +9,21 @@ import Foundation
 import CoreData
 import Combine
 
+/// Локальное хранилище заказов на Core Data.
+///
+/// Отвечает за:
+/// - реактивное наблюдение заказов по пользователю через `NSFetchedResultsController`;
+/// - массовую замену снапшота (sync) из DTO;
+/// - upsert/обновление статуса отдельных заказов;
+/// - полную очистку заказов пользователя.
+///
+/// Особенности:
+/// - все мутации выполняются на `bg`-контексте, чтение/наблюдение — на `viewContext`;
+/// - один FRC-паблишер на пользователя (кешируется в `streams`);
+/// - методы безопасно игнорируют `save()`, если нет изменений.
+///
+/// Используется репозиторием `OrdersRepository` как локальный слой.
+
 final class CoreDataOrdersStore: BaseCoreDataStore, OrdersLocalStore {
     
     private var streams: [String: OrdersFRCPublisher] = [:]

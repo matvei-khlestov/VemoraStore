@@ -9,7 +9,23 @@ import Foundation
 import FirebaseFirestore
 import Combine
 
+/// Коллекция избранных товаров пользователя в Firestore (`/users/{uid}/favorites/{productId}`).
+///
+/// Отвечает за:
+/// - загрузку списка избранных товаров пользователя (`fetch`);
+/// - добавление и удаление товаров из избранного (`add`, `remove`);
+/// - полную очистку коллекции избранного (`clear`);
+/// - реактивное наблюдение за изменениями через Combine (`listen`).
+///
+/// Особенности реализации:
+/// - использует `async/await` для асинхронных Firestore-запросов;
+/// - поток `listen(uid:)` реализован через `PassthroughSubject`, с автоудалением слушателя при отмене подписки;
+/// - структура коллекции: `users/{uid}/favorites/{productId}`;
+/// - операции записи выполняются с `merge: true`, что позволяет частично обновлять данные;
+/// - очистка (`clear`) реализована через `WriteBatch` для атомарного удаления всех документов.
+
 final class FavoritesCollection: FavoritesCollectingProtocol {
+    
     private let db = Firestore.firestore()
     private let users = "users"
     private let favorites = "favorites"

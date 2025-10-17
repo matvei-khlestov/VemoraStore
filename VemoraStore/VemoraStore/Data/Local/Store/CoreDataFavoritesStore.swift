@@ -8,6 +8,22 @@
 import Combine
 import CoreData
 
+/// Локальное хранилище избранного на Core Data.
+///
+/// Отвечает за:
+/// - реактивное наблюдение элементов избранного конкретного пользователя (через FRC);
+/// - массовую замену снапшота (sync) из DTO;
+/// - upsert/удаление отдельных элементов;
+/// - очистку избранного пользователя.
+///
+/// Особенности:
+/// - все записи/удаления выполняются на фоновой очереди `bg`;
+/// - чтение/наблюдение — через `viewContext`;
+/// - FRC-паблишеры кешируются по `userId` в `streams`;
+/// - `save()` вызывается только при наличии изменений.
+///
+/// Используется в `FavoritesRepository` как локальный слой.
+
 final class CoreDataFavoritesStore: BaseCoreDataStore, FavoritesLocalStore {
     
     private var streams: [String: FavoritesFRCPublisher] = [:]

@@ -7,14 +7,43 @@
 
 import Combine
 
-protocol PhoneInputSheetViewModelProtocol: AnyObject {
-    var phone: String { get }
-    var currentError: String? { get }
-    var phonePublisher: AnyPublisher<String, Never> { get }
-    var errorPublisher: AnyPublisher<String?, Never> { get }
+/// Протокол `PhoneInputSheetViewModelProtocol`
+/// описывает контракт ViewModel для экрана ввода телефона.
+///
+/// Отвечает за:
+/// - хранение и изменение введённого телефона;
+/// - валидацию значения через `FormValidatingProtocol`;
+/// - публикацию актуального состояния и ошибок через Combine.
+///
+/// Используется во `PhoneInputSheetViewController`
+/// для реактивного биндинга поля ввода и отображения ошибок.
 
+protocol PhoneInputSheetViewModelProtocol: AnyObject {
+    
+    // MARK: - Outputs
+    
+    /// Текущее значение телефона.
+    var phone: String { get }
+    
+    /// Текущее сообщение об ошибке.
+    var currentError: String? { get }
+    
+    // MARK: - Publishers
+    
+    /// Паблишер изменений телефона.
+    var phonePublisher: AnyPublisher<String, Never> { get }
+    
+    /// Паблишер ошибок валидации.
+    var errorPublisher: AnyPublisher<String?, Never> { get }
+    
+    // MARK: - Inputs
+    
+    /// Устанавливает новое значение телефона.
+    /// - Parameter value: Новая строка номера.
     func setPhone(_ value: String)
-    /// Возвращает true, если номер валиден. Внутри обновляет currentError.
+    
+    /// Проверяет корректность введённого телефона.
+    /// - Returns: `true`, если номер валиден.
     @discardableResult
     func validate() -> Bool
 }

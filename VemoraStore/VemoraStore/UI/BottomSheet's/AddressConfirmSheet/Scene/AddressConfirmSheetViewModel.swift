@@ -8,24 +8,46 @@
 import Foundation
 import MapKit
 
+/// ViewModel `AddressConfirmSheetViewModel`
+/// для экрана подтверждения адреса.
+///
+/// Основные задачи:
+/// - управление поиском адресов через `AddressSearchServiceProtocol`;
+/// - форматирование отображаемых адресов с помощью `AddressFormattingProtocol`;
+/// - реактивное обновление списка подсказок и разрешение выбранных адресов.
+///
+/// Обеспечивает обратные вызовы:
+/// - `onResultsChanged` — обновление списка подсказок;
+/// - `onResolvedAddress` — возврат выбранного адреса и координат.
+///
+/// Используется в:
+/// - `AddressConfirmSheetViewController`
+///   для ввода и выбора адреса доставки/самовывоза.
+
 final class AddressConfirmSheetViewModel: NSObject, AddressConfirmSheetViewModelProtocol {
     
     // MARK: - Deps
+    
     private let search: AddressSearchServiceProtocol
     private let formatter: AddressFormattingProtocol
     
     // MARK: - State (проксируем из сервиса)
+    
     private(set) var completions: [MKLocalSearchCompletion] = []
     
     var region: MKCoordinateRegion? {
-        didSet { search.setRegion(region) }
+        didSet {
+            search.setRegion(region)
+        }
     }
     
     // MARK: - Outputs
+    
     var onResultsChanged: (([MKLocalSearchCompletion]) -> Void)?
     var onResolvedAddress: ((String, CLLocationCoordinate2D) -> Void)?
     
     // MARK: - Init
+    
     init(
         search: AddressSearchServiceProtocol,
         formatter: AddressFormattingProtocol
@@ -34,7 +56,6 @@ final class AddressConfirmSheetViewModel: NSObject, AddressConfirmSheetViewModel
         self.formatter = formatter
         super.init()
         
-        // Подписываемся на обновления из сервиса
         search.onResultsChanged = { [weak self] results in
             self?.completions = results
             self?.onResultsChanged?(results)
@@ -42,6 +63,7 @@ final class AddressConfirmSheetViewModel: NSObject, AddressConfirmSheetViewModel
     }
     
     // MARK: - Intent
+    
     func updateQuery(_ text: String) {
         search.updateQuery(text)
     }

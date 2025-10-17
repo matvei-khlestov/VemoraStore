@@ -7,6 +7,19 @@
 
 import UIKit
 
+/// Координатор `EditNameCoordinator` управляет сценарием изменения имени пользователя.
+///
+/// Отвечает за:
+/// - создание и конфигурацию `EditNameViewController`;
+/// - инициализацию `EditNameViewModel` через `ViewModelBuildingProtocol`;
+/// - управление навигацией (открытие, закрытие экрана, завершение сценария);
+/// - получение `userId` из `AuthServiceProtocol`.
+///
+/// Особенности:
+/// - использует `UINavigationController` для отображения экрана;
+/// - скрывает нижний таббар при переходе на экран редактирования;
+/// - изолирует логику переходов, обеспечивая чистоту View и ViewModel.
+
 final class EditNameCoordinator: EditNameCoordinatingProtocol {
 
     // MARK: - Deps

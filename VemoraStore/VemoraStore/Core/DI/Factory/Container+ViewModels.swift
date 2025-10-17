@@ -8,6 +8,64 @@
 import Foundation
 import FactoryKit
 
+/// Расширение `Container+ViewModels` — регистрация всех ViewModel приложения
+/// в DI-контейнере.
+///
+/// Назначение:
+/// - Определяет фабрики для всех ViewModel, используемых в слоях Presentation;
+/// - Обеспечивает инъекцию зависимостей (`Repository`, `Service`, `Formatter`, `Validator`);
+/// - Гарантирует корректное связывание ViewModel с данными пользователя (`userId`)
+///   и контекстом навигации.
+///
+/// Особенности:
+/// - Используется `FactoryKit` с типами `Factory` и `ParameterFactory`:
+///   - `Factory` — для ViewModel без параметров;
+///   - `ParameterFactory` — для ViewModel, где требуется `userId`, `productId`,
+///     `categoryId` и т.п.;
+/// - Поддерживает модульность и масштабируемость приложения;
+/// - Позволяет переиспользовать зависимости между ViewModel без дублирования кода.
+///
+/// Основные группы ViewModel:
+///
+/// **Аутентификация**
+/// - `signUpViewModel`, `signInViewModel`, `passwordResetViewModel` —
+///   регистрация, вход и восстановление пароля.
+///
+/// **Каталог и товары**
+/// - `catalogViewModel` — отображение каталога;
+/// - `categoryProductsViewModel` — список товаров по категории;
+/// - `productDetailsViewModel` — детали товара;
+/// - `catalogFilterViewModel` — фильтрация товаров.
+///
+/// **Избранное и корзина**
+/// - `favoritesViewModel` — управление избранным;
+/// - `cartViewModel` — управление корзиной.
+///
+/// **Профиль и редактирование**
+/// - `profileUserViewModel` — профиль пользователя;
+/// - `editProfileViewModel` — редактирование профиля;
+/// - `editNameViewModel`, `editEmailViewModel`, `editPhoneViewModel` —
+///   изменение данных пользователя.
+///
+/// **Оформление заказа**
+/// - `checkoutViewModel` — оформление покупки;
+/// - `ordersViewModel` — список заказов.
+///
+/// **Адреса и доставка**
+/// - `deliveryDetailsViewModel` — детали доставки;
+/// - `addressConfirmSheetViewModel` — подтверждение адреса;
+/// - `mapPickerViewModel` — выбор адреса на карте.
+///
+/// **UI-компоненты ввода**
+/// - `phoneInputSheetViewModel` — ввод телефона;
+/// - `commentInputSheetViewModel` — ввод комментария.
+///
+/// **Отладка (DEBUG)**
+/// - `debugImportViewModel` — импорт данных для тестовой среды.
+///
+/// Расширение входит в модуль **Dependency Injection Layer (ViewModels)**
+/// и обеспечивает слой Presentation необходимыми зависимостями для ViewModel.
+
 extension Container {
     
     // MARK: - Auth

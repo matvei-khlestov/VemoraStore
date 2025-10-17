@@ -7,6 +7,16 @@
 
 import UIKit
 
+/// Ячейка таблицы, используемая в экране оформления заказа (`CheckoutViewController`)
+/// для отображения или редактирования комментария к заказу.
+///
+/// Содержит:
+/// - иконку комментария (`text.bubble.fill`);
+/// - текст с введённым комментарием или плейсхолдер "Оставить комментарий";
+/// - нижний разделитель.
+///
+/// При нажатии на ячейку открывается экран редактирования комментария.
+
 final class OrderCommentCell: UITableViewCell {
     
     // MARK: - Reuse Id
@@ -17,12 +27,10 @@ final class OrderCommentCell: UITableViewCell {
     
     private enum Metrics {
         enum Insets {
-            // Универсальные базовые отступы экрана (для единообразия)
             static let horizontal: CGFloat = 0
             static let verticalTop: CGFloat = 0
             static let verticalBottom: CGFloat = 0
             
-            // Контентные отступы строки
             static let content: NSDirectionalEdgeInsets = .init(
                 top: 15, leading: 16, bottom: 15, trailing: 16
             )
@@ -92,7 +100,6 @@ final class OrderCommentCell: UITableViewCell {
         return v
     }()
     
-    /// Показ/скрытие тонкой линии внизу
     var showsSeparator: Bool = false {
         didSet { separatorView.isHidden = !showsSeparator }
     }

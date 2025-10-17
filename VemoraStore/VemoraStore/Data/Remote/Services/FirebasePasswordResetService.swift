@@ -8,9 +8,25 @@
 import Foundation
 import FirebaseAuth
 
-/// Реализация `PasswordResetServiceProtocol`
+/// Сервис восстановления пароля `FirebasePasswordResetService`
+/// — реализация `PasswordResetServiceProtocol` на основе Firebase Authentication.
 ///
-/// Отвечает за отправку писем для восстановления пароля с помощью Firebase Authentication.
+/// Назначение:
+/// - отправка писем для сброса пароля по указанному e-mail (`sendPasswordReset`);
+/// - обработка и маппинг ошибок FirebaseAuth в человекочитаемые доменные ошибки.
+///
+/// Поведение:
+/// - при вызове `sendPasswordReset(email:)` инициирует асинхронный запрос Firebase
+///   `Auth.auth().sendPasswordReset(withEmail:)`;
+/// - в случае ошибки преобразует `AuthErrorCode` в `ResetDomainError`
+///   (`invalidEmail`, `userNotFound`, `tooManyRequests`, `network`, `unknown`);
+/// - каждая ошибка имеет локализованное описание (`LocalizedError`), пригодное для отображения в UI.
+///
+/// Особенности реализации:
+/// - использует `async/await` API FirebaseAuth для асинхронных операций;
+/// - не требует аутентифицированного пользователя;
+/// - безопасно обрабатывает неизвестные ошибки и возвращает `.unknown`;
+/// - не кэширует состояние, выполняет операции напрямую через `FirebaseAuth`.
 
 final class FirebasePasswordResetService: PasswordResetServiceProtocol {
     

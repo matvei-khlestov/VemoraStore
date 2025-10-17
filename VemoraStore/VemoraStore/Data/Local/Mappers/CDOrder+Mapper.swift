@@ -8,7 +8,20 @@
 import Foundation
 import CoreData
 
+/// Расширение `CDOrder`, обеспечивающее маппинг между Core Data и DTO/Entity слоями.
+///
+/// Содержит:
+/// - `apply(dto:ctx:)` — применение данных из `OrderDTO` к Core Data объекту;
+/// - `OrderEntity.init(cd:)` — преобразование Core Data сущности в доменную модель `OrderEntity`.
+///
+/// Используется в:
+/// - `OrdersLocalStore` — для сохранения заказов в базу и их чтения в доменную модель.
 extension CDOrder {
+    
+    /// Применяет данные из `OrderDTO` к Core Data сущности `CDOrder`.
+    /// - Parameters:
+    ///   - dto: DTO заказа, полученный с сервера или из репозитория.
+    ///   - ctx: Контекст `NSManagedObjectContext`, в котором выполняется обновление.
     func apply(dto: OrderDTO, ctx: NSManagedObjectContext) {
         id = dto.id
         userId = dto.userId
@@ -20,7 +33,7 @@ extension CDOrder {
         comment = dto.comment
         phoneE164 = dto.phoneE164
         
-        // replace items
+        // Удаляем старые товары и создаём новые из DTO
         let existingItems = (items as? Set<CDOrderItem>) ?? []
         existingItems.forEach { ctx.delete($0) }
         
@@ -39,7 +52,17 @@ extension CDOrder {
     }
 }
 
+/// Расширение `OrderEntity`, предоставляющее инициализацию из `CDOrder`.
+///
+/// Выполняет:
+/// - безопасное извлечение и валидацию данных из Core Data сущности;
+/// - преобразование `CDOrderItem` → `OrderItem`;
+/// - сортировку элементов по `productId` для стабильного отображения;
+/// - построение итоговой доменной сущности `OrderEntity`.
 extension OrderEntity {
+    
+    /// Инициализирует `OrderEntity` из Core Data сущности `CDOrder`.
+    /// - Parameter cd: Объект `CDOrder` из Core Data.
     init?(cd: CDOrder?) {
         guard
             let cd,
@@ -52,18 +75,18 @@ extension OrderEntity {
             let address = cd.receiveAddress
         else { return nil }
         
-        // 1) Явно приводим и копируем элементы, чтобы упростить типизацию
+        // Приводим набор позиций заказа к массиву
         let cdItemsSet: Set<CDOrderItem> = (cd.items as? Set<CDOrderItem>) ?? []
         let cdItems: [CDOrderItem] = Array(cdItemsSet)
         
-        // 2) Сортируем в отдельном шаге
+        // Стабильная сортировка по productId
         let sortedCdItems: [CDOrderItem] = cdItems.sorted {
             let l = $0.productId ?? ""
             let r = $1.productId ?? ""
             return l < r
         }
         
-        // 3) Маппим в доменную модель с явными типами
+        // Преобразуем CDOrderItem → OrderItem с вложенным Product
         let items: [OrderItem] = sortedCdItems.map { ci in
             let prod = Product(
                 id: ci.productId ?? "",

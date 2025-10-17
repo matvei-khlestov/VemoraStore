@@ -14,7 +14,10 @@ struct FilterState: Equatable {
     var maxPrice: Decimal?
 
     var isEmpty: Bool {
-        selectedCategoryIds.isEmpty && selectedBrandIds.isEmpty && minPrice == nil && maxPrice == nil
+        selectedCategoryIds.isEmpty
+        && selectedBrandIds.isEmpty
+        && minPrice == nil
+        && maxPrice == nil
     }
 }
 

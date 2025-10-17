@@ -8,6 +8,24 @@
 import Foundation
 import Combine
 
+/// ViewModel `CommentInputSheetViewModel` для экрана добавления комментария.
+///
+/// Основные задачи:
+/// - Хранение и обновление текста комментария;
+/// - Валидация введённого текста через `FormValidatingProtocol`;
+/// - Управление ошибками валидации;
+/// - Реактивное оповещение View об изменениях состояния.
+///
+/// Обеспечивает реактивные обновления через Combine:
+/// - `commentPublisher` — поток текста комментария;
+/// - `errorPublisher` — поток ошибок валидации.
+///
+/// После исправления текста автоматически очищает ошибку,
+/// если введённое значение прошло успешную проверку.
+///
+/// Используется для форм с пользовательскими комментариями
+/// или текстовыми отзывами перед отправкой на сервер.
+
 final class CommentInputSheetViewModel: CommentInputSheetViewModelProtocol {
 
     // MARK: - Deps
@@ -32,7 +50,6 @@ final class CommentInputSheetViewModel: CommentInputSheetViewModelProtocol {
         self.validator = validator
         self._comment = initialComment ?? ""
 
-        // Если была ошибка, а пользователь исправил — гасим ошибку
         $_comment
             .dropFirst()
             .sink { [weak self] value in

@@ -8,6 +8,22 @@
 import Foundation
 import FirebaseCore
 
+/// Маппинг между `BrandDTO` и документами Firestore (`/brands/{brandId}`).
+///
+/// Назначение:
+/// - преобразование данных Firestore в модель `BrandDTO` (`fromFirebase`);
+/// - обеспечение безопасного чтения полей с дефолтными значениями при отсутствии данных.
+///
+/// Особенности реализации:
+/// - дата создания и обновления (`createdAt`, `updatedAt`) восстанавливаются из `Timestamp`;
+/// - при отсутствии имени бренд получает в качестве `name` значение `id`;
+/// - поле `isActive` по умолчанию считается `true`, чтобы исключить деактивацию при неполных данных;
+/// - корректно обрабатывает пустые или отсутствующие значения `imageURL`.
+///
+/// Используется в:
+/// - `CatalogCollections` для загрузки брендов из Firestore;
+/// - `CoreDataCatalogStore` при маппинге DTO в локальные сущности (`CDBrand`).
+
 extension BrandDTO {
     static func fromFirebase(id: String, data: [String: Any]) -> BrandDTO {
         BrandDTO(

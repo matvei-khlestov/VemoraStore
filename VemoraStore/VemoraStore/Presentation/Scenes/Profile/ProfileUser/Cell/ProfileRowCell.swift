@@ -7,6 +7,11 @@
 
 import UIKit
 
+/// Ячейка профиля со строкой меню.
+///
+/// Используется для отображения пунктов профиля с текстом и иконкой.
+/// Содержит системное изображение и стрелку перехода (`.disclosureIndicator`).
+
 final class ProfileRowCell: UITableViewCell {
     
     // MARK: - Reuse Id

@@ -9,10 +9,33 @@ import Foundation
 import Combine
 import FactoryKit
 
-/// Лёгкий «сторож» сессии:
-/// - слушает смену auth.currentUserId
-/// - при смене uid чистит локальные user-scoped сторы
-/// - даёт хук для сброса потенциальных user-scoped singleton'ов в контейнере
+/// Класс `SessionManager` — лёгкий менеджер пользовательской сессии.
+///
+/// Назначение:
+/// - отслеживает изменения состояния авторизации (`auth.currentUserId`);
+/// - выполняет очистку всех локальных хранилищ, связанных с предыдущим пользователем;
+/// - сбрасывает user-scoped зависимости в контейнере `FactoryKit.Container`;
+/// - сохраняет снимок текущей корзины (`cartItemsSnapshot`) для быстрого доступа.
+///
+/// Сценарии использования:
+/// - вызывается при старте приложения для синхронизации локальных данных с текущей сессией;
+/// - реагирует на смену пользователя (login/logout) через Combine-подписку `auth.isAuthorizedPublisher`;
+/// - может использоваться вручную через `refreshNow()` для немедленного обновления состояния.
+///
+/// Состав зависимостей:
+/// - `AuthServiceProtocol`: источник статуса авторизации;
+/// - `LocalNotifyingProtocol`: управление локальными уведомлениями;
+/// - `CartLocalStore`, `FavoritesLocalStore`, `ProfileLocalStore`, `OrdersLocalStore`: локальные CoreData-хранилища;
+/// - `cartRepositoryProvider`: фабрика репозиториев корзины для конкретного пользователя;
+/// - `Container`: DI-контейнер для сброса user-scoped зависимостей;
+/// - `CheckoutStoringProtocol`: локальное хранилище для оформления заказа.
+///
+/// Особенности реализации:
+/// - использует `Combine` для реактивного слежения за изменением UID;
+/// - кеширует последний UID (`lastUID`), чтобы избежать лишней очистки при повторных вызовах;
+/// - при выходе очищает все user-scoped данные и уведомления;
+/// - при входе загружает локальный снимок корзины и подписывается на её обновления через репозиторий.
+
 final class SessionManager: SessionManaging {
     
     // MARK: - Deps
@@ -24,7 +47,6 @@ final class SessionManager: SessionManaging {
     private let container: Container
     private let checkoutStorage: CheckoutStoringProtocol
     
-    // Локальные сторы, которые завязаны на userId (можно расширять списком).
     private let cartLocal: CartLocalStore
     private let favoritesLocal: FavoritesLocalStore
     private let profileLocal: ProfileLocalStore
@@ -63,14 +85,12 @@ final class SessionManager: SessionManaging {
     // MARK: - Public
     
     func start() {
-        // 1) Разрешения и категории — один раз при старте
         notifier.requestAuthorization(options: [.alert, .badge, .sound], completion: nil)
         notifier.registerCategories([
             LocalNotificationFactory.favoritesCategory(),
             LocalNotificationFactory.cartCategory(),
             LocalNotificationFactory.checkoutCategory()
         ])
-        // Следим за авторизацией; UID берём из auth.currentUserId.
         auth.isAuthorizedPublisher
             .removeDuplicates()
             .sink { [weak self] _ in
@@ -78,11 +98,9 @@ final class SessionManager: SessionManaging {
             }
             .store(in: &bag)
         
-        // Подстрахуемся и дернём сразу.
         handleAuthStateChanged()
     }
     
-    // Можно звать явно при logout/login, если хочется мгновенно применить.
     func refreshNow() {
         handleAuthStateChanged()
     }
@@ -103,7 +121,6 @@ private extension SessionManager {
         }
         container.resetUserScopedSingletons()
         
-        // отменим старую подписку
         cartRepoCancellable?.cancel()
         
         if !current.isEmpty {

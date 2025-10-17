@@ -8,9 +8,31 @@
 import Foundation
 import Combine
 
+/// ViewModel `ProductDetailsViewModel` для экрана карточки товара.
+///
+/// Основные задачи:
+/// - Подписывается на `CatalogRepository` и публикует `product`;
+/// - Отслеживает состояние в корзине и избранном
+///   через `CartRepository` и `FavoritesRepository`;
+/// - Формирует данные для UI: название, описание,
+///   форматированную цену, URL изображения;
+/// - Предоставляет паблишеры: `productPublisher`,
+///   `isInCartPublisher`, `isFavoritePublisher`.
+///
+/// Действия:
+/// - Тоггл/добавление/удаление из избранного;
+/// - Добавление в корзину, обновление количества,
+///   удаление из корзины.
+///
+/// Форматирование:
+/// - Цена форматируется через `PriceFormattingProtocol`.
+///
+/// Реактивность:
+/// - Обновления доставляются на главный поток;
+/// - Состояния `isInCart` и `favoriteState` дедуплицируются.
+
 final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     
-    // Deps
     private let productId: String
     private let favoritesRepository: FavoritesRepository
     private let cartRepository: CartRepository
@@ -19,7 +41,6 @@ final class ProductDetailsViewModel: ProductDetailsViewModelProtocol {
     
     private var cancellables = Set<AnyCancellable>()
     
-    // State
     @Published private var product: Product?
     @Published private var isInCart: Bool = false
     @Published private var favoriteState: Bool = false

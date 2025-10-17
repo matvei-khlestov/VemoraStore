@@ -5,6 +5,21 @@
 //  Created by Matvei Khlestov on 02.10.2025.
 //
 
+import Foundation
+
+/// Класс `AuthSessionStorage`
+///
+/// Реализует протокол `AuthSessionStoringProtocol` и отвечает
+/// за безопасное хранение данных сессии пользователя с помощью `KeychainServiceProtocol`.
+///
+/// Основные задачи:
+/// - сохранение идентификатора пользователя (`userId`) и провайдера авторизации (`authProvider`);
+/// - предоставление доступа к текущим данным сессии;
+/// - безопасное удаление сохранённых данных при выходе пользователя.
+///
+/// Используется в:
+/// - `AuthService` — для управления состоянием аутентификации и восстановления сессии при запуске приложения.
+
 final class AuthSessionStorage: AuthSessionStoringProtocol {
 
     private let keychain: KeychainServiceProtocol

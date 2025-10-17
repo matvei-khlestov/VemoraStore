@@ -7,6 +7,19 @@
 
 import UIKit
 
+/// Координатор `ProfileUserCoordinator` управляет сценарием отображения профиля пользователя.
+///
+/// Отвечает за:
+/// - инициализацию и показ `ProfileUserViewController`;
+/// - обработку навигации к экранам редактирования профиля, заказов, контактов,
+///   политики конфиденциальности и информации "О нас";
+/// - делегирование событий выхода из аккаунта и удаления пользователя через колбэки `onLogout` и `onDeleteAccount`.
+///
+/// Особенности:
+/// - использует фабрики `ViewModelBuildingProtocol` и `CoordinatorBuildingProtocol` для создания зависимостей;
+/// - добавляет и удаляет дочерние координаторы, предотвращая утечки памяти;
+/// - полностью изолирует навигационную логику от слоя UI и ViewModel, следуя архитектуре Coordinator.
+
 final class ProfileUserCoordinator: ProfileUserCoordinatingProtocol {
     
     // MARK: - Coordinator

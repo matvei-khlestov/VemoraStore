@@ -8,6 +8,26 @@
 import UIKit
 import Combine
 
+/// Контроллер `ProfileUserViewController` для экрана профиля пользователя.
+///
+/// Отвечает за:
+/// - отображение аватара, имени и e-mail пользователя;
+/// - список действий профиля в таблице (редактирование, заказы, о приложении и т.д.);
+/// - взаимодействие с `ProfileUserViewModelProtocol` (биндинг имени/e-mail, загрузка аватара);
+/// - обработку пользовательских действий: выход и удаление аккаунта;
+/// - маршрутизацию через колбэки: `onEditProfileTap`, `onOrdersTap`,
+///   `onAboutTap`, `onContactTap`, `onPrivacyTap`, `onLogoutTap`,
+///   `onDeleteAccountTap`.
+///
+/// Делегаты/события:
+/// - `UITableViewDataSource` / `UITableViewDelegate` для списка действий;
+/// - настройка идентификаторов доступности (A11y) для тестов.
+///
+/// Особенности:
+/// - не содержит бизнес-логики — она вынесена во ViewModel и сервисы;
+/// - таблица встроена в `UIScrollView` и получает высоту динамически;
+/// - «выход» и «удаление» запрашивают подтверждение и выполняются асинхронно.
+
 final class ProfileUserViewController: UIViewController {
     
     // MARK: - Callbacks

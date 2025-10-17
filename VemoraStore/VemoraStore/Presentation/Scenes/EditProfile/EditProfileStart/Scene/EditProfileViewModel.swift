@@ -8,6 +8,18 @@
 import Foundation
 import Combine
 
+/// ViewModel `EditProfileViewModel` для экрана редактирования профиля.
+///
+/// Основные задачи:
+/// - Наблюдение за изменениями данных профиля через `ProfileRepository`;
+/// - Отображение имени, почты, телефона и аватара пользователя;
+/// - Загрузка и сохранение аватара через `AvatarStorageServiceProtocol`;
+/// - Синхронизация номера телефона с `CheckoutStoringProtocol`
+///   для корректного оформления заказов.
+///
+/// Обеспечивает реактивное обновление состояния через Combine
+/// и поддерживает актуальность пользовательских данных в профиле.
+
 final class EditProfileViewModel: EditProfileViewModelProtocol {
     
     // MARK: - Deps

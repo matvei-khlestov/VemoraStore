@@ -7,6 +7,22 @@
 
 import UIKit
 
+/// Ячейка `ContactRowCell` для отображения контактной информации в списке.
+///
+/// Отвечает за:
+/// - базовую строку таблицы с заголовком, дополнительным текстом и иконкой;
+/// - использование системной конфигурации `UIListContentConfiguration`;
+/// - отображение стрелки перехода (`.disclosureIndicator`);
+/// - настройку внешнего вида и вторичного текста.
+///
+/// Использование:
+/// - Применяется в экранах с контактами или настройками.
+/// - Конфигурация выполняется методом `configure(title:detail:systemImage:)`.
+///
+/// Особенности:
+/// - Вторичный текст имеет шрифт `.systemFont(ofSize: 15, weight: .regular)`;
+/// - Иконка окрашивается в `secondaryLabel` по умолчанию.
+
 final class ContactRowCell: UITableViewCell {
     
     static let reuseId = String(describing: ContactRowCell.self)

@@ -9,9 +9,27 @@ import Foundation
 import FirebaseFirestore
 import Combine
 
+/// Коллекции каталога в Firestore (`/products`, `/categories`, `/brands`).
+///
+/// Отвечает за:
+/// - однократную загрузку активных продуктов, категорий и брендов (`fetchProducts`, `fetchCategories`, `fetchBrands`);
+/// - реактивное наблюдение за изменениями каталога через Combine (`listenProducts`, `listenCategories`, `listenBrands`);
+/// - преобразование данных Firestore в DTO-модели (`ProductDTO`, `CategoryDTO`, `BrandDTO`).
+///
+/// Особенности реализации:
+/// - все запросы к Firestore выполняются асинхронно с помощью `async/await`;
+/// - используется фильтрация `isActive == true` для исключения неактивных элементов;
+/// - реализация слушателей (`addSnapshotListener`) обеспечивает live-обновления данных каталога без перезапросов;
+/// - каждый слушатель возвращает Combine-поток, автоматически удаляющий `ListenerRegistration` при отмене подписки;
+/// - коллекции Firestore:
+///   - `products` — все товары магазина;
+///   - `categories` — активные категории каталога;
+///   - `brands` — активные бренды.
+
 final class CatalogCollections: CatalogCollectingProtocol {
     
     // MARK: - Firestore
+    
     private let db = Firestore.firestore()
     private let products = "products"
     private let categories = "categories"

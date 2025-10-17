@@ -9,14 +9,28 @@ import Foundation
 import CoreLocation
 import MapKit
 
+/// ViewModel `MapPickerViewModel` для экрана выбора адреса на карте.
+///
+/// Основные задачи:
+/// - Выполнение обратного геокодирования при изменении региона карты через `GeocodingServiceProtocol`;
+/// - Форматирование найденного адреса для отображения с помощью `AddressFormattingProtocol`;
+/// - Управление частотой геокод-запросов и минимальной дистанцией обновления координат;
+/// - Обработка статуса разрешений и обновлений `CLLocationManager`;
+/// - Синхронизация состояния с UI через колбэки (показ шита, центрирование карты, обновление адреса).
+///
+/// Состояние не сохраняется между сессиями — данные рассчитываются на лету.
+/// Обновления адреса выполняются с ограничением по времени (`1.5s`) и дистанции (`35m`).
+
 final class MapPickerViewModel: MapPickerViewModelProtocol {
 
     // MARK: - Deps
+    
     private let geocoder: GeocodingServiceProtocol
     private let formatter: AddressFormattingProtocol
     private let locale: Locale
 
     // MARK: - State (бизнес-логика)
+    
     private var didShowSheet = false
     private var isSheetEditing = false
     private var lastGeocodeAt: Date = .distantPast
@@ -27,11 +41,13 @@ final class MapPickerViewModel: MapPickerViewModelProtocol {
     private let minDistanceMeters: CLLocationDistance = 35
 
     // MARK: - Outputs
+    
     var requestPresentAddressSheet: ((String?) -> Void)?
     var requestCenterMap: ((CLLocationCoordinate2D, CLLocationDistance) -> Void)?
     var updateAddressText: ((String) -> Void)?
 
     // MARK: - Init
+    
     init(
         geocoder: GeocodingServiceProtocol,
         formatter: AddressFormattingProtocol,
@@ -43,6 +59,7 @@ final class MapPickerViewModel: MapPickerViewModelProtocol {
     }
 
     // MARK: - Inputs
+    
     func setIsSheetEditing(_ isEditing: Bool) {
         isSheetEditing = isEditing
     }
@@ -51,23 +68,18 @@ final class MapPickerViewModel: MapPickerViewModelProtocol {
         guard !didShowSheet else { return }
         didShowSheet = true
         requestPresentAddressSheet?("Определяем адрес…")
-        // Небольшая задержка перед первым геокодом, как было в VC
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { [] in
-            // Первый реверс выполнится после первого onRegionDidChange, чтобы знать центр
-            // (если хочешь форсануть — можно хранить текущий центр и вызывать тут)
         }
     }
 
     func onRegionDidChange(center: CLLocationCoordinate2D) {
         guard !isSheetEditing else { return }
-        // distance gate
         if let prev = lastGeocodeCoordinate {
             let p1 = MKMapPoint(center)
             let p2 = MKMapPoint(prev)
             if p1.distance(to: p2) < minDistanceMeters { return }
         }
 
-        // time throttle
         let elapsed = Date().timeIntervalSince(lastGeocodeAt)
         let delay = max(0, minGeocodeInterval - elapsed)
 
@@ -79,10 +91,7 @@ final class MapPickerViewModel: MapPickerViewModelProtocol {
         DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: work)
     }
 
-    func onLocateTapped() {
-        // Просто просим у VC перезапросить локацию (старая логика остаётся в VC)
-        // Либо можно тут генерировать событие/флаг — но не ломаем текущую архитектуру.
-    }
+    func onLocateTapped() {}
 
     func onZoomIn(currentRegion: MKCoordinateRegion) -> MKCoordinateRegion {
         var region = currentRegion
@@ -120,6 +129,7 @@ final class MapPickerViewModel: MapPickerViewModelProtocol {
     }
 
     // MARK: - Internal
+    
     private func performReverseGeocode(_ center: CLLocationCoordinate2D) {
         guard !geocodeInFlight else { return }
         geocodeInFlight = true

@@ -7,6 +7,19 @@
 
 import UIKit
 
+/// Координатор `CategoryProductsCoordinator` управляет сценарием показа товаров конкретной категории.
+///
+/// Отвечает за:
+/// - инициализацию и показ `CategoryProductsViewController`;
+/// - передачу идентификатора категории и пользователя в `CategoryProductsViewModel`;
+/// - навигацию к экрану деталей товара (`ProductDetailsCoordinator`);
+/// - обработку события возврата назад.
+///
+/// Особенности:
+/// - изолирует логику навигации от слоя ViewModel;
+/// - использует фабрики `ViewModelBuildingProtocol` и `CoordinatorBuildingProtocol` для построения зависимостей;
+/// - реализует навигацию в рамках архитектуры Coordinator, обеспечивая переиспользуемость и модульность.
+
 final class CategoryProductsCoordinator: CategoryProductsCoordinatingProtocol {
     
     // MARK: - Properties

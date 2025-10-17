@@ -9,7 +9,35 @@ import Foundation
 import Combine
 import FirebaseAuth
 
-/// Реализация `AuthServiceProtocol` на базе FirebaseAuth: вход, регистрация и управление сессией.
+/// Сервис аутентификации `FirebaseAuthService`
+/// — реализация `AuthServiceProtocol` поверх FirebaseAuth (email/password).
+///
+/// Назначение:
+/// - управление жизненным циклом авторизации: `signIn`, `signUp`, `signOut`, `deleteAccount`;
+/// - поддержание реактивного статуса входа через Combine (`isAuthorizedPublisher`);
+/// - синхронизация локальной сессии (`AuthSessionStoringProtocol`) с фактическим состоянием Firebase;
+/// - сопоставление ошибок FirebaseAuth в человекочитаемые доменные ошибки.
+///
+/// Зависимости:
+/// - `FirebaseAuth` — провайдер аутентификации;
+/// - `AuthSessionStoringProtocol` — хранилище сессии (Keychain/Defaults).
+///
+/// Состояние/выходы:
+/// - `currentUserId` — актуальный UID авторизованного пользователя (или `nil`);
+/// - `isAuthorizedPublisher` — паблишер булевого состояния (`true`, если пользователь вошёл).
+///
+/// Поведение:
+/// - при инициализации настраивает `Auth.addStateDidChangeListener`, чтобы реагировать на смену
+///   пользователя и рассылать обновления (`applyAuthState`);
+/// - при входе/регистрации/выходе/удалении аккаунта обновляет `currentUserId`,
+///   публикует `isAuthorized` и записывает/очищает сессию в `AuthSessionStoringProtocol`;
+/// - использует `async/await` API FirebaseAuth, ошибки маппит в `AuthDomainError`
+///   (например: `invalidCredentials`, `emailAlreadyInUse`, `weakPassword`, `requiresRecentLogin`).
+///
+/// Особенности:
+/// - listener корректно снимается в `deinit`;
+/// - `signOut()` и `deleteAccount()` приводят к очистке локальной сессии;
+/// - коды ошибок FirebaseAuth (`AuthErrorCode`) транслируются в локализуемые описания для UI.
 
 final class FirebaseAuthService: AuthServiceProtocol {
 

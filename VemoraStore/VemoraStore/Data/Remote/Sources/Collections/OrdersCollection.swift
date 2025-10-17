@@ -9,7 +9,22 @@ import Foundation
 import Combine
 import FirebaseFirestore
 
-/// Firestore: /users/{uid}/orders/{orderId}
+/// Коллекция заказов пользователя в Firestore (`/users/{uid}/orders/{orderId}`).
+///
+/// Отвечает за:
+/// - загрузку и синхронизацию заказов пользователя с Firestore;
+/// - создание и обновление заказов (включая изменение статуса);
+/// - реактивное наблюдение за изменениями через Combine (`listenOrders`);
+/// - полную очистку коллекции заказов пользователя (`clear`).
+///
+/// Особенности реализации:
+/// - Firestore-операции выполняются асинхронно (`async/await`);
+/// - для `listenOrders` используются `PassthroughSubject` и `ListenerRegistration`,
+///   что обеспечивает непрерывный Combine-поток обновлений без разрывов;
+/// - подписки (`listeners`, `subjects`) кешируются по `uid` для предотвращения дублирования;
+/// - метод `clear(uid:)` выполняет пакетное удаление (batch delete) с разбиением по 450 документов;
+/// - ошибки логируются в консоль, но не прерывают поток данных.
+
 final class OrdersCollection: OrdersCollectingProtocol {
     
     // MARK: - Deps

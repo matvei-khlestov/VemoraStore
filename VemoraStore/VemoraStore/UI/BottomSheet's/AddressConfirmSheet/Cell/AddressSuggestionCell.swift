@@ -8,6 +8,17 @@
 import UIKit
 import MapKit
 
+/// Ячейка `AddressSuggestionCell`
+/// для отображения поисковых подсказок адресов.
+///
+/// Основные задачи:
+/// - вывод заголовка и подзаголовка подсказки (`MKLocalSearchCompletion`);
+/// - аккуратное оформление текста с использованием системной конфигурации;
+/// - стандартный аксессуар `disclosureIndicator` для обозначения выбора.
+///
+/// Используется в `AddressConfirmSheetViewController`
+/// внутри таблицы подсказок при вводе адреса.
+
 final class AddressSuggestionCell: UITableViewCell {
     
     // MARK: - Reuse

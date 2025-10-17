@@ -8,14 +8,36 @@
 import UIKit
 import MapKit
 
+/// Контроллер `AddressConfirmSheetViewController`
+/// для экрана ввода и подтверждения адреса доставки.
+///
+/// Основные задачи:
+/// - ввод и поиск адреса через `UITextField` с автодополнением (MapKit);
+/// - отображение списка подсказок `MKLocalSearchCompletion` в таблице;
+/// - подтверждение выбранного адреса и переход к деталям доставки;
+/// - управление состоянием шита (compact/search);
+/// - уведомление родителя о выборе адреса, окончании редактирования и полном адресе.
+///
+/// Взаимодействует с:
+/// - `AddressConfirmSheetViewModelProtocol` — управление поиском и разрешением адресов;
+/// - `DeliveryDetailsViewModelProtocol` — фабрика для второго шита с деталями адреса;
+/// - `AddressSuggestionCell` — ячейка для отображения подсказок.
+///
+/// Особенности:
+/// - поддерживает детенты compact/large с плавной анимацией;
+/// - аккуратно переключает UI при поиске и выборе адреса;
+/// - реализует обратные связи (`onAddressPicked`, `onFullAddressComposed`, `onEditingChanged`).
+
 final class AddressConfirmSheetViewController: UIViewController {
     
     // MARK: - Public Callbacks
     
     /// Колбэк выбора адреса: (отформатированный адрес, координата)
     var onAddressPicked: ((String, CLLocationCoordinate2D) -> Void)?
+    
     /// Возвращает в родителя полностью собранный адрес из второго шита
     var onFullAddressComposed: ((String) -> Void)?
+    
     /// Сообщает родителю, что поле адреса вошло/вышло из режима редактирования
     var onEditingChanged: ((Bool) -> Void)?
     

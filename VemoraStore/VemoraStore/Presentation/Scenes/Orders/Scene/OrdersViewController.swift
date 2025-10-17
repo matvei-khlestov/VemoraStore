@@ -8,9 +8,28 @@
 import UIKit
 import Combine
 
+/// Контроллер `OrdersViewController` для экрана истории заказов.
+///
+/// Отвечает за:
+/// - отображение заказов в секциях `UITableView` (по одному заказу на секцию);
+/// - биндинг данных с `OrdersViewModelProtocol` через Combine и
+///   перезагрузку таблицы по обновлениям;
+/// - конфигурацию ячеек `OrderItemCell` и тонкого разделителя последней строки;
+/// - формирование заголовков секций с маскировкой идентификатора заказа.
+///
+/// Взаимодействует с:
+/// - `OrdersViewModelProtocol` — источник данных, форматирование цены;
+/// - делегатами `UITableViewDataSource`/`UITableViewDelegate`;
+/// - обратным колбэком `onBack` для навигации назад.
+///
+/// Особенности:
+/// - компактный «брендовый» заголовок секции (`VMR-XXXX…YYYY`);
+/// - отсутствие бизнес-логики: контроллер отвечает только за UI и маршрутизацию.
+
 final class OrdersViewController: UIViewController {
     
     private var bag = Set<AnyCancellable>()
+    
     // MARK: - Callbacks
     
     var onBack: (() -> Void)?

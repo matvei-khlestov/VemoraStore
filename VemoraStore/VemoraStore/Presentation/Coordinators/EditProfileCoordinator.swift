@@ -7,6 +7,20 @@
 
 import UIKit
 
+/// Координатор `EditProfileCoordinator` управляет сценарием редактирования профиля пользователя.
+///
+/// Отвечает за:
+/// - создание и отображение экрана `EditProfileViewController`;
+/// - инициализацию `EditProfileViewModel` через `ViewModelBuildingProtocol`;
+/// - навигацию к дочерним координаторам (`EditName`, `EditEmail`, `EditPhone`);
+/// - обработку завершения сценария редактирования (`onFinish`).
+///
+/// Особенности:
+/// - использует `CoordinatorBuildingProtocol` для создания зависимых координаторов;
+/// - применяет `AuthServiceProtocol` для получения идентификатора текущего пользователя;
+/// - скрывает нижний таббар при открытии экрана редактирования;
+/// - управляет жизненным циклом дочерних координаторов, обеспечивая их корректное удаление после завершения.
+
 final class EditProfileCoordinator: EditProfileCoordinatingProtocol {
     
     // MARK: - Deps

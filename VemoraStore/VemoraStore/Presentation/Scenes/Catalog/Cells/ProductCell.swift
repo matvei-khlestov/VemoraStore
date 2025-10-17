@@ -15,6 +15,22 @@ protocol ProductCellDelegate: AnyObject {
     func productCellDidTapFavorite(_ cell: ProductCell)
 }
 
+/// Ячейка `ProductCell` для карточки товара в коллекции.
+///
+/// Основные задачи:
+/// - Показывает изображение, бренд, название и цену;
+/// - Управляет кнопкой «в корзину» и иконкой избранного;
+/// - Отправляет делегату действия: toggle cart / tap favorite;
+/// - Загружает изображение по URL (хелпер `loadImage(from:)`);
+/// - Подписывается на паблишеры корзины/избранного
+///   и обновляет UI через Combine.
+///
+/// Особенности:
+/// - Локальные состояния `isInCart` и `isFavorite` с анимациями и haptics;
+/// - Анимация нажатия всей карточки (`isHighlighted` → scale);
+/// - Верстка на Auto Layout, тени/скругления для карточки;
+/// - Сброс контента и подписок в `prepareForReuse()`.
+
 final class ProductCell: UICollectionViewCell {
     
     // MARK: - Reuse Id

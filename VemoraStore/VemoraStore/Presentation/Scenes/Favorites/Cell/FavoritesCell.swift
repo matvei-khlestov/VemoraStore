@@ -11,6 +11,19 @@ protocol FavoritesCellDelegate: AnyObject {
     func favoritesCellDidTapCart(_ cell: FavoritesCell)
 }
 
+/// Ячейка `FavoritesCell` для экрана избранного.
+///
+/// Основные задачи:
+/// - Отображает товар: изображение, бренд, название, цену;
+/// - Управляет состоянием кнопки «в корзину/в корзине» с лёгкой анимацией;
+/// - Уведомляет о нажатии на кнопку через `FavoritesCellDelegate`;
+/// - Загружает изображение по URL (через хелпер `loadImage(from:)`).
+///
+/// Особенности:
+/// - Хранит и переключает локальное состояние `isInCart`;
+/// - Аккуратная верстка на `UIStackView` и Auto Layout;
+/// - При переиспользовании сбрасывает контент и состояние кнопки.
+
 final class FavoritesCell: UITableViewCell {
     
     // MARK: - Reuse Id

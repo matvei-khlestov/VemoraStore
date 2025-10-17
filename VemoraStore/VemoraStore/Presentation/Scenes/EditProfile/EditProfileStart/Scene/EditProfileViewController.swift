@@ -9,6 +9,19 @@ import UIKit
 import Combine
 import PhotosUI
 
+/// Контроллер `EditProfileViewController` для экрана редактирования профиля.
+///
+/// Отвечает за:
+/// - отображение аватара и списка редактируемых полей (`UITableView`);
+/// - выбор/замену фото через `PHPickerViewController`;
+/// - взаимодействие с `EditProfileViewModelProtocol` (биндинг данных аватара и полей);
+/// - обработку действий пользователя: переход к редактированию имени/почты/телефона;
+/// - маршрутизацию через колбэки `onEditName`, `onEditEmail`, `onEditPhone`, `onBack`.
+///
+/// Контроллер не содержит бизнес-логики — она реализована во ViewModel и сервисах.
+/// Особенности: фиксированная высота таблицы по числу строк, аккуратная работа с
+/// обновлением аватара и доступностью (Accessibility IDs).
+
 final class EditProfileViewController: UIViewController {
     
     // MARK: - Callbacks
