@@ -106,6 +106,7 @@
 		A057D2F92EA17A8C006D8BE8 /* UITestBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A057D2F82EA17A8C006D8BE8 /* UITestBootstrap.swift */; };
 		A057D2FB2EA17AF4006D8BE8 /* Container+UITestBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A057D2FA2EA17AF4006D8BE8 /* Container+UITestBootstrap.swift */; };
 		A06E210A2EA28A7200333318 /* CartDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06E21092EA28A7200333318 /* CartDTO.swift */; };
+		A06E21E42F00748000333318 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A06E21E32F00748000333318 /* GoogleService-Info.plist */; };
 		A0854FC02E611307004633CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0854FB52E611307004633CA /* Assets.xcassets */; };
 		A0854FC22E611307004633CA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0854FB82E611307004633CA /* LaunchScreen.storyboard */; };
 		A0854FC42E611307004633CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FB42E611307004633CA /* AppDelegate.swift */; };
@@ -281,7 +282,6 @@
 		A08551DB2E837CDC004633CA /* EditPhoneCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */; };
 		A08551E12E838139004633CA /* BaseEditFieldViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551E02E838139004633CA /* BaseEditFieldViewController.swift */; };
 		A08551E32E838493004633CA /* BaseEditFieldViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551E22E838493004633CA /* BaseEditFieldViewModelProtocol.swift */; };
-		A08551E52E843EE6004633CA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A08551E42E843EE6004633CA /* GoogleService-Info.plist */; };
 		A08551E82E843FFB004633CA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A08551E72E843FFB004633CA /* FirebaseAuth */; };
 		A08551EC2E843FFB004633CA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = A08551EB2E843FFB004633CA /* FirebaseFirestore */; };
 		A08551EE2E843FFB004633CA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A08551ED2E843FFB004633CA /* FirebaseStorage */; };
@@ -526,6 +526,7 @@
 		A057D2F82EA17A8C006D8BE8 /* UITestBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestBootstrap.swift; sourceTree = "<group>"; };
 		A057D2FA2EA17AF4006D8BE8 /* Container+UITestBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+UITestBootstrap.swift"; sourceTree = "<group>"; };
 		A06E21092EA28A7200333318 /* CartDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDTO.swift; sourceTree = "<group>"; };
+		A06E21E32F00748000333318 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A0854F7D2E6112A3004633CA /* VemoraStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VemoraStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0854F962E6112A5004633CA /* VemoraStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VemoraStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0854FA02E6112A5004633CA /* VemoraStoreUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VemoraStoreUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -704,7 +705,6 @@
 		A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneCoordinator.swift; sourceTree = "<group>"; };
 		A08551E02E838139004633CA /* BaseEditFieldViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseEditFieldViewController.swift; sourceTree = "<group>"; };
 		A08551E22E838493004633CA /* BaseEditFieldViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseEditFieldViewModelProtocol.swift; sourceTree = "<group>"; };
-		A08551E42E843EE6004633CA /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A08551F62E85F21B004633CA /* brands.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = brands.json; sourceTree = "<group>"; };
 		A08551F82E85F228004633CA /* categories.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = categories.json; sourceTree = "<group>"; };
 		A08551FA2E85F232004633CA /* products.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = products.json; sourceTree = "<group>"; };
@@ -1320,7 +1320,7 @@
 				A0854FBB2E611307004633CA /* SceneDelegate.swift */,
 				A057D2F82EA17A8C006D8BE8 /* UITestBootstrap.swift */,
 				A0854FB62E611307004633CA /* Info.plist */,
-				A08551E42E843EE6004633CA /* GoogleService-Info.plist */,
+				A06E21E32F00748000333318 /* GoogleService-Info.plist */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -2742,7 +2742,7 @@
 				A0854FC22E611307004633CA /* LaunchScreen.storyboard in Resources */,
 				A08551FB2E85F232004633CA /* products.json in Resources */,
 				A08551F92E85F228004633CA /* categories.json in Resources */,
-				A08551E52E843EE6004633CA /* GoogleService-Info.plist in Resources */,
+				A06E21E42F00748000333318 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

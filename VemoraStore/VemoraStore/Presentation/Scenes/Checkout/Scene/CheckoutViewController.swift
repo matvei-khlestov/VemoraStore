@@ -820,11 +820,18 @@ private extension CheckoutViewController {
         guard !isPickup else { return }
         let section = Section.pickupAddress.rawValue
         let indexPath = IndexPath(row: row, section: section)
-        
-        if let cell: Cell = tableView.visibleCell(at: indexPath) {
+
+        guard tableView.numberOfSections > section,
+              tableView.numberOfRows(inSection: section) > row else { return }
+
+        if let cell = tableView.cellForRow(at: indexPath) as? Cell {
             visibleCell(cell)
-        } else if tableView.numberOfSections > section,
-                  tableView.numberOfRows(inSection: section) > row {
+
+            UIView.animate(withDuration: 0.25, delay: 0, options: [.curveEaseInOut]) {
+                self.tableView.beginUpdates()
+                self.tableView.endUpdates()
+            }
+        } else {
             tableView.reloadRows(at: [indexPath], initialNoAnim: isInitialAppear)
         }
     }

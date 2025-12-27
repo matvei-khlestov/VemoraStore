@@ -96,7 +96,7 @@ final class CategoryCell: UICollectionViewCell {
     
     func configure(category: Category, count: Int) {
         titleLabel.text = category.name
-        subtitleLabel.text = "\(count) Products"
+        subtitleLabel.text = "\(count) товаров"
         circleImageView.loadImage(from: category.imageURL)
     }
 }
