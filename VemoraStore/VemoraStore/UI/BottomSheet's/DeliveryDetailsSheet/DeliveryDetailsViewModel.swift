@@ -1,0 +1,75 @@
+//
+//  DeliveryDetailsViewModel.swift
+//  VemoraStore
+//
+//  Created by Matvei Khlestov on 15.09.2025.
+//
+
+import Foundation
+import Combine
+
+/// ViewModel `DeliveryDetailsViewModel`
+///
+/// Основные задачи:
+/// - хранение и обновление деталей адреса доставки;
+/// - управление состоянием «Без квартиры»;
+/// - валидация квартиры при необходимости;
+/// - сбор финального форматированного адреса.
+///
+/// Взаимодействует с:
+/// - `DeliveryAddressFormattingProtocol` — форматирование базового адреса;
+/// - `DeliveryDetailsSheetViewController` — ввод полей и сохранение.
+///
+/// Используется для экрана редактирования деталей доставки.
+
+final class DeliveryDetailsViewModel: DeliveryDetailsViewModelProtocol {
+    
+    // MARK: - Deps
+    
+    private let formatter: DeliveryAddressFormattingProtocol
+    
+    // MARK: - Inputs (state)
+    
+    let baseAddress: String
+    let noFlat = CurrentValueSubject<Bool, Never>(false)
+    let apt = CurrentValueSubject<String, Never>("")
+    let entrance = CurrentValueSubject<String, Never>("")
+    let floor = CurrentValueSubject<String, Never>("")
+    let intercom = CurrentValueSubject<String, Never>("")
+    
+    // MARK: - Init
+    
+    init(baseAddress: String, formatter: DeliveryAddressFormattingProtocol) {
+        self.baseAddress = baseAddress
+        self.formatter = formatter
+    }
+    
+    // MARK: - Actions
+    
+    func toggleNoFlat() {
+        noFlat.value.toggle()
+    }
+    
+    func validateAptIfNeeded() -> Bool {
+        if noFlat.value { return true }
+        return !apt.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
+    func buildFinalAddress() -> String {
+        var chunks = formatter.formatBaseAddress(baseAddress)
+        
+        if !noFlat.value {
+            if let apt = clean(apt.value) { chunks.append("кв. \(apt)") }
+        }
+        if let ent = clean(entrance.value) { chunks.append("под. \(ent)") }
+        if let code = clean(intercom.value) { chunks.append("дмф. \(code)") }
+        if let fl = clean(floor.value) { chunks.append("этаж \(fl)") }
+        
+        return chunks.joined(separator: ", ")
+    }
+    
+    private func clean(_ text: String) -> String? {
+        let t = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        return t.isEmpty ? nil : t
+    }
+}
