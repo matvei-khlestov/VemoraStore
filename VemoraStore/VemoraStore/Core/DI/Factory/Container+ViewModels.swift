@@ -60,9 +60,6 @@ import FactoryKit
 /// - `phoneInputSheetViewModel` — ввод телефона;
 /// - `commentInputSheetViewModel` — ввод комментария.
 ///
-/// **Отладка (DEBUG)**
-/// - `debugImportViewModel` — импорт данных для тестовой среды.
-///
 /// Расширение входит в модуль **Dependency Injection Layer (ViewModels)**
 /// и обеспечивает слой Presentation необходимыми зависимостями для ViewModel.
 
@@ -310,17 +307,4 @@ extension Container {
             )
         }
     }
-    
-    // MARK: - Debug
-    
-#if DEBUG
-    var debugImportViewModel: Factory<DebugImportViewModelProtocol> {
-        self {
-            DebugImportViewModel(
-                debugImportStorage: self.debugImportStorage(),
-                debugImporter: self.debugImporter()
-            )
-        }
-    }
-#endif
 }

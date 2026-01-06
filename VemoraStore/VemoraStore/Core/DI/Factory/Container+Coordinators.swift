@@ -55,10 +55,6 @@ import UIKit
 /// - `mainCoordinator` — корневой таб-бар;
 /// - `appCoordinator` — стартовый координатор приложения (root flow).
 ///
-/// Особенности режима Debug:
-/// - При `#if DEBUG` регистрируется `debugImportCoordinator` —
-///   координатор для импортов и отладки данных.
-///
 /// Расширение входит в модуль **Dependency Injection Layer (Coordinators)**
 /// и обеспечивает слой Presentation навигацией через единый DI-контейнер.
 
@@ -342,17 +338,4 @@ extension Container {
             )
         }
     }
-    
-    // MARK: - Debug
-    
-#if DEBUG
-    var debugImportCoordinator: ParameterFactory<UINavigationController, DebugCoordinatingProtocol> {
-        self { navigation in
-            DebugImportCoordinator(
-                navigation: navigation,
-                viewModelFactory: self.viewModelFactory()
-            )
-        }
-    }
-#endif
 }

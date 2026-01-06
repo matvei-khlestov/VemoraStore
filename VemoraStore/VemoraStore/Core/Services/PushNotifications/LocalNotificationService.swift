@@ -33,7 +33,6 @@ public final class LocalNotificationService: NSObject, LocalNotifyingProtocol {
     private let center: UNUserNotificationCenter
     private let calendar: Calendar
     
-    // DI-friendly init
     public init(center: UNUserNotificationCenter = .current(),
                 calendar: Calendar = .current) {
         self.center = center
@@ -69,7 +68,7 @@ public final class LocalNotificationService: NSObject, LocalNotifyingProtocol {
                          categoryId: String? = nil,
                          userInfo: [AnyHashable: Any]? = nil,
                          unique: Bool = true) -> String {
-        // не в прошлое
+        
         let fireDate = max(date, Date().addingTimeInterval(1))
         
         let comps = calendar.dateComponents(

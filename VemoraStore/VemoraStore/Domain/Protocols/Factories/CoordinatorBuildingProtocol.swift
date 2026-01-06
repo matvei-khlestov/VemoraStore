@@ -187,13 +187,4 @@ protocol CoordinatorBuildingProtocol {
     func makeAppCoordinator(
         navigation: UINavigationController
     ) -> AppCoordinatingProtocol
-    
-    // MARK: - Debug
-    
-#if DEBUG
-    /// Создаёт координатор отладочного модуля.
-    func makeDebugCoordinator(
-        navigation: UINavigationController
-    ) -> DebugCoordinatingProtocol
-#endif
 }
