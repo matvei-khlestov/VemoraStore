@@ -114,11 +114,4 @@ protocol ViewModelBuildingProtocol {
     
     /// Создаёт ViewModel для выбора местоположения на карте.
     func makeMapPickerViewModel() -> MapPickerViewModelProtocol
-    
-    // MARK: - Debug
-    
-#if DEBUG
-    /// Создаёт ViewModel для отладки импорта данных.
-    func makeDebugImortViewModel() -> DebugImportViewModelProtocol
-#endif
 }

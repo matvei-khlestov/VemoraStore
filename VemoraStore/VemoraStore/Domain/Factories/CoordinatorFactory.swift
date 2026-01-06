@@ -222,14 +222,4 @@ final class CoordinatorFactory: CoordinatorBuildingProtocol {
     ) -> AppCoordinatingProtocol {
         container.appCoordinator(navigation)
     }
-    
-    // MARK: - Debug
-    
-#if DEBUG
-    func makeDebugCoordinator(
-        navigation: UINavigationController
-    ) -> DebugCoordinatingProtocol {
-        container.debugImportCoordinator(navigation)
-    }
-#endif
 }

@@ -138,12 +138,4 @@ final class ViewModelFactory: ViewModelBuildingProtocol {
     func makeMapPickerViewModel() -> MapPickerViewModelProtocol {
         container.mapPickerViewModel()
     }
-    
-    // MARK: - Debug
-    
-#if DEBUG
-    func makeDebugImortViewModel() -> DebugImportViewModelProtocol {
-        container.debugImportViewModel()
-    }
-#endif
 }
