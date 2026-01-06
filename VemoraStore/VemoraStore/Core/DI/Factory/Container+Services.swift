@@ -39,17 +39,10 @@ import FactoryKit
 /// **Уведомления**
 /// - `localNotificationService` — локальные уведомления (push категории и напоминания).
 ///
-/// **Отладка (DEBUG)**
-/// - `debugImportStorage` — хранилище данных для UI Debug режима;
-/// - `checksumStorage` — механизм контроля целостности отладочных данных;
-/// - `debugImportService` — сервис импорта отладочных сущностей;
-/// - `debugImporter` — интерфейс для выполнения импортов в тестовой среде.
-///
 /// Особенности:
 /// - Все критичные сервисы зарегистрированы как `.singleton` для гарантии единого экземпляра;
 /// - Используются протоколы (`AuthServiceProtocol`, `PasswordResetServiceProtocol`,
 ///   `KeychainServiceProtocol`) для слабой связности и удобного мокинга;
-/// - Поддерживает DEBUG-конфигурацию без влияния на production окружение.
 ///
 /// Расширение входит в модуль **Dependency Injection Layer (Services)**
 /// и обеспечивает все слои приложения базовыми системными сервисами.
@@ -121,39 +114,4 @@ extension Container {
             LocalNotificationService.shared
         }.singleton
     }
-    
-    // MARK: - Debug
-    
-#if DEBUG
-    var debugImportStorage: Factory<DebugImportStoringProtocol> {
-        self {
-            DebugImportStorage.shared
-        }
-    }
-    
-    var checksumStorage: ParameterFactory<String, ChecksumStoringProtocol> {
-        self { namespace in
-            ChecksumStorage(namespace: namespace)
-        }
-    }
-    
-    var debugImportService: Factory<DebugImportServicingProtocol> {
-        self { [unowned self] in
-            DebugImportService(
-                checksumStoreFactory: { namespace in
-                    self.checksumStorage(namespace)
-                }
-            )
-        }.singleton
-    }
-    
-    var debugImporter: Factory<DebugImportingProtocol> {
-        self { [unowned self] in
-            DebugImporter(
-                debugImportService: self.debugImportService(),
-                debugImportStorage: self.debugImportStorage()
-            )
-        }.singleton
-    }
-#endif
 }

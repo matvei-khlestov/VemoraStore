@@ -20,7 +20,6 @@ import UIKit
 ///   и `AuthServiceProtocol` для построения зависимостей;
 /// - автоматически запускает `SessionManager` при инициализации;
 /// - скрывает или показывает навигационную панель в зависимости от контекста;
-/// - поддерживает отладочный импорт данных при сборке `DEBUG`.
 
 final class AppCoordinator: AppCoordinatingProtocol {
     
@@ -136,15 +135,4 @@ final class AppCoordinator: AppCoordinatingProtocol {
         
         success.start()
     }
-    
-#if DEBUG
-    private func showDebugImport() {
-        let debug = coordinatorFactory.makeDebugCoordinator(navigation: navigation)
-        add(debug)
-        debug.onFinish = { [weak self, weak debug] in
-            if let debug { self?.remove(debug) }
-        }
-        debug.start()
-    }
-#endif
 }

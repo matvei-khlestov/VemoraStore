@@ -288,33 +288,9 @@
 		A08551F02E8440B2004633CA /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = A08551EF2E8440B2004633CA /* FirebaseMessaging */; };
 		A08551F22E8440BF004633CA /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = A08551F12E8440BF004633CA /* FirebaseCrashlytics */; };
 		A08551F42E8440F3004633CA /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = A08551F32E8440F3004633CA /* FirebaseCore */; };
-		A08551F72E85F21B004633CA /* brands.json in Resources */ = {isa = PBXBuildFile; fileRef = A08551F62E85F21B004633CA /* brands.json */; };
-		A08551F92E85F228004633CA /* categories.json in Resources */ = {isa = PBXBuildFile; fileRef = A08551F82E85F228004633CA /* categories.json */; };
-		A08551FB2E85F232004633CA /* products.json in Resources */ = {isa = PBXBuildFile; fileRef = A08551FA2E85F232004633CA /* products.json */; };
-		A08551FE2E85F2A8004633CA /* DebugImportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08551FD2E85F2A8004633CA /* DebugImportService.swift */; };
-		A08552012E860892004633CA /* DebugImporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552002E860892004633CA /* DebugImporter.swift */; };
-		A08552062E860C0E004633CA /* DebugImportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552052E860C0E004633CA /* DebugImportViewModel.swift */; };
-		A08552082E860C9F004633CA /* DebugImportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552072E860C9F004633CA /* DebugImportViewController.swift */; };
-		A085520A2E86216D004633CA /* DebugImportStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552092E86216D004633CA /* DebugImportStorage.swift */; };
-		A085520C2E862BE2004633CA /* ChecksumStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085520B2E862BE2004633CA /* ChecksumStorage.swift */; };
-		A085520E2E862C1B004633CA /* SHA256.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085520D2E862C1B004633CA /* SHA256.swift */; };
 		A08552112E867031004633CA /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552102E867031004633CA /* Product.swift */; };
 		A08552132E8670D0004633CA /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552122E8670D0004633CA /* Category.swift */; };
 		A08552172E867177004633CA /* Brand.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552162E867177004633CA /* Brand.swift */; };
-		A08552192E8671E1004633CA /* ImportError.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552182E8671E1004633CA /* ImportError.swift */; };
-		A085521B2E867318004633CA /* DryRunReport.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085521A2E867318004633CA /* DryRunReport.swift */; };
-		A085521D2E86755A004633CA /* ImportOutcome.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085521C2E86755A004633CA /* ImportOutcome.swift */; };
-		A085521F2E867BA5004633CA /* SectionWriteResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085521E2E867BA5004633CA /* SectionWriteResult.swift */; };
-		A08552212E871B6B004633CA /* SeedConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552202E871B6B004633CA /* SeedConfig.swift */; };
-		A08552232E872CCF004633CA /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552222E872CCF004633CA /* State.swift */; };
-		A08552252E872E64004633CA /* DebugImportStoringProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552242E872E64004633CA /* DebugImportStoringProtocol.swift */; };
-		A08552272E8741AA004633CA /* ChecksumStoringProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552262E8741AA004633CA /* ChecksumStoringProtocol.swift */; };
-		A08552292E87469F004633CA /* DebugImportServicingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552282E87469F004633CA /* DebugImportServicingProtocol.swift */; };
-		A085522B2E875149004633CA /* DebugImportingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085522A2E875149004633CA /* DebugImportingProtocol.swift */; };
-		A085522D2E875614004633CA /* DebugImportViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085522C2E875614004633CA /* DebugImportViewModelProtocol.swift */; };
-		A085522F2E875EBF004633CA /* DebugImportCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085522E2E875EBF004633CA /* DebugImportCoordinator.swift */; };
-		A08552332E875FAB004633CA /* DebugCoordinatingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552322E875FAB004633CA /* DebugCoordinatingProtocol.swift */; };
-		A08552352E879A6C004633CA /* PreparedInputs.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552342E879A6C004633CA /* PreparedInputs.swift */; };
 		A08552392E886F2E004633CA /* AddToCartButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552382E886F2E004633CA /* AddToCartButton.swift */; };
 		A085523B2E8877B5004633CA /* FavoriteButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085523A2E8877B5004633CA /* FavoriteButton.swift */; };
 		A08552432E88AD7A004633CA /* UIStackView+ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552422E88AD7A004633CA /* UIStackView+ext.swift */; };
@@ -705,33 +681,9 @@
 		A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPhoneCoordinator.swift; sourceTree = "<group>"; };
 		A08551E02E838139004633CA /* BaseEditFieldViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseEditFieldViewController.swift; sourceTree = "<group>"; };
 		A08551E22E838493004633CA /* BaseEditFieldViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseEditFieldViewModelProtocol.swift; sourceTree = "<group>"; };
-		A08551F62E85F21B004633CA /* brands.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = brands.json; sourceTree = "<group>"; };
-		A08551F82E85F228004633CA /* categories.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = categories.json; sourceTree = "<group>"; };
-		A08551FA2E85F232004633CA /* products.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = products.json; sourceTree = "<group>"; };
-		A08551FD2E85F2A8004633CA /* DebugImportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportService.swift; sourceTree = "<group>"; };
-		A08552002E860892004633CA /* DebugImporter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImporter.swift; sourceTree = "<group>"; };
-		A08552052E860C0E004633CA /* DebugImportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportViewModel.swift; sourceTree = "<group>"; };
-		A08552072E860C9F004633CA /* DebugImportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportViewController.swift; sourceTree = "<group>"; };
-		A08552092E86216D004633CA /* DebugImportStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportStorage.swift; sourceTree = "<group>"; };
-		A085520B2E862BE2004633CA /* ChecksumStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecksumStorage.swift; sourceTree = "<group>"; };
-		A085520D2E862C1B004633CA /* SHA256.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SHA256.swift; sourceTree = "<group>"; };
 		A08552102E867031004633CA /* Product.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Product.swift; sourceTree = "<group>"; };
 		A08552122E8670D0004633CA /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		A08552162E867177004633CA /* Brand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Brand.swift; sourceTree = "<group>"; };
-		A08552182E8671E1004633CA /* ImportError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportError.swift; sourceTree = "<group>"; };
-		A085521A2E867318004633CA /* DryRunReport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DryRunReport.swift; sourceTree = "<group>"; };
-		A085521C2E86755A004633CA /* ImportOutcome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportOutcome.swift; sourceTree = "<group>"; };
-		A085521E2E867BA5004633CA /* SectionWriteResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SectionWriteResult.swift; sourceTree = "<group>"; };
-		A08552202E871B6B004633CA /* SeedConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeedConfig.swift; sourceTree = "<group>"; };
-		A08552222E872CCF004633CA /* State.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = State.swift; sourceTree = "<group>"; };
-		A08552242E872E64004633CA /* DebugImportStoringProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportStoringProtocol.swift; sourceTree = "<group>"; };
-		A08552262E8741AA004633CA /* ChecksumStoringProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChecksumStoringProtocol.swift; sourceTree = "<group>"; };
-		A08552282E87469F004633CA /* DebugImportServicingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportServicingProtocol.swift; sourceTree = "<group>"; };
-		A085522A2E875149004633CA /* DebugImportingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportingProtocol.swift; sourceTree = "<group>"; };
-		A085522C2E875614004633CA /* DebugImportViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportViewModelProtocol.swift; sourceTree = "<group>"; };
-		A085522E2E875EBF004633CA /* DebugImportCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugImportCoordinator.swift; sourceTree = "<group>"; };
-		A08552322E875FAB004633CA /* DebugCoordinatingProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugCoordinatingProtocol.swift; sourceTree = "<group>"; };
-		A08552342E879A6C004633CA /* PreparedInputs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreparedInputs.swift; sourceTree = "<group>"; };
 		A08552382E886F2E004633CA /* AddToCartButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddToCartButton.swift; sourceTree = "<group>"; };
 		A085523A2E8877B5004633CA /* FavoriteButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavoriteButton.swift; sourceTree = "<group>"; };
 		A08552422E88AD7A004633CA /* UIStackView+ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+ext.swift"; sourceTree = "<group>"; };
@@ -1181,15 +1133,6 @@
 			path = Publishers;
 			sourceTree = "<group>";
 		};
-		A03AC86A2E912E7A00AAEE87 /* Import */ = {
-			isa = PBXGroup;
-			children = (
-				A08552092E86216D004633CA /* DebugImportStorage.swift */,
-				A085520B2E862BE2004633CA /* ChecksumStorage.swift */,
-			);
-			path = Import;
-			sourceTree = "<group>";
-		};
 		A03AC87D2E93CF8700AAEE87 /* Transformers */ = {
 			isa = PBXGroup;
 			children = (
@@ -1378,7 +1321,6 @@
 				A03AC84B2E8FAC8600AAEE87 /* Repositories */,
 				A03AC8212E8E38ED00AAEE87 /* Remote */,
 				A0854FED2E61224B004633CA /* Local */,
-				A08551FF2E860851004633CA /* SeedData */,
 				A08551A02E833782004633CA /* FileManager */,
 				A0854FF22E61229E004633CA /* Location */,
 				A0F612FD2E9EB1E100EC0459 /* Adapters */,
@@ -1490,7 +1432,6 @@
 				A08551C42E83692E004633CA /* EditNameCoordinator.swift */,
 				A08551CF2E837782004633CA /* EditEmailCoordinator.swift */,
 				A08551DA2E837CDC004633CA /* EditPhoneCoordinator.swift */,
-				A085522E2E875EBF004633CA /* DebugImportCoordinator.swift */,
 			);
 			path = Coordinators;
 			sourceTree = "<group>";
@@ -1498,7 +1439,6 @@
 		A08550172E6125A4004633CA /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				A08552042E860BBC004633CA /* DebugImport */,
 				A08550182E6125CC004633CA /* Auth */,
 				A08550EF2E7AB680004633CA /* PrivacyPolicy */,
 				A08550E52E79F724004633CA /* ContactUs */,
@@ -1603,7 +1543,6 @@
 			isa = PBXGroup;
 			children = (
 				A0F612CE2E9E639500EC0459 /* Checkout */,
-				A03AC86A2E912E7A00AAEE87 /* Import */,
 			);
 			path = UserDefaults;
 			sourceTree = "<group>";
@@ -1839,10 +1778,6 @@
 				A08550BD2E789D27004633CA /* AddressSearchServiceProtocol.swift */,
 				A08550D22E79BA69004633CA /* GeocodingServiceProtocol.swift */,
 				A08551A12E8337A2004633CA /* AvatarStorageServiceProtocol.swift */,
-				A08552242E872E64004633CA /* DebugImportStoringProtocol.swift */,
-				A08552262E8741AA004633CA /* ChecksumStoringProtocol.swift */,
-				A08552282E87469F004633CA /* DebugImportServicingProtocol.swift */,
-				A085522A2E875149004633CA /* DebugImportingProtocol.swift */,
 				A03AC80F2E8E277800AAEE87 /* AuthSessionStoringProtocol.swift */,
 				A03AC8182E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift */,
 				A0F6130B2E9FC48000EC0459 /* LocalNotifyingProtocol.swift */,
@@ -1882,7 +1817,6 @@
 				A08551C72E837673004633CA /* EditEmailViewModelProtocol.swift */,
 				A08551D12E837C01004633CA /* EditPhoneViewModelProtocol.swift */,
 				A08551E22E838493004633CA /* BaseEditFieldViewModelProtocol.swift */,
-				A085522C2E875614004633CA /* DebugImportViewModelProtocol.swift */,
 				A03AC7EB2E8CE2EA00AAEE87 /* PhoneInputSheetViewModelProtocol.swift */,
 				A03AC7F52E8D015B00AAEE87 /* CommentInputSheetViewModelProtocol.swift */,
 				A03AC8C52E94FF1F00AAEE87 /* CategoryProductsViewModelProtocol.swift */,
@@ -2110,7 +2044,6 @@
 				A08551C22E836900004633CA /* EditNameCoordinatingProtocol.swift */,
 				A08551CD2E837733004633CA /* EditEmailCoordinatingProtocol.swift */,
 				A08551D82E837CBA004633CA /* EditPhoneCoordinatingProtocol.swift */,
-				A08552322E875FAB004633CA /* DebugCoordinatingProtocol.swift */,
 				A03AC8CB2E95022100AAEE87 /* CategoryProductsCoordinatingProtocol.swift */,
 				A03AC8EA2E9847A200AAEE87 /* CatalogFilterCoordinatingProtocol.swift */,
 			);
@@ -2215,53 +2148,8 @@
 			isa = PBXGroup;
 			children = (
 				A0F6130D2E9FC4DD00EC0459 /* PushNotifications */,
-				A085520F2E866EC9004633CA /* DebugImport */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		A08551FF2E860851004633CA /* SeedData */ = {
-			isa = PBXGroup;
-			children = (
-				A08552032E8608EC004633CA /* JSON */,
-				A08552002E860892004633CA /* DebugImporter.swift */,
-				A08552202E871B6B004633CA /* SeedConfig.swift */,
-			);
-			path = SeedData;
-			sourceTree = "<group>";
-		};
-		A08552032E8608EC004633CA /* JSON */ = {
-			isa = PBXGroup;
-			children = (
-				A08551F62E85F21B004633CA /* brands.json */,
-				A08551F82E85F228004633CA /* categories.json */,
-				A08551FA2E85F232004633CA /* products.json */,
-			);
-			path = JSON;
-			sourceTree = "<group>";
-		};
-		A08552042E860BBC004633CA /* DebugImport */ = {
-			isa = PBXGroup;
-			children = (
-				A08552222E872CCF004633CA /* State.swift */,
-				A08552052E860C0E004633CA /* DebugImportViewModel.swift */,
-				A08552072E860C9F004633CA /* DebugImportViewController.swift */,
-			);
-			path = DebugImport;
-			sourceTree = "<group>";
-		};
-		A085520F2E866EC9004633CA /* DebugImport */ = {
-			isa = PBXGroup;
-			children = (
-				A08551FD2E85F2A8004633CA /* DebugImportService.swift */,
-				A085521E2E867BA5004633CA /* SectionWriteResult.swift */,
-				A085521A2E867318004633CA /* DryRunReport.swift */,
-				A085521C2E86755A004633CA /* ImportOutcome.swift */,
-				A08552342E879A6C004633CA /* PreparedInputs.swift */,
-				A08552182E8671E1004633CA /* ImportError.swift */,
-				A085520D2E862C1B004633CA /* SHA256.swift */,
-			);
-			path = DebugImport;
 			sourceTree = "<group>";
 		};
 		A08552412E88AD3C004633CA /* UIStackView+ext */ = {
@@ -2691,7 +2579,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1640;
-				LastUpgradeCheck = 1640;
+				LastUpgradeCheck = 2620;
 				TargetAttributes = {
 					A0854F7C2E6112A3004633CA = {
 						CreatedOnToolsVersion = 16.4;
@@ -2738,10 +2626,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A0854FC02E611307004633CA /* Assets.xcassets in Resources */,
-				A08551F72E85F21B004633CA /* brands.json in Resources */,
 				A0854FC22E611307004633CA /* LaunchScreen.storyboard in Resources */,
-				A08551FB2E85F232004633CA /* products.json in Resources */,
-				A08551F92E85F228004633CA /* categories.json in Resources */,
 				A06E21E42F00748000333318 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2773,7 +2658,6 @@
 				A08551402E8094A8004633CA /* PasswordResetServiceProtocol.swift in Sources */,
 				A08550EB2E7A056D004633CA /* ProfileGuestRow.swift in Sources */,
 				A08550D92E79BB7E004633CA /* MapPickerViewModel.swift in Sources */,
-				A085522B2E875149004633CA /* DebugImportingProtocol.swift in Sources */,
 				A085510B2E7C4B0B004633CA /* OrdersViewController.swift in Sources */,
 				A08551422E8094DF004633CA /* FirebasePasswordResetService.swift in Sources */,
 				A0854FE62E6121E3004633CA /* FirebaseAuthService.swift in Sources */,
@@ -2794,7 +2678,6 @@
 				A08551B92E835BA9004633CA /* PaddedFieldState.swift in Sources */,
 				A0F613022E9EB2BD00EC0459 /* KeychainStore.swift in Sources */,
 				A08550F12E7AB69F004633CA /* PrivacyPolicyText.swift in Sources */,
-				A085520E2E862C1B004633CA /* SHA256.swift in Sources */,
 				A03AC81B2E8E2D7700AAEE87 /* KeychainKey.swift in Sources */,
 				A085525D2E893AE2004633CA /* ProfileRowCell.swift in Sources */,
 				A03AC8CC2E95022100AAEE87 /* CategoryProductsCoordinatingProtocol.swift in Sources */,
@@ -2818,7 +2701,6 @@
 				A08551C12E8368A0004633CA /* EditNameViewController.swift in Sources */,
 				A0F6130A2E9ED29F00EC0459 /* UIImageView+Kingfisher.swift in Sources */,
 				A08550C02E789FA8004633CA /* AddressFormattingProtocol.swift in Sources */,
-				A08552252E872E64004633CA /* DebugImportStoringProtocol.swift in Sources */,
 				A03AC8242E8E391600AAEE87 /* ProfileCollection.swift in Sources */,
 				A0F612A42E9C288900EC0459 /* FavoritesFRCPublisher.swift in Sources */,
 				A08550C22E78A407004633CA /* DeliveryDetailsViewModel.swift in Sources */,
@@ -2831,14 +2713,12 @@
 				A0854FC42E611307004633CA /* AppDelegate.swift in Sources */,
 				A03AC8742E93C75D00AAEE87 /* CatalogCollectingProtocol.swift in Sources */,
 				A085516A2E81D024004633CA /* FavoritesViewModelProtocol.swift in Sources */,
-				A08552082E860C9F004633CA /* DebugImportViewController.swift in Sources */,
 				A08550AB2E782F1A004633CA /* PaddedField.swift in Sources */,
 				A03AC8ED2E9847C400AAEE87 /* CatalogFilterCoordinator.swift in Sources */,
 				A08550712E694489004633CA /* CatalogSectionHeader.swift in Sources */,
 				A03B7E212E9ACAA600AFCEA1 /* CartItem.swift in Sources */,
 				A085514F2E80A54F004633CA /* LabelLinkRow.swift in Sources */,
 				A0F612B02E9C2A5700EC0459 /* DefaultFavoritesRepository.swift in Sources */,
-				A085520C2E862BE2004633CA /* ChecksumStorage.swift in Sources */,
 				A03AC8782E93C86300AAEE87 /* CategoryDTO+FirebaseMapper.swift in Sources */,
 				A08550932E7416B8004633CA /* ChangePhoneCell.swift in Sources */,
 				A08552652E8A179A004633CA /* AboutTexts.swift in Sources */,
@@ -2852,7 +2732,6 @@
 				A03AC8A72E93EAB500AAEE87 /* CDProfile+CoreDataProperties.swift in Sources */,
 				A03AC7F12E8CE3CC00AAEE87 /* PhoneInputSheetViewController.swift in Sources */,
 				A085519B2E8227E6004633CA /* MainCoordinatingProtocol.swift in Sources */,
-				A085521F2E867BA5004633CA /* SectionWriteResult.swift in Sources */,
 				A0F612882E9AD84000EC0459 /* CartCollectingProtocol.swift in Sources */,
 				A03AC8932E93DC6200AAEE87 /* CDCategory+Mapper.swift in Sources */,
 				A085507E2E6BF434004633CA /* CartCell.swift in Sources */,
@@ -2923,9 +2802,7 @@
 				A0F612AA2E9C295C00EC0459 /* FavoritesCollectingProtocol.swift in Sources */,
 				A0F6130C2E9FC48000EC0459 /* LocalNotifyingProtocol.swift in Sources */,
 				A03AC8F32E992F7900AAEE87 /* FilterBottomBar.swift in Sources */,
-				A08552272E8741AA004633CA /* ChecksumStoringProtocol.swift in Sources */,
 				A08551712E81F06E004633CA /* ViewModelFactory.swift in Sources */,
-				A085521B2E867318004633CA /* DryRunReport.swift in Sources */,
 				A03AC87A2E93CB3300AAEE87 /* CatalogRepository.swift in Sources */,
 				A08550532E613F5A004633CA /* Container+Utils.swift in Sources */,
 				A08551C32E836900004633CA /* EditNameCoordinatingProtocol.swift in Sources */,
@@ -2933,7 +2810,6 @@
 				A08550F52E7AB7C1004633CA /* PrivacyPolicyCoordinator.swift in Sources */,
 				A03AC88F2E93D9A200AAEE87 /* ProductsFRCPublisher.swift in Sources */,
 				A057D2F92EA17A8C006D8BE8 /* UITestBootstrap.swift in Sources */,
-				A085521D2E86755A004633CA /* ImportOutcome.swift in Sources */,
 				A08550952E741943004633CA /* OrderCommentCell.swift in Sources */,
 				A08550422E612AEA004633CA /* MapPickerViewController.swift in Sources */,
 				A06E210A2EA28A7200333318 /* CartDTO.swift in Sources */,
@@ -2946,7 +2822,6 @@
 				A08551D02E837782004633CA /* EditEmailCoordinator.swift in Sources */,
 				A0F612982E9C263E00EC0459 /* FavoriteItem.swift in Sources */,
 				A03AC7FD2E8D023700AAEE87 /* CommentInputSheetViewController.swift in Sources */,
-				A08552012E860892004633CA /* DebugImporter.swift in Sources */,
 				A03AC8912E93DBFC00AAEE87 /* CDProduct+Mapper.swift in Sources */,
 				A08552712E8A4699004633CA /* EditProfileRowCell.swift in Sources */,
 				A03AC8AE2E93EE4200AAEE87 /* CDCategory+CoreDataClass.swift in Sources */,
@@ -2957,7 +2832,6 @@
 				A03AC8E12E98116200AAEE87 /* CDBrand+CoreDataProperties.swift in Sources */,
 				A08551B32E835AF3004633CA /* FormTextFieldKind.swift in Sources */,
 				A08551492E809747004633CA /* ResetPasswordViewController.swift in Sources */,
-				A08552292E87469F004633CA /* DebugImportServicingProtocol.swift in Sources */,
 				A085518F2E821AEF004633CA /* ContactUsCoordinatingProtocol.swift in Sources */,
 				A0F613072E9EBB7E00EC0459 /* PriceFormatter.swift in Sources */,
 				A085501F2E612637004633CA /* CatalogViewController.swift in Sources */,
@@ -2970,11 +2844,9 @@
 				A03AC8202E8E389800AAEE87 /* ProfileCollectingProtocol.swift in Sources */,
 				A0F612B32E9C38B000EC0459 /* CDFavoriteItem+CoreDataClass.swift in Sources */,
 				A0F612B42E9C38B000EC0459 /* CDFavoriteItem+CoreDataProperties.swift in Sources */,
-				A08551FE2E85F2A8004633CA /* DebugImportService.swift in Sources */,
 				A03AC88D2E93D96A00AAEE87 /* CoreDataCatalogStore.swift in Sources */,
 				A08550F32E7AB6E0004633CA /* PrivacyPolicyViewController.swift in Sources */,
 				A08550692E64005F004633CA /* CartCoordinator.swift in Sources */,
-				A08552232E872CCF004633CA /* State.swift in Sources */,
 				A08551322E7DE3B4004633CA /* UITextField+ext.swift in Sources */,
 				A08551A42E8337DB004633CA /* AvatarStorageService.swift in Sources */,
 				A0F612C82E9E374300EC0459 /* ProductDTO.swift in Sources */,
@@ -3006,7 +2878,6 @@
 				A08551092E7C4A95004633CA /* OrderItemCell.swift in Sources */,
 				A0F612AC2E9C299D00EC0459 /* FavoritesCollection.swift in Sources */,
 				A08550E72E79F73B004633CA /* ContactUsViewController.swift in Sources */,
-				A08552352E879A6C004633CA /* PreparedInputs.swift in Sources */,
 				A085514B2E809897004633CA /* ResetPasswordCoordinator.swift in Sources */,
 				A08551AD2E833B6A004633CA /* EditProfileCoordinator.swift in Sources */,
 				A08550F82E7AD084004633CA /* ProfileUserViewController.swift in Sources */,
@@ -3016,14 +2887,12 @@
 				A085507B2E6ADDBB004633CA /* UIView+Animations.swift in Sources */,
 				A03AC7FB2E8D020200AAEE87 /* CommentInputSheetViewModel.swift in Sources */,
 				A08551242E7D9440004633CA /* ValidationResult.swift in Sources */,
-				A085520A2E86216D004633CA /* DebugImportStorage.swift in Sources */,
 				A03AC8192E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift in Sources */,
 				A08550402E612ADB004633CA /* CheckoutViewModel.swift in Sources */,
 				A0F612DC2E9E764000EC0459 /* CDOrder+Mapper.swift in Sources */,
 				A08550FC2E7AD229004633CA /* ProfileUserCoordinator.swift in Sources */,
 				A08550A02E748A11004633CA /* OrderSuccessViewController.swift in Sources */,
 				A085512E2E7DE2B1004633CA /* UIButton+ext.swift in Sources */,
-				A085522F2E875EBF004633CA /* DebugImportCoordinator.swift in Sources */,
 				A03AC8472E8FAA4F00AAEE87 /* CoreDataStack.swift in Sources */,
 				A0F612F02E9E891800EC0459 /* OrdersFRCPublisher.swift in Sources */,
 				A03AC8DB2E980BC200AAEE87 /* BrandDTO+FirebaseMapper.swift in Sources */,
@@ -3037,9 +2906,7 @@
 				A0F612B92E9D869000EC0459 /* SessionManaging.swift in Sources */,
 				A0F612AE2E9C2A2D00EC0459 /* FavoritesRepository.swift in Sources */,
 				A03AC84F2E8FAF2A00AAEE87 /* Container+Repositories.swift in Sources */,
-				A08552062E860C0E004633CA /* DebugImportViewModel.swift in Sources */,
 				A03AC82A2E8E3F4E00AAEE87 /* Container+Collections.swift in Sources */,
-				A085522D2E875614004633CA /* DebugImportViewModelProtocol.swift in Sources */,
 				A08550672E63F7EC004633CA /* FavoritesCoordinator.swift in Sources */,
 				A08551DB2E837CDC004633CA /* EditPhoneCoordinator.swift in Sources */,
 				A08551532E8182AC004633CA /* UIAlertController+ext.swift in Sources */,
@@ -3059,13 +2926,11 @@
 				A08550E22E79E1AC004633CA /* AboutViewController.swift in Sources */,
 				A085516E2E81F010004633CA /* ViewModelBuildingProtocol.swift in Sources */,
 				A08551022E7B0A41004633CA /* CheckoutViewModelProtocol.swift in Sources */,
-				A08552332E875FAB004633CA /* DebugCoordinatingProtocol.swift in Sources */,
 				A08550CF2E78C4AC004633CA /* DeliveryAddressFormattingProtocol.swift in Sources */,
 				A03AC8C32E94450500AAEE87 /* CDProduct+CoreDataClass.swift in Sources */,
 				A03AC8C42E94450500AAEE87 /* CDProduct+CoreDataProperties.swift in Sources */,
 				A0F613002E9EB2A400EC0459 /* DefaultsStore.swift in Sources */,
 				A08552112E867031004633CA /* Product.swift in Sources */,
-				A08552192E8671E1004633CA /* ImportError.swift in Sources */,
 				A0F6127A2E9AD02100EC0459 /* CDCartItem+Mapper.swift in Sources */,
 				A085517A2E81FDCB004633CA /* ProductDetailsCoordinatingProtocol.swift in Sources */,
 				A03AC8DD2E98107800AAEE87 /* CDBrand+Mapper.swift in Sources */,
@@ -3095,7 +2960,6 @@
 				A08550232E61265E004633CA /* ProductCell.swift in Sources */,
 				A03AC7F42E8CFA4A00AAEE87 /* FormTextView.swift in Sources */,
 				A08551472E809712004633CA /* ResetPasswordViewModel.swift in Sources */,
-				A08552212E871B6B004633CA /* SeedConfig.swift in Sources */,
 				A08550E92E79F7A4004633CA /* ContactUsCoordinator.swift in Sources */,
 				A08551892E821536004633CA /* CartCoordinatingProtocol.swift in Sources */,
 				A08551742E81F2EC004633CA /* CatalogCoordinatingProtocol.swift in Sources */,
@@ -3321,6 +3185,7 @@
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -3378,6 +3243,7 @@
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				VALIDATE_PRODUCT = YES;
 			};
