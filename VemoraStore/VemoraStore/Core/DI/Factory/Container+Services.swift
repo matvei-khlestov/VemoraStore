@@ -114,4 +114,12 @@ extension Container {
             LocalNotificationService.shared
         }.singleton
     }
+    
+    // MARK: - Analytics
+    
+    var analyticsService: Factory<AnalyticsServiceProtocol> {
+        self {
+            FirebaseAnalyticsService()
+        }.singleton
+    }
 }

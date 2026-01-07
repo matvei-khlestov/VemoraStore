@@ -285,7 +285,6 @@
 		A08551E82E843FFB004633CA /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = A08551E72E843FFB004633CA /* FirebaseAuth */; };
 		A08551EC2E843FFB004633CA /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = A08551EB2E843FFB004633CA /* FirebaseFirestore */; };
 		A08551EE2E843FFB004633CA /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = A08551ED2E843FFB004633CA /* FirebaseStorage */; };
-		A08551F02E8440B2004633CA /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = A08551EF2E8440B2004633CA /* FirebaseMessaging */; };
 		A08551F22E8440BF004633CA /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = A08551F12E8440BF004633CA /* FirebaseCrashlytics */; };
 		A08551F42E8440F3004633CA /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = A08551F32E8440F3004633CA /* FirebaseCore */; };
 		A08552112E867031004633CA /* Product.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552102E867031004633CA /* Product.swift */; };
@@ -303,6 +302,10 @@
 		A085526C2E8A20B9004633CA /* ContactRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085526B2E8A20B9004633CA /* ContactRowCell.swift */; };
 		A08552712E8A4699004633CA /* EditProfileRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552702E8A4699004633CA /* EditProfileRowCell.swift */; };
 		A08552762E8B4E3D004633CA /* AddressSuggestionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552752E8B4E3D004633CA /* AddressSuggestionCell.swift */; };
+		A091BF572F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091BF562F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift */; };
+		A091BF592F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091BF582F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift */; };
+		A091BF5B2F0E3B5500DA4E8B /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091BF5A2F0E3B5500DA4E8B /* AnalyticsEvent.swift */; };
+		A091BF5D2F0E3EB200DA4E8B /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = A091BF5C2F0E3EB200DA4E8B /* FirebaseAnalytics */; };
 		A0E2141D2EA13E1500D1E635 /* SignInUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0E2141C2EA13E1500D1E635 /* SignInUITests.swift */; };
 		A0F612742E9ACBFC00EC0459 /* CartItemDTO+FirebaseMapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F612732E9ACBFC00EC0459 /* CartItemDTO+FirebaseMapper.swift */; };
 		A0F6127A2E9AD02100EC0459 /* CDCartItem+Mapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0F612792E9AD02100EC0459 /* CDCartItem+Mapper.swift */; };
@@ -696,6 +699,9 @@
 		A085526B2E8A20B9004633CA /* ContactRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactRowCell.swift; sourceTree = "<group>"; };
 		A08552702E8A4699004633CA /* EditProfileRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRowCell.swift; sourceTree = "<group>"; };
 		A08552752E8B4E3D004633CA /* AddressSuggestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSuggestionCell.swift; sourceTree = "<group>"; };
+		A091BF562F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalyticsService.swift; sourceTree = "<group>"; };
+		A091BF582F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsServiceProtocol.swift; sourceTree = "<group>"; };
+		A091BF5A2F0E3B5500DA4E8B /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
 		A0E2141C2EA13E1500D1E635 /* SignInUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInUITests.swift; sourceTree = "<group>"; };
 		A0F612732E9ACBFC00EC0459 /* CartItemDTO+FirebaseMapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CartItemDTO+FirebaseMapper.swift"; sourceTree = "<group>"; };
 		A0F612792E9AD02100EC0459 /* CDCartItem+Mapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CDCartItem+Mapper.swift"; sourceTree = "<group>"; };
@@ -784,7 +790,7 @@
 			files = (
 				A08551EC2E843FFB004633CA /* FirebaseFirestore in Frameworks */,
 				A085505C2E614D79004633CA /* FactoryKit in Frameworks */,
-				A08551F02E8440B2004633CA /* FirebaseMessaging in Frameworks */,
+				A091BF5D2F0E3EB200DA4E8B /* FirebaseAnalytics in Frameworks */,
 				A08551F22E8440BF004633CA /* FirebaseCrashlytics in Frameworks */,
 				A03AC8B82E9404BE00AAEE87 /* Kingfisher in Frameworks */,
 				A08551F42E8440F3004633CA /* FirebaseCore in Frameworks */,
@@ -1781,6 +1787,7 @@
 				A03AC80F2E8E277800AAEE87 /* AuthSessionStoringProtocol.swift */,
 				A03AC8182E8E2D2B00AAEE87 /* KeychainServiceProtocol.swift */,
 				A0F6130B2E9FC48000EC0459 /* LocalNotifyingProtocol.swift */,
+				A091BF582F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -2147,6 +2154,7 @@
 		A08551FC2E85F26F004633CA /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				A091BF552F0E3A9900DA4E8B /* FirebaseAnalytics */,
 				A0F6130D2E9FC4DD00EC0459 /* PushNotifications */,
 			);
 			path = Services;
@@ -2302,6 +2310,15 @@
 				A08551542E8182C5004633CA /* Alert's */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		A091BF552F0E3A9900DA4E8B /* FirebaseAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				A091BF562F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift */,
+				A091BF5A2F0E3B5500DA4E8B /* AnalyticsEvent.swift */,
+			);
+			path = FirebaseAnalytics;
 			sourceTree = "<group>";
 		};
 		A0E2140E2EA1390F00D1E635 /* UnitTests */ = {
@@ -2522,10 +2539,10 @@
 				A08551E72E843FFB004633CA /* FirebaseAuth */,
 				A08551EB2E843FFB004633CA /* FirebaseFirestore */,
 				A08551ED2E843FFB004633CA /* FirebaseStorage */,
-				A08551EF2E8440B2004633CA /* FirebaseMessaging */,
 				A08551F12E8440BF004633CA /* FirebaseCrashlytics */,
 				A08551F32E8440F3004633CA /* FirebaseCore */,
 				A03AC8B72E9404BE00AAEE87 /* Kingfisher */,
+				A091BF5C2F0E3EB200DA4E8B /* FirebaseAnalytics */,
 			);
 			productName = VemoraStore;
 			productReference = A0854F7D2E6112A3004633CA /* VemoraStore.app */;
@@ -2830,6 +2847,7 @@
 				A03AC8E02E98116200AAEE87 /* CDBrand+CoreDataClass.swift in Sources */,
 				A0F612A22E9C284A00EC0459 /* CDFavoriteItem+Mapper.swift in Sources */,
 				A03AC8E12E98116200AAEE87 /* CDBrand+CoreDataProperties.swift in Sources */,
+				A091BF592F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift in Sources */,
 				A08551B32E835AF3004633CA /* FormTextFieldKind.swift in Sources */,
 				A08551492E809747004633CA /* ResetPasswordViewController.swift in Sources */,
 				A085518F2E821AEF004633CA /* ContactUsCoordinatingProtocol.swift in Sources */,
@@ -2866,6 +2884,7 @@
 				A08550022E612411004633CA /* AuthServiceProtocol.swift in Sources */,
 				A08550512E613F2D004633CA /* Container+ViewModels.swift in Sources */,
 				A085506D2E6400FC004633CA /* CheckoutCoordinator.swift in Sources */,
+				A091BF572F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift in Sources */,
 				A085512C2E7D99F7004633CA /* SignUpViewController.swift in Sources */,
 				A0F6127E2E9AD19800EC0459 /* CartLocalStore.swift in Sources */,
 				A0F612F82E9E8A0800EC0459 /* DefaultOrdersRepository.swift in Sources */,
@@ -2928,6 +2947,7 @@
 				A08551022E7B0A41004633CA /* CheckoutViewModelProtocol.swift in Sources */,
 				A08550CF2E78C4AC004633CA /* DeliveryAddressFormattingProtocol.swift in Sources */,
 				A03AC8C32E94450500AAEE87 /* CDProduct+CoreDataClass.swift in Sources */,
+				A091BF5B2F0E3B5500DA4E8B /* AnalyticsEvent.swift in Sources */,
 				A03AC8C42E94450500AAEE87 /* CDProduct+CoreDataProperties.swift in Sources */,
 				A0F613002E9EB2A400EC0459 /* DefaultsStore.swift in Sources */,
 				A08552112E867031004633CA /* Product.swift in Sources */,
@@ -3431,11 +3451,6 @@
 			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseStorage;
 		};
-		A08551EF2E8440B2004633CA /* FirebaseMessaging */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
-			productName = FirebaseMessaging;
-		};
 		A08551F12E8440BF004633CA /* FirebaseCrashlytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
@@ -3445,6 +3460,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
+		};
+		A091BF5C2F0E3EB200DA4E8B /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A08551E62E843FFB004633CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
 		};
 /* End XCSwiftPackageProductDependency section */
 

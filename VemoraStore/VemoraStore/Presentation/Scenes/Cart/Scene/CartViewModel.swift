@@ -28,6 +28,7 @@ final class CartViewModel: CartViewModelProtocol {
     private let repo: CartRepository
     private let priceFormatter: PriceFormattingProtocol
     private let notifier: LocalNotifyingProtocol
+    private let analytics: AnalyticsServiceProtocol
     
     // MARK: - State
     
@@ -44,11 +45,13 @@ final class CartViewModel: CartViewModelProtocol {
     init(
         cartRepository: CartRepository,
         priceFormatter: PriceFormattingProtocol,
-        notifier: LocalNotifyingProtocol
+        notifier: LocalNotifyingProtocol,
+        analytics: AnalyticsServiceProtocol
     ) {
         self.repo = cartRepository
         self.priceFormatter = priceFormatter
         self.notifier = notifier
+        self.analytics = analytics
         bind()
     }
     
@@ -97,6 +100,7 @@ final class CartViewModel: CartViewModelProtocol {
     
     func setQuantity(for productId: String, quantity: Int) {
         let newQty = max(1, quantity)
+        analytics.log(.cartQuantityChange(productId: productId, quantity: newQty))
         Task {
             try? await repo.setQuantity(
                 productId: productId,
@@ -136,6 +140,7 @@ final class CartViewModel: CartViewModelProtocol {
     }
     
     func removeItem(with productId: String) {
+        analytics.log(.cartRemove(productId: productId))
         Task { try? await repo.remove(productId: productId) }
         if let idx = cartItems.firstIndex(where: {
             $0.productId == productId
@@ -181,6 +186,7 @@ final class CartViewModel: CartViewModelProtocol {
     // MARK: - Checkout Actions
 
     func clearCart() {
+        analytics.log(.cartClear(count: cartItems.count, totalPrice: totalPrice))
         Task {
             try? await repo.clear()
         }
