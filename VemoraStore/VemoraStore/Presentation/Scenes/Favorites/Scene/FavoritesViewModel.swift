@@ -46,6 +46,7 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     private let cart: CartRepository
     private let priceFormatter: PriceFormattingProtocol
     private let notifier: LocalNotifyingProtocol
+    private let analytics: AnalyticsServiceProtocol
     
     // MARK: - State
     
@@ -60,12 +61,14 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
         favoritesRepository: FavoritesRepository,
         cartRepository: CartRepository,
         priceFormatter: PriceFormattingProtocol,
-        notifier: LocalNotifyingProtocol
+        notifier: LocalNotifyingProtocol,
+        analytics: AnalyticsServiceProtocol
     ) {
         self.favorites = favoritesRepository
         self.cart = cartRepository
         self.priceFormatter = priceFormatter
         self.notifier = notifier
+        self.analytics = analytics
         bind()
     }
     
@@ -103,6 +106,9 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     }
     
     func toggleFavorite(id: String) {
+        let isFavoriteNow = favoriteItems.contains { $0.productId == id } == false
+        analytics.log(.favoriteToggle(productId: id, isFavorite: isFavoriteNow))
+        
         Task {
             try? await favorites.toggle(productId: id)
         }
@@ -110,10 +116,12 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     
     func toggleCart(for id: String) {
         if inCartIds.contains(id) {
+            analytics.log(.cartRemove(productId: id))
             Task {
                 try? await cart.remove(productId: id)
             }
         } else {
+            analytics.log(.cartAdd(productId: id, quantity: 1, price: nil))
             Task {
                 try? await cart.add(productId: id, by: 1)
             }
@@ -131,22 +139,25 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
     }
     
     func clearFavorites() {
-        Task { try? await favorites.clear() }
-        favoriteItems.removeAll()            
+        analytics.log(.favoritesClear(count: favoriteItems.count))
+        Task {
+            try? await favorites.clear()
+        }
+        favoriteItems.removeAll()
     }
     
     func formattedPrice(_ price: Double) -> String {
         priceFormatter.format(price: price)
     }
-
+    
     // MARK: - Local Notifications
-
+    
     private func updateFavoritesReminder(favorites: [FavoriteItem], inCartIds: Set<String>) {
         let hasFavorites = !favorites.isEmpty
         let anyFavInCart = favorites.contains { inCartIds.contains($0.productId) }
-
+        
         if hasFavorites && !anyFavInCart {
-            #if DEBUG
+#if DEBUG
             _ = notifier.schedule(
                 after: 10,
                 id: NotificationTemplate.Favorites.id,
@@ -156,14 +167,14 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
                 userInfo: NotificationTemplate.Favorites.userInfo,
                 unique: true
             )
-            #else
+#else
             let now = Date()
             let target = Calendar.current.date(byAdding: .day, value: 1, to: now) ?? now.addingTimeInterval(24*60*60)
             var comps = Calendar.current.dateComponents([.year, .month, .day], from: target)
             comps.hour = 10
             comps.minute = 0
             let date = Calendar.current.date(from: comps) ?? now.addingTimeInterval(24*60*60)
-
+            
             _ = notifier.schedule(
                 id: NotificationTemplate.Favorites.id,
                 title: NotificationTemplate.Favorites.title,
@@ -173,7 +184,7 @@ final class FavoritesViewModel: FavoritesViewModelProtocol {
                 userInfo: NotificationTemplate.Favorites.userInfo,
                 unique: true
             )
-            #endif
+#endif
         } else {
             notifier.cancel(ids: [NotificationTemplate.Favorites.id])
         }

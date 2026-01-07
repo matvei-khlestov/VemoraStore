@@ -32,6 +32,7 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
     private let notifier: LocalNotifyingProtocol
     private var storage: CheckoutStoringProtocol
     private let currentUserId: String
+    private let analytics: AnalyticsServiceProtocol
     
     // MARK: - State
     
@@ -105,7 +106,8 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
         snapshotItems: [CartItem],
         storage: CheckoutStoringProtocol,
         currentUserId: String,
-        notifier: LocalNotifyingProtocol
+        notifier: LocalNotifyingProtocol,
+        analytics: AnalyticsServiceProtocol
     ) {
         self.cartRepository = cartRepository
         self.ordersRepository = ordersRepository
@@ -115,6 +117,7 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
         self.storage = storage
         self.currentUserId = currentUserId
         self.notifier = notifier
+        self.analytics = analytics
         
         switch storage.savedDeliveryMethod {
         case .pickup:   self.deliveryMethod = .pickup
@@ -177,19 +180,28 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
     // MARK: - Intents
     
     func setDeliveryMethod(_ method: DeliveryMethod) {
+        analytics.log(.setDeliveryMethod(method: method == .pickup ? "pickup" : "delivery"))
         deliveryMethod = method
     }
     
     func placeOrder() async throws {
         try validateBeforePlacing()
-
+        
+        let methodString = (deliveryMethod == .pickup) ? "pickup" : "delivery"
+        let total = items.reduce(0.0) { $0 + $1.lineTotal }
+        
+        analytics.log(.placeOrderTap(
+            itemsCount: items.count,
+            totalPrice: total,
+            currency: "PLN",
+            method: methodString
+        ))
+        
         isPlacing = true
-        defer {
-            isPlacing = false
-        }
-
+        defer { isPlacing = false }
+        
         do {
-            _ = try await ordersRepository.createOrderFromCheckout(
+            let orderId = try await ordersRepository.createOrderFromCheckout(
                 userId: currentUserId,
                 items: items,
                 deliveryMethod: deliveryMethod,
@@ -197,8 +209,21 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
                 phoneE164: receiverPhoneE164,
                 comment: orderCommentText
             )
+            
+            analytics.log(.orderCreated(
+                orderId: orderId.isEmpty ? nil : orderId,
+                itemsCount: items.count,
+                totalPrice: total,
+                currency: "PLN",
+                method: methodString
+            ))
+            
             schedulePostOrderNotification()
         } catch {
+            analytics.log(.orderCreateFailed(
+                reason: String(describing: error),
+                method: methodString
+            ))
             throw AppError.map(error)
         }
     }
@@ -210,13 +235,17 @@ final class CheckoutViewModel: CheckoutViewModelProtocol {
     func updateDeliveryAddress(_ fullAddress: String) {
         deliveryAddressString = fullAddress
         storage.savedDeliveryAddressString = fullAddress
-        if deliveryMethod != .delivery { deliveryMethod = .delivery }
+        analytics.log(.setDeliveryAddress(isEmpty: fullAddress.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty))
+        if deliveryMethod != .delivery {
+            deliveryMethod = .delivery
+        }
     }
     
     func updateReceiverPhone(_ e164: String?) {
         let value = (e164?.isEmpty == true) ? nil : e164
         receiverPhoneE164 = value
         storage.savedReceiverPhoneE164 = value
+        analytics.log(.setReceiverPhone(isEmpty: (value ?? "").isEmpty))
     }
     
     func updateOrderComment(_ text: String?) {
@@ -242,7 +271,7 @@ private extension CheckoutViewModel {
         if items.isEmpty {
             throw AppError.emptyCart
         }
-
+        
         if deliveryMethod == .delivery {
             let hasAddress = !(deliveryAddressString ?? "").isEmpty
             let hasPhone   = !(receiverPhoneE164 ?? "").isEmpty
