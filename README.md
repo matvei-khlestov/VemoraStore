@@ -78,6 +78,15 @@ The project includes **27 screens**, covering the full user journey:
 
 This makes the project close to a real production-level application in terms of structure and complexity.
 
+## Testing
+
+The project includes automated testing based on the **XCTest** framework.
+
+- **Unit tests** are used to verify business logic in ViewModels, services, and repositories.
+- **UI tests** are implemented to validate core user flows and ensure stable interaction between interface elements.
+
+The selected architecture (MVVM + Coordinator + Dependency Injection) simplifies component isolation and makes the application suitable for systematic and maintainable testing.
+
 ## Notes
 
 This project is intended for **educational and demonstration purposes**.  
