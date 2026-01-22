@@ -8,24 +8,42 @@
 import Foundation
 import Combine
 
-/// ViewModel `EditEmailViewModel` для экрана редактирования электронной почты.
+/// ViewModel экрана изменения e-mail.
 ///
-/// Основные задачи:
-/// - Валидация введённого email с помощью `FormValidatingProtocol`;
-/// - Наблюдение и загрузка текущего профиля пользователя через `ProfileRepository`;
-/// - Обновление email на сервере после успешной валидации;
-/// - Управление состоянием кнопки "Сохранить" на основе корректности и изменений.
+/// Отвечает за:
+/// - загрузку текущего email из профиля (через `ProfileRepository`);
+/// - валидацию email (через `FormValidatingProtocol`);
+/// - управление состоянием кнопки "Изменить";
+/// - выполнение сценария смены email в два шага:
+///   1) изменение email в Auth-провайдере (`AuthServiceProtocol`);
+///   2) обновление email в профиле (`ProfileRepository`).
 ///
-/// Обеспечивает реактивное обновление интерфейса через Combine,
-/// синхронизируя текущее состояние поля и ошибки валидации в реальном времени.
-
+/// Особенность UX:
+/// - перед выполнением операции требуется пароль текущего пользователя (reauth).
+/// - `submit()` инициирует password-challenge и завершает выполнение ошибкой `PasswordChallengeError.passwordRequired`,
+///   чтобы UI не завершал сценарий (не делал `onFinish`) до ввода пароля.
+/// - после ввода пароля UI вызывает `submit(withPassword:)`.
 final class EditEmailViewModel: EditEmailViewModelProtocol {
+    
+    // MARK: - UI / Flow Errors
+    
+    /// Служебная ошибка для остановки базового `submit()` и запуска password-challenge UI.
+    enum PasswordChallengeError: Error {
+        case passwordRequired
+    }
     
     // MARK: - Deps
     
     private let profileRepository: ProfileRepository
+    private let authService: AuthServiceProtocol
     private let userId: String
     private let validator: FormValidatingProtocol
+    
+    // MARK: - UI callbacks
+    
+    /// Вызывается, когда для обновления email требуется текущий пароль.
+    /// Контроллер должен показать UI ввода пароля и передать его обратно через `submit(withPassword:)`.
+    var onPasswordRequired: (() -> Void)?
     
     // MARK: - State
     
@@ -39,13 +57,15 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
     
     init(
         profileRepository: ProfileRepository,
+        authService: AuthServiceProtocol,
         validator: FormValidatingProtocol,
         userId: String
     ) {
         self.profileRepository = profileRepository
+        self.authService = authService
         self.validator = validator
         self.userId = userId
-
+        
         bindProfile()
     }
     
@@ -87,15 +107,31 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
     
     // MARK: - Actions
     
+    /// Первый шаг: инициирует запрос пароля (reauth challenge).
+    /// ВАЖНО: после вызова `onPasswordRequired` кидает `PasswordChallengeError.passwordRequired`,
+    /// чтобы базовый контроллер не завершал сценарий (`onFinish`) и не показывал "ошибку".
     func submit() async throws {
         guard validator.validate(email, for: .email).isValid else { return }
         
+        onPasswordRequired?()
+        throw PasswordChallengeError.passwordRequired
+    }
+    
+    /// Второй шаг: выполняет реальную смену email (Variant A):
+    /// 1) Auth updateEmail (через reauth по паролю)
+    /// 2) ProfileRepository updateEmail
+    func submit(withPassword password: String) async throws {
+        guard validator.validate(email, for: .email).isValid else { return }
+        
+        try await authService.updateEmail(to: email, currentPassword: password)
         try await profileRepository.updateEmail(uid: userId, email: email)
         
         await MainActor.run {
             self.initialEmail = self.email
         }
     }
+    
+    // MARK: - Binding
     
     private func bindProfile() {
         profileRepository.observeProfile()
@@ -111,8 +147,8 @@ final class EditEmailViewModel: EditEmailViewModelProtocol {
         
         $email
             .removeDuplicates()
-            .map {
-                [validator] in validator.validate($0, for: .email).message
+            .map { [validator] in
+                validator.validate($0, for: .email).message
             }
             .assign(to: &$_emailError)
     }

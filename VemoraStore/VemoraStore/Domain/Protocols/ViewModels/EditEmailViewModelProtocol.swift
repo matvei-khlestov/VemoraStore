@@ -30,8 +30,17 @@ protocol EditEmailViewModelProtocol: BaseEditFieldViewModelProtocol, AnyObject {
     /// Текущее сообщение об ошибке.
     var currentError: String? { get }
     
+    /// Вызывается, когда для обновления e-mail требуется подтверждение текущим паролем.
+    var onPasswordRequired: (() -> Void)? { get set }
+    
     // MARK: - Inputs
     
     /// Устанавливает новое значение e-mail пользователя.
     func setEmail(_ value: String)
+    
+    /// Инициирует сохранение и, при необходимости, запрашивает подтверждение паролем.
+    func submit() async throws
+    
+    /// Завершает сохранение с подтверждением текущим паролем пользователя.
+    func submit(withPassword password: String) async throws
 }

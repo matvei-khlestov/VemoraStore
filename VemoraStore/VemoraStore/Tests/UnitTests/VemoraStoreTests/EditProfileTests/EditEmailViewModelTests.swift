@@ -12,6 +12,7 @@ import Combine
 final class EditEmailViewModelTests: XCTestCase {
     
     private var repo: ProfileRepositorySpy_EditEmail!
+    private var auth: AuthServiceMock!
     private var validator: ValidatorFake!
     private var vm: EditEmailViewModel!
     private var bag: Set<AnyCancellable>!
@@ -19,9 +20,11 @@ final class EditEmailViewModelTests: XCTestCase {
     override func setUp() {
         super.setUp()
         repo = ProfileRepositorySpy_EditEmail()
+        auth = AuthServiceMock()
         validator = ValidatorFake()
         vm = EditEmailViewModel(
             profileRepository: repo,
+            authService: auth,
             validator: validator,
             userId: "uid-1"
         )
@@ -32,6 +35,7 @@ final class EditEmailViewModelTests: XCTestCase {
         bag = nil
         vm = nil
         validator = nil
+        auth = nil
         repo = nil
         super.tearDown()
     }
@@ -42,11 +46,19 @@ final class EditEmailViewModelTests: XCTestCase {
         {
             _ in ValidationResult(
                 isValid: valid,
-                messages: message.map {
-                    [$0]
-                } ?? []
+                messages: message.map { [$0] } ?? []
             )
         }
+    }
+    
+    private func sendInitialProfile(email: String = "old@ex.com") {
+        repo.send(UserProfile(
+            userId: "uid-1",
+            name: "U",
+            email: email,
+            phone: "",
+            updatedAt: Date()
+        ))
     }
     
     // MARK: - Initial bind
@@ -90,17 +102,8 @@ final class EditEmailViewModelTests: XCTestCase {
     // MARK: - isSubmitEnabled logic
     
     func test_isSubmitEnabled_true_when_valid_and_changed() throws {
-        repo.send(UserProfile(
-            userId: "uid-1",
-            name: "U",
-            email: "old@ex.com",
-            phone: "",
-            updatedAt: Date())
-        )
-        validator.setRule(
-            for: .email,
-            rule: rule(valid: true)
-        )
+        sendInitialProfile(email: "old@ex.com")
+        validator.setRule(for: .email, rule: rule(valid: true))
         
         let enabled = try awaitValue(
             vm.isSubmitEnabled,
@@ -111,17 +114,8 @@ final class EditEmailViewModelTests: XCTestCase {
     }
     
     func test_isSubmitEnabled_false_when_same_after_trim_or_empty() throws {
-        repo.send(UserProfile(
-            userId: "uid-1",
-            name: "U",
-            email: "same@ex.com",
-            phone: "",
-            updatedAt: Date())
-        )
-        validator.setRule(
-            for: .email,
-            rule: rule(valid: true)
-        )
+        sendInitialProfile(email: "same@ex.com")
+        validator.setRule(for: .email, rule: rule(valid: true))
         
         let same = try awaitValue(
             vm.isSubmitEnabled,
@@ -139,13 +133,7 @@ final class EditEmailViewModelTests: XCTestCase {
     }
     
     func test_isSubmitEnabled_false_when_invalid_even_if_changed() throws {
-        repo.send(UserProfile(
-            userId: "uid-1",
-            name: "U",
-            email: "old@ex.com",
-            phone: "",
-            updatedAt: Date())
-        )
+        sendInitialProfile(email: "old@ex.com")
         validator.setRule(
             for: .email,
             rule: rule(valid: false, message: "bad")
@@ -162,55 +150,148 @@ final class EditEmailViewModelTests: XCTestCase {
         XCTAssertEqual(err, "bad")
     }
     
-    // MARK: - submit
+    // MARK: - submit (Step 1: password challenge)
     
-    func test_submit_calls_updateEmail_when_valid_and_updates_initialEmail() async throws {
-        repo.send(UserProfile(
-            userId: "uid-1",
-            name: "U",
-            email: "old@ex.com",
-            phone: "",
-            updatedAt: Date())
-        )
-        validator.setRule(
-            for: .email,
-            rule: rule(valid: true)
-        )
+    func test_submit_triggers_password_required_and_throws_challenge_error() async throws {
+        sendInitialProfile(email: "old@ex.com")
+        validator.setRule(for: .email, rule: rule(valid: true))
+        vm.setEmail("new@ex.com")
         
-        _ = try awaitValue(
-            vm.emailPublisher,
-            where: { $0 == "new@ex.com" },
-            after: { self.vm.setEmail("new@ex.com") }
-        )
+        let exp = expectation(description: "onPasswordRequired called")
+        vm.onPasswordRequired = { exp.fulfill() }
+        
+        do {
+            try await vm.submit()
+            XCTFail("Expected PasswordChallengeError.passwordRequired")
+        } catch is EditEmailViewModel.PasswordChallengeError {
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+        
+        await fulfillment(of: [exp], timeout: 1.0)
+        
+        XCTAssertEqual(auth.updateEmailCalls, 0)
+        XCTAssertEqual(repo.updateEmailCalls, 0)
+    }
+    
+    func test_submit_does_nothing_when_invalid_and_does_not_trigger_password_prompt() async throws {
+        sendInitialProfile(email: "old@ex.com")
+        validator.setRule(for: .email, rule: rule(valid: false, message: "bad"))
+        vm.setEmail("new@ex.com")
+        
+        var passwordPromptCalls = 0
+        vm.onPasswordRequired = { passwordPromptCalls += 1 }
+        
+        try await vm.submit()
+        
+        XCTAssertEqual(passwordPromptCalls, 0)
+        XCTAssertEqual(auth.updateEmailCalls, 0)
+        XCTAssertEqual(repo.updateEmailCalls, 0)
+    }
+    
+    // MARK: - submit(withPassword:) (Step 2: update email)
+    
+    func test_submitWithPassword_calls_auth_and_repo_and_updates_initialEmail() async throws {
+        validator.setRule(for: .email, rule: rule(valid: true))
+        
+        sendInitialProfile(email: "old@ex.com")
+        
+        _ = try awaitValue(vm.emailPublisher, where: { $0 == "old@ex.com" })
+        
+        vm.setEmail("new@ex.com")
         
         _ = try awaitValue(vm.isSubmitEnabled, where: { $0 == true })
         
-        try await vm.submit()
+        try await vm.submit(withPassword: "123456")
+        
+        XCTAssertEqual(auth.updateEmailCalls, 1)
+        XCTAssertEqual(auth.lastUpdateEmailNewEmail, "new@ex.com")
+        XCTAssertEqual(auth.lastUpdateEmailCurrentPassword, "123456")
         
         XCTAssertEqual(repo.updateEmailCalls, 1)
         XCTAssertEqual(repo.lastUpdateEmail?.uid, "uid-1")
         XCTAssertEqual(repo.lastUpdateEmail?.email, "new@ex.com")
         
-        let canSubmitAfter: Bool = try awaitValue(vm.isSubmitEnabled.first())
+        let canSubmitAfter: Bool = try awaitValue(vm.isSubmitEnabled, where: { $0 == false })
         XCTAssertFalse(canSubmitAfter)
     }
     
-    func test_submit_does_nothing_when_invalid() async throws {
-        repo.send(UserProfile(
-            userId: "uid-1",
-            name: "U",
-            email: "old@ex.com",
-            phone: "",
-            updatedAt: Date())
-        )
-        validator.setRule(
-            for: .email,
-            rule: rule(valid: false, message: "bad")
-        )
-        
+    func test_submitWithPassword_does_nothing_when_invalid() async throws {
+        sendInitialProfile(email: "old@ex.com")
+        validator.setRule(for: .email, rule: rule(valid: false, message: "bad"))
         vm.setEmail("new@ex.com")
-        try await vm.submit()
         
+        try await vm.submit(withPassword: "123456")
+        
+        XCTAssertEqual(auth.updateEmailCalls, 0)
         XCTAssertEqual(repo.updateEmailCalls, 0)
+    }
+    
+    func test_submitWithPassword_propagates_auth_error_and_does_not_update_repo() async throws {
+        struct TestError: Error {}
+
+        var latestIsSubmitEnabled: Bool?
+        vm.isSubmitEnabled
+            .sink { latestIsSubmitEnabled = $0 }
+            .store(in: &bag)
+
+        validator.setRule(for: .email, rule: rule(valid: true))
+
+        _ = try awaitValue(
+            vm.emailPublisher,
+            where: { $0 == "old@ex.com" },
+            after: { self.sendInitialProfile(email: "old@ex.com") }
+        )
+
+        vm.setEmail("new@ex.com")
+
+        _ = try awaitValue(vm.isSubmitEnabled, where: { $0 == true })
+
+        auth.updateEmailResult = .failure(TestError())
+
+        do {
+            try await vm.submit(withPassword: "123456")
+            XCTFail("Expected error")
+        } catch is TestError {
+            // ok
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+
+        XCTAssertEqual(auth.updateEmailCalls, 1)
+        XCTAssertEqual(repo.updateEmailCalls, 0)
+        XCTAssertEqual(latestIsSubmitEnabled, true)
+    }
+    
+    func test_submitWithPassword_propagates_repo_error_after_auth_success() async throws {
+        struct TestError: Error {}
+
+        validator.setRule(for: .email, rule: rule(valid: true))
+
+        _ = try awaitValue(
+            vm.emailPublisher,
+            where: { $0 == "old@ex.com" },
+            after: { self.sendInitialProfile(email: "old@ex.com") }
+        )
+
+        vm.setEmail("new@ex.com")
+        _ = try awaitValue(vm.isSubmitEnabled, where: { $0 == true })
+
+        repo.updateEmailResult = .failure(TestError())
+
+        do {
+            try await vm.submit(withPassword: "123456")
+            XCTFail("Expected error")
+        } catch is TestError {
+            // ok
+        } catch {
+            XCTFail("Unexpected error: \(error)")
+        }
+
+        XCTAssertEqual(auth.updateEmailCalls, 1)
+        XCTAssertEqual(repo.updateEmailCalls, 1)
+
+        let enabledAfter = try awaitValue(vm.isSubmitEnabled, where: { $0 == true })
+        XCTAssertTrue(enabledAfter)
     }
 }

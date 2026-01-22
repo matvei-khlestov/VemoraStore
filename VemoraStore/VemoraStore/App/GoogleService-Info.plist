@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyAuVK5cpooWSXiEvGuJRB_WUlmLOlGqcLw</string>
+	<string>AIzaSyCZngi8PXA2NyKszXMHMH0vKQdCZstn0xA</string>
 	<key>GCM_SENDER_ID</key>
-	<string>502027619102</string>
+	<string>1013382300796</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>vemora.tech.VemoraStore</string>
 	<key>PROJECT_ID</key>
-	<string>vemora-store-39ca0</string>
+	<string>vemora-store-4f145</string>
 	<key>STORAGE_BUCKET</key>
-	<string>vemora-store-39ca0.firebasestorage.app</string>
+	<string>vemora-store-4f145.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:502027619102:ios:e052e2a145b849cef9970f</string>
+	<string>1:1013382300796:ios:52c221999250827642f5f9</string>
 </dict>
 </plist>
