@@ -106,7 +106,6 @@
 		A057D2F92EA17A8C006D8BE8 /* UITestBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A057D2F82EA17A8C006D8BE8 /* UITestBootstrap.swift */; };
 		A057D2FB2EA17AF4006D8BE8 /* Container+UITestBootstrap.swift in Sources */ = {isa = PBXBuildFile; fileRef = A057D2FA2EA17AF4006D8BE8 /* Container+UITestBootstrap.swift */; };
 		A06E210A2EA28A7200333318 /* CartDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = A06E21092EA28A7200333318 /* CartDTO.swift */; };
-		A06E21E42F00748000333318 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A06E21E32F00748000333318 /* GoogleService-Info.plist */; };
 		A0854FC02E611307004633CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A0854FB52E611307004633CA /* Assets.xcassets */; };
 		A0854FC22E611307004633CA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A0854FB82E611307004633CA /* LaunchScreen.storyboard */; };
 		A0854FC42E611307004633CA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A0854FB42E611307004633CA /* AppDelegate.swift */; };
@@ -303,6 +302,7 @@
 		A08552712E8A4699004633CA /* EditProfileRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552702E8A4699004633CA /* EditProfileRowCell.swift */; };
 		A08552762E8B4E3D004633CA /* AddressSuggestionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552752E8B4E3D004633CA /* AddressSuggestionCell.swift */; };
 		A08F9A692F22022600A81B26 /* AnalyticsServiceSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F9A682F22022600A81B26 /* AnalyticsServiceSpy.swift */; };
+		A08F9A6D2F22174D00A81B26 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = A08F9A6C2F22174D00A81B26 /* GoogleService-Info.plist */; };
 		A091BF572F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091BF562F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift */; };
 		A091BF592F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091BF582F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift */; };
 		A091BF5B2F0E3B5500DA4E8B /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091BF5A2F0E3B5500DA4E8B /* AnalyticsEvent.swift */; };
@@ -506,7 +506,6 @@
 		A057D2F82EA17A8C006D8BE8 /* UITestBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestBootstrap.swift; sourceTree = "<group>"; };
 		A057D2FA2EA17AF4006D8BE8 /* Container+UITestBootstrap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+UITestBootstrap.swift"; sourceTree = "<group>"; };
 		A06E21092EA28A7200333318 /* CartDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CartDTO.swift; sourceTree = "<group>"; };
-		A06E21E32F00748000333318 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A0854F7D2E6112A3004633CA /* VemoraStore.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VemoraStore.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0854F962E6112A5004633CA /* VemoraStoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VemoraStoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A0854FA02E6112A5004633CA /* VemoraStoreUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VemoraStoreUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -701,6 +700,7 @@
 		A08552702E8A4699004633CA /* EditProfileRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRowCell.swift; sourceTree = "<group>"; };
 		A08552752E8B4E3D004633CA /* AddressSuggestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSuggestionCell.swift; sourceTree = "<group>"; };
 		A08F9A682F22022600A81B26 /* AnalyticsServiceSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsServiceSpy.swift; sourceTree = "<group>"; };
+		A08F9A6C2F22174D00A81B26 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		A091BF562F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalyticsService.swift; sourceTree = "<group>"; };
 		A091BF582F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsServiceProtocol.swift; sourceTree = "<group>"; };
 		A091BF5A2F0E3B5500DA4E8B /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
@@ -973,7 +973,6 @@
 				A0F612BA2E9D86C700EC0459 /* Managers */,
 				A0F612C72E9E374300EC0459 /* DTO */,
 				A03AC85B2E91151300AAEE87 /* Mappers */,
-				A03AC85C2E91152700AAEE87 /* Services */,
 				A03AC8592E9114DA00AAEE87 /* Sources */,
 			);
 			path = Remote;
@@ -1117,15 +1116,6 @@
 				A0F612E72E9E83EC00EC0459 /* OrderDTO+FirebaseMapper.swift */,
 			);
 			path = Mappers;
-			sourceTree = "<group>";
-		};
-		A03AC85C2E91152700AAEE87 /* Services */ = {
-			isa = PBXGroup;
-			children = (
-				A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */,
-				A08551412E8094DF004633CA /* FirebasePasswordResetService.swift */,
-			);
-			path = Services;
 			sourceTree = "<group>";
 		};
 		A03AC8672E91206E00AAEE87 /* Publishers */ = {
@@ -1272,7 +1262,7 @@
 				A0854FBB2E611307004633CA /* SceneDelegate.swift */,
 				A057D2F82EA17A8C006D8BE8 /* UITestBootstrap.swift */,
 				A0854FB62E611307004633CA /* Info.plist */,
-				A06E21E32F00748000333318 /* GoogleService-Info.plist */,
+				A08F9A6C2F22174D00A81B26 /* GoogleService-Info.plist */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -1280,11 +1270,9 @@
 		A0854FD12E6117F4004633CA /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				A08551FC2E85F26F004633CA /* Services */,
 				A0854FD22E611805004633CA /* DI */,
 				A0854FD52E61186A004633CA /* Extensions */,
 				A08550B82E7893F6004633CA /* Utils */,
-				A0854FDC2E6119CA004633CA /* Security */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1327,11 +1315,10 @@
 		A0854FDF2E611B1B004633CA /* Data */ = {
 			isa = PBXGroup;
 			children = (
+				A08551FC2E85F26F004633CA /* Services */,
 				A03AC84B2E8FAC8600AAEE87 /* Repositories */,
 				A03AC8212E8E38ED00AAEE87 /* Remote */,
 				A0854FED2E61224B004633CA /* Local */,
-				A08551A02E833782004633CA /* FileManager */,
-				A0854FF22E61229E004633CA /* Location */,
 				A0F612FD2E9EB1E100EC0459 /* Adapters */,
 				A0F612FE2E9EB27800EC0459 /* Keychain */,
 				A08550482E612C25004633CA /* UserDefaults */,
@@ -2158,7 +2145,12 @@
 			isa = PBXGroup;
 			children = (
 				A091BF552F0E3A9900DA4E8B /* FirebaseAnalytics */,
+				A08F9A722F2260A400A81B26 /* FirebaseAuth */,
+				A08F9A732F2260B000A81B26 /* FirebaseResetPassword */,
 				A0F6130D2E9FC4DD00EC0459 /* PushNotifications */,
+				A0854FF22E61229E004633CA /* Location */,
+				A08551A02E833782004633CA /* FileManager */,
+				A0854FDC2E6119CA004633CA /* Security */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -2313,6 +2305,22 @@
 				A08551542E8182C5004633CA /* Alert's */,
 			);
 			path = Shared;
+			sourceTree = "<group>";
+		};
+		A08F9A722F2260A400A81B26 /* FirebaseAuth */ = {
+			isa = PBXGroup;
+			children = (
+				A0854FE52E6121E3004633CA /* FirebaseAuthService.swift */,
+			);
+			path = FirebaseAuth;
+			sourceTree = "<group>";
+		};
+		A08F9A732F2260B000A81B26 /* FirebaseResetPassword */ = {
+			isa = PBXGroup;
+			children = (
+				A08551412E8094DF004633CA /* FirebasePasswordResetService.swift */,
+			);
+			path = FirebaseResetPassword;
 			sourceTree = "<group>";
 		};
 		A091BF552F0E3A9900DA4E8B /* FirebaseAnalytics */ = {
@@ -2647,7 +2655,7 @@
 			files = (
 				A0854FC02E611307004633CA /* Assets.xcassets in Resources */,
 				A0854FC22E611307004633CA /* LaunchScreen.storyboard in Resources */,
-				A06E21E42F00748000333318 /* GoogleService-Info.plist in Resources */,
+				A08F9A6D2F22174D00A81B26 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

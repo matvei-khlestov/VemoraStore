@@ -117,3 +117,38 @@ extension UIAlertController {
         return alert
     }
 }
+
+extension UIAlertController {
+
+    static func makeSecureInput(
+        title: String,
+        message: String,
+        placeholder: String,
+        cancelTitle: String = "Отмена",
+        confirmTitle: String = "Продолжить",
+        onConfirm: @escaping (_ text: String) -> Void,
+        onCancel: (() -> Void)? = nil
+    ) -> UIAlertController {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: .alert
+        )
+
+        alert.addTextField { tf in
+            tf.placeholder = placeholder
+            tf.isSecureTextEntry = true
+        }
+
+        alert.addAction(UIAlertAction(title: cancelTitle, style: .cancel) { _ in
+            onCancel?()
+        })
+
+        alert.addAction(UIAlertAction(title: confirmTitle, style: .default) { _ in
+            let text = alert.textFields?.first?.text ?? ""
+            onConfirm(text)
+        })
+
+        return alert
+    }
+}

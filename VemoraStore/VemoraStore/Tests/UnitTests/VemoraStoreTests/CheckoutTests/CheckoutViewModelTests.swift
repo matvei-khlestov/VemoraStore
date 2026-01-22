@@ -190,18 +190,36 @@ final class CheckoutViewModelTests: XCTestCase {
     
     func test_placeOrder_success_delivery_creates_order_and_schedules() async throws {
         cart.itemsSubject.send([item("p2", 2)])
+
         _ = try awaitValue(vm.itemsPublisher, where: { !$0.isEmpty })
+
         vm.setDeliveryMethod(.delivery)
-        vm.updateDeliveryAddress("City, St 2")
-        vm.updateReceiverPhone("+79990002233")
+
+        // Дождались, что адрес реально применился
+        let address = "City, St 2"
+        vm.updateDeliveryAddress(address)
+        XCTAssertEqual(vm.deliveryAddressString, address)
+
+        // Дождались, что телефон реально применился (через publisher)
+        let phone = "+79990002233"
+        _ = try awaitValue(
+            vm.receiverPhoneDisplayPublisher,
+            where: { $0 == phone },
+            after: { self.vm.updateReceiverPhone(phone) }
+        )
+        XCTAssertEqual(vm.receiverPhoneE164, phone)
+
+        // Барьер: кнопка точно стала активной после всех апдейтов
         _ = try awaitValue(vm.isPlaceOrderEnabled, where: { $0 == true })
+
         try await vm.placeOrder()
+
         XCTAssertEqual(orders.createCalls, 1)
         XCTAssertEqual(orders.parsed?.userId, uid)
         XCTAssertEqual(orders.parsed?.itemIds, ["p2"])
         XCTAssertEqual(orders.parsed?.isPickup, false)
-        XCTAssertEqual(orders.parsed?.address, "City, St 2")
-        XCTAssertEqual(orders.parsed?.phone, "+79990002233")
+        XCTAssertEqual(orders.parsed?.address, address)
+        XCTAssertEqual(orders.parsed?.phone, phone)
         XCTAssertTrue(notifier.scheduleAfterCount >= 1)
         XCTAssertNotNil(notifier.lastScheduledId)
     }
