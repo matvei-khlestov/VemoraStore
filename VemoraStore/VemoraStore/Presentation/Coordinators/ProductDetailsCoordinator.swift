@@ -56,6 +56,7 @@ final class ProductDetailsCoordinator: ProductDetailsCoordinatingProtocol {
             userId: userId
         )
         let vc = ProductDetailsViewController(viewModel: vm)
+        vc.hidesBottomBarWhenPushed = true
     
         vc.onBack = { [weak self] in
             self?.navigation.popViewController(animated: true)

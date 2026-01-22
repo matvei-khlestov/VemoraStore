@@ -34,7 +34,7 @@ protocol OrdersRepository: AnyObject {
     /// Наблюдает за локальными изменениями списка заказов.
     /// - Returns: Паблишер, эмитирующий массив сущностей `OrderEntity`.
     func observeOrders() -> AnyPublisher<[OrderEntity], Never>
-
+    
     // MARK: - Commands
     
     /// Обновляет локальные данные заказов, синхронизируя их с удалённым хранилищем.
@@ -53,4 +53,17 @@ protocol OrdersRepository: AnyObject {
     
     /// Полностью очищает локальное состояние заказов (например, при выходе из профиля).
     func clear() async throws
+    
+    // MARK: - Checkout
+    
+    /// Создаёт заказ из данных Checkout.
+    /// Важно: это требование протокола, чтобы в тестах спай мог перехватывать вызов.
+    func createOrderFromCheckout(
+        userId: String,
+        items: [CartItem],
+        deliveryMethod: CheckoutViewModel.DeliveryMethod,
+        addressString: String?,
+        phoneE164: String?,
+        comment: String?
+    ) async throws -> String
 }
