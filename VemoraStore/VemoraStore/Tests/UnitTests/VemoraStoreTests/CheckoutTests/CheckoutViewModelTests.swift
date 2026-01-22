@@ -17,6 +17,8 @@ final class CheckoutViewModelTests: XCTestCase {
     private var price: PriceFormatterMock!
     private var storage: CheckoutStorageMock!
     private var notifier: NotifierMock!
+    private var analyticsSpy: AnalyticsServiceSpy!
+    
     private var vm: CheckoutViewModel!
     private var bag: Set<AnyCancellable>!
     private let uid = "uid-1"
@@ -29,6 +31,8 @@ final class CheckoutViewModelTests: XCTestCase {
         price = PriceFormatterMock()
         storage = CheckoutStorageMock()
         notifier = NotifierMock()
+        analyticsSpy = AnalyticsServiceSpy()
+        
         vm = CheckoutViewModel(
             cartRepository: cart,
             ordersRepository: orders,
@@ -37,7 +41,8 @@ final class CheckoutViewModelTests: XCTestCase {
             snapshotItems: [],
             storage: storage,
             currentUserId: uid,
-            notifier: notifier
+            notifier: notifier,
+            analytics: analyticsSpy
         )
         bag = []
     }
@@ -45,6 +50,7 @@ final class CheckoutViewModelTests: XCTestCase {
     override func tearDown() {
         bag = nil
         vm = nil
+        analyticsSpy = nil
         notifier = nil
         storage = nil
         price = nil
@@ -71,6 +77,7 @@ final class CheckoutViewModelTests: XCTestCase {
         storage.savedDeliveryMethod = .delivery
         storage.savedDeliveryAddressString = "A"
         storage.savedReceiverPhoneE164 = "+7000"
+        
         vm = CheckoutViewModel(
             cartRepository: cart,
             ordersRepository: orders,
@@ -79,8 +86,10 @@ final class CheckoutViewModelTests: XCTestCase {
             snapshotItems: [],
             storage: storage,
             currentUserId: uid,
-            notifier: notifier
+            notifier: notifier,
+            analytics: analyticsSpy
         )
+        
         XCTAssertEqual(vm.deliveryMethod, .delivery)
         XCTAssertEqual(vm.deliveryAddressString, "A")
         XCTAssertEqual(vm.receiverPhoneE164, "+7000")

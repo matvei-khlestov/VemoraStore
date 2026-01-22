@@ -8,6 +8,27 @@
 import Foundation
 import FirebaseAnalytics
 
+/// Сервис аналитики на базе Firebase Analytics.
+///
+/// `FirebaseAnalyticsService` является конкретной реализацией
+/// `AnalyticsServiceProtocol` и отвечает за отправку аналитических событий
+/// в Firebase.
+///
+/// Основные задачи:
+/// - логирование пользовательских событий (`AnalyticsEvent`);
+/// - установка идентификатора пользователя;
+/// - установка пользовательских свойств для сегментации;
+/// - централизованное маппирование доменных событий в формат Firebase.
+///
+/// Используется в:
+/// - ViewModel'ях (Catalog, Cart, Favorites, Checkout и др.);
+/// - координаторах и сервисах, где требуется трекинг пользовательских действий.
+///
+/// Преимущества:
+/// - изоляция Firebase SDK за протоколом;
+/// - упрощённое тестирование (через `AnalyticsServiceSpy`);
+/// - единый источник правды для структуры аналитических событий.
+
 final class FirebaseAnalyticsService: AnalyticsServiceProtocol {
 
     func log(_ event: AnalyticsEvent) {

@@ -302,6 +302,7 @@
 		A085526C2E8A20B9004633CA /* ContactRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A085526B2E8A20B9004633CA /* ContactRowCell.swift */; };
 		A08552712E8A4699004633CA /* EditProfileRowCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552702E8A4699004633CA /* EditProfileRowCell.swift */; };
 		A08552762E8B4E3D004633CA /* AddressSuggestionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08552752E8B4E3D004633CA /* AddressSuggestionCell.swift */; };
+		A08F9A692F22022600A81B26 /* AnalyticsServiceSpy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A08F9A682F22022600A81B26 /* AnalyticsServiceSpy.swift */; };
 		A091BF572F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091BF562F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift */; };
 		A091BF592F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091BF582F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift */; };
 		A091BF5B2F0E3B5500DA4E8B /* AnalyticsEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A091BF5A2F0E3B5500DA4E8B /* AnalyticsEvent.swift */; };
@@ -699,6 +700,7 @@
 		A085526B2E8A20B9004633CA /* ContactRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactRowCell.swift; sourceTree = "<group>"; };
 		A08552702E8A4699004633CA /* EditProfileRowCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileRowCell.swift; sourceTree = "<group>"; };
 		A08552752E8B4E3D004633CA /* AddressSuggestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressSuggestionCell.swift; sourceTree = "<group>"; };
+		A08F9A682F22022600A81B26 /* AnalyticsServiceSpy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsServiceSpy.swift; sourceTree = "<group>"; };
 		A091BF562F0E3ACD00DA4E8B /* FirebaseAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseAnalyticsService.swift; sourceTree = "<group>"; };
 		A091BF582F0E3B2F00DA4E8B /* AnalyticsServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsServiceProtocol.swift; sourceTree = "<group>"; };
 		A091BF5A2F0E3B5500DA4E8B /* AnalyticsEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsEvent.swift; sourceTree = "<group>"; };
@@ -862,6 +864,7 @@
 				A0F613172EA0342800EC0459 /* AuthServiceMock.swift */,
 				A0F6131A2EA0344200EC0459 /* ValidatorFake.swift */,
 				A0F6131D2EA0346000EC0459 /* Combine+XCTest.swift */,
+				A08F9A682F22022600A81B26 /* AnalyticsServiceSpy.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -3006,6 +3009,7 @@
 				A0387AD32EA1172400C363E8 /* EditEmailViewModelTests.swift in Sources */,
 				A0387AC72EA1104A00C363E8 /* EditProfileViewModelTests.swift in Sources */,
 				A0F6135F2EA0EFDA00EC0459 /* PriceFormatterMock.swift in Sources */,
+				A08F9A692F22022600A81B26 /* AnalyticsServiceSpy.swift in Sources */,
 				A0387AD02EA116EF00C363E8 /* ProfileRepositorySpy_EditEmail.swift in Sources */,
 				A0F6136B2EA0FF8200EC0459 /* ProductDetailsViewModelTests.swift in Sources */,
 				A0F613562EA0EF7E00EC0459 /* CatalogRepositoryMock.swift in Sources */,

@@ -7,7 +7,6 @@
 
 import XCTest
 import Combine
-import UserNotifications
 @testable import VemoraStore
 
 final class CartViewModelTests: XCTestCase {
@@ -15,31 +14,51 @@ final class CartViewModelTests: XCTestCase {
     private var cartRepo: CartRepositoryMock!
     private var formatter: PriceFormatterMock!
     private var notifier: NotifierMock!
+    private var analyticsSpy: AnalyticsServiceSpy!
+    
     private var vm: CartViewModel!
     private var bag: Set<AnyCancellable>!
     
     override func setUp() {
         super.setUp()
+        
         cartRepo = CartRepositoryMock()
         formatter = PriceFormatterMock()
         notifier  = NotifierMock()
+        analyticsSpy = AnalyticsServiceSpy()
+        
         vm = CartViewModel(
             cartRepository: cartRepo,
             priceFormatter: formatter,
-            notifier: notifier
+            notifier: notifier,
+            analytics: analyticsSpy
         )
-        bag = []
         
+        bag = []
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
     }
     
     override func tearDown() {
         bag = nil
         vm = nil
+        analyticsSpy = nil
         notifier = nil
         formatter = nil
         cartRepo = nil
         super.tearDown()
+    }
+    
+    private func item(_ id: String, _ qty: Int, price: Double = 10) -> CartItem {
+        .init(
+            userId: "u1",
+            productId: id,
+            brandName: "b",
+            title: "t",
+            price: price,
+            imageURL: nil,
+            quantity: qty,
+            updatedAt: Date()
+        )
     }
     
     // MARK: - Publishers / Propagation
@@ -85,20 +104,8 @@ final class CartViewModelTests: XCTestCase {
     
     // MARK: - Quantity: set / increase / decrease
     
-    func test_setQuantity_clamps_to_min1_and_updates_local_and_repo() {
-        let now = Date()
-        cartRepo.itemsSubject.send([
-            .init(
-                userId: "u1",
-                productId: "p1",
-                brandName: "",
-                title: "",
-                price: 10,
-                imageURL: nil,
-                quantity: 4,
-                updatedAt: now
-            )
-        ])
+    func test_setQuantity_clamps_to_min1_and_updates_local_and_repo_and_logs() {
+        cartRepo.itemsSubject.send([item("p1", 4, price: 10)])
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
         
         vm.setQuantity(for: "p1", quantity: 0)
@@ -112,23 +119,27 @@ final class CartViewModelTests: XCTestCase {
         XCTAssertEqual(cartRepo.setQtyCalls[1].qty, 5)
         
         XCTAssertEqual(vm.item(at: IndexPath(row: 0, section: 0)).quantity, 5)
+        
+        XCTAssertTrue(analyticsSpy.logged.contains(where: {
+            if case let .cartQuantityChange(productId, quantity) = $0 {
+                return productId == "p1" && quantity == 1
+            }
+            return false
+        }))
+        
+        XCTAssertTrue(analyticsSpy.logged.contains(where: {
+            if case let .cartQuantityChange(productId, quantity) = $0 {
+                return productId == "p1" && quantity == 5
+            }
+            return false
+        }))
     }
     
-    func test_increaseQuantity_uses_current_plus_one() {
-        let now = Date()
-        cartRepo.itemsSubject.send([
-            .init(
-                userId: "u1",
-                productId: "p2",
-                brandName: "",
-                title: "",
-                price: 10,
-                imageURL: nil,
-                quantity: 2,
-                updatedAt: now
-            )
-        ])
+    func test_increaseQuantity_uses_current_plus_one_and_does_not_log() {
+        cartRepo.itemsSubject.send([item("p2", 2, price: 10)])
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+        
+        let prevEvents = analyticsSpy.logged.count
         
         vm.increaseQuantity(for: "p2")
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
@@ -136,24 +147,15 @@ final class CartViewModelTests: XCTestCase {
         XCTAssertEqual(cartRepo.setQtyCalls.count, 1)
         XCTAssertEqual(cartRepo.setQtyCalls[0].productId, "p2")
         XCTAssertEqual(cartRepo.setQtyCalls[0].qty, 3)
+        
+        XCTAssertEqual(analyticsSpy.logged.count, prevEvents)
     }
     
-    func test_decreaseQuantity_never_below_one() {
-        let now = Date()
-        
-        cartRepo.itemsSubject.send([
-            .init(
-                userId: "u1",
-                productId: "p3",
-                brandName: "",
-                title: "",
-                price: 10,
-                imageURL: nil,
-                quantity: 1,
-                updatedAt: now
-            )
-        ])
+    func test_decreaseQuantity_never_below_one_and_does_not_log() {
+        cartRepo.itemsSubject.send([item("p3", 1, price: 10)])
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+        
+        let prevEvents = analyticsSpy.logged.count
         
         vm.decreaseQuantity(for: "p3")
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
@@ -162,20 +164,11 @@ final class CartViewModelTests: XCTestCase {
         XCTAssertEqual(cartRepo.setQtyCalls[0].productId, "p3")
         XCTAssertEqual(cartRepo.setQtyCalls[0].qty, 1)
         
+        XCTAssertEqual(analyticsSpy.logged.count, prevEvents)
+        
         let prevCount = cartRepo.setQtyCalls.count
         
-        cartRepo.itemsSubject.send([
-            .init(
-                userId: "u1",
-                productId: "p4",
-                brandName: "",
-                title: "",
-                price: 10,
-                imageURL: nil,
-                quantity: 3,
-                updatedAt: now
-            )
-        ])
+        cartRepo.itemsSubject.send([item("p4", 3, price: 10)])
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
         
         vm.decreaseQuantity(for: "p4")
@@ -185,33 +178,16 @@ final class CartViewModelTests: XCTestCase {
         let last = cartRepo.setQtyCalls.last!
         XCTAssertEqual(last.productId, "p4")
         XCTAssertEqual(last.qty, 2)
+        
+        XCTAssertEqual(analyticsSpy.logged.count, prevEvents)
     }
     
     // MARK: - Remove & Clear
     
-    func test_removeItem_calls_repo_and_removes_locally() throws {
-        let now = Date()
+    func test_removeItem_calls_repo_and_removes_locally_and_logs() throws {
         cartRepo.itemsSubject.send([
-            .init(
-                userId: "u1",
-                productId: "p1",
-                brandName: "",
-                title: "",
-                price: 10,
-                imageURL: nil,
-                quantity: 1,
-                updatedAt: now
-            ),
-            .init(
-                userId: "u1",
-                productId: "p2",
-                brandName: "",
-                title: "",
-                price: 20,
-                imageURL: nil,
-                quantity: 1,
-                updatedAt: now
-            )
+            item("p1", 1, price: 10),
+            item("p2", 1, price: 20)
         ])
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
         
@@ -222,32 +198,29 @@ final class CartViewModelTests: XCTestCase {
         )
         
         XCTAssertEqual(received.map(\.productId), ["p2"])
-        XCTAssertEqual(self.vm.cartItems.map(\.productId), ["p2"])
-        XCTAssertEqual(self.vm.count, 1)
+        XCTAssertEqual(vm.cartItems.map(\.productId), ["p2"])
+        XCTAssertEqual(vm.count, 1)
         
         let deadline = Date().addingTimeInterval(0.3)
-        while self.cartRepo.removeCalls.isEmpty && Date() < deadline {
+        while cartRepo.removeCalls.isEmpty && Date() < deadline {
             RunLoop.main.run(until: Date().addingTimeInterval(0.01))
         }
         
-        XCTAssertFalse(self.cartRepo.removeCalls.isEmpty, "Ожидали вызов repo.remove(productId:)")
-        XCTAssertEqual(self.cartRepo.removeCalls.last, "p1")
+        XCTAssertFalse(cartRepo.removeCalls.isEmpty, "Ожидали вызов repo.remove(productId:)")
+        XCTAssertEqual(cartRepo.removeCalls.last, "p1")
+        
+        guard let last = analyticsSpy.logged.last else {
+            return XCTFail("Expected analytics event")
+        }
+        if case let .cartRemove(productId) = last {
+            XCTAssertEqual(productId, "p1")
+        } else {
+            XCTFail("Expected cartRemove event, got \(last)")
+        }
     }
     
-    func test_clearCart_calls_repo_cancels_notification_and_empties() {
-        let now = Date()
-        cartRepo.itemsSubject.send([
-            .init(
-                userId: "u1",
-                productId: "p7",
-                brandName: "",
-                title: "",
-                price: 5,
-                imageURL: nil,
-                quantity: 2,
-                updatedAt: now
-            )
-        ])
+    func test_clearCart_calls_repo_cancels_notification_empties_and_logs_payload() {
+        cartRepo.itemsSubject.send([item("p7", 2, price: 5)])
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
         
         vm.clearCart()
@@ -256,36 +229,31 @@ final class CartViewModelTests: XCTestCase {
         XCTAssertEqual(cartRepo.clearCalls, 1)
         XCTAssertTrue(vm.cartItems.isEmpty)
         XCTAssertFalse(notifier.lastCancelledIds.isEmpty)
+        
+        guard let last = analyticsSpy.logged.last else {
+            return XCTFail("Expected analytics event")
+        }
+        if case let .cartClear(count, totalPrice) = last {
+            XCTAssertEqual(count, 1)
+            XCTAssertEqual(totalPrice, 10)
+        } else {
+            XCTFail("Expected cartClear event, got \(last)")
+        }
     }
     
     // MARK: - Notifications
     
     func test_scheduleCartReminderForLeavingScreen_schedules_when_has_items() {
-        let now = Date()
-        cartRepo.itemsSubject.send([
-            .init(userId: "u1",
-                  productId: "p1",
-                  brandName: "",
-                  title: "",
-                  price: 10,
-                  imageURL: nil,
-                  quantity: 2,
-                  updatedAt: now)
-        ])
-        
+        cartRepo.itemsSubject.send([item("p1", 2, price: 10)])
         RunLoop.main.run(until: Date().addingTimeInterval(0.05))
-        XCTAssertEqual(
-            vm.totalItems,
-            2,
-            "totalItems должен быть > 0 перед планированием"
-        )
+        
+        XCTAssertEqual(vm.totalItems, 2, "totalItems должен быть > 0 перед планированием")
         
         let prevAfter = notifier.scheduleAfterCount
         let prevAt = notifier.scheduleAtCount
         let prevCancelsCount = notifier.lastCancelledIds.count
         
         vm.scheduleCartReminderForLeavingScreen()
-        
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
         
         XCTAssertTrue(
@@ -308,19 +276,7 @@ final class CartViewModelTests: XCTestCase {
     }
     
     func test_auto_cancel_when_cart_becomes_empty_via_stream() {
-        let now = Date()
-        cartRepo.itemsSubject.send([
-            .init(
-                userId: "u1",
-                productId: "p1",
-                brandName: "",
-                title: "",
-                price: 10,
-                imageURL: nil,
-                quantity: 1,
-                updatedAt: now
-            )
-        ])
+        cartRepo.itemsSubject.send([item("p1", 1, price: 10)])
         RunLoop.main.run(until: Date().addingTimeInterval(0.02))
         
         cartRepo.itemsSubject.send([])

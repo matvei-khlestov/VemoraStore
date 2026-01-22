@@ -7,7 +7,6 @@
 
 import XCTest
 import Combine
-import UserNotifications
 @testable import VemoraStore
 
 final class FavoritesViewModelTests: XCTestCase {
@@ -16,28 +15,36 @@ final class FavoritesViewModelTests: XCTestCase {
     private var cartRepo: CartRepositoryMock!
     private var formatter: PriceFormatterMock!
     private var notifier: NotifierMock!
+    private var analyticsSpy: AnalyticsServiceSpy!
+    
     private var vm: FavoritesViewModel!
     private var bag: Set<AnyCancellable>!
     
     override func setUp() {
         super.setUp()
+        
         favsRepo = FavoritesRepositoryMock()
         cartRepo = CartRepositoryMock()
         formatter = PriceFormatterMock()
         notifier = NotifierMock()
+        analyticsSpy = AnalyticsServiceSpy()
+        
         vm = FavoritesViewModel(
             favoritesRepository: favsRepo,
             cartRepository: cartRepo,
             priceFormatter: formatter,
-            notifier: notifier
+            notifier: notifier,
+            analytics: analyticsSpy
         )
+        
         bag = []
-        RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+        RunLoop.main.run(until: Date().addingTimeInterval(0.05))
     }
     
     override func tearDown() {
         bag = nil
         vm = nil
+        analyticsSpy = nil
         notifier = nil
         formatter = nil
         cartRepo = nil
@@ -74,6 +81,7 @@ final class FavoritesViewModelTests: XCTestCase {
             where: { !$0.isEmpty },
             after: { self.favsRepo.itemsSubject.send(items) }
         )
+        
         XCTAssertEqual(received, items)
         XCTAssertEqual(vm.count, 2)
         XCTAssertEqual(vm.item(at: IndexPath(row: 0, section: 0)).productId, "p1")
@@ -91,18 +99,16 @@ final class FavoritesViewModelTests: XCTestCase {
                 quantity: 1,
                 updatedAt: Date()
             ),
-            
-                .init(
-                    userId: "u1",
-                    productId: "p1",
-                    brandName: "",
-                    title: "",
-                    price: 10,
-                    imageURL: nil,
-                    quantity: 2,
-                    updatedAt: Date()
-                    
-                )
+            .init(
+                userId: "u1",
+                productId: "p1",
+                brandName: "",
+                title: "",
+                price: 10,
+                imageURL: nil,
+                quantity: 2,
+                updatedAt: Date()
+            )
         ]
         
         let set = try awaitValue(
@@ -110,24 +116,54 @@ final class FavoritesViewModelTests: XCTestCase {
             where: { !$0.isEmpty },
             after: { self.cartRepo.itemsSubject.send(cartItems) }
         )
+        
         XCTAssertEqual(set, Set(["p1", "p3"]))
         XCTAssertTrue(vm.isInCart("p1"))
         XCTAssertFalse(vm.isInCart("p2"))
     }
     
-    // MARK: - Commands: Cart
+    // MARK: - Favorites
     
-    func test_toggleCart_adds_when_not_in_cart() {
+    func test_toggleFavorite_logs_payload() {
+        vm.toggleFavorite(id: "p9")
+        
+        guard let last = analyticsSpy.logged.last else {
+            return XCTFail("Expected analytics event")
+        }
+        
+        if case let .favoriteToggle(productId, isFavorite) = last {
+            XCTAssertEqual(productId, "p9")
+            XCTAssertTrue(isFavorite)
+        } else {
+            XCTFail("Expected favoriteToggle, got \(last)")
+        }
+    }
+    
+    // MARK: - Cart
+    
+    func test_toggleCart_adds_when_not_in_cart_and_logs() {
         vm.toggleCart(for: "p9")
-        RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+        RunLoop.main.run(until: Date().addingTimeInterval(0.05))
         
         XCTAssertEqual(cartRepo.addCalls.count, 1)
         XCTAssertEqual(cartRepo.addCalls[0].productId, "p9")
         XCTAssertEqual(cartRepo.addCalls[0].by, 1)
         XCTAssertTrue(cartRepo.removeCalls.isEmpty)
+        
+        guard let last = analyticsSpy.logged.last else {
+            return XCTFail("Expected analytics event")
+        }
+        
+        if case let .cartAdd(productId, quantity, price) = last {
+            XCTAssertEqual(productId, "p9")
+            XCTAssertEqual(quantity, 1)
+            XCTAssertNil(price)
+        } else {
+            XCTFail("Expected cartAdd, got \(last)")
+        }
     }
     
-    func test_toggleCart_removes_when_in_cart() {
+    func test_toggleCart_removes_when_in_cart_and_logs() {
         cartRepo.itemsSubject.send([
             .init(
                 userId: "u1",
@@ -140,19 +176,30 @@ final class FavoritesViewModelTests: XCTestCase {
                 updatedAt: Date()
             )
         ])
-        RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+        RunLoop.main.run(until: Date().addingTimeInterval(0.05))
         
         vm.toggleCart(for: "p7")
-        RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+        RunLoop.main.run(until: Date().addingTimeInterval(0.05))
         
         XCTAssertTrue(cartRepo.addCalls.isEmpty)
         XCTAssertEqual(cartRepo.removeCalls, ["p7"])
+        
+        guard let last = analyticsSpy.logged.last else {
+            return XCTFail("Expected analytics event")
+        }
+        
+        if case let .cartRemove(productId) = last {
+            XCTAssertEqual(productId, "p7")
+        } else {
+            XCTFail("Expected cartRemove, got \(last)")
+        }
     }
     
-    // MARK: - Commands: Favorites mutate locally
+    // MARK: - Favorites mutate locally
     
     func test_removeItem_removes_locally_and_calls_toggle() throws {
         let now = Date()
+        
         favsRepo.itemsSubject.send([
             .init(
                 userId: "u1",
@@ -173,6 +220,7 @@ final class FavoritesViewModelTests: XCTestCase {
                 updatedAt: now
             )
         ])
+        
         cartRepo.itemsSubject.send([
             .init(
                 userId: "u1",
@@ -185,10 +233,11 @@ final class FavoritesViewModelTests: XCTestCase {
                 updatedAt: now
             )
         ])
-        RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+        
+        RunLoop.main.run(until: Date().addingTimeInterval(0.05))
         
         vm.removeItem(with: "p1")
-        RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+        RunLoop.main.run(until: Date().addingTimeInterval(0.05))
         
         XCTAssertEqual(favsRepo.toggleCalls, ["p1"])
         XCTAssertEqual(vm.count, 1)
@@ -201,7 +250,7 @@ final class FavoritesViewModelTests: XCTestCase {
         XCTAssertEqual(received.map(\.productId), ["p2"])
     }
     
-    func test_clearFavorites_calls_repo_and_clears_local() throws {
+    func test_clearFavorites_calls_repo_clears_local_and_logs() throws {
         favsRepo.itemsSubject.send([
             .init(
                 userId: "u1",
@@ -213,10 +262,10 @@ final class FavoritesViewModelTests: XCTestCase {
                 updatedAt: Date()
             )
         ])
-        RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+        RunLoop.main.run(until: Date().addingTimeInterval(0.05))
         
         vm.clearFavorites()
-        RunLoop.main.run(until: Date().addingTimeInterval(0.02))
+        RunLoop.main.run(until: Date().addingTimeInterval(0.05))
         
         XCTAssertEqual(favsRepo.clearCalls, 1)
         
@@ -226,18 +275,26 @@ final class FavoritesViewModelTests: XCTestCase {
         )
         XCTAssertTrue(received.isEmpty)
         XCTAssertEqual(vm.count, 0)
+        
+        guard let last = analyticsSpy.logged.last else {
+            return XCTFail("Expected analytics event")
+        }
+        
+        if case let .favoritesClear(count) = last {
+            XCTAssertEqual(count, 1)
+        } else {
+            XCTFail("Expected favoritesClear, got \(last)")
+        }
     }
     
     // MARK: - Formatter
     
     func test_formattedPrice_delegates_to_formatter() {
-        formatter.stub = {
-            price in "€\(Int(price))"
-        }
+        formatter.stub = { price in "€\(Int(price))" }
         XCTAssertEqual(vm.formattedPrice(1290), "€1290")
     }
     
-    // MARK: - Local Notifications behavior
+    // MARK: - Local Notifications
     
     func test_notifications_schedule_when_has_favorites_and_none_in_cart() {
         favsRepo.itemsSubject.send([
@@ -252,9 +309,11 @@ final class FavoritesViewModelTests: XCTestCase {
             )
         ])
         cartRepo.itemsSubject.send([])
-        RunLoop.main.run(until: Date().addingTimeInterval(0.25))
+        RunLoop.main.run(until: Date().addingTimeInterval(0.3))
         
-        XCTAssertTrue(notifier.scheduleAfterCount == 1 || notifier.scheduleAtCount == 1)
+        XCTAssertTrue(
+            notifier.scheduleAfterCount == 1 || notifier.scheduleAtCount == 1
+        )
         XCTAssertTrue(notifier.lastCancelledIds.isEmpty)
     }
     
@@ -282,7 +341,7 @@ final class FavoritesViewModelTests: XCTestCase {
                 updatedAt: Date()
             )
         ])
-        RunLoop.main.run(until: Date().addingTimeInterval(0.25))
+        RunLoop.main.run(until: Date().addingTimeInterval(0.3))
         
         XCTAssertFalse(notifier.lastCancelledIds.isEmpty)
     }
@@ -290,7 +349,7 @@ final class FavoritesViewModelTests: XCTestCase {
     func test_notifications_cancel_when_no_favorites() {
         favsRepo.itemsSubject.send([])
         cartRepo.itemsSubject.send([])
-        RunLoop.main.run(until: Date().addingTimeInterval(0.25))
+        RunLoop.main.run(until: Date().addingTimeInterval(0.3))
         
         XCTAssertFalse(notifier.lastCancelledIds.isEmpty)
     }
