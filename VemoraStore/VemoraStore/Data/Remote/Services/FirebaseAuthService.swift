@@ -121,7 +121,7 @@ final class FirebaseAuthService: AuthServiceProtocol {
         }
     }
 }
-
+  
 // MARK: - Private: Listener & State syncing
 
 private extension FirebaseAuthService {

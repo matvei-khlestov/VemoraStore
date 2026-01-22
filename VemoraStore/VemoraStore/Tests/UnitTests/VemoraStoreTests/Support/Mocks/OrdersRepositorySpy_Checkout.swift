@@ -9,51 +9,65 @@ import Foundation
 import Combine
 @testable import VemoraStore
 
-struct ParsedArgs: Equatable {
-    var userId: String
-    var itemIds: [String]
-    var isPickup: Bool
-    var address: String?
-    var phone: String?
-    var comment: String?
-}
-
 final class OrdersRepositorySpy_Checkout: OrdersRepository {
-    private let subject = CurrentValueSubject<[OrderEntity], Never>([])
-    private(set) var createCalls = 0
-    private(set) var lastDTO: OrderDTO?
     
-    var parsed: ParsedArgs? {
-        guard let d = lastDTO else { return nil }
-        let raw = d.receiveAddress.trimmingCharacters(in: .whitespacesAndNewlines)
-        let lower = raw.lowercased()
-        let isPickup =
-        raw.isEmpty ||
-        lower.contains("самовывоз") || 
-        lower.contains("pickup")
-        let ids = d.items.map { $0.productId }
-        return .init(
-            userId: d.userId,
-            itemIds: ids,
-            isPickup: isPickup,
-            address: isPickup ? nil : d.receiveAddress,
-            phone: d.phoneE164,
-            comment: d.comment
-        )
-    }
+    // MARK: - OrdersRepository (required)
+    
+    private let subject = CurrentValueSubject<[OrderEntity], Never>([])
     
     func observeOrders() -> AnyPublisher<[OrderEntity], Never> {
         subject.eraseToAnyPublisher()
     }
     
     func refresh(uid: String) async throws {}
+    func create(order: OrderDTO) async throws {}
+    func updateStatus(orderId: String, to status: OrderStatus) async throws {}
+    func clear() async throws {}
     
-    func create(order: OrderDTO) async throws {
-        createCalls += 1
-        lastDTO = order
+    // MARK: - Checkout Spy API
+    
+    struct Parsed {
+        let userId: String
+        let itemIds: [String]
+        let isPickup: Bool
+        let address: String?
+        let phone: String?
+        let comment: String?
     }
     
-    func updateStatus(orderId: String, to status: OrderStatus) async throws {}
+    private(set) var createCalls: Int = 0
+    private(set) var parsed: Parsed?
     
-    func clear() async throws {}
+    var stubbedOrderId: String = "order-1"
+    var stubbedCreateError: Error? = nil
+    
+    // ВАЖНО:
+    // Этот метод должен совпадать по сигнатуре с тем, что вызывает CheckoutViewModel.
+    // Даже если он определён в extension OrdersRepository где-то в продакшн-коде,
+    // спай может иметь его напрямую — тестам это ок.
+    func createOrderFromCheckout(
+        userId: String,
+        items: [CartItem],
+        deliveryMethod: CheckoutViewModel.DeliveryMethod,
+        addressString: String?,
+        phoneE164: String?,
+        comment: String?
+    ) async throws -> String {
+        createCalls += 1
+        
+        parsed = Parsed(
+            userId: userId,
+            itemIds: items.map(\.productId),
+            isPickup: deliveryMethod == .pickup,
+            address: addressString,
+            phone: phoneE164,
+            comment: comment
+        )
+        
+        if let stubbedCreateError {
+            throw stubbedCreateError
+        }
+        
+        return stubbedOrderId
+    }
 }
