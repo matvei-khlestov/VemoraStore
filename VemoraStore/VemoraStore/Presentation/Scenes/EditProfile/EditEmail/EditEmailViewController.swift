@@ -7,28 +7,95 @@
 
 import UIKit
 
-/// Контроллер `EditEmailViewController` для экрана изменения адреса электронной почты.
+/// Экран изменения e-mail пользователя (`EditEmailViewController`).
 ///
-/// Отвечает за:
-/// - отображение поля редактирования e-mail;
-/// - взаимодействие с `EditEmailViewModelProtocol` (валидация, сохранение изменений);
-/// - настройку заголовка навигации и конфигурацию базового контроллера редактирования.
+/// Назначение:
+/// - предоставляет UI для редактирования e-mail через базовый экран `BaseEditFieldViewController`;
+/// - обрабатывает сценарий смены e-mail, требующий подтверждения текущим паролем (reauth);
+/// - показывает `UIAlertController` с secure-вводом пароля и повторяет сабмит с введённым значением.
 ///
-/// Контроллер не содержит бизнес-логики — она реализована во ViewModel.
-/// Основан на `BaseEditFieldViewController`, что обеспечивает единый UX
-/// для редактирования различных пользовательских полей.
-
+/// Зависимости:
+/// - `EditEmailViewModel` — конкретная ViewModel с логикой смены e-mail и сигналом `onPasswordRequired`.
+///
+/// Навигация:
+/// - `onFinish` (унаследовано) вызывается после успешного обновления e-mail, чтобы закрыть экран.
+///
+/// Особенности UX:
+/// - password prompt показывается только если нет другого `presentedViewController`,
+///   чтобы избежать повторной презентации и конфликтов переходов;
+/// - перед показом prompt выполняется `view.endEditing(true)` для корректного закрытия клавиатуры;
+/// - при ошибке ввода/обновления показывается стандартный error-alert через `UIAlertController.makeError`.
 final class EditEmailViewController: BaseEditFieldViewController {
     
+    // MARK: - Deps
+    
+    private let typedViewModel: EditEmailViewModel
+    
+    // MARK: - Init
+    
     init(viewModel: EditEmailViewModelProtocol) {
+        guard let vm = viewModel as? EditEmailViewModel else {
+            fatalError("EditEmailViewController expects EditEmailViewModel")
+        }
+        self.typedViewModel = vm
+        
         super.init(
             viewModel: viewModel,
             fieldKind: .email,
             navTitle: "Изменить почту"
         )
+        
+        self.typedViewModel.onPasswordRequired = { [weak self] in
+            Task { @MainActor in
+                self?.presentPasswordPromptIfPossible()
+            }
+        }
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+// MARK: - Password Prompt
+
+private extension EditEmailViewController {
+    
+    /// Показывает password prompt, если в данный момент не отображается другой модальный контроллер.
+    ///
+    /// Используется для сценариев, где смена e-mail требует подтверждения текущим паролем.
+    /// Метод выполняется на `MainActor`, так как затрагивает UI.
+    @MainActor
+    func presentPasswordPromptIfPossible() {
+        guard presentedViewController == nil else { return }
+        
+        view.endEditing(true)
+        
+        let alert = UIAlertController.makeSecureInput(
+            title: "Подтвердите пароль",
+            message: "Для изменения почты требуется подтверждение текущим паролем.",
+            placeholder: "Текущий пароль",
+            onConfirm: { [weak self] password in
+                guard let self else { return }
+                
+                Task {
+                    do {
+                        try await self.typedViewModel.submit(withPassword: password)
+                        await MainActor.run {
+                            self.onFinish?()
+                        }
+                    } catch {
+                        await MainActor.run {
+                            if let presented = self.presentedViewController {
+                                presented.dismiss(animated: true)
+                            }
+                            self.present(UIAlertController.makeError(error), animated: true)
+                        }
+                    }
+                }
+            }
+        )
+        
+        present(alert, animated: true)
     }
 }

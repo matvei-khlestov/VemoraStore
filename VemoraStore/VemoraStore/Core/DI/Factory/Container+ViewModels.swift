@@ -209,6 +209,7 @@ extension Container {
         self { userId in
             EditEmailViewModel(
                 profileRepository: self.profileRepository(userId),
+                authService: self.authService(),
                 validator: self.formValidator(),
                 userId: userId,
             )
